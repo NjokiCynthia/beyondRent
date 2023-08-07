@@ -52,11 +52,23 @@ TextStyle displaySmallThinWhite = GoogleFonts.getFont(
   color: Colors.white,
 );
 
-TextStyle displaySmallThinBlack = GoogleFonts.getFont(
+TextStyle bodyText = GoogleFonts.getFont(
   Strings.fontName,
   fontSize: 12,
-  fontWeight: FontWeight.w300,
+  fontWeight: FontWeight.w500,
   color: Colors.black,
+);
+TextStyle displayTitle = GoogleFonts.getFont(
+  Strings.fontName,
+  fontSize: 20,
+  fontWeight: FontWeight.bold,
+  color: Colors.black,
+);
+TextStyle buttonText = GoogleFonts.getFont(
+  Strings.fontName,
+  fontSize: 12,
+  fontWeight: FontWeight.bold,
+  color: primaryDarkColor,
 );
 TextStyle displaySmallWhite = GoogleFonts.getFont(
   Strings.fontName,
