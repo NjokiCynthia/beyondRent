@@ -17,11 +17,11 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Center(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            decoration: const BoxDecoration(
               border: Border(
                 bottom: BorderSide(
                   color: Colors.black, // Set the color of the bottom border
@@ -32,12 +32,12 @@ class _LoginState extends State<Login> {
             child: Theme(
               data: Theme.of(context).copyWith(
                 // Set the border radius to zero
-                textSelectionTheme: TextSelectionThemeData(
+                textSelectionTheme: const TextSelectionThemeData(
                   cursorColor: Colors.black,
                   selectionHandleColor: Colors.black,
                   selectionColor: Colors.black,
                 ),
-                inputDecorationTheme: InputDecorationTheme(
+                inputDecorationTheme: const InputDecorationTheme(
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,
@@ -51,16 +51,16 @@ class _LoginState extends State<Login> {
                 onInputValidated: (bool value) {
                   print(value);
                 },
-                selectorConfig: SelectorConfig(
+                selectorConfig: const SelectorConfig(
                   selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
                 ),
                 ignoreBlank: false,
                 autoValidateMode: AutovalidateMode.disabled,
-                selectorTextStyle: TextStyle(color: Colors.black),
+                selectorTextStyle: const TextStyle(color: Colors.black),
                 initialValue: number,
                 textFieldController: controller,
                 formatInput: true,
-                keyboardType: TextInputType.numberWithOptions(
+                keyboardType: const TextInputType.numberWithOptions(
                   signed: true,
                   decimal: true,
                 ),

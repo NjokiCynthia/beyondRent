@@ -22,8 +22,7 @@ class MyApp extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset('assets/images/rentals.png'),
-            const SizedBox(height: 16),
-            Text(
+            const Text(
               'XSoft', // Replace with the desired text
             ),
           ],
