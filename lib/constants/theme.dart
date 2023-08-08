@@ -43,6 +43,7 @@ class MyTheme {
       background: Colors.white,
     ),
   );
+  static const Color primaryColor = primaryDarkColor;
 }
 
 TextStyle displaySmallThinWhite = GoogleFonts.getFont(
