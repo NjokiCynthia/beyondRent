@@ -14,14 +14,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'X-RENT',
-     theme: MyTheme.darkTheme.copyWith(
-        primaryColor: MyTheme.primaryColor, // Use your primary color from the theme
+      theme: MyTheme.darkTheme.copyWith(
+        primaryColor:
+            MyTheme.primaryColor, // Use your primary color from the theme
       ),
       debugShowCheckedModeBanner: false, // Remove the debug banner
       home: AnimatedSplashScreen(
-        duration: 3000,
+        duration: 113000,
         splash:
-            AnimatedRotationImage(), // Use the custom widget for animated image
+            AnimatedScaleImage(), // Use the custom widget for animated image
         nextScreen: const HomePage(),
         splashTransition: SplashTransition.fadeTransition,
       ),
@@ -32,14 +33,15 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class AnimatedRotationImage extends StatefulWidget {
+class AnimatedScaleImage extends StatefulWidget {
   @override
-  _AnimatedRotationImageState createState() => _AnimatedRotationImageState();
+  _AnimatedScaleImageState createState() => _AnimatedScaleImageState();
 }
 
-class _AnimatedRotationImageState extends State<AnimatedRotationImage>
+class _AnimatedScaleImageState extends State<AnimatedScaleImage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
 
   @override
   void initState() {
@@ -48,27 +50,28 @@ class _AnimatedRotationImageState extends State<AnimatedRotationImage>
       vsync: this,
       duration: Duration(seconds: 3),
     );
-    _controller.forward().whenComplete(() {
-      _controller
-          .dispose(); // Dispose of the controller after the initial rotation
-    });
+    _scaleAnimation =
+        CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+    _controller.forward();
   }
 
   @override
   Widget build(BuildContext context) {
-    return RotationTransition(
-      turns: _controller,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset('assets/images/rentals.png'),
-        ],
+    return ScaleTransition(
+      scale: _scaleAnimation,
+      child: Container(
+        width: MediaQuery.of(context).size.width *
+            1.0, // Adjust the width as needed
+        height: MediaQuery.of(context).size.width *
+            1.0, // Adjust the height as needed
+        child: Image.asset('assets/images/rentals.png'),
       ),
     );
   }
 
   @override
   void dispose() {
+    _controller.dispose();
     super.dispose();
   }
 }
