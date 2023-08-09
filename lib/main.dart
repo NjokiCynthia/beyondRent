@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:x_rent/constants/theme.dart';
+import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/screens/intro_screens/onboarding_page.dart';
 
 void main() {
@@ -14,15 +14,28 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'X-RENT',
-      theme: MyTheme.darkTheme.copyWith(
-        primaryColor:
-            MyTheme.primaryColor, // Use your primary color from the theme
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        textTheme: TextTheme(
+          displayLarge: AppTextStyles.header,
+          displayMedium: AppTextStyles.smallHeaderSlightlyBold,
+          bodyMedium: AppTextStyles.normal,
+          bodySmall: AppTextStyles.small,
+          labelMedium: AppTextStyles.normalGreen,
+        ),
       ),
-      debugShowCheckedModeBanner: false, // Remove the debug banner
+      debugShowCheckedModeBanner: false,
       home: AnimatedSplashScreen(
-        duration: 113000,
-        splash:
-            AnimatedScaleImage(), // Use the custom widget for animated image
+        duration: 3000,
+        splash: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/images/rentals.png'),
+            const Text(
+              'XSoft',
+            ),
+          ],
+        ),
         nextScreen: const HomePage(),
         splashTransition: SplashTransition.fadeTransition,
       ),
@@ -33,15 +46,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class AnimatedScaleImage extends StatefulWidget {
+class AnimatedRotationImage extends StatefulWidget {
   @override
-  _AnimatedScaleImageState createState() => _AnimatedScaleImageState();
+  _AnimatedRotationImageState createState() => _AnimatedRotationImageState();
 }
 
-class _AnimatedScaleImageState extends State<AnimatedScaleImage>
+class _AnimatedRotationImageState extends State<AnimatedRotationImage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
 
   @override
   void initState() {
@@ -50,28 +62,27 @@ class _AnimatedScaleImageState extends State<AnimatedScaleImage>
       vsync: this,
       duration: Duration(seconds: 3),
     );
-    _scaleAnimation =
-        CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
-    _controller.forward();
+    _controller.forward().whenComplete(() {
+      _controller
+          .dispose(); // Dispose of the controller after the initial rotation
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: _scaleAnimation,
-      child: Container(
-        width: MediaQuery.of(context).size.width *
-            1.0, // Adjust the width as needed
-        height: MediaQuery.of(context).size.width *
-            1.0, // Adjust the height as needed
-        child: Image.asset('assets/images/rentals.png'),
+    return RotationTransition(
+      turns: _controller,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset('assets/images/rentals.png'),
+        ],
       ),
     );
   }
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 }
