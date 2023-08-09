@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:x_rent/constants/theme.dart';
+import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/screens/intro_screens/onboarding_page.dart';
 
 void main() {
@@ -14,8 +14,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'X-RENT',
-      theme: MyTheme.darkTheme,
-      debugShowCheckedModeBanner: false, // Remove the debug banner
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        textTheme: TextTheme(
+          displayLarge: AppTextStyles.header,
+          displayMedium: AppTextStyles.smallHeaderSlightlyBold,
+          bodyMedium: AppTextStyles.normal,
+          bodySmall: AppTextStyles.small,
+          labelMedium: AppTextStyles.normalGreen,
+        ),
+      ),
+      debugShowCheckedModeBanner: false,
       home: AnimatedSplashScreen(
         duration: 3000,
         splash: Column(
@@ -23,14 +32,12 @@ class MyApp extends StatelessWidget {
           children: [
             Image.asset('assets/images/rentals.png'),
             const Text(
-              'XSoft', // Replace with the desired text
+              'XSoft',
             ),
           ],
         ),
-        // Replace with your splash image asset
         nextScreen: const HomePage(),
         splashTransition: SplashTransition.fadeTransition,
-        // pageTransitionType: // You can change the transition type
       ),
       routes: {
         '/home': (_) => const HomePage(),
