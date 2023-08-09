@@ -151,7 +151,7 @@ class TransactionCard extends StatelessWidget {
               color: backgroundColor,
               shape: BoxShape.circle,
             ),
-            child: Text('M'),
+            child: const Text('M'),
           ),
           Expanded(
             child: Row(
@@ -217,12 +217,12 @@ class TenantWidget extends StatelessWidget {
                       color: backgroundColor,
                       shape: BoxShape.circle,
                     ),
-                    child: Text('M'),
+                    child: const Text('M'),
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Gaseema Nudngu'),
+                      const Text('Gaseema Nudngu'),
                       Text(
                         'The Icon Heights',
                         style: Theme.of(context).textTheme.bodySmall,
