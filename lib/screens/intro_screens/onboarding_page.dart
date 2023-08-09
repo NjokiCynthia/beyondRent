@@ -4,6 +4,7 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/screens/authentication/login.dart';
+import 'package:x_rent/screens/dashboard.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -23,7 +24,16 @@ class _HomePageState extends State<HomePage> {
               "Manage your rental properties effortlessly. View all apartments, tenants, and send invoices seamlessly. Get started and make property management a breeze.",
           image: Padding(
             padding: EdgeInsets.only(top: 40),
-            child: Image.asset('assets/illustrations/view_rentals.png'),
+            child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Dashboard(),
+                    ),
+                  );
+                },
+                child: Image.asset('assets/illustrations/view_rentals.png')),
           ),
           decoration: pageDecoration(),
         ),
