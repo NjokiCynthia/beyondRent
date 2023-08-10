@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:x_rent/constants/theme.dart';
+import 'package:x_rent/screens/dashboard.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -84,7 +85,12 @@ class _LoginState extends State<Login> {
                       .primaryColor, // Use your primary color from the theme
                 ),
                 onPressed: () {
-                  
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: ((context) => Dashboard()),
+                    ),
+                  );
                 },
                 child: Text('Confirm'),
               ),

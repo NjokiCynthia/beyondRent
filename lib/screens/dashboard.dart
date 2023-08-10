@@ -47,8 +47,8 @@ class _DashboardState extends State<Dashboard> {
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.settings),
-        title: ("Settings"),
+        icon: const Icon(Icons.person),
+        title: ("Profile"),
         activeColorPrimary: mintyGreen,
         inactiveColorPrimary: Colors.grey,
       ),

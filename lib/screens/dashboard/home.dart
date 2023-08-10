@@ -125,7 +125,7 @@ class _HomeState extends State<Home> {
       backgroundColor: const Color.fromRGBO(247, 247, 247, 1),
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 20),
           child: Column(
             children: [
               const DashboardAppbar(
