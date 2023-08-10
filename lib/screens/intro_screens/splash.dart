@@ -17,7 +17,7 @@ class _AnimatedScaleImageState extends State<AnimatedScaleImage>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
     );
     _scaleAnimation =
         CurvedAnimation(parent: _controller, curve: Curves.easeInOut);

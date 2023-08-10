@@ -14,11 +14,11 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              DashboardAppbar(
+              const DashboardAppbar(
                 headerText: 'My Profile',
                 headerBody: 'Last updated two weeks ago',
                 icon: Icon(
@@ -27,7 +27,7 @@ class _ProfileState extends State<Profile> {
                   size: 20,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20, // Adjust spacing between header and card
               ), // Adjust the spacing
               Card(
@@ -39,8 +39,8 @@ class _ProfileState extends State<Profile> {
                       alignment: Alignment.topCenter,
                       children: [
                         Transform.translate(
-                          offset: Offset(0, -30),
-                          child: Column(
+                          offset: const Offset(0, -30),
+                          child: const Column(
                             children: [
                               CircleAvatar(
                                 backgroundImage:
@@ -59,22 +59,22 @@ class _ProfileState extends State<Profile> {
                         ),
                       ],
                     ),
-                    ListTile(
+                    const ListTile(
                       leading: Icon(Icons.phone),
                       title: Text('+254797181989'),
                     ),
-                    ListTile(
+                    const ListTile(
                       leading: Icon(Icons.email),
                       title: Text('njoki@example.com'),
                     ),
-                    ListTile(
+                    const ListTile(
                       leading: Icon(Icons.location_city),
                       title: Text('Nairobi'),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 20), // Adjust the spacing
+              const SizedBox(height: 20), // Adjust the spacing
               Card(
                 elevation: 4,
                 child: ListTile(
@@ -83,23 +83,23 @@ class _ProfileState extends State<Profile> {
                       color: Colors.grey.shade300,
                       shape: BoxShape.circle,
                     ),
-                    padding: EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(8),
                     child: Icon(
                       Icons.notifications,
                       color: Colors.grey.shade600,
                     ),
                   ),
-                  title: Text(
+                  title: const Text(
                     'Reminders',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  subtitle: Text('Never miss the rent due date'),
-                  trailing: Icon(Icons.arrow_forward_ios),
+                  subtitle: const Text('Never miss the rent due date'),
+                  trailing: const Icon(Icons.arrow_forward_ios),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30, // Adjust spacing between card and reminders card
               ),
 
@@ -111,25 +111,25 @@ class _ProfileState extends State<Profile> {
                       color: Colors.grey.shade300,
                       shape: BoxShape.circle,
                     ),
-                    padding: EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(8),
                     child: Icon(
                       Icons.language,
                       color: Colors.grey.shade600,
                     ),
                   ),
-                  title: Text(
+                  title: const Text(
                     'Language',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  subtitle: Text('Chosen Language: English'),
-                  trailing: Icon(Icons.arrow_forward_ios),
+                  subtitle: const Text('Chosen Language: English'),
+                  trailing: const Icon(Icons.arrow_forward_ios),
                 ),
               ),
-              Spacer(), // To fill the remaining space
+              const Spacer(), // To fill the remaining space
               Padding(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                     bottom: 20), // Adjust spacing from the bottom
                 child: SizedBox(
                   height: 48,
@@ -138,7 +138,7 @@ class _ProfileState extends State<Profile> {
                     onPressed: () {
                       // Add your logout functionality here
                     },
-                    icon: Icon(Icons.exit_to_app, color: Colors.red),
+                    icon: const Icon(Icons.exit_to_app, color: Colors.red),
                     label: Text(
                       'Logout',
                       style: TextStyle(color: Colors.red.withOpacity(0.8)),
