@@ -16,6 +16,15 @@ class _TransactionsState extends State<Transactions> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Align(
+          alignment: Alignment.center,
+          child: Text(
+            'Filter Transactions',
+            style: Theme.of(context).textTheme.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
+        ),
+        const SizedBox(height: 20),
         Text(
           'Payment Method',
           style: Theme.of(context).textTheme.bodySmall,

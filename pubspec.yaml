@@ -71,6 +71,8 @@ flutter:
     - assets/images/icons/filter.png
     - assets/images/icons/home.png
     - assets/images/icons/bank.png
+    - assets/images/icons/left-arrow.png
+    - assets/images/icons/info.png
 
     #Illustrations
     - assets/illustrations/invoice.png

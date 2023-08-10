@@ -17,6 +17,7 @@ class DashboardAppbar extends StatelessWidget {
   final String? headerBody;
   final num? leftHeader;
   final dynamic icon;
+  final bool? propertyNav;
   final ValueSetter<dynamic>? callback;
   const DashboardAppbar({
     super.key,
@@ -24,67 +25,121 @@ class DashboardAppbar extends StatelessWidget {
     this.headerBody,
     this.leftHeader,
     this.icon,
+    this.propertyNav,
     this.callback,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Expanded(
-          child: leftHeader == 1
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    return propertyNav == true
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Image.asset(
+                    'assets/images/icons/left-arrow.png',
+                    width: 15,
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
                   children: [
                     Text(
-                      headerText!,
-                      style: Theme.of(context).textTheme.displayMedium,
+                      'Sep 2022',
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    Text(
-                      headerBody!,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
-                )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      headerText!,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    Text(
-                      headerBody!,
-                      style: Theme.of(context).textTheme.displayMedium,
+                    Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Colors.black.withOpacity(0.2),
+                      size: 20,
                     ),
                   ],
                 ),
-        ),
-        GestureDetector(
-          onTap: () {
-            callback!('1');
-          },
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              ],
-            ),
-            child: icon,
-          ),
-        ),
-      ],
-    );
+                child: Image.asset(
+                  'assets/images/icons/info.png',
+                  width: 15,
+                ),
+              ),
+            ],
+          )
+        : Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: leftHeader == 1
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            headerText!,
+                            style: Theme.of(context).textTheme.displayMedium,
+                          ),
+                          Text(
+                            headerBody!,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            headerText!,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          Text(
+                            headerBody!,
+                            style: Theme.of(context).textTheme.displayMedium,
+                          ),
+                        ],
+                      ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  callback!('1');
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: icon,
+                ),
+              ),
+            ],
+          );
   }
 }
 

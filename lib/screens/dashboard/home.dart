@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
+import 'package:x_rent/screens/dashboard/propertyDetails.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
@@ -75,30 +77,37 @@ class _HomeState extends State<Home> {
                 'Rent',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      _showDayPicker(context);
-                    },
-                    child: Text(
+              GestureDetector(
+                onTap: () {
+                  _showDayPicker(context);
+                },
+                child: Row(
+                  children: [
+                    Text(
                       currentMonth,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
-                  ),
-                  Icon(
-                    Icons.keyboard_arrow_down,
-                    color: Colors.black.withOpacity(0.2),
-                    size: 20,
-                  )
-                ],
+                    Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Colors.black.withOpacity(0.2),
+                      size: 20,
+                    )
+                  ],
+                ),
               ),
             ],
           ),
         ),
         const SizedBox(height: 10),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            PersistentNavBarNavigator.pushNewScreen(
+              context,
+              screen: const PropertyDetails(),
+              withNavBar: false,
+              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+            );
+          },
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(

@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
           bodyMedium: AppTextStyles.normal,
           bodySmall: AppTextStyles.small,
           labelMedium: AppTextStyles.normalGreen,
+          titleMedium: AppTextStyles.titleNormalBold,
         ),
       ),
       debugShowCheckedModeBanner: false,

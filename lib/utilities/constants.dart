@@ -30,6 +30,11 @@ class AppTextStyles {
     fontSize: 16,
     color: Colors.black,
   );
+  static final TextStyle titleNormalBold = GoogleFonts.poppins(
+    fontSize: 16,
+    color: Colors.black,
+    fontWeight: FontWeight.w500,
+  );
   static final TextStyle normalGreen = GoogleFonts.poppins(
     fontSize: 16,
     color: Colors.green,
