@@ -21,11 +21,12 @@ class _ProfileState extends State<Profile> {
               DashboardAppbar(
                 headerText: 'My Profile',
                 headerBody: 'Last updated two weeks ago',
-                icon: Icon(
+                icon: const Icon(
                   Icons.person,
                   color: Colors.black,
                   size: 20,
                 ),
+                callback: (value) {},
               ),
               SizedBox(
                 height: 20, // Adjust spacing between header and card

@@ -18,15 +18,16 @@ class _TenantsState extends State<Tenants> {
           padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
           child: Column(
             children: [
-              const DashboardAppbar(
+              DashboardAppbar(
                 headerText: 'Tenants',
                 headerBody: 'Tenants who have paid: 80',
                 leftHeader: 1,
-                icon: Icon(
+                icon: const Icon(
                   Icons.group_add,
                   color: Colors.black,
                   size: 20,
                 ),
+                callback: (value) {},
               ),
               Expanded(
                 child: ListView(

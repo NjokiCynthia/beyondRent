@@ -16,13 +16,15 @@ class DashboardAppbar extends StatelessWidget {
   final String? headerText;
   final String? headerBody;
   final num? leftHeader;
-  final Icon? icon;
+  final dynamic icon;
+  final ValueSetter<dynamic>? callback;
   const DashboardAppbar({
     super.key,
     this.headerText,
     this.headerBody,
     this.leftHeader,
     this.icon,
+    this.callback,
   });
 
   @override
@@ -51,6 +53,7 @@ class DashboardAppbar extends StatelessWidget {
                   children: [
                     Text(
                       headerText!,
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                     Text(
                       headerBody!,
@@ -59,13 +62,26 @@ class DashboardAppbar extends StatelessWidget {
                   ],
                 ),
         ),
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white,
+        GestureDetector(
+          onTap: () {
+            callback!('1');
+          },
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: icon,
           ),
-          child: icon,
         ),
       ],
     );
@@ -278,4 +294,30 @@ class TenantWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+// Bottom Sheet Modal
+showBottomModal(BuildContext context, Widget content) {
+  showModalBottomSheet<void>(
+    useRootNavigator: true,
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (BuildContext context) {
+      return _buildBottomModalContent(context, content);
+    },
+  );
+}
+
+Widget _buildBottomModalContent(BuildContext context, Widget content) {
+  return ClipRRect(
+    borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+    child: Container(
+      color: Colors.white,
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
+        child: content,
+      ),
+    ),
+  );
 }

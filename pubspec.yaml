@@ -67,6 +67,10 @@ flutter:
 
     #Icons
     - assets/images/icons/logo-green.png
+    - assets/images/icons/exchange.png
+    - assets/images/icons/filter.png
+    - assets/images/icons/home.png
+    - assets/images/icons/bank.png
 
     #Illustrations
     - assets/illustrations/invoice.png

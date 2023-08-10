@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 // Color Themes
 Color mintyGreen = const Color.fromRGBO(13, 201, 150, 1);
+
+PersistentTabController bottomNavigationController =
+    PersistentTabController(initialIndex: 0);
 
 class AppTextStyles {
   static final TextStyle headerBig = GoogleFonts.poppins(
