@@ -19,83 +19,112 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(
-                      color: Colors.black,
-                      width: 2.0,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(bottom: 50),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 10),
+                    child: Image.asset(
+                      'assets/images/icons/logo-green.png',
+                      width: 40,
                     ),
                   ),
-                ),
-                child: Theme(
-                  data: Theme.of(context).copyWith(
-                    textSelectionTheme: const TextSelectionThemeData(
-                      cursorColor: Colors.black,
-                      selectionHandleColor: Colors.black,
-                      selectionColor: Colors.black,
-                    ),
-                    inputDecorationTheme: const InputDecorationTheme(
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      contentPadding: EdgeInsets.zero,
-                    ),
-                  ),
-                  child: InternationalPhoneNumberInput(
-                    onInputChanged: (PhoneNumber number) {
-                      print(number.phoneNumber);
-                    },
-                    onInputValidated: (bool value) {
-                      print(value);
-                    },
-                    selectorConfig: const SelectorConfig(
-                      selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-                    ),
-                    textStyle: TextStyle(color: Colors.black),
-                    ignoreBlank: false,
-                    autoValidateMode: AutovalidateMode.disabled,
-                    selectorTextStyle: const TextStyle(color: Colors.black),
-                    initialValue: number,
-                    textAlignVertical: TextAlignVertical.top,
-                    textFieldController: controller,
-                    formatInput: true,
-                    keyboardType: const TextInputType.numberWithOptions(
-                      signed: true,
-                      decimal: true,
-                    ),
-                    maxLength: 10,
-                    inputBorder: InputBorder.none,
-                    onSaved: (PhoneNumber number) {
-                      print('On Saved: $number');
-                    },
-                  ),
-                ),
+                  Text(
+                    'XRent',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(color: Colors.black),
+                  )
+                ],
               ),
-              SizedBox(height: 20), // Add spacing between the input and button
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: MyTheme
-                      .primaryColor, // Use your primary color from the theme
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: ((context) => Dashboard()),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.black,
+                          width: 2.0,
+                        ),
+                      ),
                     ),
-                  );
-                },
-                child: Text('Confirm'),
+                    child: Theme(
+                      data: Theme.of(context).copyWith(
+                        textSelectionTheme: const TextSelectionThemeData(
+                          cursorColor: Colors.black,
+                          selectionHandleColor: Colors.black,
+                          selectionColor: Colors.black,
+                        ),
+                        inputDecorationTheme: const InputDecorationTheme(
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                      ),
+                      child: InternationalPhoneNumberInput(
+                        onInputChanged: (PhoneNumber number) {
+                          print(number.phoneNumber);
+                        },
+                        onInputValidated: (bool value) {
+                          print(value);
+                        },
+                        selectorConfig: const SelectorConfig(
+                          selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                        ),
+                        textStyle: TextStyle(color: Colors.black),
+                        ignoreBlank: false,
+                        autoValidateMode: AutovalidateMode.disabled,
+                        selectorTextStyle: const TextStyle(color: Colors.black),
+                        initialValue: number,
+                        textAlignVertical: TextAlignVertical.top,
+                        textFieldController: controller,
+                        formatInput: true,
+                        keyboardType: const TextInputType.numberWithOptions(
+                          signed: true,
+                          decimal: true,
+                        ),
+                        maxLength: 10,
+                        inputBorder: InputBorder.none,
+                        onSaved: (PhoneNumber number) {
+                          print('On Saved: $number');
+                        },
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                      height: 20), // Add spacing between the input and button
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: MyTheme
+                          .primaryColor, // Use your primary color from the theme
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => Dashboard()),
+                        ),
+                      );
+                    },
+                    child: Text('Confirm'),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

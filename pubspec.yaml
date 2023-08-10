@@ -37,6 +37,7 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   introduction_screen: ^3.1.9
   intl_phone_number_input: ^0.7.3+1
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
@@ -64,8 +65,12 @@ flutter:
   assets:
     - assets/images/rentals.png
 
+    #Icons
+    - assets/images/icons/logo-green.png
+
     #Illustrations
     - assets/illustrations/invoice.png
+    - assets/illustrations/organize.png
     - assets/illustrations/manage_properties.png
     - assets/illustrations/view_rentals.png
 

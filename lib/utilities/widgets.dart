@@ -208,29 +208,30 @@ class TenantWidget extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                  child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    margin: const EdgeInsets.only(right: 10),
-                    decoration: BoxDecoration(
-                      color: backgroundColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Text('M'),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Gaseema Nudngu'),
-                      Text(
-                        'The Icon Heights',
-                        style: Theme.of(context).textTheme.bodySmall,
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.only(right: 10),
+                      decoration: BoxDecoration(
+                        color: backgroundColor,
+                        shape: BoxShape.circle,
                       ),
-                    ],
-                  )
-                ],
-              )),
+                      child: const Text('M'),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Gaseema Nudngu'),
+                        Text(
+                          'The Icon Heights',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(

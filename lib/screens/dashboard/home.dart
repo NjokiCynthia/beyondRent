@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:x_rent/utilities/widgets.dart';
+import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -9,10 +10,65 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  DateTime selectedDate = DateTime.now();
+
+  Future<void> _showMonthPicker(BuildContext context) async {
+    DateTime currentDate = DateTime.now();
+    DateTime lastSelectableDate =
+        DateTime(currentDate.year, currentDate.month - 1, 1);
+
+    int selectedMonthIndex = currentDate.month - 1;
+    int? newMonthIndex = await showDialog<int>(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text('Select a Month'),
+          children: List.generate(12, (index) {
+            DateTime monthDate = DateTime(currentDate.year, index + 1);
+            if (monthDate.isAfter(lastSelectableDate)) {
+              return null; // Return a placeholder if month is not selectable
+            } else {
+              return Column(
+                children: [
+                  SimpleDialogOption(
+                    onPressed: () {
+                      Navigator.pop(context, index);
+                    },
+                    child: Text(DateFormat.MMMM().format(monthDate)),
+                  ),
+                  Divider(),
+                ],
+              );
+            }
+          }).whereType<Widget>().toList(),
+        );
+      },
+    );
+
+    if (newMonthIndex != null) {
+      setState(() {
+        selectedDate = DateTime(currentDate.year, newMonthIndex + 1);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget rentWidget = Column(
       children: [
+        Column(
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: () => _showMonthPicker(context),
+              child: Text('Pick Month'),
+            ),
+            if (selectedDate != null)
+              Text(
+                'Selected Month: ${selectedDate!.month}/${selectedDate!.year}',
+                style: TextStyle(fontSize: 18),
+              ),
+          ],
+        ),
         Padding(
           padding: const EdgeInsets.only(left: 5, right: 5),
           child: Row(
@@ -125,7 +181,8 @@ class _HomeState extends State<Home> {
       backgroundColor: const Color.fromRGBO(247, 247, 247, 1),
       body: SafeArea(
         child: Container(
-          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 20),
+          padding:
+              const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 20),
           child: Column(
             children: [
               const DashboardAppbar(

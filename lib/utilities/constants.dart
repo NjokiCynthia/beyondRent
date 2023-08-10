@@ -5,6 +5,11 @@ import 'package:google_fonts/google_fonts.dart';
 Color mintyGreen = const Color.fromRGBO(13, 201, 150, 1);
 
 class AppTextStyles {
+  static final TextStyle headerBig = GoogleFonts.poppins(
+    fontSize: 30,
+    fontWeight: FontWeight.w500,
+    color: Colors.black.withOpacity(0.8),
+  );
   static final TextStyle header = GoogleFonts.poppins(
     fontSize: 24,
     fontWeight: FontWeight.bold,
