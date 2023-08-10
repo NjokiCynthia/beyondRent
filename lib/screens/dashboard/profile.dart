@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 
@@ -21,7 +20,7 @@ class _ProfileState extends State<Profile> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              DashboardAppbar(
+              const DashboardAppbar(
                 headerText: 'My Profile',
                 headerBody: 'Last updated two weeks ago',
                 icon: Icon(
@@ -29,6 +28,9 @@ class _ProfileState extends State<Profile> {
                   color: Colors.black,
                   size: 20,
                 ),
+              ),
+              SizedBox(
+                height: 80,
               ),
               Card(
                 shape: RoundedRectangleBorder(
@@ -43,12 +45,12 @@ class _ProfileState extends State<Profile> {
                       alignment: Alignment.topCenter,
                       children: [
                         Transform.translate(
-                          offset: const Offset(0, -50),
+                          offset: const Offset(0, -40),
                           child: const Column(
                             children: [
                               CircleAvatar(
                                 backgroundImage:
-                                    AssetImage('assets/images/avatar.png'),
+                                    AssetImage('assets/images/avatar.jpg'),
                                 radius: 50,
                               ),
                               SizedBox(height: 5),
@@ -64,17 +66,24 @@ class _ProfileState extends State<Profile> {
                       ],
                     ),
                     const ListTile(
-                      leading: Icon(Icons.phone),
+                      leading: Icon(
+                        Icons.phone,
+                        color: Color.fromRGBO(13, 201, 150, 1),
+                      ),
                       title: Text(
                         '+254797181989',
                       ),
                     ),
                     const ListTile(
-                      leading: Icon(Icons.email),
+                      leading: Icon(Icons.email,
+                          color: Color.fromRGBO(13, 201, 150, 1)),
                       title: Text('njoki@example.com'),
                     ),
                     const ListTile(
-                      leading: Icon(Icons.location_city),
+                      leading: Icon(
+                        Icons.location_city,
+                        color: Color.fromRGBO(13, 201, 150, 1),
+                      ),
                       title: Text('Nairobi'),
                     ),
                   ],
@@ -90,13 +99,13 @@ class _ProfileState extends State<Profile> {
                 child: ListTile(
                   leading: Container(
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
+                      color: Color.fromRGBO(13, 201, 150, 1).withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
                     padding: const EdgeInsets.all(8),
                     child: Icon(
                       Icons.notifications,
-                      color: Colors.grey.shade600,
+                      color: Color.fromRGBO(13, 201, 150, 1),
                     ),
                   ),
                   title: const Text(
@@ -121,13 +130,13 @@ class _ProfileState extends State<Profile> {
                 child: ListTile(
                   leading: Container(
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
+                      color: Color.fromRGBO(13, 201, 150, 1).withOpacity(0.1),
                       shape: BoxShape.circle,
                     ),
                     padding: const EdgeInsets.all(8),
                     child: Icon(
                       Icons.language,
-                      color: Colors.grey.shade600,
+                      color: Color.fromRGBO(13, 201, 150, 1),
                     ),
                   ),
                   title: const Text(

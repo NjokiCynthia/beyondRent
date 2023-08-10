@@ -8,7 +8,10 @@ class StepPage2 extends StatefulWidget {
   final int currentPageIndex;
   final PageController pageController;
 
-  StepPage2({required this.currentPageIndex, required this.pageController});
+  const StepPage2(
+      {super.key,
+      required this.currentPageIndex,
+      required this.pageController});
 
   @override
   _StepPage2State createState() => _StepPage2State();
@@ -16,7 +19,6 @@ class StepPage2 extends StatefulWidget {
 
 class _StepPage2State extends State<StepPage2> {
   int _selectedIndex = 0;
-  String _selectedPaymentOption = '';
 
   void _selectItem(int index) {
     setState(() {
@@ -29,16 +31,14 @@ class _StepPage2State extends State<StepPage2> {
   PhoneNumber number = PhoneNumber(isoCode: 'KE');
   @override
   Widget build(BuildContext context) {
-    int _currentPageIndex = widget.currentPageIndex;
-    PageController _pageController = widget.pageController;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
-          Row(
+          const Row(
             children: [
               Icon(Icons.person_2),
               SizedBox(
@@ -47,7 +47,7 @@ class _StepPage2State extends State<StepPage2> {
               Text('Enter Tenant name'),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           TextFormField(
             style: bodyText,
             decoration: InputDecoration(
@@ -57,7 +57,7 @@ class _StepPage2State extends State<StepPage2> {
               labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
                   .copyWith(color: Colors.grey),
               border: OutlineInputBorder(
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
@@ -71,7 +71,7 @@ class _StepPage2State extends State<StepPage2> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
@@ -79,10 +79,10 @@ class _StepPage2State extends State<StepPage2> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
-          Row(
+          const Row(
             children: [
               Icon(Icons.email),
               SizedBox(
@@ -91,7 +91,7 @@ class _StepPage2State extends State<StepPage2> {
               Text('Enter Tenant email address'),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           TextFormField(
             style: bodyText,
             decoration: InputDecoration(
@@ -101,7 +101,7 @@ class _StepPage2State extends State<StepPage2> {
               labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
                   .copyWith(color: Colors.grey),
               border: OutlineInputBorder(
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
@@ -115,7 +115,7 @@ class _StepPage2State extends State<StepPage2> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
@@ -123,10 +123,10 @@ class _StepPage2State extends State<StepPage2> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
-          Row(
+          const Row(
             children: [
               Icon(Icons.phone),
               SizedBox(
@@ -135,7 +135,7 @@ class _StepPage2State extends State<StepPage2> {
               Text('Phone Number'),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           InternationalPhoneNumberInput(
             onInputChanged: (PhoneNumber number) {},
             onInputValidated: (bool value) {},
@@ -156,7 +156,7 @@ class _StepPage2State extends State<StepPage2> {
             ),
             maxLength: 10,
             inputBorder: OutlineInputBorder(
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: Colors.grey,
                 width: 1.0,
               ),
@@ -169,7 +169,7 @@ class _StepPage2State extends State<StepPage2> {
               labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
                   .copyWith(color: Colors.grey),
               border: OutlineInputBorder(
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
@@ -183,7 +183,7 @@ class _StepPage2State extends State<StepPage2> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
@@ -192,10 +192,10 @@ class _StepPage2State extends State<StepPage2> {
             ),
             onSaved: (PhoneNumber number) {},
           ),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
-          Row(
+          const Row(
             children: [
               Icon(Icons.holiday_village),
               SizedBox(
@@ -204,7 +204,7 @@ class _StepPage2State extends State<StepPage2> {
               Text('Block occupied by tenant'),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -217,7 +217,7 @@ class _StepPage2State extends State<StepPage2> {
               labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
                   .copyWith(color: Colors.grey),
               border: OutlineInputBorder(
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
@@ -231,7 +231,7 @@ class _StepPage2State extends State<StepPage2> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
@@ -239,10 +239,10 @@ class _StepPage2State extends State<StepPage2> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
-          Row(
+          const Row(
             children: [
               Icon(Icons.king_bed_rounded),
               SizedBox(
@@ -251,10 +251,10 @@ class _StepPage2State extends State<StepPage2> {
               Text('Unit occupied by tenant'),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Container(
+          SizedBox(
             height: 48,
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -265,8 +265,8 @@ class _StepPage2State extends State<StepPage2> {
                       _selectItem(index);
                     },
                     child: Container(
-                      padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         color: _selectedIndex == index
                             ? mintyGreen
@@ -289,8 +289,8 @@ class _StepPage2State extends State<StepPage2> {
                   );
                 }),
           ),
-          SizedBox(height: 24),
-          Row(
+          const SizedBox(height: 24),
+          const Row(
             children: [
               Icon(Icons.money_off),
               SizedBox(
@@ -299,7 +299,7 @@ class _StepPage2State extends State<StepPage2> {
               Text('Price of the unit'),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -312,7 +312,7 @@ class _StepPage2State extends State<StepPage2> {
               labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
                   .copyWith(color: Colors.grey),
               border: OutlineInputBorder(
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
@@ -326,7 +326,7 @@ class _StepPage2State extends State<StepPage2> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
@@ -334,10 +334,10 @@ class _StepPage2State extends State<StepPage2> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           SizedBox(
@@ -346,10 +346,12 @@ class _StepPage2State extends State<StepPage2> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: mintyGreen),
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: ((context) => Dashboard())));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) => const Dashboard())));
               },
-              child: Text('Confirm'),
+              child: const Text('Confirm'),
             ),
           ),
         ],

@@ -2,10 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:x_rent/constants/color_contants.dart';
-import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/screens/authentication/login.dart';
-import 'package:x_rent/screens/dashboard.dart';
-import 'package:x_rent/utilities/constants.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:x_rent/property/add_property.dart';
 import 'package:x_rent/utilities/widgets.dart';
 
 class Tenants extends StatefulWidget {
@@ -22,10 +23,18 @@ class _TenantsState extends State<Tenants> {
                 headerText: 'Tenants',
                 headerBody: 'Tenants who have paid: 80',
                 leftHeader: 1,
-                icon: const Icon(
-                  Icons.group_add,
-                  color: Colors.black,
-                  size: 20,
+                icon: GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddProperty()),
+                    );
+                  },
+                  child: Icon(
+                    Icons.group_add,
+                    color: Colors.black,
+                    size: 20,
+                  ),
                 ),
                 callback: (value) {},
               ),
@@ -38,7 +47,7 @@ class _TenantsState extends State<Tenants> {
                     TenantWidget(),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

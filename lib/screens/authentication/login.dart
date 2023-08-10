@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/property/add_property.dart';
-import 'package:x_rent/screens/dashboard.dart';
+import 'package:x_rent/property/property.dart';
+
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -53,7 +54,7 @@ class _LoginState extends State<Login> {
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
                           color: Colors.black,
@@ -77,15 +78,15 @@ class _LoginState extends State<Login> {
                       ),
                       child: InternationalPhoneNumberInput(
                         onInputChanged: (PhoneNumber number) {
-                          print(number.phoneNumber);
+                          
                         },
                         onInputValidated: (bool value) {
-                          print(value);
+                         
                         },
                         selectorConfig: const SelectorConfig(
                           selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
                         ),
-                        textStyle: TextStyle(color: Colors.black),
+                        textStyle: const TextStyle(color: Colors.black),
                         ignoreBlank: false,
                         autoValidateMode: AutovalidateMode.disabled,
                         selectorTextStyle: const TextStyle(color: Colors.black),
@@ -105,7 +106,7 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                       height: 20), // Add spacing between the input and button
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -116,11 +117,11 @@ class _LoginState extends State<Login> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: ((context) => Dashboard()),
+                          builder: ((context) => const Property()),
                         ),
                       );
                     },
-                    child: Text('Confirm'),
+                    child: const Text('Confirm'),
                   ),
                 ],
               ),

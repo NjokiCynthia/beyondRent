@@ -4,10 +4,12 @@ import 'package:x_rent/property/add_tenant.dart';
 import 'package:x_rent/utilities/constants.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -15,12 +17,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: AddProperty(),
+      home: const AddProperty(),
     );
   }
 }
 
 class AddProperty extends StatefulWidget {
+  const AddProperty({super.key});
+
   @override
   _AddPropertyState createState() => _AddPropertyState();
 }
@@ -31,7 +35,7 @@ class _AddPropertyState extends State<AddProperty> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> _pages = [
+    List<Widget> pages = [
       StepPage1(
         currentPageIndex: _currentPageIndex,
         pageController: _pageController,
@@ -44,29 +48,25 @@ class _AddPropertyState extends State<AddProperty> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: SafeArea(
           child: Column(
             children: [
-              Container(
-                child: Text(
-                  'Add Property and Tenants',
-                  style: AppTextStyles.smallHeaderSlightlyBold,
-                ),
+              Text(
+                'Add Property and Tenants',
+                style: AppTextStyles.smallHeaderSlightlyBold,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildStepIndicator(0),
-                    SizedBox(width: 8),
-                    _buildStepIndicator(1),
-                    SizedBox(width: 8),
-                  ],
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildStepIndicator(0),
+                  const SizedBox(width: 8),
+                  _buildStepIndicator(1),
+                  const SizedBox(width: 8),
+                ],
               ),
               Expanded(
                 child: PageView(
@@ -76,7 +76,7 @@ class _AddPropertyState extends State<AddProperty> {
                       _currentPageIndex = index;
                     });
                   },
-                  children: _pages,
+                  children: pages,
                 ),
               ),
             ],
@@ -105,7 +105,7 @@ class StepPage1 extends StatefulWidget {
   final int currentPageIndex;
   final PageController pageController;
 
-  StepPage1({required this.currentPageIndex, required this.pageController});
+  const StepPage1({super.key, required this.currentPageIndex, required this.pageController});
 
   @override
   _StepPage1State createState() => _StepPage1State();
@@ -113,7 +113,7 @@ class StepPage1 extends StatefulWidget {
 
 class _StepPage1State extends State<StepPage1> {
   int _selectedIndex = 0;
-  String _selectedPaymentOption = '';
+  final String _selectedPaymentOption = '';
 
   void _selectItem(int index) {
     setState(() {
@@ -123,17 +123,16 @@ class _StepPage1State extends State<StepPage1> {
 
   @override
   Widget build(BuildContext context) {
-    int _currentPageIndex = widget.currentPageIndex;
-    PageController _pageController = widget.pageController;
+    PageController pageController = widget.pageController;
 
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
-          Row(
+          const Row(
             children: [
               Icon(Icons.home),
               SizedBox(
@@ -142,7 +141,7 @@ class _StepPage1State extends State<StepPage1> {
               Text('Enter Property name'),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           TextFormField(
             style: bodyText,
             decoration: InputDecoration(
@@ -152,7 +151,7 @@ class _StepPage1State extends State<StepPage1> {
               labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
                   .copyWith(color: Colors.grey),
               border: OutlineInputBorder(
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
@@ -166,7 +165,7 @@ class _StepPage1State extends State<StepPage1> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
@@ -174,10 +173,10 @@ class _StepPage1State extends State<StepPage1> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
-          Row(
+          const Row(
             children: [
               Icon(Icons.numbers),
               SizedBox(
@@ -186,7 +185,7 @@ class _StepPage1State extends State<StepPage1> {
               Text('Number of blocks'),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -199,7 +198,7 @@ class _StepPage1State extends State<StepPage1> {
               labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
                   .copyWith(color: Colors.grey),
               border: OutlineInputBorder(
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
@@ -213,7 +212,7 @@ class _StepPage1State extends State<StepPage1> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
@@ -221,10 +220,10 @@ class _StepPage1State extends State<StepPage1> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
-          Row(
+          const Row(
             children: [
               Icon(Icons.king_bed_rounded),
               SizedBox(
@@ -233,10 +232,10 @@ class _StepPage1State extends State<StepPage1> {
               Text('Bedrooms'),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Container(
+          SizedBox(
             height: 48,
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -247,8 +246,8 @@ class _StepPage1State extends State<StepPage1> {
                       _selectItem(index);
                     },
                     child: Container(
-                      padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         color: _selectedIndex == index
                             ? mintyGreen
@@ -271,8 +270,8 @@ class _StepPage1State extends State<StepPage1> {
                   );
                 }),
           ),
-          SizedBox(height: 24),
-          Row(
+          const SizedBox(height: 24),
+          const Row(
             children: [
               Icon(Icons.money_off),
               SizedBox(
@@ -281,7 +280,7 @@ class _StepPage1State extends State<StepPage1> {
               Text('Price of the unit'),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           TextFormField(
@@ -294,7 +293,7 @@ class _StepPage1State extends State<StepPage1> {
               labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
                   .copyWith(color: Colors.grey),
               border: OutlineInputBorder(
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
@@ -308,7 +307,7 @@ class _StepPage1State extends State<StepPage1> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.grey,
                   width: 1.0,
                 ),
@@ -316,10 +315,10 @@ class _StepPage1State extends State<StepPage1> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
-          Row(
+          const Row(
             children: [
               Icon(Icons.payment),
               SizedBox(
@@ -328,7 +327,7 @@ class _StepPage1State extends State<StepPage1> {
               Text('Payment options'),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Row(
@@ -338,13 +337,13 @@ class _StepPage1State extends State<StepPage1> {
                 groupValue: _selectedPaymentOption,
                 onChanged: (value) {},
               ),
-              Text(
+              const Text(
                 'M-Pesa',
                 style: TextStyle(fontSize: 18),
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           SizedBox(
@@ -353,16 +352,15 @@ class _StepPage1State extends State<StepPage1> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: mintyGreen),
               onPressed: () {
-                _pageController.animateToPage(
+                pageController.animateToPage(
                   1,
-                  duration: Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
                 );
                 setState(() {
-                  _currentPageIndex = 1;
                 });
               },
-              child: Text('Proceed'),
+              child: const Text('Proceed'),
             ),
           ),
         ],

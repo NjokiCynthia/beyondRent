@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:x_rent/screens/intro_screens/onboarding_page.dart';
-import 'package:x_rent/utilities/constants.dart';
 
 class AnimatedScaleImage extends StatefulWidget {
   const AnimatedScaleImage({Key? key}) : super(key: key);

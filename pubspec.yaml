@@ -73,6 +73,8 @@ flutter:
     - assets/images/icons/bank.png
     - assets/images/icons/left-arrow.png
     - assets/images/icons/info.png
+    - assets/images/avatar.jpg
+    - assets/images/apartment.png
 
     #Illustrations
     - assets/illustrations/invoice.png
