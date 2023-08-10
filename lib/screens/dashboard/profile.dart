@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:x_rent/constants/theme.dart';
+import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 
 class Profile extends StatefulWidget {
@@ -12,25 +14,53 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.withOpacity(0.1),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const DashboardAppbar(
-                headerText: 'My Profile',
-                headerBody: 'Last updated two weeks ago',
-                icon: Icon(
-                  Icons.person,
-                  color: Colors.black,
-                  size: 20,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'My Profile',
+                        style: displayTitle,
+                      ),
+                      Text(
+                        'Last updated two weeks ago',
+                        style: displayGrey,
+                      )
+                    ],
+                  ),
+                  Icon(
+                    Icons.person,
+                    color: Colors.black,
+                    size: 20,
+                  ),
+                ],
               ),
+              // const DashboardAppbar(
+              //   headerText: 'My Profile',
+              //   headerBody: 'Last updated two weeks ago',
+              //   icon: Icon(
+              //     Icons.person,
+              //     color: Colors.black,
+              //     size: 20,
+              //   ),
+              // ),
               const SizedBox(
-                height: 20, // Adjust spacing between header and card
-              ), // Adjust the spacing
+                height: 80,
+              ),
               Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                      10.0), // Adjust the radius as needed
+                ),
                 elevation: 4,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -39,7 +69,7 @@ class _ProfileState extends State<Profile> {
                       alignment: Alignment.topCenter,
                       children: [
                         Transform.translate(
-                          offset: const Offset(0, -30),
+                          offset: const Offset(0, -50),
                           child: const Column(
                             children: [
                               CircleAvatar(
@@ -61,7 +91,9 @@ class _ProfileState extends State<Profile> {
                     ),
                     const ListTile(
                       leading: Icon(Icons.phone),
-                      title: Text('+254797181989'),
+                      title: Text(
+                        '+254797181989',
+                      ),
                     ),
                     const ListTile(
                       leading: Icon(Icons.email),
@@ -76,6 +108,10 @@ class _ProfileState extends State<Profile> {
               ),
               const SizedBox(height: 20), // Adjust the spacing
               Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                      10.0), // Adjust the radius as needed
+                ),
                 elevation: 4,
                 child: ListTile(
                   leading: Container(
@@ -104,6 +140,9 @@ class _ProfileState extends State<Profile> {
               ),
 
               Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
                 elevation: 4,
                 child: ListTile(
                   leading: Container(

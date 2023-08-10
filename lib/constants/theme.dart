@@ -119,3 +119,9 @@ TextStyle displayNormalWhiteBold = GoogleFonts.getFont(
   fontWeight: FontWeight.w500,
   color: Colors.white,
 );
+TextStyle displayGrey = GoogleFonts.getFont(
+  Strings.fontName,
+  fontSize: 15,
+  fontWeight: FontWeight.w500,
+  color: Colors.grey,
+);
