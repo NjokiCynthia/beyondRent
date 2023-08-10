@@ -11,64 +11,53 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   DateTime selectedDate = DateTime.now();
+  String currentMonth = '';
 
-  Future<void> _showMonthPicker(BuildContext context) async {
+  Future<void> _showDayPicker(BuildContext context) async {
     DateTime currentDate = DateTime.now();
     DateTime lastSelectableDate =
-        DateTime(currentDate.year, currentDate.month - 1, 1);
+        DateTime(currentDate.year - 1, currentDate.month);
 
-    int selectedMonthIndex = currentDate.month - 1;
-    int? newMonthIndex = await showDialog<int>(
+    DateTime? selected = await showDatePicker(
       context: context,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          title: Text('Select a Month'),
-          children: List.generate(12, (index) {
-            DateTime monthDate = DateTime(currentDate.year, index + 1);
-            if (monthDate.isAfter(lastSelectableDate)) {
-              return null; // Return a placeholder if month is not selectable
-            } else {
-              return Column(
-                children: [
-                  SimpleDialogOption(
-                    onPressed: () {
-                      Navigator.pop(context, index);
-                    },
-                    child: Text(DateFormat.MMMM().format(monthDate)),
-                  ),
-                  Divider(),
-                ],
-              );
-            }
-          }).whereType<Widget>().toList(),
+      initialDate: currentDate,
+      firstDate: lastSelectableDate,
+      lastDate: currentDate,
+      initialDatePickerMode: DatePickerMode.day, // Change this to day
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: Colors.blue,
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child!,
         );
       },
     );
 
-    if (newMonthIndex != null) {
+    if (selected != null) {
       setState(() {
-        selectedDate = DateTime(currentDate.year, newMonthIndex + 1);
+        selectedDate = selected;
+        currentMonth = getMonthAbbreviation(selected);
       });
     }
+  }
+
+  String getMonthAbbreviation(DateTime date) {
+    String abbreviation = DateFormat.MMM().format(date);
+    return abbreviation;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    currentMonth = getMonthAbbreviation(selectedDate);
   }
 
   @override
   Widget build(BuildContext context) {
     Widget rentWidget = Column(
       children: [
-        Column(
-          children: <Widget>[
-            ElevatedButton(
-              onPressed: () => _showMonthPicker(context),
-              child: Text('Pick Month'),
-            ),
-            if (selectedDate != null)
-              Text(
-                'Selected Month: ${selectedDate!.month}/${selectedDate!.year}',
-                style: TextStyle(fontSize: 18),
-              ),
-          ],
-        ),
         Padding(
           padding: const EdgeInsets.only(left: 5, right: 5),
           child: Row(
@@ -80,9 +69,14 @@ class _HomeState extends State<Home> {
               ),
               Row(
                 children: [
-                  Text(
-                    'Sept ',
-                    style: Theme.of(context).textTheme.bodySmall,
+                  GestureDetector(
+                    onTap: () {
+                      _showDayPicker(context);
+                    },
+                    child: Text(
+                      currentMonth,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                   ),
                   Icon(
                     Icons.keyboard_arrow_down,

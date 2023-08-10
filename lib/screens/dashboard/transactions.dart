@@ -10,7 +10,6 @@ class Transactions extends StatefulWidget {
 
 class _TransactionsState extends State<Transactions> {
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(247, 247, 247, 1),
