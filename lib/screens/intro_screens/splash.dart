@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:x_rent/screens/intro_screens/onboarding_page.dart';
+import 'package:x_rent/utilities/constants.dart';
 
 class AnimatedScaleImage extends StatefulWidget {
+  const AnimatedScaleImage({Key? key}) : super(key: key);
   @override
   _AnimatedScaleImageState createState() => _AnimatedScaleImageState();
 }
@@ -17,7 +19,7 @@ class _AnimatedScaleImageState extends State<AnimatedScaleImage>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 1),
     );
     _scaleAnimation =
         CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
@@ -32,9 +34,26 @@ class _AnimatedScaleImageState extends State<AnimatedScaleImage>
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.9,
           height: MediaQuery.of(context).size.width * 0.9,
-          child: Image.asset(
-            'assets/images/rentals.png',
-            fit: BoxFit.contain,
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  child: Image.asset(
+                    'assets/images/icons/logo-green.png',
+                    width: 40,
+                  ),
+                ),
+                Text(
+                  'XRent',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(color: Colors.black),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -49,11 +68,12 @@ class _AnimatedScaleImageState extends State<AnimatedScaleImage>
 }
 
 class SplashScreen extends StatelessWidget {
+  const SplashScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
       duration: 3000,
-      splash: Column(
+      splash: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

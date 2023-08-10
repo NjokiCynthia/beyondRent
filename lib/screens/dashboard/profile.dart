@@ -21,40 +21,14 @@ class _ProfileState extends State<Profile> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'My Profile',
-                        style: displayTitle,
-                      ),
-                      Text(
-                        'Last updated two weeks ago',
-                        style: displayGrey,
-                      )
-                    ],
-                  ),
-                  Icon(
-                    Icons.person,
-                    color: Colors.black,
-                    size: 20,
-                  ),
-                ],
-              ),
-              // const DashboardAppbar(
-              //   headerText: 'My Profile',
-              //   headerBody: 'Last updated two weeks ago',
-              //   icon: Icon(
-              //     Icons.person,
-              //     color: Colors.black,
-              //     size: 20,
-              //   ),
-              // ),
-              const SizedBox(
-                height: 80,
+              DashboardAppbar(
+                headerText: 'My Profile',
+                headerBody: 'Last updated two weeks ago',
+                icon: Icon(
+                  Icons.person,
+                  color: Colors.black,
+                  size: 20,
+                ),
               ),
               Card(
                 shape: RoundedRectangleBorder(

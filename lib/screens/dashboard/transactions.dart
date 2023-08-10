@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:x_rent/utilities/widgets.dart';
+import 'package:x_rent/utilities/constants.dart';
 
 class Transactions extends StatefulWidget {
   const Transactions({Key? key}) : super(key: key);
@@ -10,8 +11,96 @@ class Transactions extends StatefulWidget {
 
 class _TransactionsState extends State<Transactions> {
   @override
-  @override
   Widget build(BuildContext context) {
+    Widget modalContent = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Align(
+          alignment: Alignment.center,
+          child: Text(
+            'Filter Transactions',
+            style: Theme.of(context).textTheme.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          'Payment Method',
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(right: 20),
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Wrap(
+                direction: Axis.vertical,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/icons/home.png',
+                    width: 30,
+                  ),
+                  Text(
+                    'Mobile Money',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Wrap(
+                direction: Axis.vertical,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/icons/bank.png',
+                    width: 30,
+                  ),
+                  Text(
+                    'Bank Transfer',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        )
+      ],
+    );
     return Scaffold(
       backgroundColor: const Color.fromRGBO(247, 247, 247, 1),
       body: SafeArea(
@@ -19,15 +108,20 @@ class _TransactionsState extends State<Transactions> {
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Column(
             children: [
-              const DashboardAppbar(
-                headerText: 'Tenants',
-                headerBody: 'Tenants who have paid: 80',
+              DashboardAppbar(
+                headerText: 'Transactions',
+                headerBody: 'Total records: 1000',
                 leftHeader: 1,
-                icon: Icon(
-                  Icons.group_add,
-                  color: Colors.black,
-                  size: 20,
+                icon: Image.asset(
+                  'assets/images/icons/filter.png',
+                  width: 20,
                 ),
+                callback: (value) {
+                  showBottomModal(
+                    context,
+                    modalContent,
+                  );
+                },
               ),
               Expanded(
                 child: ListView(

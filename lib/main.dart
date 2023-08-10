@@ -17,15 +17,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         textTheme: TextTheme(
+          titleLarge: AppTextStyles.headerBig,
           displayLarge: AppTextStyles.header,
           displayMedium: AppTextStyles.smallHeaderSlightlyBold,
           bodyMedium: AppTextStyles.normal,
           bodySmall: AppTextStyles.small,
           labelMedium: AppTextStyles.normalGreen,
+          titleMedium: AppTextStyles.titleNormalBold,
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(), // Use the SplashScreen widget as the home
+      home: SplashScreen(),
       routes: {
         '/home': (_) => const HomePage(),
       },

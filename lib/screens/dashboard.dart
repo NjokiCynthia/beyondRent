@@ -14,9 +14,6 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  PersistentTabController bottomNavigationController =
-      PersistentTabController(initialIndex: 0);
-
   List<Widget> _buildScreens() {
     return [
       const Home(),
