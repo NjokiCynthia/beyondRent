@@ -392,8 +392,10 @@ class _PropertyDetailsState extends State<PropertyDetails> {
           onTap: () {
             Navigator.pop(context);
             showBottomModal(
+              
               context,
-              customeInvoiceContent,
+            
+              customeInvoiceContent, 
             );
           },
           child: Container(
@@ -444,7 +446,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                         ? _showDayPicker(context)
                         : showBottomModal(
                             context,
-                            modalContent,
+                            modalContent, 
                           );
                   },
                 ),

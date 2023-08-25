@@ -394,11 +394,23 @@ class TenantWidget extends StatelessWidget {
 }
 
 // Bottom Sheet Modal
-showBottomModal(BuildContext context, Widget content) {
+// showBottomModal(
+//   BuildContext context,
+//   Widget content,
+// ) {
+//   showModalBottomSheet<void>(
+//     useRootNavigator: true,
+//     context: context,
+//     backgroundColor: Colors.transparent,
+//     builder: (BuildContext context) {
+//       return _buildBottomModalContent(context, content);
+//     },
+//   );
+// }
+void showBottomModal(BuildContext context, Widget content) {
   showModalBottomSheet<void>(
     useRootNavigator: true,
     context: context,
-    isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (BuildContext context) {
       return _buildBottomModalContent(context, content);
@@ -407,14 +419,34 @@ showBottomModal(BuildContext context, Widget content) {
 }
 
 Widget _buildBottomModalContent(BuildContext context, Widget content) {
-  return ClipRRect(
-    borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+  return SingleChildScrollView(
     child: Container(
-      color: Colors.white,
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
-        child: content,
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: content,
+      decoration: BoxDecoration(
+        color: Theme.of(context).canvasColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16.0),
+          topRight: Radius.circular(16.0),
+        ),
       ),
     ),
   );
 }
+
+
+
+// Widget _buildBottomModalContent(BuildContext context, Widget content) {
+//   return ClipRRect(
+//     borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+//     child: Container(
+//       color: Colors.white,
+//       child: Container(
+//         padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
+//         child: content,
+//       ),
+//     ),
+//   );
+// }

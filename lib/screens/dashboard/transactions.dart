@@ -238,8 +238,9 @@ class _TransactionsState extends State<Transactions> {
                 ),
                 callback: (value) {
                   showBottomModal(
+
                     context,
-                    modalContent,
+                    modalContent, 
                   );
                 },
               ),
