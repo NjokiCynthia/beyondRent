@@ -4,11 +4,11 @@ import 'package:x_rent/utilities/constants.dart';
 
 Color getRandomColor() {
   final random = Random();
-  return Color.fromARGB(
-    100,
+  return Color.fromRGBO(
+    random.nextInt(150),
     random.nextInt(256),
     random.nextInt(256),
-    random.nextInt(256),
+    0.3,
   );
 }
 
@@ -51,35 +51,45 @@ class DashboardAppbar extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  children: [
-                    Text(
-                      'Sep 2022',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    Icon(
-                      Icons.keyboard_arrow_down,
-                      color: Colors.black.withOpacity(0.2),
-                      size: 20,
-                    ),
-                  ],
+              GestureDetector(
+                onTap: () {
+                  callback!('date');
+                },
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Aug 2023',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      Icon(
+                        Icons.keyboard_arrow_down,
+                        color: Colors.black.withOpacity(0.2),
+                        size: 20,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Image.asset(
-                  'assets/images/icons/info.png',
-                  width: 15,
+              GestureDetector(
+                onTap: () {
+                  callback!('');
+                },
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Image.asset(
+                    'assets/images/icons/info.png',
+                    width: 15,
+                  ),
                 ),
               ),
             ],
@@ -199,19 +209,26 @@ class TransactionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final backgroundColor = getRandomColor();
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
+      // margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 0.5,
-            blurRadius: 1,
-            offset: const Offset(0, 1),
+        // color: Colors.white,
+        border: Border(
+          bottom: BorderSide(
+            //                   <--- left side
+            color: Colors.grey.withOpacity(0.1),
+            width: 1.0,
           ),
-        ],
+        ),
+        // borderRadius: BorderRadius.circular(10),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.grey.withOpacity(0.3),
+        //     spreadRadius: 0.5,
+        //     blurRadius: 1,
+        //     offset: const Offset(0, 1),
+        //   ),
+        // ],
       ),
       child: Row(
         children: [
@@ -235,14 +252,29 @@ class TransactionCard extends StatelessWidget {
                       Text(name!),
                       Text(
                         date!,
-                        style: Theme.of(context).textTheme.bodySmall,
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontSize: 12,
+                            ),
                       ),
                     ],
                   ),
                 ),
-                Text(
-                  '+ Kes. 40,000',
-                  style: Theme.of(context).textTheme.labelMedium,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        '+ Kes. 40,000',
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
+                      Text(
+                        'House Rent',
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontSize: 12,
+                            ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -255,7 +287,17 @@ class TransactionCard extends StatelessWidget {
 
 // Tenants Widget
 class TenantWidget extends StatelessWidget {
-  const TenantWidget({super.key});
+  final String? name;
+  final String? date;
+  final num? amount;
+  final ValueSetter<dynamic>? callback;
+  const TenantWidget({
+    super.key,
+    this.name,
+    this.date,
+    this.amount,
+    this.callback,
+  });
   @override
   Widget build(BuildContext context) {
     final backgroundColor = getRandomColor();
@@ -293,9 +335,9 @@ class TenantWidget extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Gaseema Nudngu'),
+                        Text(name!),
                         Text(
-                          'The Icon Heights',
+                          'Elgon Court',
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ],
@@ -327,7 +369,7 @@ class TenantWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '10, Oct 2022',
+                '$date',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               Column(

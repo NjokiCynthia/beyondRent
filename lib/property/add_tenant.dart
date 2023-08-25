@@ -255,7 +255,7 @@ class _StepPage2State extends State<StepPage2> {
             height: 10,
           ),
           SizedBox(
-            height: 48,
+            height: 60,
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: 8,
@@ -290,56 +290,6 @@ class _StepPage2State extends State<StepPage2> {
                 }),
           ),
           const SizedBox(height: 24),
-          const Row(
-            children: [
-              Icon(Icons.money_off),
-              SizedBox(
-                width: 10,
-              ),
-              Text('Price of the unit'),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          TextFormField(
-            style: bodyText,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              labelText: 'Price of the unit',
-              labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                  .copyWith(color: Colors.grey),
-              border: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.grey.shade300,
-                  width: 2.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          const SizedBox(
-            height: 24,
-          ),
           SizedBox(
             height: 48,
             width: double.infinity,
@@ -347,9 +297,11 @@ class _StepPage2State extends State<StepPage2> {
               style: ElevatedButton.styleFrom(backgroundColor: mintyGreen),
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: ((context) => const Dashboard())));
+                  context,
+                  MaterialPageRoute(
+                    builder: ((context) => const Dashboard()),
+                  ),
+                );
               },
               child: const Text('Confirm'),
             ),

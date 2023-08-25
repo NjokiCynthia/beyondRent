@@ -1,23 +1,193 @@
 import 'package:flutter/material.dart';
 import 'package:x_rent/constants/theme.dart';
-import 'package:x_rent/property/add_tenant.dart';
+import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/utilities/constants.dart';
+import 'package:x_rent/property/add_tenant.dart';
 
-void main() {
-  runApp(const MyApp());
+int _selectedIndex = 0;
+List unitList = [];
+
+// This widget represents the modal content and its state
+class AddUnitsModalContent extends StatefulWidget {
+  @override
+  _AddUnitsModalContentState createState() => _AddUnitsModalContentState();
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class _AddUnitsModalContentState extends State<AddUnitsModalContent> {
+  void _selectItem(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'X Rent',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return SingleChildScrollView(
+      physics:
+          AlwaysScrollableScrollPhysics(), // Ensure content is always scrollable
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ... (other widgets)
+
+          const Row(
+            children: [
+              Icon(Icons.king_bed_rounded),
+              SizedBox(width: 10),
+              Text('Bedrooms'),
+            ],
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 60,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 8,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    _selectItem(index);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: _selectedIndex == index
+                          ? mintyGreen
+                          : Colors.grey.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Center(
+                      child: Text(
+                        index == 0 ? 'Studio' : index.toString(),
+                        style: TextStyle(
+                          color: _selectedIndex == index
+                              ? Colors.white
+                              : Colors.black,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Row(
+            children: [
+              Icon(Icons.numbers),
+              SizedBox(
+                width: 10,
+              ),
+              Text('Price of unit'),
+            ],
+          ),
+          const SizedBox(height: 10),
+          TextFormField(
+            style: bodyText,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              labelText: 'Price of the unit',
+              labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                  .copyWith(color: Colors.grey),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.grey.shade300,
+                  width: 2.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Row(
+            children: [
+              Icon(Icons.numbers),
+              SizedBox(
+                width: 10,
+              ),
+              Text('Number of similar units'),
+            ],
+          ),
+          const SizedBox(height: 10),
+          TextFormField(
+            style: bodyText,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              labelText: 'Number of units',
+              labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                  .copyWith(color: Colors.grey),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.grey.shade300,
+                  width: 2.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                unitList.add({
+                  'bedrooms': 1,
+                  'price': 2000,
+                  'units': 10,
+                });
+              });
+              print('unitList');
+              print(unitList);
+            },
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: mintyGreen,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                'Complete',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ],
       ),
-      home: const AddProperty(),
     );
   }
 }
@@ -105,15 +275,19 @@ class StepPage1 extends StatefulWidget {
   final int currentPageIndex;
   final PageController pageController;
 
-  const StepPage1({super.key, required this.currentPageIndex, required this.pageController});
+  const StepPage1(
+      {super.key,
+      required this.currentPageIndex,
+      required this.pageController});
 
   @override
   _StepPage1State createState() => _StepPage1State();
 }
 
 class _StepPage1State extends State<StepPage1> {
-  int _selectedIndex = 0;
   final String _selectedPaymentOption = '';
+
+  bool _modalState = false;
 
   void _selectItem(int index) {
     setState(() {
@@ -124,6 +298,99 @@ class _StepPage1State extends State<StepPage1> {
   @override
   Widget build(BuildContext context) {
     PageController pageController = widget.pageController;
+
+    Widget addUnitsModal = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Enter property name',
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+        const SizedBox(height: 10),
+        TextFormField(
+          style: bodyText,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            labelText: 'Property Name',
+            labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                .copyWith(color: Colors.grey),
+            border: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Colors.grey,
+                width: 1.0,
+              ),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.grey.shade300,
+                width: 2.0,
+              ),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Colors.grey,
+                width: 1.0,
+              ),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        const Row(
+          children: [
+            Icon(Icons.king_bed_rounded, size: 15),
+            SizedBox(
+              width: 10,
+            ),
+            Text('Bedrooms'),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        SizedBox(
+          height: 60,
+          child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: 8,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    _selectItem(index);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: _selectedIndex == index
+                          ? mintyGreen
+                          : Colors.grey.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Center(
+                      child: Text(
+                        index == 0 ? 'Studio' : index.toString(),
+                        style: TextStyle(
+                          color: _selectedIndex == index
+                              ? Colors.white
+                              : Colors.black,
+                          //fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+        ),
+      ],
+    );
 
     return SingleChildScrollView(
       child: Column(
@@ -176,148 +443,111 @@ class _StepPage1State extends State<StepPage1> {
           const SizedBox(
             height: 24,
           ),
-          const Row(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.numbers),
-              SizedBox(
-                width: 10,
+              const Row(
+                children: [
+                  Icon(Icons.numbers),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('Add property units'),
+                ],
               ),
-              Text('Number of blocks'),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          TextFormField(
-            style: bodyText,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              labelText: 'Number of blocks',
-              labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                  .copyWith(color: Colors.grey),
-              border: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
+              const SizedBox(
+                height: 20,
               ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.grey.shade300,
-                  width: 2.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          const Row(
-            children: [
-              Icon(Icons.king_bed_rounded),
-              SizedBox(
-                width: 10,
-              ),
-              Text('Bedrooms'),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            height: 48,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 8,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      _selectItem(index);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      margin: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color: _selectedIndex == index
-                            ? mintyGreen
-                            : Colors.grey.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Center(
-                        child: Text(
-                          index == 0 ? 'Studio' : index.toString(),
-                          style: TextStyle(
-                            color: _selectedIndex == index
-                                ? Colors.white
-                                : Colors.black,
-                            //fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: List.generate(unitList.length, (index) {
+                  int bedrooms = unitList[index]['bedrooms'];
+                  int price = unitList[index]['price'];
+                  int units = unitList[index]['units'];
+
+                  return Container(
+                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    decoration: BoxDecoration(
+                      color: mintyGreen,
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                    width: MediaQuery.of(context).size.width / 2 -
+                        50, // Two items per row
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Bedrooms: $bedrooms',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(fontSize: 15, color: Colors.white),
                         ),
-                      ),
+                        Text(
+                          'Price: $price',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(fontSize: 15, color: Colors.white),
+                        ),
+                        Text(
+                          'Units: $units',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(fontSize: 15, color: Colors.white),
+                        ),
+                      ],
                     ),
                   );
                 }),
-          ),
-          const SizedBox(height: 24),
-          const Row(
-            children: [
-              Icon(Icons.money_off),
-              SizedBox(
-                width: 10,
               ),
-              Text('Price of the unit'),
+              const SizedBox(
+                height: 20,
+              ),
+              GestureDetector(
+                onTap: () {
+                  showBottomModal(
+                    context,
+                    AddUnitsModalContent(),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                  margin: const EdgeInsets.only(right: 10),
+                  decoration: BoxDecoration(
+                    color: mintyGreen,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: Text(
+                          '+',
+                          style:
+                              Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    fontSize: 30,
+                                    color: Colors.white,
+                                  ),
+                        ),
+                      ),
+                      Text(
+                        'Add unit',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(fontSize: 13, color: Colors.white),
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          TextFormField(
-            style: bodyText,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              labelText: 'Price of the unit',
-              labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                  .copyWith(color: Colors.grey),
-              border: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.grey.shade300,
-                  width: 2.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 24,
-          ),
+          const SizedBox(height: 24),
           const Row(
             children: [
               Icon(Icons.payment),
@@ -357,8 +587,7 @@ class _StepPage1State extends State<StepPage1> {
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
                 );
-                setState(() {
-                });
+                setState(() {});
               },
               child: const Text('Proceed'),
             ),

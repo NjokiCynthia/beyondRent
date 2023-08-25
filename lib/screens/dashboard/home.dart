@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/screens/dashboard/propertyDetails.dart';
+import 'package:x_rent/property/add_property.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:intl/intl.dart';
 
@@ -127,11 +128,11 @@ class _HomeState extends State<Home> {
               children: [
                 const Text('Total rent for September'),
                 Text(
-                  'Kes. 7,000',
+                  'Kes. 140,000',
                   style: Theme.of(context).textTheme.displayLarge,
                 ),
                 const SizedBox(height: 10),
-                const ProgressBar(progress: 30),
+                const ProgressBar(progress: 60),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,11 +152,11 @@ class _HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Kes, 7,000',
+                      'Kes, 140,000',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     Text(
-                      'Kes, 64,000',
+                      'Kes, 270,000',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],
@@ -188,10 +189,46 @@ class _HomeState extends State<Home> {
           ),
         ),
         const SizedBox(height: 20),
-        const TransactionCard(name: 'Julia', date: '20th', amount: 2000),
-        const TransactionCard(name: 'Julia', date: '20th', amount: 2000),
-        const TransactionCard(name: 'Julia', date: '20th', amount: 2000),
-        const TransactionCard(name: 'Julia', date: '20th', amount: 2000),
+        const TransactionCard(
+          name: 'Liam',
+          date: '22nd, Mar 2023',
+          amount: 20000,
+        ),
+        const TransactionCard(
+          name: 'Sophia',
+          date: '24th, Mar 2023',
+          amount: 32000,
+        ),
+        const TransactionCard(
+          name: 'Ethan',
+          date: '26th, Mar 2023',
+          amount: 25000,
+        ),
+        const TransactionCard(
+          name: 'Ava',
+          date: '28th, Mar 2023',
+          amount: 30000,
+        ),
+        const TransactionCard(
+          name: 'Emma',
+          date: '28th, Mar 2023',
+          amount: 25000,
+        ),
+        const TransactionCard(
+          name: 'Olivia',
+          date: '28th, Mar 2023',
+          amount: 30000,
+        ),
+        const TransactionCard(
+          name: 'Ava',
+          date: '28th, Mar 2023',
+          amount: 30000,
+        ),
+        const TransactionCard(
+          name: 'Ava',
+          date: '28th, Mar 2023',
+          amount: 30000,
+        ),
       ],
     );
     Widget modalContent = Column(
@@ -248,37 +285,47 @@ class _HomeState extends State<Home> {
           style: Theme.of(context).textTheme.bodySmall,
         ),
         const SizedBox(height: 10),
-        Row(children: [
-          Container(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: mintyGreen,
-            ),
-            child: Row(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 20),
-                  child: Text(
-                    'Add property',
+        GestureDetector(
+          onTap: () {
+            PersistentNavBarNavigator.pushNewScreen(
+              context,
+              screen: const AddProperty(),
+              withNavBar: false,
+              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+            );
+          },
+          child: Row(children: [
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: mintyGreen,
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 20),
+                    child: Text(
+                      'Add property',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: Colors.white),
+                    ),
+                  ),
+                  Text(
+                    '+',
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium!
                         .copyWith(color: Colors.white),
                   ),
-                ),
-                Text(
-                  '+',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: Colors.white),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Expanded(child: Container())
-        ]),
+            Expanded(child: Container())
+          ]),
+        ),
         const SizedBox(height: 20),
       ],
     );
@@ -289,6 +336,7 @@ class _HomeState extends State<Home> {
           padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
           child: Column(
             children: [
+              const SizedBox(height: 20),
               DashboardAppbar(
                 headerText: 'Property',
                 headerBody: 'Elgon Court',

@@ -114,7 +114,7 @@ class _ProfileState extends State<Profile> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  subtitle: const Text('Never miss the rent due date'),
+                  subtitle: const Text('Send out rent reminders'),
                   trailing: const Icon(Icons.arrow_forward_ios),
                 ),
               ),
