@@ -268,7 +268,7 @@ class _HomeState extends State<Home> {
                         width: 20,
                       ),
                     ),
-                    const Text('Elgon Court'),
+                    Text(propertyName),
                   ],
                 ),
               ),
@@ -339,7 +339,7 @@ class _HomeState extends State<Home> {
               const SizedBox(height: 20),
               DashboardAppbar(
                 headerText: 'Property',
-                headerBody: 'Elgon Court',
+                headerBody: propertyName,
                 icon: Image.asset(
                   'assets/images/icons/exchange.png',
                   width: 20,
@@ -347,7 +347,10 @@ class _HomeState extends State<Home> {
                 callback: (value) {
                   showBottomModal(
                     context,
-                    modalContent,
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      child: modalContent,
+                    ),
                   );
                 },
               ),

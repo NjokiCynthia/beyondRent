@@ -6,6 +6,11 @@ String ipAddress = 'https://kodi.sandbox.co.ke';
 // Color Themes
 Color mintyGreen = const Color.fromRGBO(13, 201, 150, 1);
 
+String propertyName = 'Elgon Court';
+String propertyUser = 'Cynthia Njoki';
+String propertyUserPhone = '+254721882694';
+String propertyUserEmail = 'cynthia@gmail.com';
+
 PersistentTabController bottomNavigationController =
     PersistentTabController(initialIndex: 0);
 

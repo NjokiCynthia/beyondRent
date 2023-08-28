@@ -4,7 +4,7 @@ import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/property/property_list.dart';
 import 'package:x_rent/screens/authentication/signup.dart';
 import 'package:x_rent/utilities/constants.dart';
-import 'package:x_rent/utilities/constants.dart';
+import 'package:x_rent/screens/dashboard.dart';
 import 'package:x_rent/utilities/widgets.dart';
 
 class Login extends StatefulWidget {
@@ -159,21 +159,16 @@ class _LoginState extends State<Login> {
                   ),
                   const SizedBox(height: 30),
                   CustomRequestButton(
-                    url: '/mobile/signup',
+                    url: '/mobile/login',
                     method: 'POST',
                     buttonText: 'Log in',
                     body: const {
-                      "request_id": "5v76g4v567344334355475cd4f",
-                      "first_name": "Alice",
-                      "last_name": "Kimani",
-                      "identity": "0766772700",
-                      "property_name": "Kirui Apartments",
-                      "location": "Buru Age 3",
-                      "password": "123456789"
+                      "phone": "0766444600",
+                      "password": "123456789",
+                      "remember": true
                     },
                     onSuccess: (res) {
-                      print(res['data']['response_code'].runtimeType);
-                      if (res['data']['response_code'] != '1') {
+                      if (res['data']['response']['status'] != 1) {
                         return showToast(
                           context,
                           'Error!',
@@ -182,7 +177,12 @@ class _LoginState extends State<Login> {
                           Colors.red,
                         );
                       }
-                      print('good to go');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => const Dashboard()),
+                        ),
+                      );
                     },
                   ),
                 ],

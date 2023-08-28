@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/utilities/constants.dart';
-import 'package:x_rent/property/add_tenant.dart';
+import 'package:x_rent/property/step2.dart';
+import 'package:x_rent/property/step3.dart';
 
 int _selectedIndex = 0;
 List unitList = [];
+PageController propertyPageController = PageController(initialPage: 0);
+int _currentPageIndex = 0;
 
 // This widget represents the modal content and its state
 class AddUnitsModalContent extends StatefulWidget {
@@ -210,19 +213,20 @@ class AddProperty extends StatefulWidget {
 }
 
 class _AddPropertyState extends State<AddProperty> {
-  PageController _pageController = PageController(initialPage: 0);
-  int _currentPageIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = [
       StepPage1(
         currentPageIndex: _currentPageIndex,
-        pageController: _pageController,
+        pageController: propertyPageController,
       ),
       StepPage2(
         currentPageIndex: _currentPageIndex,
-        pageController: _pageController,
+        pageController: propertyPageController,
+      ),
+      StepPage3(
+        currentPageIndex: _currentPageIndex,
+        pageController: propertyPageController,
       ),
     ];
     return Scaffold(
@@ -233,7 +237,7 @@ class _AddPropertyState extends State<AddProperty> {
           child: Column(
             children: [
               Text(
-                'Add Property and Tenants',
+                'Add Property and Units',
                 style: AppTextStyles.smallHeaderSlightlyBold,
               ),
               const SizedBox(
@@ -246,11 +250,13 @@ class _AddPropertyState extends State<AddProperty> {
                   const SizedBox(width: 8),
                   _buildStepIndicator(1),
                   const SizedBox(width: 8),
+                  _buildStepIndicator(2),
+                  const SizedBox(width: 8),
                 ],
               ),
               Expanded(
                 child: PageView(
-                  controller: _pageController,
+                  controller: propertyPageController,
                   onPageChanged: (index) {
                     setState(() {
                       _currentPageIndex = index;
@@ -280,6 +286,8 @@ class _AddPropertyState extends State<AddProperty> {
     );
   }
 }
+
+TextEditingController propertyNameController = TextEditingController();
 
 class StepPage1 extends StatefulWidget {
   final int currentPageIndex;
@@ -322,6 +330,10 @@ class _StepPage1State extends State<StepPage1> {
         const SizedBox(height: 10),
         TextFormField(
           style: bodyText,
+          controller: propertyNameController,
+          onChanged: (text) {
+            // print(text);
+          },
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
@@ -426,6 +438,7 @@ class _StepPage1State extends State<StepPage1> {
           ),
           const SizedBox(height: 10),
           TextFormField(
+            onChanged: (text) {},
             style: bodyText,
             decoration: InputDecoration(
               filled: true,
@@ -459,113 +472,160 @@ class _StepPage1State extends State<StepPage1> {
           const SizedBox(
             height: 24,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          const Row(
             children: [
-              const Row(
-                children: [
-                  Icon(
-                    Icons.numbers,
-                    color: Color.fromRGBO(13, 201, 150, 1),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text('Add property units'),
-                ],
+              Icon(
+                Icons.map,
+                color: Color.fromRGBO(13, 201, 150, 1),
               ),
-              const SizedBox(
-                height: 20,
+              SizedBox(
+                width: 10,
               ),
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: List.generate(unitList.length, (index) {
-                  int bedrooms = unitList[index]['bedrooms'];
-                  int price = unitList[index]['price'];
-                  int units = unitList[index]['units'];
-
-                  return Container(
-                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    decoration: BoxDecoration(
-                      color: mintyGreen,
-                      borderRadius: BorderRadius.circular(7),
-                    ),
-                    width: MediaQuery.of(context).size.width / 2 -
-                        50, // Two items per row
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Bedrooms: $bedrooms',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(fontSize: 15, color: Colors.white),
-                        ),
-                        Text(
-                          'Price: $price',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(fontSize: 15, color: Colors.white),
-                        ),
-                        Text(
-                          'Units: $units',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(fontSize: 15, color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              GestureDetector(
-                onTap: () {
-                  showBottomModal(
-                    context,
-                    const AddUnitsModalContent(),
-                  );
-                },
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                  margin: const EdgeInsets.only(right: 10),
-                  decoration: BoxDecoration(
-                    color: mintyGreen,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Text(
-                          '+',
-                          style:
-                              Theme.of(context).textTheme.bodySmall!.copyWith(
-                                    fontSize: 30,
-                                    color: Colors.white,
-                                  ),
-                        ),
-                      ),
-                      Text(
-                        'Add unit',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .copyWith(fontSize: 13, color: Colors.white),
-                      )
-                    ],
-                  ),
-                ),
-              ),
+              Text('Enter Property Location'),
             ],
           ),
+          const SizedBox(height: 10),
+          TextFormField(
+            style: bodyText,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              labelText: 'Property Location',
+              labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                  .copyWith(color: Colors.grey),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.grey.shade300,
+                  width: 2.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 24,
+          ),
+          // Column(
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: [
+          //     const Row(
+          //       children: [
+          //         Icon(
+          //           Icons.numbers,
+          //           color: Color.fromRGBO(13, 201, 150, 1),
+          //         ),
+          //         SizedBox(
+          //           width: 10,
+          //         ),
+          //         Text('Add property units'),
+          //       ],
+          //     ),
+          //     const SizedBox(
+          //       height: 20,
+          //     ),
+          //     Wrap(
+          //       spacing: 10,
+          //       runSpacing: 10,
+          //       children: List.generate(unitList.length, (index) {
+          //         int bedrooms = unitList[index]['bedrooms'];
+          //         int price = unitList[index]['price'];
+          //         int units = unitList[index]['units'];
+
+          //         return Container(
+          //           padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+          //           decoration: BoxDecoration(
+          //             color: mintyGreen,
+          //             borderRadius: BorderRadius.circular(7),
+          //           ),
+          //           width: MediaQuery.of(context).size.width / 2 -
+          //               50, // Two items per row
+          //           child: Column(
+          //             crossAxisAlignment: CrossAxisAlignment.start,
+          //             children: [
+          //               Text(
+          //                 'Bedrooms: $bedrooms',
+          //                 style: Theme.of(context)
+          //                     .textTheme
+          //                     .bodySmall!
+          //                     .copyWith(fontSize: 15, color: Colors.white),
+          //               ),
+          //               Text(
+          //                 'Price: $price',
+          //                 style: Theme.of(context)
+          //                     .textTheme
+          //                     .bodySmall!
+          //                     .copyWith(fontSize: 15, color: Colors.white),
+          //               ),
+          //               Text(
+          //                 'Units: $units',
+          //                 style: Theme.of(context)
+          //                     .textTheme
+          //                     .bodySmall!
+          //                     .copyWith(fontSize: 15, color: Colors.white),
+          //               ),
+          //             ],
+          //           ),
+          //         );
+          //       }),
+          //     ),
+          //     const SizedBox(
+          //       height: 20,
+          //     ),
+          //     GestureDetector(
+          //       onTap: () {
+          //         showBottomModal(
+          //           context,
+          //           const AddUnitsModalContent(),
+          //         );
+          //       },
+          //       child: Container(
+          //         padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+          //         margin: const EdgeInsets.only(right: 10),
+          //         decoration: BoxDecoration(
+          //           color: mintyGreen,
+          //           borderRadius: BorderRadius.circular(5),
+          //         ),
+          //         child: Row(
+          //           mainAxisSize: MainAxisSize.min,
+          //           children: [
+          //             Padding(
+          //               padding: const EdgeInsets.only(right: 10),
+          //               child: Text(
+          //                 '+',
+          //                 style:
+          //                     Theme.of(context).textTheme.bodySmall!.copyWith(
+          //                           fontSize: 30,
+          //                           color: Colors.white,
+          //                         ),
+          //               ),
+          //             ),
+          //             Text(
+          //               'Add unit',
+          //               style: Theme.of(context)
+          //                   .textTheme
+          //                   .bodySmall!
+          //                   .copyWith(fontSize: 13, color: Colors.white),
+          //             )
+          //           ],
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
           const SizedBox(height: 24),
           SizedBox(
             height: 48,
@@ -578,7 +638,6 @@ class _StepPage1State extends State<StepPage1> {
                   duration: const Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
                 );
-                setState(() {});
               },
               child: const Text('Proceed'),
             ),

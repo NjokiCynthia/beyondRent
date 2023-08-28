@@ -33,7 +33,7 @@ class _SignupState extends State<Signup> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(bottom: 50),
+                    margin: const EdgeInsets.only(bottom: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -324,13 +324,12 @@ class _SignupState extends State<Signup> {
                       "request_id": "5v76g4v567344334355475cd4f",
                       "first_name": "Alice",
                       "last_name": "Kimani",
-                      "identity": "0766772700",
+                      "identity": "0703802740",
                       "property_name": "Kirui Apartments",
                       "location": "Buru Age 3",
                       "password": "123456789"
                     },
                     onSuccess: (res) {
-                      print(res['data']['response_code'].runtimeType);
                       if (res['data']['response_code'] != '1') {
                         return showToast(
                           context,
@@ -340,7 +339,12 @@ class _SignupState extends State<Signup> {
                           Colors.red,
                         );
                       }
-                      print('good to go');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => const Property()),
+                        ),
+                      );
                     },
                   ),
                 ],
