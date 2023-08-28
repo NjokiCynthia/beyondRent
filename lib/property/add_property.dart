@@ -548,34 +548,6 @@ class _StepPage1State extends State<StepPage1> {
             ],
           ),
           const SizedBox(height: 24),
-          const Row(
-            children: [
-              Icon(Icons.payment),
-              SizedBox(
-                width: 10,
-              ),
-              Text('Payment options'),
-            ],
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: [
-              Radio(
-                value: 'mpesa',
-                groupValue: _selectedPaymentOption,
-                onChanged: (value) {},
-              ),
-              const Text(
-                'M-Pesa',
-                style: TextStyle(fontSize: 18),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 24,
-          ),
           SizedBox(
             height: 48,
             width: double.infinity,

@@ -52,10 +52,6 @@ class _LoginState extends State<Login> {
                       ],
                     ),
                   ),
-                  Text(
-                    'Choose one of your properties',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
