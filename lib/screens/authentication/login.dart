@@ -25,7 +25,7 @@ class _LoginState extends State<Login> {
         Expanded(
           child: Center(
             child: Container(
-              margin: EdgeInsets.only(left: 20, right: 20),
+              margin: const EdgeInsets.only(left: 20, right: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -167,7 +167,7 @@ class _LoginState extends State<Login> {
           child: RichText(
             text: TextSpan(
               text: "Don't have an account? ",
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
               children: <TextSpan>[
                 TextSpan(
                   text: 'Signup',

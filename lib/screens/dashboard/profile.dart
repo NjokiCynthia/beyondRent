@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 
 class Profile extends StatefulWidget {
@@ -30,7 +29,7 @@ class _ProfileState extends State<Profile> {
                     size: 20,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
                 Card(
@@ -69,12 +68,12 @@ class _ProfileState extends State<Profile> {
                       ListTile(
                         leading: Container(
                           decoration: BoxDecoration(
-                            color: Color.fromRGBO(13, 201, 150, 1)
+                            color: const Color.fromRGBO(13, 201, 150, 1)
                                 .withOpacity(0.1),
                             shape: BoxShape.circle,
                           ),
                           padding: const EdgeInsets.all(8),
-                          child: Icon(
+                          child: const Icon(
                             Icons.phone,
                             color: Color.fromRGBO(13, 201, 150, 1),
                           ),
@@ -86,12 +85,12 @@ class _ProfileState extends State<Profile> {
                       ListTile(
                         leading: Container(
                           decoration: BoxDecoration(
-                            color: Color.fromRGBO(13, 201, 150, 1)
+                            color: const Color.fromRGBO(13, 201, 150, 1)
                                 .withOpacity(0.1),
                             shape: BoxShape.circle,
                           ),
                           padding: const EdgeInsets.all(8),
-                          child: Icon(
+                          child: const Icon(
                             Icons.email,
                             color: Color.fromRGBO(13, 201, 150, 1),
                           ),
@@ -103,12 +102,12 @@ class _ProfileState extends State<Profile> {
                       ListTile(
                         leading: Container(
                           decoration: BoxDecoration(
-                            color: Color.fromRGBO(13, 201, 150, 1)
+                            color: const Color.fromRGBO(13, 201, 150, 1)
                                 .withOpacity(0.1),
                             shape: BoxShape.circle,
                           ),
                           padding: const EdgeInsets.all(8),
-                          child: Icon(
+                          child: const Icon(
                             Icons.location_city,
                             color: Color.fromRGBO(13, 201, 150, 1),
                           ),
@@ -130,11 +129,11 @@ class _ProfileState extends State<Profile> {
                   child: ListTile(
                     leading: Container(
                       decoration: BoxDecoration(
-                        color: Color.fromRGBO(13, 201, 150, 1).withOpacity(0.1),
+                        color: const Color.fromRGBO(13, 201, 150, 1).withOpacity(0.1),
                         shape: BoxShape.circle,
                       ),
                       padding: const EdgeInsets.all(8),
-                      child: Icon(
+                      child: const Icon(
                         Icons.notifications,
                         color: Color.fromRGBO(13, 201, 150, 1),
                       ),
@@ -161,11 +160,11 @@ class _ProfileState extends State<Profile> {
                   child: ListTile(
                     leading: Container(
                       decoration: BoxDecoration(
-                        color: Color.fromRGBO(13, 201, 150, 1).withOpacity(0.1),
+                        color: const Color.fromRGBO(13, 201, 150, 1).withOpacity(0.1),
                         shape: BoxShape.circle,
                       ),
                       padding: const EdgeInsets.all(8),
-                      child: Icon(
+                      child: const Icon(
                         Icons.language,
                         color: Color.fromRGBO(13, 201, 150, 1),
                       ),

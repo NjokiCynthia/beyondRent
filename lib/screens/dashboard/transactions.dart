@@ -102,8 +102,8 @@ class _TransactionsState extends State<Transactions> {
             Navigator.pop(context);
           },
           child: Container(
-            padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-            margin: EdgeInsets.only(bottom: 50),
+            padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+            margin: const EdgeInsets.only(bottom: 50),
             decoration: BoxDecoration(
               color: mintyGreen,
               borderRadius: BorderRadius.circular(10),

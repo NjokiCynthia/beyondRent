@@ -9,6 +9,8 @@ List unitList = [];
 
 // This widget represents the modal content and its state
 class AddUnitsModalContent extends StatefulWidget {
+  const AddUnitsModalContent({super.key});
+
   @override
   _AddUnitsModalContentState createState() => _AddUnitsModalContentState();
 }
@@ -24,7 +26,7 @@ class _AddUnitsModalContentState extends State<AddUnitsModalContent> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           // mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,7 +189,7 @@ class _AddUnitsModalContentState extends State<AddUnitsModalContent> {
                   color: mintyGreen,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Text(
+                child: const Text(
                   'Complete',
                   textAlign: TextAlign.center,
                 ),
@@ -527,7 +529,7 @@ class _StepPage1State extends State<StepPage1> {
                 onTap: () {
                   showBottomModal(
                     context,
-                    AddUnitsModalContent(),
+                    const AddUnitsModalContent(),
                   );
                 },
                 child: Container(

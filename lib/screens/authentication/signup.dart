@@ -26,7 +26,7 @@ class _SignupState extends State<Signup> {
         Expanded(
           child: Center(
             child: Container(
-              margin: EdgeInsets.only(left: 20, right: 20),
+              margin: const EdgeInsets.only(left: 20, right: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -169,8 +169,8 @@ class _SignupState extends State<Signup> {
             );
           },
           child: Container(
-            padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-            margin: EdgeInsets.only(bottom: 50),
+            padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+            margin: const EdgeInsets.only(bottom: 50),
             decoration: BoxDecoration(
               color: mintyGreen,
               borderRadius: BorderRadius.circular(10),
@@ -196,7 +196,7 @@ class _SignupState extends State<Signup> {
           child: RichText(
             text: TextSpan(
               text: 'Already have an account? ',
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
               children: <TextSpan>[
                 TextSpan(
                   text: 'Login',

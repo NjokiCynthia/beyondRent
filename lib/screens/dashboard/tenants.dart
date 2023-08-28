@@ -30,7 +30,7 @@ class _TenantsState extends State<Tenants> {
                     //   MaterialPageRoute(builder: (context) => AddProperty()),
                     // );
                   },
-                  child: Icon(
+                  child: const Icon(
                     Icons.group_add,
                     color: Colors.black,
                     size: 20,
