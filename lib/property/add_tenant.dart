@@ -40,7 +40,10 @@ class _StepPage2State extends State<StepPage2> {
           ),
           const Row(
             children: [
-              Icon(Icons.person_2),
+              Icon(
+                Icons.person_2,
+                color: Color.fromRGBO(13, 201, 150, 1),
+              ),
               SizedBox(
                 width: 10,
               ),
@@ -84,7 +87,10 @@ class _StepPage2State extends State<StepPage2> {
           ),
           const Row(
             children: [
-              Icon(Icons.email),
+              Icon(
+                Icons.email,
+                color: Color.fromRGBO(13, 201, 150, 1),
+              ),
               SizedBox(
                 width: 10,
               ),
@@ -128,7 +134,10 @@ class _StepPage2State extends State<StepPage2> {
           ),
           const Row(
             children: [
-              Icon(Icons.phone),
+              Icon(
+                Icons.phone,
+                color: Color.fromRGBO(13, 201, 150, 1),
+              ),
               SizedBox(
                 width: 10,
               ),
@@ -197,7 +206,10 @@ class _StepPage2State extends State<StepPage2> {
           ),
           const Row(
             children: [
-              Icon(Icons.holiday_village),
+              Icon(
+                Icons.holiday_village,
+                color: Color.fromRGBO(13, 201, 150, 1),
+              ),
               SizedBox(
                 width: 10,
               ),
@@ -244,7 +256,10 @@ class _StepPage2State extends State<StepPage2> {
           ),
           const Row(
             children: [
-              Icon(Icons.king_bed_rounded),
+              Icon(
+                Icons.king_bed_rounded,
+                color: Color.fromRGBO(13, 201, 150, 1),
+              ),
               SizedBox(
                 width: 10,
               ),

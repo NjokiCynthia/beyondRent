@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
+String ipAddress = 'https://kodi.sandbox.co.ke';
 // Color Themes
 Color mintyGreen = const Color.fromRGBO(13, 201, 150, 1);
 
@@ -50,4 +51,21 @@ class AppTextStyles {
     fontWeight: FontWeight.bold,
     color: Colors.grey,
   );
+}
+
+// Media screen height & width
+class SizeConfig {
+  static late MediaQueryData _mediaQueryData;
+  static late double screenWidth;
+  static late double screenHeight;
+  static late double blockSizeHorizontal;
+  static late double blockSizeVertical;
+
+  void init(BuildContext context) {
+    _mediaQueryData = MediaQuery.of(context);
+    screenWidth = _mediaQueryData.size.width;
+    screenHeight = _mediaQueryData.size.height;
+    blockSizeHorizontal = screenWidth / 100;
+    blockSizeVertical = screenHeight / 100;
+  }
 }

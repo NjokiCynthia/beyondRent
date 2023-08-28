@@ -4,6 +4,8 @@ import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/property/property_list.dart';
 import 'package:x_rent/screens/authentication/signup.dart';
 import 'package:x_rent/utilities/constants.dart';
+import 'package:x_rent/utilities/constants.dart';
+import 'package:x_rent/utilities/widgets.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -25,7 +27,7 @@ class _LoginState extends State<Login> {
         Expanded(
           child: Center(
             child: Container(
-              margin: EdgeInsets.only(left: 20, right: 20),
+              margin: const EdgeInsets.only(left: 20, right: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -56,16 +58,40 @@ class _LoginState extends State<Login> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Enter Email Address',
+                        'Enter Phone Number',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       const SizedBox(height: 10),
-                      TextFormField(
-                        style: bodyText,
-                        decoration: InputDecoration(
+                      InternationalPhoneNumberInput(
+                        onInputChanged: (PhoneNumber number) {},
+                        onInputValidated: (bool value) {},
+                        selectorConfig: const SelectorConfig(
+                          selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                        ),
+                        textStyle: bodyText,
+                        ignoreBlank: false,
+                        autoValidateMode: AutovalidateMode.disabled,
+                        selectorTextStyle: const TextStyle(color: Colors.black),
+                        initialValue: number,
+                        textAlignVertical: TextAlignVertical.top,
+                        textFieldController: controller,
+                        formatInput: true,
+                        keyboardType: const TextInputType.numberWithOptions(
+                          signed: true,
+                          decimal: true,
+                        ),
+                        maxLength: 10,
+                        inputBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        inputDecoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
-                          labelText: 'Email address',
+                          labelText: 'Phone number',
                           labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
                               .copyWith(color: Colors.grey),
                           border: OutlineInputBorder(
@@ -90,6 +116,7 @@ class _LoginState extends State<Login> {
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
+                        onSaved: (PhoneNumber number) {},
                       ),
                       const SizedBox(height: 20),
                       Text(
@@ -130,21 +157,33 @@ class _LoginState extends State<Login> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: MyTheme
-                          .primaryColor, // Use your primary color from the theme
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: ((context) => const PropertyList()),
-                        ),
-                      );
+                  const SizedBox(height: 30),
+                  CustomRequestButton(
+                    url: '/mobile/signup',
+                    method: 'POST',
+                    buttonText: 'Log in',
+                    body: const {
+                      "request_id": "5v76g4v567344334355475cd4f",
+                      "first_name": "Alice",
+                      "last_name": "Kimani",
+                      "identity": "0766772700",
+                      "property_name": "Kirui Apartments",
+                      "location": "Buru Age 3",
+                      "password": "123456789"
                     },
-                    child: const Text('Login'),
+                    onSuccess: (res) {
+                      print(res['data']['response_code'].runtimeType);
+                      if (res['data']['response_code'] != '1') {
+                        return showToast(
+                          context,
+                          'Error!',
+                          res['data']['message'] ??
+                              'Error, please try again later.',
+                          Colors.red,
+                        );
+                      }
+                      print('good to go');
+                    },
                   ),
                 ],
               ),
@@ -160,16 +199,19 @@ class _LoginState extends State<Login> {
               ),
             );
           },
-          child: RichText(
-            text: TextSpan(
-              text: "Don't have an account? ",
-              style: TextStyle(color: Colors.black),
-              children: <TextSpan>[
-                TextSpan(
-                  text: 'Signup',
-                  style: TextStyle(color: mintyGreen),
-                ),
-              ],
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: RichText(
+              text: TextSpan(
+                text: "Don't have an account? ",
+                style: const TextStyle(color: Colors.black),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: 'Signup',
+                    style: TextStyle(color: mintyGreen),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

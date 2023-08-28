@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:x_rent/utilities/constants.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:dio/dio.dart';
+import 'package:provider/provider.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 Color getRandomColor() {
   final random = Random();
@@ -10,6 +14,71 @@ Color getRandomColor() {
     random.nextInt(256),
     0.3,
   );
+}
+
+class MessageNotification extends StatelessWidget {
+  final VoidCallback onReply;
+  final String message;
+  final String? title;
+  final Color? color;
+
+  const MessageNotification({
+    Key? key,
+    required this.onReply,
+    required this.message,
+    required this.color,
+    required this.title,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: SizeConfig.blockSizeHorizontal * 90,
+      margin: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 7),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Card(
+        margin: const EdgeInsets.symmetric(
+          horizontal: 2,
+          vertical: 1,
+        ),
+        color: color ?? Colors.green,
+        child: ListTile(
+          title: title == null
+              ? null
+              : Text(
+                  '$title',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(fontSize: 16, color: Colors.white),
+                ),
+          subtitle: Text(
+            message,
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall!
+                .copyWith(fontSize: 16, color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Global Toast
+showToast(context, String title, String message, Color color) {
+  return showOverlayNotification((context) {
+    return MessageNotification(
+      title: title,
+      message: message,
+      color: color,
+      onReply: () {
+        OverlaySupportEntry.of(context)!.dismiss();
+      },
+    );
+  });
 }
 
 class DashboardAppbar extends StatelessWidget {
@@ -394,11 +463,23 @@ class TenantWidget extends StatelessWidget {
 }
 
 // Bottom Sheet Modal
-showBottomModal(BuildContext context, Widget content) {
+// showBottomModal(
+//   BuildContext context,
+//   Widget content,
+// ) {
+//   showModalBottomSheet<void>(
+//     useRootNavigator: true,
+//     context: context,
+//     backgroundColor: Colors.transparent,
+//     builder: (BuildContext context) {
+//       return _buildBottomModalContent(context, content);
+//     },
+//   );
+// }
+void showBottomModal(BuildContext context, Widget content) {
   showModalBottomSheet<void>(
     useRootNavigator: true,
     context: context,
-    isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (BuildContext context) {
       return _buildBottomModalContent(context, content);
@@ -407,14 +488,180 @@ showBottomModal(BuildContext context, Widget content) {
 }
 
 Widget _buildBottomModalContent(BuildContext context, Widget content) {
-  return ClipRRect(
-    borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+  return SingleChildScrollView(
     child: Container(
-      color: Colors.white,
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
-        child: content,
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
+      decoration: BoxDecoration(
+        color: Theme.of(context).canvasColor,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(16.0),
+          topRight: Radius.circular(16.0),
+        ),
+      ),
+      child: content,
     ),
   );
 }
+
+class CustomRequestButton extends StatefulWidget {
+  final bool? buttonError;
+  final String? buttonErrorMessage;
+  final String? url;
+  final String method;
+  final String buttonText;
+  final Map<String, dynamic> body;
+  final dynamic onSuccess;
+
+  const CustomRequestButton({
+    super.key,
+    this.buttonError,
+    this.buttonErrorMessage,
+    this.url,
+    required this.method,
+    required this.buttonText,
+    required this.body,
+    required this.onSuccess,
+  });
+
+  @override
+  _CustomRequestButtonState createState() => _CustomRequestButtonState();
+}
+
+class _CustomRequestButtonState extends State<CustomRequestButton> {
+  bool isButtonDisabled = false;
+  bool isLoading = false;
+  late Dio _dio;
+
+  @override
+  void initState() {
+    super.initState();
+    _dio = Dio();
+  }
+
+  Future<void> sendRequest() async {
+    if (widget.buttonError == true) {
+      return widget.onSuccess({
+        'isSuccessful': false,
+        'error': widget.buttonErrorMessage,
+      });
+    }
+    if (widget.url == null) {
+      return widget.onSuccess({'isSuccessful': true});
+    }
+    setState(() {
+      isButtonDisabled = true;
+      isLoading = true;
+    });
+
+    try {
+      final response = await _makeRequest();
+      setState(() {
+        isButtonDisabled = false;
+        isLoading = false;
+      });
+      if (response.statusCode == 200) {
+        // Request was successful
+        widget.onSuccess({'isSuccessful': true, 'data': response.data});
+      } else {
+        // Request returned an error status code
+        widget.onSuccess({
+          'isSuccessful': false,
+          'error': response.data['error'],
+        });
+      }
+    } on DioException catch (error) {
+      setState(() {
+        isButtonDisabled = false;
+        isLoading = false;
+      });
+      var theError = error.response?.data;
+      var theStatus = error.response?.statusCode;
+
+      print('error: $error');
+      print('theError: $theError');
+      print('theStatus: $theStatus');
+
+      widget.onSuccess({
+        'isSuccessful': false,
+        'error': 'Error making request',
+      });
+    }
+
+    setState(() {
+      isButtonDisabled = false;
+      isLoading = false;
+    });
+  }
+
+  Future<Response<dynamic>> _makeRequest() async {
+    // Retrieve user information from provider
+    final headers = {
+      'Versioncode': 99,
+      'version': 99,
+    };
+    final options = Options(contentType: 'application/json', headers: headers);
+
+    try {
+      if (widget.method == 'POST') {
+        print('url: ${ipAddress + widget.url!}');
+        return _dio.post(
+          ipAddress + widget.url!,
+          data: widget.body,
+          options: options,
+        );
+      } else if (widget.method == 'GET') {
+        return _dio.get(ipAddress + widget.url!, options: options);
+      }
+    } catch (error) {
+      throw Exception('Invalid request method: ${widget.method}');
+    }
+    throw Exception('Invalid request method: ${widget.method}');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: isButtonDisabled ? null : sendRequest,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 2000),
+        decoration: BoxDecoration(
+          color: mintyGreen,
+          borderRadius:
+              isLoading ? BorderRadius.circular(8) : BorderRadius.circular(8),
+        ),
+        child: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(15),
+          child: isLoading
+              ? const SpinKitThreeBounce(
+                  color: Colors.white,
+                  size: 20,
+                )
+              : Text(
+                  widget.buttonText,
+                  style: Theme.of(context)
+                      .textTheme
+                      .displayMedium!
+                      .copyWith(color: Colors.white, fontSize: 16),
+                ),
+        ),
+      ),
+    );
+  }
+}
+
+
+// Widget _buildBottomModalContent(BuildContext context, Widget content) {
+//   return ClipRRect(
+//     borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+//     child: Container(
+//       color: Colors.white,
+//       child: Container(
+//         padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
+//         child: content,
+//       ),
+//     ),
+//   );
+// }
