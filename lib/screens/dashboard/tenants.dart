@@ -38,36 +38,10 @@ class _TenantsState extends State<Tenants> {
                 ),
                 callback: (value) {},
               ),
-              Expanded(
-                child: ListView(
-                  children: const [
-                    SizedBox(height: 30),
-                    TenantWidget(
-                      name: 'Liam',
-                      date: '22nd, Mar 2023',
-                      amount: 20000,
-                    ),
-                    TenantWidget(
-                      name: 'Sophia',
-                      date: '24th, Mar 2023',
-                      amount: 32000,
-                    ),
-                    TenantWidget(
-                      name: 'Ethan',
-                      date: '26th, Mar 2023',
-                      amount: 25000,
-                    ),
-                    TenantWidget(
-                      name: 'Ava',
-                      date: '28th, Mar 2023',
-                      amount: 30000,
-                    ),
-                    TenantWidget(
-                      name: 'Emma',
-                      date: '28th, Mar 2023',
-                      amount: 25000,
-                    ),
-                  ],
+              Container(
+                margin: EdgeInsets.only(top: 50),
+                child: Center(
+                  child: EmptyTenants(),
                 ),
               ),
             ],

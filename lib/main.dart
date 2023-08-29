@@ -3,9 +3,24 @@ import 'package:x_rent/screens/intro_screens/onboarding_page.dart';
 import 'package:x_rent/screens/intro_screens/splash.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:provider/provider.dart';
+import 'package:x_rent/providers/user_provider.dart';
+import 'package:x_rent/providers/property_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<UserProvider>.value(
+          value: UserProvider(),
+        ),
+        ChangeNotifierProvider<PropertyProvider>.value(
+          value: PropertyProvider(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

@@ -51,18 +51,6 @@ class _SignupState extends State<Signup> {
         buttonErrorMessage = 'Enter phone number';
       });
     }
-    if (property_name_ctrl.text == '') {
-      return setState(() {
-        buttonError = true;
-        buttonErrorMessage = 'Enter property name';
-      });
-    }
-    if (property_location_ctrl.text == '') {
-      return setState(() {
-        buttonError = true;
-        buttonErrorMessage = 'Enter property location';
-      });
-    }
     if (password_ctrl.text == '') {
       return setState(() {
         buttonError = true;
@@ -256,90 +244,90 @@ class _SignupState extends State<Signup> {
           onSaved: (PhoneNumber number) {},
         ),
         const SizedBox(height: 20),
-        Text(
-          'Enter Property Name',
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-        const SizedBox(height: 10),
-        TextFormField(
-          onChanged: (text) {
-            validateSignupInputs();
-          },
-          keyboardType: TextInputType.text,
-          controller: property_name_ctrl,
-          style: bodyText,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            labelText: 'Property name',
-            labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                .copyWith(color: Colors.grey),
-            border: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey.shade300,
-                width: 2.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        Text(
-          'Enter Property Location',
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-        const SizedBox(height: 10),
-        TextFormField(
-          onChanged: (text) {
-            validateSignupInputs();
-          },
-          keyboardType: TextInputType.text,
-          controller: property_location_ctrl,
-          style: bodyText,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            labelText: 'Property location',
-            labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                .copyWith(color: Colors.grey),
-            border: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey.shade300,
-                width: 2.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
+        // Text(
+        //   'Enter Property Name',
+        //   style: Theme.of(context).textTheme.bodySmall,
+        // ),
+        // const SizedBox(height: 10),
+        // TextFormField(
+        //   onChanged: (text) {
+        //     validateSignupInputs();
+        //   },
+        //   keyboardType: TextInputType.text,
+        //   controller: property_name_ctrl,
+        //   style: bodyText,
+        //   decoration: InputDecoration(
+        //     filled: true,
+        //     fillColor: Colors.white,
+        //     labelText: 'Property name',
+        //     labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+        //         .copyWith(color: Colors.grey),
+        //     border: OutlineInputBorder(
+        //       borderSide: const BorderSide(
+        //         color: Colors.grey,
+        //         width: 1.0,
+        //       ),
+        //       borderRadius: BorderRadius.circular(8.0),
+        //     ),
+        //     enabledBorder: OutlineInputBorder(
+        //       borderSide: BorderSide(
+        //         color: Colors.grey.shade300,
+        //         width: 2.0,
+        //       ),
+        //       borderRadius: BorderRadius.circular(8.0),
+        //     ),
+        //     focusedBorder: OutlineInputBorder(
+        //       borderSide: const BorderSide(
+        //         color: Colors.grey,
+        //         width: 1.0,
+        //       ),
+        //       borderRadius: BorderRadius.circular(8.0),
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 20),
+        // Text(
+        //   'Enter Property Location',
+        //   style: Theme.of(context).textTheme.bodySmall,
+        // ),
+        // const SizedBox(height: 10),
+        // TextFormField(
+        //   onChanged: (text) {
+        //     validateSignupInputs();
+        //   },
+        //   keyboardType: TextInputType.text,
+        //   controller: property_location_ctrl,
+        //   style: bodyText,
+        //   decoration: InputDecoration(
+        //     filled: true,
+        //     fillColor: Colors.white,
+        //     labelText: 'Property location',
+        //     labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+        //         .copyWith(color: Colors.grey),
+        //     border: OutlineInputBorder(
+        //       borderSide: const BorderSide(
+        //         color: Colors.grey,
+        //         width: 1.0,
+        //       ),
+        //       borderRadius: BorderRadius.circular(8.0),
+        //     ),
+        //     enabledBorder: OutlineInputBorder(
+        //       borderSide: BorderSide(
+        //         color: Colors.grey.shade300,
+        //         width: 2.0,
+        //       ),
+        //       borderRadius: BorderRadius.circular(8.0),
+        //     ),
+        //     focusedBorder: OutlineInputBorder(
+        //       borderSide: const BorderSide(
+        //         color: Colors.grey,
+        //         width: 1.0,
+        //       ),
+        //       borderRadius: BorderRadius.circular(8.0),
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 20),
         Text(
           'Enter Password',
           style: Theme.of(context).textTheme.bodySmall,
@@ -437,24 +425,24 @@ class _SignupState extends State<Signup> {
                     url: '/mobile/signup',
                     method: 'POST',
                     buttonText: 'Sign up',
-                    // body: {
-                    //   "request_id": "5v76g4v567344334355475cd4f",
-                    //   "first_name": first_name_ctrl.text,
-                    //   "last_name": last_name_ctrl.text,
-                    //   "identity": phone_number_inpt,
-                    //   "property_name": property_name_ctrl.text,
-                    //   "location": property_location_ctrl.text,
-                    //   "password": password_ctrl.text
-                    // },
-                    body: const {
+                    body: {
                       "request_id": "5v76g4v567344334355475cd4f",
-                      "first_name": "Alice",
-                      "last_name": "Kimaani",
-                      "identity": "0766494200",
+                      "first_name": first_name_ctrl.text,
+                      "last_name": last_name_ctrl.text,
+                      "identity": phone_number_inpt,
                       "property_name": "Kirui Apartments",
                       "location": "Buru Age 3",
-                      "password": "123456789"
+                      "password": password_ctrl.text
                     },
+                    // body: const {
+                    //   "request_id": "5v76g4v567344334355475cd4f",
+                    //   "first_name": "Alice",
+                    //   "last_name": "Kimaani",
+                    //   "identity": "0766494200",
+                    //   "property_name": "Kirui Apartments",
+                    //   "location": "Buru Age 3",
+                    //   "password": "123456789"
+                    // },
                     onSuccess: (res) {
                       print('<<<<<<<<<<<< res >>>>>>>>>>>>>');
                       print(res);

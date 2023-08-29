@@ -4,6 +4,7 @@ import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/property/add_property.dart';
 import 'package:x_rent/screens/dashboard.dart';
 import 'package:x_rent/utilities/constants.dart';
+import 'package:x_rent/utilities/widgets.dart';
 
 class StepPage2 extends StatefulWidget {
   final int currentPageIndex;
@@ -20,6 +21,13 @@ class StepPage2 extends StatefulWidget {
 
 class _StepPage2State extends State<StepPage2> {
   int _selectedIndex = 0;
+  bool propertySaveLoading = false;
+  final TextEditingController controller = TextEditingController();
+  String initialCountry = 'KE';
+
+  final TextEditingController houseNoController = TextEditingController();
+  final TextEditingController floorNoController = TextEditingController();
+  final TextEditingController blockNoController = TextEditingController();
 
   void _selectItem(int index) {
     setState(() {
@@ -27,9 +35,42 @@ class _StepPage2State extends State<StepPage2> {
     });
   }
 
-  final TextEditingController controller = TextEditingController();
-  String initialCountry = 'KE';
-  PhoneNumber number = PhoneNumber(isoCode: 'KE');
+  propertyInputValidator() async {
+    print(houseNoController.text);
+    print(floorNoController.text);
+    print(blockNoController.text);
+    if (houseNoController.text == '') {
+      showToast(
+        context,
+        'Error!',
+        'Enter house number',
+        Colors.red,
+      );
+      return false;
+    } else if (floorNoController.text == '') {
+      showToast(
+        context,
+        'Error!',
+        'Enter floor number',
+        Colors.red,
+      );
+      return false;
+    } else if (blockNoController.text == '') {
+      showToast(
+        context,
+        'Error!',
+        'Enter block number',
+        Colors.red,
+      );
+      return false;
+    }
+    return true;
+  }
+
+  addPropertyDetails() async {
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -50,6 +91,7 @@ class _StepPage2State extends State<StepPage2> {
                       Text('House No.'),
                       const SizedBox(height: 10),
                       TextFormField(
+                        controller: houseNoController,
                         style: bodyText,
                         decoration: InputDecoration(
                           filled: true,
@@ -93,6 +135,7 @@ class _StepPage2State extends State<StepPage2> {
                       Text('Floor'),
                       const SizedBox(height: 10),
                       TextFormField(
+                        controller: floorNoController,
                         style: bodyText,
                         decoration: InputDecoration(
                           filled: true,
@@ -141,11 +184,12 @@ class _StepPage2State extends State<StepPage2> {
                       Text('Block'),
                       const SizedBox(height: 10),
                       TextFormField(
+                        controller: blockNoController,
                         style: bodyText,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
-                          labelText: 'House number',
+                          labelText: 'Block number',
                           labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
                               .copyWith(color: Colors.grey),
                           border: OutlineInputBorder(
@@ -190,7 +234,7 @@ class _StepPage2State extends State<StepPage2> {
               SizedBox(
                 width: 10,
               ),
-              Text('Property type'),
+              Text('House type'),
             ],
           ),
           const SizedBox(
@@ -237,15 +281,26 @@ class _StepPage2State extends State<StepPage2> {
             width: double.infinity,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: mintyGreen),
-              onPressed: () {
-                propertyPageController.animateToPage(
-                  2,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
-                setState(() {});
+              onPressed: () async {
+                setState(() {
+                  propertySaveLoading = true;
+                });
+                await propertyInputValidator().then((value) {
+                  if (value == true) {
+                    addPropertyDetails().then((value) {
+                      propertyPageController.animateToPage(
+                        2,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    });
+                  }
+                });
+                setState(() {
+                  propertySaveLoading = false;
+                });
               },
-              child: const Text('Proceed'),
+              child: Text(propertySaveLoading == true ? 'Saving' : 'Proceed'),
             ),
           ),
         ],

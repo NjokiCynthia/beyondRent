@@ -3,12 +3,15 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/property/property_list.dart';
 import 'package:x_rent/screens/authentication/signup.dart';
+import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/screens/dashboard.dart';
 import 'package:x_rent/utilities/widgets.dart';
+import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
-  const Login({super.key});
+  final bool? justSignedup;
+  const Login({super.key, this.justSignedup});
 
   @override
   State<Login> createState() => _LoginState();
@@ -19,8 +22,26 @@ class _LoginState extends State<Login> {
   String initialCountry = 'KE';
   PhoneNumber number = PhoneNumber(isoCode: 'KE');
 
+  checkIfFreshSignup() {
+    if (widget.justSignedup == true) {
+      showToast(
+        context,
+        'Success',
+        'You have Signed up successfully. Use your details to log in.',
+        Colors.green,
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkIfFreshSignup();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
         body: Column(
       children: [
@@ -179,10 +200,25 @@ class _LoginState extends State<Login> {
                           Colors.red,
                         );
                       }
+                      var userData = res['data']['response']['user'];
+                      var accessToken = res['data']['response']['access_token'];
+
+                      final userProvider = context.read<UserProvider>();
+                      userProvider.setUser(
+                        User(
+                          firstName: userData['first_name'],
+                          lastName: userData['last_name'],
+                          phone: userData['phone'],
+                          email: userData['email'],
+                          id: userData['id'],
+                          token: accessToken,
+                        ),
+                      );
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: ((context) => const Dashboard()),
+                          builder: ((context) => const PropertyList()),
                         ),
                       );
                     },

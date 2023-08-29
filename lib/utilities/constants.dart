@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:dio/dio.dart';
 
 String ipAddress = 'https://kodi.sandbox.co.ke';
 // Color Themes
@@ -72,5 +73,34 @@ class SizeConfig {
     screenHeight = _mediaQueryData.size.height;
     blockSizeHorizontal = screenWidth / 100;
     blockSizeVertical = screenHeight / 100;
+  }
+}
+
+class ApiClient {
+  final Dio _dio;
+
+  ApiClient() : _dio = Dio();
+
+  Future<dynamic> post(String path, dynamic data,
+      {Map<String, dynamic>? headers}) async {
+    try {
+      final response = await _dio.post('$ipAddress$path',
+          data: data, options: Options(headers: headers));
+      return response.data;
+    } on DioException catch (error) {
+      return error.response?.data;
+    }
+  }
+
+  Future<dynamic> get(String path,
+      {Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers}) async {
+    try {
+      final response = await _dio.get('$ipAddress$path',
+          queryParameters: queryParameters, options: Options(headers: headers));
+      return response.data;
+    } on DioException catch (error) {
+      return error.response;
+    }
   }
 }

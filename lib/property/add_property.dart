@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:x_rent/constants/theme.dart';
-import 'package:x_rent/utilities/widgets.dart';
+import 'package:x_rent/providers/property_provider.dart';
+import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/utilities/constants.dart';
+import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/property/step2.dart';
 import 'package:x_rent/property/step3.dart';
+import 'package:provider/provider.dart';
 
 int _selectedIndex = 0;
 List unitList = [];
@@ -287,8 +290,6 @@ class _AddPropertyState extends State<AddProperty> {
   }
 }
 
-TextEditingController propertyNameController = TextEditingController();
-
 class StepPage1 extends StatefulWidget {
   final int currentPageIndex;
   final PageController pageController;
@@ -303,11 +304,11 @@ class StepPage1 extends StatefulWidget {
 }
 
 class _StepPage1State extends State<StepPage1> {
-  String _selectedPaymentOption;
+  final TextEditingController propertyNameController = TextEditingController();
+  final TextEditingController propertyLocationController =
+      TextEditingController();
 
-  _StepPage1State() : _selectedPaymentOption = 'mpesa';
-
-  bool _modalState = false;
+  bool propertySaveLoading = false;
 
   void _selectItem(int index) {
     setState(() {
@@ -315,107 +316,79 @@ class _StepPage1State extends State<StepPage1> {
     });
   }
 
+  propertyInputValidator() async {
+    if (propertyNameController.text == '') {
+      showToast(
+        context,
+        'Error!',
+        'Enter property name',
+        Colors.red,
+      );
+      return false;
+    } else if (propertyLocationController.text == '') {
+      showToast(
+        context,
+        'Error!',
+        'Enter property location',
+        Colors.red,
+      );
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  addNewProperty() async {
+    final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    final token = userProvider.user?.token;
+
+    final postData = {
+      "property_name": propertyNameController.text,
+      "location": propertyLocationController.text,
+    };
+    final apiClient = ApiClient();
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+      'Cookie':
+          'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=rp9tk80huscienrtaogk28hqsq9likdk; identity=254766444600; remember_code=FMdTpp.zfXw8n7qu2x9Sku'
+    };
+    await apiClient
+        .post('/mobile/create_property', postData, headers: headers)
+        .then((response) {
+      var propertyReturned = response['response']['user_groups'][0];
+
+      if (response['response']['status'] == 1) {
+        propertyProvider.setProperty(
+          Property(
+            propertyName: propertyReturned['name'],
+            propertyLocation: '',
+            id: propertyReturned['id'],
+          ),
+        );
+        print('propertyProvider.property?.propertyName');
+        print(propertyProvider.property?.propertyName);
+        return true;
+      }
+      return false;
+    }).catchError((error) {
+      // Handle the error
+      print('error');
+      print(error);
+      return false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     PageController pageController = widget.pageController;
-
-    Widget addUnitsModal = Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Enter property name',
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-        const SizedBox(height: 10),
-        TextFormField(
-          style: bodyText,
-          controller: propertyNameController,
-          onChanged: (text) {
-            // print(text);
-          },
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            labelText: 'Property Name',
-            labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                .copyWith(color: Colors.grey),
-            border: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey.shade300,
-                width: 2.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        const Row(
-          children: [
-            Icon(Icons.king_bed_rounded,
-                color: Color.fromRGBO(13, 201, 150, 1), size: 15),
-            SizedBox(
-              width: 10,
-            ),
-            Text('Bedrooms'),
-          ],
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        SizedBox(
-          height: 60,
-          child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 8,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    _selectItem(index);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    margin: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: _selectedIndex == index
-                          ? mintyGreen
-                          : Colors.grey.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Center(
-                      child: Text(
-                        index == 0 ? 'Studio' : index.toString(),
-                        style: TextStyle(
-                          color: _selectedIndex == index
-                              ? Colors.white
-                              : Colors.black,
-                          //fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }),
-        ),
-      ],
-    );
 
     return SingleChildScrollView(
       child: Column(
@@ -438,6 +411,7 @@ class _StepPage1State extends State<StepPage1> {
           ),
           const SizedBox(height: 10),
           TextFormField(
+            controller: propertyNameController,
             onChanged: (text) {},
             style: bodyText,
             decoration: InputDecoration(
@@ -475,7 +449,7 @@ class _StepPage1State extends State<StepPage1> {
           const Row(
             children: [
               Icon(
-                Icons.map,
+                Icons.location_on,
                 color: Color.fromRGBO(13, 201, 150, 1),
               ),
               SizedBox(
@@ -486,6 +460,7 @@ class _StepPage1State extends State<StepPage1> {
           ),
           const SizedBox(height: 10),
           TextFormField(
+            controller: propertyLocationController,
             style: bodyText,
             decoration: InputDecoration(
               filled: true,
@@ -519,127 +494,32 @@ class _StepPage1State extends State<StepPage1> {
           const SizedBox(
             height: 24,
           ),
-          // Column(
-          //   crossAxisAlignment: CrossAxisAlignment.start,
-          //   children: [
-          //     const Row(
-          //       children: [
-          //         Icon(
-          //           Icons.numbers,
-          //           color: Color.fromRGBO(13, 201, 150, 1),
-          //         ),
-          //         SizedBox(
-          //           width: 10,
-          //         ),
-          //         Text('Add property units'),
-          //       ],
-          //     ),
-          //     const SizedBox(
-          //       height: 20,
-          //     ),
-          //     Wrap(
-          //       spacing: 10,
-          //       runSpacing: 10,
-          //       children: List.generate(unitList.length, (index) {
-          //         int bedrooms = unitList[index]['bedrooms'];
-          //         int price = unitList[index]['price'];
-          //         int units = unitList[index]['units'];
-
-          //         return Container(
-          //           padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-          //           decoration: BoxDecoration(
-          //             color: mintyGreen,
-          //             borderRadius: BorderRadius.circular(7),
-          //           ),
-          //           width: MediaQuery.of(context).size.width / 2 -
-          //               50, // Two items per row
-          //           child: Column(
-          //             crossAxisAlignment: CrossAxisAlignment.start,
-          //             children: [
-          //               Text(
-          //                 'Bedrooms: $bedrooms',
-          //                 style: Theme.of(context)
-          //                     .textTheme
-          //                     .bodySmall!
-          //                     .copyWith(fontSize: 15, color: Colors.white),
-          //               ),
-          //               Text(
-          //                 'Price: $price',
-          //                 style: Theme.of(context)
-          //                     .textTheme
-          //                     .bodySmall!
-          //                     .copyWith(fontSize: 15, color: Colors.white),
-          //               ),
-          //               Text(
-          //                 'Units: $units',
-          //                 style: Theme.of(context)
-          //                     .textTheme
-          //                     .bodySmall!
-          //                     .copyWith(fontSize: 15, color: Colors.white),
-          //               ),
-          //             ],
-          //           ),
-          //         );
-          //       }),
-          //     ),
-          //     const SizedBox(
-          //       height: 20,
-          //     ),
-          //     GestureDetector(
-          //       onTap: () {
-          //         showBottomModal(
-          //           context,
-          //           const AddUnitsModalContent(),
-          //         );
-          //       },
-          //       child: Container(
-          //         padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-          //         margin: const EdgeInsets.only(right: 10),
-          //         decoration: BoxDecoration(
-          //           color: mintyGreen,
-          //           borderRadius: BorderRadius.circular(5),
-          //         ),
-          //         child: Row(
-          //           mainAxisSize: MainAxisSize.min,
-          //           children: [
-          //             Padding(
-          //               padding: const EdgeInsets.only(right: 10),
-          //               child: Text(
-          //                 '+',
-          //                 style:
-          //                     Theme.of(context).textTheme.bodySmall!.copyWith(
-          //                           fontSize: 30,
-          //                           color: Colors.white,
-          //                         ),
-          //               ),
-          //             ),
-          //             Text(
-          //               'Add unit',
-          //               style: Theme.of(context)
-          //                   .textTheme
-          //                   .bodySmall!
-          //                   .copyWith(fontSize: 13, color: Colors.white),
-          //             )
-          //           ],
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // ),
           const SizedBox(height: 24),
           SizedBox(
             height: 48,
             width: double.infinity,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: mintyGreen),
-              onPressed: () {
-                pageController.animateToPage(
-                  1,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
+              onPressed: () async {
+                setState(() {
+                  propertySaveLoading = true;
+                });
+                await propertyInputValidator().then((value) {
+                  if (value == true) {
+                    addNewProperty().then((value) {
+                      pageController.animateToPage(
+                        1,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    });
+                  }
+                });
+                setState(() {
+                  propertySaveLoading = false;
+                });
               },
-              child: const Text('Proceed'),
+              child: Text(propertySaveLoading == true ? 'Saving' : 'Proceed'),
             ),
           ),
         ],

@@ -238,84 +238,17 @@ class _TransactionsState extends State<Transactions> {
                 ),
                 callback: (value) {
                   showBottomModal(
-
                     context,
-                    modalContent, 
+                    modalContent,
                   );
                 },
               ),
-              Expanded(
-                child: ListView(
-                  children: const [
-                    SizedBox(height: 30),
-                    TransactionCard(
-                      name: 'Liam',
-                      date: '20th, Feb 2023',
-                      amount: 2000,
-                    ),
-                    TransactionCard(
-                      name: 'Ethan',
-                      date: '20th, Feb 2023',
-                      amount: 2000,
-                    ),
-                    TransactionCard(
-                      name: 'Ava',
-                      date: '20th, Feb 2023',
-                      amount: 2000,
-                    ),
-                    TransactionCard(
-                      name: 'Julia',
-                      date: '20th, Feb 2023',
-                      amount: 2000,
-                    ),
-                    TransactionCard(
-                      name: 'Julia',
-                      date: '20th, Feb 2023',
-                      amount: 2000,
-                    ),
-                    TransactionCard(
-                      name: 'Olivia',
-                      date: '20th, Feb 2023',
-                      amount: 2000,
-                    ),
-                    TransactionCard(
-                      name: 'Liam',
-                      date: '20th, Feb 2023',
-                      amount: 2000,
-                    ),
-                    TransactionCard(
-                      name: 'Ava',
-                      date: '20th, Feb 2023',
-                      amount: 2000,
-                    ),
-                    TransactionCard(
-                      name: 'Julia',
-                      date: '20th, Feb 2023',
-                      amount: 2000,
-                    ),
-                    TransactionCard(
-                      name: 'Julia',
-                      date: '20th, Feb 2023',
-                      amount: 2000,
-                    ),
-                    TransactionCard(
-                      name: 'Liam',
-                      date: '20th, Feb 2023',
-                      amount: 2000,
-                    ),
-                    TransactionCard(
-                      name: 'Ethan',
-                      date: '20th, Feb 2023',
-                      amount: 2000,
-                    ),
-                    TransactionCard(
-                      name: 'Ava',
-                      date: '20th, Feb 2023',
-                      amount: 2000,
-                    ),
-                  ],
+              Container(
+                margin: EdgeInsets.only(top: 50),
+                child: Center(
+                  child: EmptyTransactions(),
                 ),
-              )
+              ),
             ],
           ),
         ),

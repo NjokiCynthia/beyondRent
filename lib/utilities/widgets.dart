@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:dio/dio.dart';
-import 'package:provider/provider.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 
@@ -16,6 +15,40 @@ Color getRandomColor() {
     random.nextInt(256),
     0.3,
   );
+}
+
+class EmptyTenants extends StatelessWidget {
+  const EmptyTenants({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Image.asset('assets/illustrations/tenant.png', width: 250),
+        Text(
+          'Tenant list empty.',
+          style: Theme.of(context).textTheme.bodyMedium,
+          textAlign: TextAlign.center,
+        )
+      ],
+    );
+  }
+}
+
+class EmptyTransactions extends StatelessWidget {
+  const EmptyTransactions({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Image.asset('assets/illustrations/transaction.png', width: 250),
+        Text(
+          'Transaction list empty.',
+          style: Theme.of(context).textTheme.bodyMedium,
+          textAlign: TextAlign.center,
+        )
+      ],
+    );
+  }
 }
 
 class MessageNotification extends StatelessWidget {
