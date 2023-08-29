@@ -79,11 +79,11 @@ class _PropertyDetailsState extends State<PropertyDetails> {
             style: Theme.of(context).textTheme.titleLarge,
           ),
           Text(
-            'Rent for September 2022',
+            'Rent for Aug 2023',
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           const SizedBox(height: 10),
-          const ProgressBar(progress: 60),
+          const ProgressBar(progress: 0),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -108,18 +108,18 @@ class _PropertyDetailsState extends State<PropertyDetails> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Kes, 143,765',
+                'Ksh. 0',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               Text(
-                'Kes, 270,000',
+                'Ksh. 0',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ],
           ),
           const SizedBox(height: 10),
           Text(
-            'Total rent: Kes, 410,000',
+            'Total rent: Ksh. 0',
             style: Theme.of(context).textTheme.bodyLarge,
           ),
         ],
@@ -155,7 +155,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                         shape: BoxShape.circle,
                       ),
                       child: Text(
-                        '25',
+                        '0',
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall!
@@ -179,7 +179,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                       shape: BoxShape.circle,
                     ),
                     child: Text(
-                      '15',
+                      '0',
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall!
@@ -199,51 +199,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
             ),
           ),
           const SizedBox(height: 30),
-          const TransactionCard(
-            name: 'Julia',
-            date: '20th, Dec 2023',
-            amount: 2000,
-          ),
-          const TransactionCard(
-            name: 'Liam',
-            date: '22nd, Mar 2023',
-            amount: 20000,
-          ),
-          const TransactionCard(
-            name: 'Sophia',
-            date: '24th, Mar 2023',
-            amount: 32000,
-          ),
-          const TransactionCard(
-            name: 'Ethan',
-            date: '26th, Mar 2023',
-            amount: 25000,
-          ),
-          const TransactionCard(
-            name: 'Ava',
-            date: '28th, Mar 2023',
-            amount: 30000,
-          ),
-          const TransactionCard(
-            name: 'Emma',
-            date: '28th, Mar 2023',
-            amount: 25000,
-          ),
-          const TransactionCard(
-            name: 'Olivia',
-            date: '28th, Mar 2023',
-            amount: 30000,
-          ),
-          const TransactionCard(
-            name: 'Ava',
-            date: '28th, Mar 2023',
-            amount: 30000,
-          ),
-          const TransactionCard(
-            name: 'Ava',
-            date: '28th, Mar 2023',
-            amount: 30000,
-          ),
+          const EmptyTransactions(),
         ],
       ),
     );
@@ -454,10 +410,12 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                 ),
               ),
               Expanded(
-                child: ListView(
+                child: Column(
                   children: [
                     propertySummary,
-                    propertyDetails,
+                    Expanded(
+                      child: Center(child: propertyDetails),
+                    ),
                   ],
                 ),
               ),
