@@ -108,7 +108,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Kes, 140,000',
+                'Kes, 143,765',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               Text(
@@ -392,10 +392,8 @@ class _PropertyDetailsState extends State<PropertyDetails> {
           onTap: () {
             Navigator.pop(context);
             showBottomModal(
-              
               context,
-            
-              customeInvoiceContent, 
+              customeInvoiceContent,
             );
           },
           child: Container(
@@ -446,7 +444,11 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                         ? _showDayPicker(context)
                         : showBottomModal(
                             context,
-                            modalContent, 
+                            Container(
+                              padding: const EdgeInsets.all(20),
+                              margin: const EdgeInsets.only(bottom: 30),
+                              child: modalContent,
+                            ),
                           );
                   },
                 ),

@@ -128,7 +128,7 @@ class _HomeState extends State<Home> {
               children: [
                 const Text('Total rent for September'),
                 Text(
-                  'Kes. 140,000',
+                  'Kes. 143,765',
                   style: Theme.of(context).textTheme.displayLarge,
                 ),
                 const SizedBox(height: 10),
@@ -152,7 +152,7 @@ class _HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Kes, 140,000',
+                      'Kes, 143,765',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     Text(

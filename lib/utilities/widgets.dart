@@ -572,21 +572,25 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
         });
       }
     } on DioException catch (error) {
-      setState(() {
-        isButtonDisabled = false;
-        isLoading = false;
-      });
-      var theError = error.response?.data;
-      var theStatus = error.response?.statusCode;
+      print('error');
+      print(error);
+      // setState(() {
+      //   isButtonDisabled = false;
+      //   isLoading = false;
+      // });
+      // var serverError = error.error;
+      // var theError = error.response?.data;
+      // var theStatus = error.response?.statusCode;
 
-      print('error: $error');
-      print('theError: $theError');
-      print('theStatus: $theStatus');
+      // print('serverError: $serverError');
+      // print('error: $error');
+      // print('theError: $theError');
+      // print('theStatus: $theStatus');
 
-      widget.onSuccess({
-        'isSuccessful': false,
-        'error': 'Error making request',
-      });
+      // widget.onSuccess({
+      //   'isSuccessful': false,
+      //   'error': 'Error making request',
+      // });
     }
 
     setState(() {
