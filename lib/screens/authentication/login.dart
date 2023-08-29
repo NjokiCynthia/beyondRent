@@ -88,6 +88,8 @@ class _LoginState extends State<Login> {
                         onInputValidated: (bool value) {},
                         selectorConfig: const SelectorConfig(
                           selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                          setSelectorButtonAsPrefixIcon: true,
+                          leadingPadding: 10,
                         ),
                         textStyle: bodyText,
                         ignoreBlank: false,
