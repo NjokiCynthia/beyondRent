@@ -4,20 +4,20 @@ import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/screens/dashboard.dart';
 import 'package:x_rent/utilities/constants.dart';
 
-class StepPage2 extends StatefulWidget {
+class StepPage3 extends StatefulWidget {
   final int currentPageIndex;
   final PageController pageController;
 
-  const StepPage2(
+  const StepPage3(
       {super.key,
       required this.currentPageIndex,
       required this.pageController});
 
   @override
-  _StepPage2State createState() => _StepPage2State();
+  _StepPage3State createState() => _StepPage3State();
 }
 
-class _StepPage2State extends State<StepPage2> {
+class _StepPage3State extends State<StepPage3> {
   int _selectedIndex = 0;
 
   void _selectItem(int index) {

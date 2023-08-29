@@ -4,6 +4,8 @@ import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/property/property_list.dart';
 import 'package:x_rent/screens/authentication/signup.dart';
 import 'package:x_rent/utilities/constants.dart';
+import 'package:x_rent/screens/dashboard.dart';
+import 'package:x_rent/utilities/widgets.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -52,24 +54,46 @@ class _LoginState extends State<Login> {
                       ],
                     ),
                   ),
-                  Text(
-                    'Choose one of your properties',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Enter Email Address',
+                        'Enter Phone Number',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       const SizedBox(height: 10),
-                      TextFormField(
-                        style: bodyText,
-                        decoration: InputDecoration(
+                      InternationalPhoneNumberInput(
+                        onInputChanged: (PhoneNumber number) {},
+                        onInputValidated: (bool value) {},
+                        selectorConfig: const SelectorConfig(
+                          selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                          setSelectorButtonAsPrefixIcon: true,
+                          leadingPadding: 10,
+                        ),
+                        textStyle: bodyText,
+                        ignoreBlank: false,
+                        autoValidateMode: AutovalidateMode.disabled,
+                        selectorTextStyle: const TextStyle(color: Colors.black),
+                        initialValue: number,
+                        textAlignVertical: TextAlignVertical.top,
+                        textFieldController: controller,
+                        formatInput: true,
+                        keyboardType: const TextInputType.numberWithOptions(
+                          signed: true,
+                          decimal: true,
+                        ),
+                        maxLength: 10,
+                        inputBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        inputDecoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
-                          labelText: 'Email address',
+                          labelText: 'Phone number',
                           labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
                               .copyWith(color: Colors.grey),
                           border: OutlineInputBorder(
@@ -94,6 +118,7 @@ class _LoginState extends State<Login> {
                             borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
+                        onSaved: (PhoneNumber number) {},
                       ),
                       const SizedBox(height: 20),
                       Text(
@@ -134,21 +159,33 @@ class _LoginState extends State<Login> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: MyTheme
-                          .primaryColor, // Use your primary color from the theme
-                    ),
-                    onPressed: () {
+                  const SizedBox(height: 30),
+                  CustomRequestButton(
+                    url: '/mobile/login',
+                    method: 'POST',
+                    buttonText: 'Log in',
+                    body: const {
+                      "phone": "0766444600",
+                      "password": "123456789",
+                      "remember": true
+                    },
+                    onSuccess: (res) {
+                      if (res['data']['response']['status'] != 1) {
+                        return showToast(
+                          context,
+                          'Error!',
+                          res['data']['message'] ??
+                              'Error, please try again later.',
+                          Colors.red,
+                        );
+                      }
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: ((context) => const PropertyList()),
+                          builder: ((context) => const Dashboard()),
                         ),
                       );
                     },
-                    child: const Text('Login'),
                   ),
                 ],
               ),
@@ -164,16 +201,19 @@ class _LoginState extends State<Login> {
               ),
             );
           },
-          child: RichText(
-            text: TextSpan(
-              text: "Don't have an account? ",
-              style: const TextStyle(color: Colors.black),
-              children: <TextSpan>[
-                TextSpan(
-                  text: 'Signup',
-                  style: TextStyle(color: mintyGreen),
-                ),
-              ],
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: RichText(
+              text: TextSpan(
+                text: "Don't have an account? ",
+                style: const TextStyle(color: Colors.black),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: 'Signup',
+                    style: TextStyle(color: mintyGreen),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:x_rent/utilities/widgets.dart';
+import 'package:x_rent/utilities/constants.dart';
+import 'package:x_rent/property/property.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -46,16 +49,16 @@ class _ProfileState extends State<Profile> {
                         children: [
                           Transform.translate(
                             offset: const Offset(0, -40),
-                            child: const Column(
+                            child: Column(
                               children: [
                                 CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/images/avatar.jpg'),
+                                  backgroundImage: AssetImage(
+                                      'assets/images/icons/user.png'),
                                   radius: 50,
                                 ),
                                 SizedBox(height: 5),
                                 Text(
-                                  'Cynthia Njoki',
+                                  propertyUser,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -78,8 +81,8 @@ class _ProfileState extends State<Profile> {
                             color: Color.fromRGBO(13, 201, 150, 1),
                           ),
                         ),
-                        title: const Text(
-                          '+254797181989',
+                        title: Text(
+                          propertyUserPhone,
                         ),
                       ),
                       ListTile(
@@ -95,8 +98,8 @@ class _ProfileState extends State<Profile> {
                             color: Color.fromRGBO(13, 201, 150, 1),
                           ),
                         ),
-                        title: const Text(
-                          'example@gmail.com',
+                        title: Text(
+                          propertyUserEmail,
                         ),
                       ),
                       ListTile(
@@ -120,6 +123,49 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 const SizedBox(height: 10), // Adjust the spacing
+                GestureDetector(
+                  onTap: () {
+                    PersistentNavBarNavigator.pushNewScreen(
+                      context,
+                      screen: const Property(),
+                      withNavBar: false,
+                      pageTransitionAnimation:
+                          PageTransitionAnimation.cupertino,
+                    );
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          10.0), // Adjust the radius as needed
+                    ),
+                    elevation: 4,
+                    child: ListTile(
+                      leading: Container(
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(13, 201, 150, 1)
+                              .withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        child: const Icon(
+                          Icons.house,
+                          color: Color.fromRGBO(13, 201, 150, 1),
+                        ),
+                      ),
+                      title: const Text(
+                        'Properties',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: const Text('Add a new property'),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10, // Adjust spacing between card and reminders card
+                ),
                 Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(
@@ -129,7 +175,8 @@ class _ProfileState extends State<Profile> {
                   child: ListTile(
                     leading: Container(
                       decoration: BoxDecoration(
-                        color: const Color.fromRGBO(13, 201, 150, 1).withOpacity(0.1),
+                        color: const Color.fromRGBO(13, 201, 150, 1)
+                            .withOpacity(0.1),
                         shape: BoxShape.circle,
                       ),
                       padding: const EdgeInsets.all(8),
@@ -160,7 +207,8 @@ class _ProfileState extends State<Profile> {
                   child: ListTile(
                     leading: Container(
                       decoration: BoxDecoration(
-                        color: const Color.fromRGBO(13, 201, 150, 1).withOpacity(0.1),
+                        color: const Color.fromRGBO(13, 201, 150, 1)
+                            .withOpacity(0.1),
                         shape: BoxShape.circle,
                       ),
                       padding: const EdgeInsets.all(8),
