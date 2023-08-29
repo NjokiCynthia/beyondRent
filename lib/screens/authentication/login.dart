@@ -19,6 +19,9 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final TextEditingController controller = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  String phoneNoController = '';
+
   String initialCountry = 'KE';
   PhoneNumber number = PhoneNumber(isoCode: 'KE');
 
@@ -41,7 +44,6 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
         body: Column(
       children: [
@@ -84,7 +86,11 @@ class _LoginState extends State<Login> {
                       ),
                       const SizedBox(height: 10),
                       InternationalPhoneNumberInput(
-                        onInputChanged: (PhoneNumber number) {},
+                        onInputChanged: (PhoneNumber number) {
+                          setState(() {
+                            phoneNoController = number.phoneNumber ?? '';
+                          });
+                        },
                         onInputValidated: (bool value) {},
                         selectorConfig: const SelectorConfig(
                           selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
@@ -101,7 +107,6 @@ class _LoginState extends State<Login> {
                           signed: true,
                           decimal: true,
                         ),
-                        maxLength: 10,
                         inputBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
                             color: Colors.grey,
@@ -147,6 +152,7 @@ class _LoginState extends State<Login> {
                       const SizedBox(height: 10),
                       TextFormField(
                         style: bodyText,
+                        controller: passwordController,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
@@ -183,12 +189,17 @@ class _LoginState extends State<Login> {
                     url: '/mobile/login',
                     method: 'POST',
                     buttonText: 'Log in',
-                    body: const {
-                      "phone": "0766444600",
-                      "password": "123456789",
+                    body: {
+                      "phone": phoneNoController,
+                      "password": passwordController.text,
                       "remember": true
                     },
                     onSuccess: (res) {
+                      print({
+                        "phone": phoneNoController,
+                        "password": passwordController.text,
+                        "remember": true
+                      });
                       if (res['data']['response']['status'] != 1) {
                         return showToast(
                           context,
