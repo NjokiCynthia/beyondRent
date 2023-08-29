@@ -476,31 +476,31 @@ class _SignupState extends State<Signup> {
               ),
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((context) => const Dashboard()),
-                ),
-              );
-            },
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-              margin: const EdgeInsets.only(bottom: 50),
-              decoration: BoxDecoration(
-                color: mintyGreen,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                'Demo Account',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15),
-              ),
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: ((context) => const Dashboard()),
+          //       ),
+          //     );
+          //   },
+          //   child: Container(
+          //     padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+          //     margin: const EdgeInsets.only(bottom: 50),
+          //     decoration: BoxDecoration(
+          //       color: mintyGreen,
+          //       borderRadius: BorderRadius.circular(10),
+          //     ),
+          //     child: Text(
+          //       'Demo Account',
+          //       style: Theme.of(context).textTheme.titleLarge!.copyWith(
+          //           color: Colors.white,
+          //           fontWeight: FontWeight.w600,
+          //           fontSize: 15),
+          //     ),
+          //   ),
+          // ),
           GestureDetector(
             onTap: () {
               Navigator.push(
