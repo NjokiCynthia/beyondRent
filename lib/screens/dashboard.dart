@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:x_rent/screens/dashboard/home.dart';
+import 'package:x_rent/screens/dashboard/invoices.dart';
 import 'package:x_rent/screens/dashboard/profile.dart';
 import 'package:x_rent/screens/dashboard/tenants.dart';
 import 'package:x_rent/screens/dashboard/transactions.dart';
@@ -19,6 +20,8 @@ class _DashboardState extends State<Dashboard> {
       const Home(),
       const Tenants(),
       const Transactions(),
+      //InvoicesScreen(),
+
       const Profile(),
     ];
   }
