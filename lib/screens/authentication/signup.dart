@@ -385,149 +385,150 @@ class _SignupState extends State<Signup> {
       ],
     );
     return Scaffold(
-        body: Column(
-      children: [
-        Expanded(
-          child: Center(
-            child: Container(
-              margin: const EdgeInsets.only(left: 20, right: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 20, bottom: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 10),
-                          child: Image.asset(
-                            'assets/images/icons/logo-green.png',
-                            width: 40,
+      body: Column(
+        children: [
+          Expanded(
+            child: Center(
+              child: Container(
+                margin: const EdgeInsets.only(left: 20, right: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 20, bottom: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(right: 10),
+                            child: Image.asset(
+                              'assets/images/icons/logo-green.png',
+                              width: 40,
+                            ),
                           ),
-                        ),
-                        Text(
-                          'XRent',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(color: Colors.black),
-                        )
-                      ],
+                          Text(
+                            'XRent',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(color: Colors.black),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  form,
-                  const SizedBox(height: 20),
-                  CustomRequestButton(
-                    buttonError: buttonError,
-                    buttonErrorMessage: buttonErrorMessage,
-                    url: '/mobile/signup',
-                    method: 'POST',
-                    buttonText: 'Sign up',
-                    body: {
-                      "request_id": "5v76g4v567344334355475cd4f",
-                      "first_name": first_name_ctrl.text,
-                      "last_name": last_name_ctrl.text,
-                      "identity": phone_number_inpt,
-                      "property_name": "Kirui Apartments",
-                      "location": "Buru Age 3",
-                      "password": password_ctrl.text
-                    },
-                    // body: const {
-                    //   "request_id": "5v76g4v567344334355475cd4f",
-                    //   "first_name": "Alice",
-                    //   "last_name": "Kimaani",
-                    //   "identity": "0766494200",
-                    //   "property_name": "Kirui Apartments",
-                    //   "location": "Buru Age 3",
-                    //   "password": "123456789"
-                    // },
-                    onSuccess: (res) {
-                      print('<<<<<<<<<<<< res >>>>>>>>>>>>>');
-                      print(res);
-                      if (res['isSuccessful'] == false) {
-                        return showToast(
+                    form,
+                    const SizedBox(height: 20),
+                    CustomRequestButton(
+                      buttonError: buttonError,
+                      buttonErrorMessage: buttonErrorMessage,
+                      url: '/mobile/signup',
+                      method: 'POST',
+                      buttonText: 'Sign up',
+                      body: {
+                        "request_id": "5v76g4v567344334355475cd4f",
+                        "first_name": first_name_ctrl.text,
+                        "last_name": last_name_ctrl.text,
+                        "identity": phone_number_inpt,
+                        "property_name": "Kirui Apartments",
+                        "location": "Buru Age 3",
+                        "password": password_ctrl.text
+                      },
+                      // body: const {
+                      //   "request_id": "5v76g4v567344334355475cd4f",
+                      //   "first_name": "Alice",
+                      //   "last_name": "Kimaani",
+                      //   "identity": "0766494200",
+                      //   "property_name": "Kirui Apartments",
+                      //   "location": "Buru Age 3",
+                      //   "password": "123456789"
+                      // },
+                      onSuccess: (res) {
+                        print('<<<<<<<<<<<< res >>>>>>>>>>>>>');
+                        print(res);
+                        if (res['isSuccessful'] == false) {
+                          return showToast(
+                            context,
+                            'Error!',
+                            res['error'] ?? 'Error, please try again later.',
+                            Colors.red,
+                          );
+                        }
+                        if (res['data']['response_code'] != '1') {
+                          return showToast(
+                            context,
+                            'Error!',
+                            res['data']['message'] ??
+                                'Error, please try again later.',
+                            Colors.red,
+                          );
+                        }
+                        Navigator.push(
                           context,
-                          'Error!',
-                          res['error'] ?? 'Error, please try again later.',
-                          Colors.red,
+                          MaterialPageRoute(
+                            builder: ((context) => const Property()),
+                          ),
                         );
-                      }
-                      if (res['data']['response_code'] != '1') {
-                        return showToast(
-                          context,
-                          'Error!',
-                          res['data']['message'] ??
-                              'Error, please try again later.',
-                          Colors.red,
-                        );
-                      }
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: ((context) => const Property()),
-                        ),
-                      );
-                    },
-                  ),
-                ],
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: ((context) => const Dashboard()),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((context) => const Dashboard()),
+                ),
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+              margin: const EdgeInsets.only(bottom: 50),
+              decoration: BoxDecoration(
+                color: mintyGreen,
+                borderRadius: BorderRadius.circular(10),
               ),
-            );
-          },
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-            margin: const EdgeInsets.only(bottom: 50),
-            decoration: BoxDecoration(
-              color: mintyGreen,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              'Demo Account',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15),
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: ((context) => const Login()),
-              ),
-            );
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 20),
-            child: RichText(
-              text: TextSpan(
-                text: 'Already have an account? ',
-                style: const TextStyle(color: Colors.black),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: 'Login',
-                    style: TextStyle(color: mintyGreen),
-                  ),
-                ],
+              child: Text(
+                'Demo Account',
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15),
               ),
             ),
           ),
-        ),
-        const SizedBox(height: 20),
-      ],
-    ));
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((context) => const Login()),
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: RichText(
+                text: TextSpan(
+                  text: 'Already have an account? ',
+                  style: const TextStyle(color: Colors.black),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: 'Login',
+                      style: TextStyle(color: mintyGreen),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
   }
 }
