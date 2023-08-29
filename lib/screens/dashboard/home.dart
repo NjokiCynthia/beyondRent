@@ -5,6 +5,8 @@ import 'package:x_rent/screens/dashboard/propertyDetails.dart';
 import 'package:x_rent/property/add_property.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:x_rent/providers/property_provider.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -16,6 +18,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   DateTime selectedDate = DateTime.now();
   String currentMonth = '';
+  List trasactionList = [];
 
   Future<void> _showDayPicker(BuildContext context) async {
     DateTime currentDate = DateTime.now();
@@ -67,6 +70,10 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
     Widget rentWidget = Column(
       children: [
         Padding(
@@ -128,11 +135,11 @@ class _HomeState extends State<Home> {
               children: [
                 const Text('Total rent for September'),
                 Text(
-                  'Kes. 143,765',
+                  'Ksh. 0',
                   style: Theme.of(context).textTheme.displayLarge,
                 ),
                 const SizedBox(height: 10),
-                const ProgressBar(progress: 60),
+                const ProgressBar(progress: 0),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -152,11 +159,11 @@ class _HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Kes, 143,765',
+                      'Ksh, 0',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     Text(
-                      'Kes, 270,000',
+                      'Ksh, 0',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],
@@ -189,46 +196,13 @@ class _HomeState extends State<Home> {
           ),
         ),
         const SizedBox(height: 20),
-        const TransactionCard(
-          name: 'Liam',
-          date: '22nd, Mar 2023',
-          amount: 20000,
-        ),
-        const TransactionCard(
-          name: 'Sophia',
-          date: '24th, Mar 2023',
-          amount: 32000,
-        ),
-        const TransactionCard(
-          name: 'Ethan',
-          date: '26th, Mar 2023',
-          amount: 25000,
-        ),
-        const TransactionCard(
-          name: 'Ava',
-          date: '28th, Mar 2023',
-          amount: 30000,
-        ),
-        const TransactionCard(
-          name: 'Emma',
-          date: '28th, Mar 2023',
-          amount: 25000,
-        ),
-        const TransactionCard(
-          name: 'Olivia',
-          date: '28th, Mar 2023',
-          amount: 30000,
-        ),
-        const TransactionCard(
-          name: 'Ava',
-          date: '28th, Mar 2023',
-          amount: 30000,
-        ),
-        const TransactionCard(
-          name: 'Ava',
-          date: '28th, Mar 2023',
-          amount: 30000,
-        ),
+        trasactionList.isEmpty
+            ? const EmptyTransactions()
+            : const TransactionCard(
+                name: 'Liam',
+                date: '22nd, Mar 2023',
+                amount: 20000,
+              ),
       ],
     );
     Widget modalContent = Column(
@@ -268,7 +242,9 @@ class _HomeState extends State<Home> {
                         width: 20,
                       ),
                     ),
-                    Text(propertyName),
+                    Text(
+                      propertyProvider.property!.propertyName,
+                    ),
                   ],
                 ),
               ),
@@ -339,7 +315,7 @@ class _HomeState extends State<Home> {
               const SizedBox(height: 20),
               DashboardAppbar(
                 headerText: 'Property',
-                headerBody: propertyName,
+                headerBody: propertyProvider.property?.propertyName,
                 icon: Image.asset(
                   'assets/images/icons/exchange.png',
                   width: 20,

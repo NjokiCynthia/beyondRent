@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:x_rent/utilities/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/property/property.dart';
+import 'package:x_rent/providers/user_provider.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class Profile extends StatefulWidget {
@@ -14,6 +16,10 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
     return Scaffold(
       backgroundColor: Colors.grey.withOpacity(0.1),
       body: SafeArea(
@@ -58,7 +64,7 @@ class _ProfileState extends State<Profile> {
                                 ),
                                 SizedBox(height: 5),
                                 Text(
-                                  propertyUser,
+                                  '${userProvider.user!.firstName} ${userProvider.user!.lastName}',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -82,24 +88,7 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         title: Text(
-                          propertyUserPhone,
-                        ),
-                      ),
-                      ListTile(
-                        leading: Container(
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(13, 201, 150, 1)
-                                .withOpacity(0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          child: const Icon(
-                            Icons.email,
-                            color: Color.fromRGBO(13, 201, 150, 1),
-                          ),
-                        ),
-                        title: Text(
-                          propertyUserEmail,
+                          userProvider.user!.phone,
                         ),
                       ),
                       ListTile(

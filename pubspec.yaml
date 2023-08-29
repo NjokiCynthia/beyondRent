@@ -94,6 +94,8 @@ flutter:
     - assets/images/apartment.png
 
     #Illustrations
+    - assets/illustrations/tenant.png
+    - assets/illustrations/transaction.png
     - assets/illustrations/invoice.png
     - assets/illustrations/organize.png
     - assets/illustrations/manage_properties.png

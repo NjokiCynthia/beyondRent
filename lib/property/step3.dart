@@ -321,6 +321,23 @@ class _StepPage3State extends State<StepPage3> {
               child: const Text('Confirm'),
             ),
           ),
+          const SizedBox(height: 24),
+          SizedBox(
+            height: 48,
+            width: double.infinity,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: mintyGreen),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((context) => const Dashboard()),
+                  ),
+                );
+              },
+              child: const Text('Skip'),
+            ),
+          ),
         ],
       ),
     );
