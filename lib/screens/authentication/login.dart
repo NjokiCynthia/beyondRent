@@ -24,6 +24,7 @@ class _LoginState extends State<Login> {
 
   String initialCountry = 'KE';
   PhoneNumber number = PhoneNumber(isoCode: 'KE');
+  bool _obscurePassword = true;
 
   checkIfFreshSignup() {
     if (widget.justSignedup == true) {
@@ -153,6 +154,7 @@ class _LoginState extends State<Login> {
                       ),
                       const SizedBox(height: 10),
                       TextFormField(
+                        obscureText: _obscurePassword,
                         style: bodyText,
                         controller: passwordController,
                         decoration: InputDecoration(
@@ -181,6 +183,19 @@ class _LoginState extends State<Login> {
                               width: 1.0,
                             ),
                             borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.grey,
+                            ),
                           ),
                         ),
                       ),
