@@ -39,7 +39,9 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    checkIfFreshSignup();
+    Future.delayed(const Duration(seconds: 1), () {
+      checkIfFreshSignup();
+    });
   }
 
   @override
@@ -155,6 +157,7 @@ class _LoginState extends State<Login> {
                       TextFormField(
                         style: bodyText,
                         controller: passwordController,
+                        obscureText: true,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,

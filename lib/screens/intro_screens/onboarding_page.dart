@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
           decoration: pageDecoration(),
         ),
         PageViewModel(
-          title: "Stay Organized with XSoft",
+          title: "Stay Organized with XRent",
           body:
               "Easily access information about your properties and tenants. Keep track of payments, agreements, and maintenance requests. Simplify your rental management journey.",
           image: Align(
@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
         PageViewModel(
           title: "Efficient Invoice Management!",
           body:
-              "With XSoft, send monthly invoices to tenants effortlessly. Receive payments and keep track of outstanding amounts. Experience hassle-free rental management now!",
+              "With XRent, send monthly invoices to tenants effortlessly. Receive payments and keep track of outstanding amounts. Experience hassle-free rental management now!",
           image: Padding(
             padding: EdgeInsets.only(top: 40),
             child: Image.asset('assets/illustrations/invoice.png'),
