@@ -160,7 +160,6 @@ class _LoginState extends State<Login> {
                         obscureText: _obscurePassword,
                         style: bodyText,
                         controller: passwordController,
-                        obscureText: true,
                         onChanged: (value) {
                           setState(() {
                             finalPassword = value;
