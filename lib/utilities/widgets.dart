@@ -6,7 +6,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:dio/dio.dart';
 import 'package:overlay_support/overlay_support.dart';
 
-
 Color getRandomColor() {
   final random = Random();
   return Color.fromRGBO(
@@ -641,7 +640,6 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
       'version': 99,
     };
     final options = Options(contentType: 'application/json', headers: headers);
-
     try {
       if (widget.method == 'POST') {
         print('url: ${ipAddress + widget.url!}');
@@ -691,7 +689,6 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
   }
 }
 
-
 // Widget _buildBottomModalContent(BuildContext context, Widget content) {
 //   return ClipRRect(
 //     borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
@@ -739,7 +736,10 @@ class InvoiceCard extends StatelessWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(invoice.timeline, style: Theme.of(context).textTheme.bodySmall,),
+            Text(
+              invoice.timeline,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
             SizedBox(height: 8.0),
             Row(
               children: [

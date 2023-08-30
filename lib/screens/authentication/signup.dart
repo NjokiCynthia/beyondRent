@@ -200,7 +200,7 @@ class _SignupState extends State<Signup> {
           initialValue: number,
           textAlignVertical: TextAlignVertical.top,
           textFieldController: phone_number_ctrl,
-          formatInput: true,
+          formatInput: false,
           keyboardType: const TextInputType.numberWithOptions(
             signed: true,
             decimal: true,
