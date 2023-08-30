@@ -150,6 +150,8 @@ class _StepPage3State extends State<StepPage3> {
             onInputValidated: (bool value) {},
             selectorConfig: const SelectorConfig(
               selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+              setSelectorButtonAsPrefixIcon: true,
+              leadingPadding: 10,
             ),
             textStyle: bodyText,
             ignoreBlank: false,
