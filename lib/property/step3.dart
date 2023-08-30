@@ -151,7 +151,7 @@ class _StepPage3State extends State<StepPage3> {
             selectorConfig: const SelectorConfig(
               selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
               setSelectorButtonAsPrefixIcon: true,
-            leadingPadding: 10,
+              leadingPadding: 10,
             ),
             textStyle: bodyText,
             ignoreBlank: false,
