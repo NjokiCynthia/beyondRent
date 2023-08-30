@@ -21,6 +21,7 @@ class _LoginState extends State<Login> {
   final TextEditingController controller = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   String phoneNoController = '';
+  String finalPassword = '';
 
   String initialCountry = 'KE';
   PhoneNumber number = PhoneNumber(isoCode: 'KE');
@@ -40,7 +41,9 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    checkIfFreshSignup();
+    Future.delayed(const Duration(seconds: 1), () {
+      checkIfFreshSignup();
+    });
   }
 
   @override
@@ -105,7 +108,7 @@ class _LoginState extends State<Login> {
                         initialValue: number,
                         textAlignVertical: TextAlignVertical.top,
                         textFieldController: controller,
-                        formatInput: true,
+                        formatInput: false,
                         keyboardType: const TextInputType.numberWithOptions(
                           signed: true,
                           decimal: true,
@@ -157,6 +160,12 @@ class _LoginState extends State<Login> {
                         obscureText: _obscurePassword,
                         style: bodyText,
                         controller: passwordController,
+                        obscureText: true,
+                        onChanged: (value) {
+                          setState(() {
+                            finalPassword = value;
+                          });
+                        },
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
@@ -208,15 +217,10 @@ class _LoginState extends State<Login> {
                     buttonText: 'Log in',
                     body: {
                       "phone": phoneNoController,
-                      "password": passwordController.text,
+                      "password": finalPassword,
                       "remember": true
                     },
                     onSuccess: (res) {
-                      print({
-                        "phone": phoneNoController,
-                        "password": passwordController.text,
-                        "remember": true
-                      });
                       if (res['data']['response']['status'] != 1) {
                         return showToast(
                           context,

@@ -57,11 +57,11 @@ class _SignupState extends State<Signup> {
         buttonErrorMessage = 'Enter password';
       });
     }
-    if (password_ctrl.text.length < 6) {
+    if (password_ctrl.text.length < 8) {
       return setState(() {
         buttonError = true;
         buttonErrorMessage =
-            'Minimum password length must be at least 6 characters';
+            'Minimum password length must be at least 8 characters';
       });
     }
     print('buttonError');
@@ -200,7 +200,7 @@ class _SignupState extends State<Signup> {
           initialValue: number,
           textAlignVertical: TextAlignVertical.top,
           textFieldController: phone_number_ctrl,
-          formatInput: true,
+          formatInput: false,
           keyboardType: const TextInputType.numberWithOptions(
             signed: true,
             decimal: true,
@@ -425,6 +425,15 @@ class _SignupState extends State<Signup> {
                       url: '/mobile/signup',
                       method: 'POST',
                       buttonText: 'Sign up',
+                      // body: {
+                      //   "request_id": "5v76g4v567344334355475cd4f",
+                      //   "first_name": first_name_ctrl.text,
+                      //   "last_name": last_name_ctrl.text,
+                      //   "identity": phone_number_inpt,
+                      //   "property_name": "Kirui Apartments",
+                      //   "location": "Buru Age 3",
+                      //   "password": password_ctrl.text
+                      // },
                       body: {
                         "request_id": "5v76g4v567344334355475cd4f",
                         "first_name": first_name_ctrl.text,
@@ -434,17 +443,9 @@ class _SignupState extends State<Signup> {
                         "location": "Buru Age 3",
                         "password": password_ctrl.text
                       },
-                      // body: const {
-                      //   "request_id": "5v76g4v567344334355475cd4f",
-                      //   "first_name": "Alice",
-                      //   "last_name": "Kimaani",
-                      //   "identity": "0766494200",
-                      //   "property_name": "Kirui Apartments",
-                      //   "location": "Buru Age 3",
-                      //   "password": "123456789"
-                      // },
                       onSuccess: (res) {
                         print('<<<<<<<<<<<< res >>>>>>>>>>>>>');
+                        print(password_ctrl.text.runtimeType);
                         print(res);
                         if (res['isSuccessful'] == false) {
                           return showToast(
@@ -466,7 +467,8 @@ class _SignupState extends State<Signup> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: ((context) => const Property()),
+                            builder: ((context) =>
+                                const Login(justSignedup: true)),
                           ),
                         );
                       },
@@ -506,7 +508,7 @@ class _SignupState extends State<Signup> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: ((context) => const Login()),
+                  builder: ((context) => const Login(justSignedup: false)),
                 ),
               );
             },
