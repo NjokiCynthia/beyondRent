@@ -7,6 +7,7 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/providers/property_provider.dart';
+import 'package:x_rent/screens/dashboard.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -71,6 +72,10 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
+    final userPropertyListProvider = Provider.of<PropertyListProvider>(
       context,
       listen: false,
     );
@@ -210,97 +215,133 @@ class _HomeState extends State<Home> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Select a properties',
+          'Select a property',
           style: Theme.of(context).textTheme.bodySmall,
         ),
         const SizedBox(height: 10),
-        Container(
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                spreadRadius: 2,
-                blurRadius: 4,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: userPropertyListProvider.properties.length,
+          itemBuilder: (context, index) {
+            Property property = userPropertyListProvider.properties[index];
+
+            return GestureDetector(
+              onTap: () {
+                print('Tapped');
+                final propertyProvider = Provider.of<PropertyProvider>(
+                  context,
+                  listen: false,
+                );
+                propertyProvider.setProperty(
+                  Property(
+                    propertyName:
+                        userPropertyListProvider.properties[index].propertyName,
+                    propertyLocation: userPropertyListProvider
+                        .properties[index].propertyLocation,
+                    id: userPropertyListProvider.properties[index].id,
+                  ),
+                );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((context) => const Dashboard()),
+                  ),
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                margin: const EdgeInsets.only(bottom: 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      margin: const EdgeInsets.only(right: 20),
-                      child: Image.asset(
-                        'assets/images/icons/home.png',
-                        width: 20,
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(right: 20),
+                            child: Image.asset(
+                              'assets/images/icons/home.png',
+                              width: 20,
+                            ),
+                          ),
+                          Text(
+                            property.propertyName,
+                          ),
+                        ],
                       ),
                     ),
                     Text(
-                      propertyProvider.property!.propertyName,
+                      'view',
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
                 ),
               ),
-              Text(
-                'view',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
-          ),
+            );
+          },
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 20),
         Text(
           'Add New Properties',
           style: Theme.of(context).textTheme.bodySmall,
         ),
         const SizedBox(height: 10),
-        GestureDetector(
-          onTap: () {
-            PersistentNavBarNavigator.pushNewScreen(
-              context,
-              screen: const AddProperty(),
-              withNavBar: false,
-              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-            );
-          },
-          child: Row(children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: mintyGreen,
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(right: 20),
-                    child: Text(
-                      'Add property',
+        Container(
+          margin: const EdgeInsets.only(bottom: 20),
+          child: GestureDetector(
+            onTap: () {
+              PersistentNavBarNavigator.pushNewScreen(
+                context,
+                screen: const AddProperty(),
+                withNavBar: false,
+                pageTransitionAnimation: PageTransitionAnimation.cupertino,
+              );
+            },
+            child: Row(children: [
+              Container(
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: mintyGreen,
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(right: 20),
+                      child: Text(
+                        'Add property',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(color: Colors.white),
+                      ),
+                    ),
+                    Text(
+                      '+',
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium!
                           .copyWith(color: Colors.white),
                     ),
-                  ),
-                  Text(
-                    '+',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: Colors.white),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Expanded(child: Container())
-          ]),
+              Expanded(child: Container())
+            ]),
+          ),
         ),
         const SizedBox(height: 20),
       ],

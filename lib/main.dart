@@ -22,6 +22,9 @@ void main() async {
         ChangeNotifierProvider<PropertyProvider>.value(
           value: PropertyProvider(),
         ),
+        ChangeNotifierProvider<PropertyListProvider>.value(
+          value: PropertyListProvider(),
+        ),
       ],
       child: MyApp(isFirstLaunch: isFirstLaunch),
       //const MyApp(),

@@ -27,6 +27,10 @@ class _PropertyListState extends State<PropertyList> {
       context,
       listen: false,
     );
+    final userPropertyListProvider = Provider.of<PropertyListProvider>(
+      context,
+      listen: false,
+    );
     final token = userProvider.user?.token;
     final userID = userProvider.user?.id;
 
@@ -48,6 +52,15 @@ class _PropertyListState extends State<PropertyList> {
         setState(() {
           userPropertyList = response['response']['properties'];
         });
+        for (var propertyData in userPropertyList) {
+          Property property = Property(
+            propertyName: propertyData['name'],
+            propertyLocation: '',
+            id: int.parse(propertyData['id']),
+          );
+          userPropertyListProvider.addProperty(property);
+        }
+        print(userPropertyList);
       }
       setState(() {
         propertiesLoading = false;

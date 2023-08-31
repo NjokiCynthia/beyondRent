@@ -23,3 +23,15 @@ class PropertyProvider extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+class PropertyListProvider extends ChangeNotifier {
+  final List<Property> _properties = [];
+
+  List<Property> get properties => _properties;
+
+  void addProperty(Property property) {
+    _properties.add(property);
+
+    notifyListeners();
+  }
+}
