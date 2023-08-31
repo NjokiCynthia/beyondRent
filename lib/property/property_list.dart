@@ -5,6 +5,8 @@ import 'package:x_rent/property/add_property.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:x_rent/providers/property_provider.dart';
+import 'package:x_rent/providers/user_provider.dart';
 
 class PropertyList extends StatefulWidget {
   const PropertyList({super.key});
@@ -80,9 +82,11 @@ class _PropertyListState extends State<PropertyList> {
       shrinkWrap: true,
       itemCount: userPropertyList.length,
       itemBuilder: (context, index) {
-        print(userPropertyList[index]);
+        var currentPropertyID = int.parse(userPropertyList[index]['id']);
+        var currentPropertyName = userPropertyList[index]['name'];
         return Center(
           child: Container(
+            width: MediaQuery.of(context).size.width * 0.7,
             margin: const EdgeInsets.only(bottom: 20),
             padding: const EdgeInsets.only(
               left: 20,
@@ -95,7 +99,18 @@ class _PropertyListState extends State<PropertyList> {
               borderRadius: BorderRadius.circular(7),
             ),
             child: GestureDetector(
-              onTap: () {
+              onTap: () async {
+                final propertyProvider = Provider.of<PropertyProvider>(
+                  context,
+                  listen: false,
+                );
+                propertyProvider.setProperty(
+                  Property(
+                    propertyName: currentPropertyName,
+                    propertyLocation: '',
+                    id: currentPropertyID,
+                  ),
+                );
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -103,10 +118,23 @@ class _PropertyListState extends State<PropertyList> {
                   ),
                 );
               },
-              child: Text(
-                userPropertyList[index]['name'],
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Colors.black.withOpacity(0.7), fontSize: 20),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Icon(
+                      Icons.house_rounded,
+                      color: mintyGreen,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      userPropertyList[index]['name'],
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          color: Colors.black.withOpacity(0.7), fontSize: 20),
+                    ),
+                  )
+                ],
               ),
             ),
           ),

@@ -358,7 +358,7 @@ class _StepPage1State extends State<StepPage1> {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
       'Cookie':
-          'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=rp9tk80huscienrtaogk28hqsq9likdk; identity=254766444600; remember_code=FMdTpp.zfXw8n7qu2x9Sku'
+          'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=ibiggj095ls74kb814hjn11a0nd0r1ta; identity=254721882678; remember_code=EHvV.sbjT505bkXj.ZuN2O'
     };
     await apiClient
         .post('/mobile/create_property', postData, headers: headers)
@@ -373,8 +373,6 @@ class _StepPage1State extends State<StepPage1> {
             id: propertyReturned['id'],
           ),
         );
-        print('propertyProvider.property?.propertyName');
-        print(propertyProvider.property?.propertyName);
         return true;
       }
       return false;
