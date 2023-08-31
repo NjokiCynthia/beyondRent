@@ -229,7 +229,6 @@ class _LoginState extends State<Login> {
                           token: accessToken,
                         ),
                       );
-
                       Navigator.push(
                         context,
                         MaterialPageRoute(
