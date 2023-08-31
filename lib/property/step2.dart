@@ -6,6 +6,15 @@ import 'package:x_rent/screens/dashboard.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 
+import 'package:x_rent/constants/theme.dart';
+import 'package:x_rent/providers/property_provider.dart';
+import 'package:x_rent/providers/user_provider.dart';
+import 'package:x_rent/utilities/constants.dart';
+import 'package:x_rent/utilities/widgets.dart';
+import 'package:x_rent/property/step2.dart';
+import 'package:x_rent/property/step3.dart';
+import 'package:provider/provider.dart';
+
 class StepPage2 extends StatefulWidget {
   final int currentPageIndex;
   final PageController pageController;
@@ -36,9 +45,6 @@ class _StepPage2State extends State<StepPage2> {
   }
 
   propertyInputValidator() async {
-    print(houseNoController.text);
-    print(floorNoController.text);
-    print(blockNoController.text);
     if (houseNoController.text == '') {
       showToast(
         context,
@@ -67,8 +73,46 @@ class _StepPage2State extends State<StepPage2> {
     return true;
   }
 
-  addPropertyDetails() async {
-    return true;
+  addPropertyUnits() async {
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
+    final token = userProvider.user?.token;
+
+    final postData = {
+      "property_id": propertyProvider.property?.id,
+      "house_number": houseNoController.text,
+      "house_type": 1,
+      "block": 1,
+      "floor": floorNoController.text,
+      "tenant_id": 0,
+      "contribution_id": 0
+    };
+    final apiClient = ApiClient();
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+      'Cookie': '...' // your cookie value here
+    };
+
+    try {
+      final response = await apiClient.post(
+        '/mobile/units/create',
+        postData,
+        headers: headers,
+      );
+      return response['response'];
+    } catch (error) {
+      // Handle the error
+      print('error');
+      print(error);
+      return {"status": 7, "time": 1693485381, "message": "Error saving unit"};
+    }
   }
 
   @override
@@ -276,6 +320,20 @@ class _StepPage2State extends State<StepPage2> {
                 }),
           ),
           const SizedBox(height: 24),
+          // GestureDetector(
+          //   onTap: () {
+          //     print('tapped');
+          //     final propertyProvider = Provider.of<PropertyProvider>(
+          //       context,
+          //       listen: false,
+          //     );
+          //     print(propertyProvider.property?.propertyName);
+          //     print(propertyProvider.property?.propertyLocation);
+          //     print(propertyProvider.property?.id);
+          //     print('done');
+          //   },
+          //   child: Text('Tap me'),
+          // ),
           SizedBox(
             height: 48,
             width: double.infinity,
@@ -287,12 +345,21 @@ class _StepPage2State extends State<StepPage2> {
                 });
                 await propertyInputValidator().then((value) {
                   if (value == true) {
-                    addPropertyDetails().then((value) {
-                      propertyPageController.animateToPage(
-                        2,
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
+                    addPropertyUnits().then((addPropertyRes) {
+                      if (addPropertyRes['status'] == 1) {
+                        propertyPageController.animateToPage(
+                          2,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      } else {
+                        showToast(
+                          context,
+                          'Error!',
+                          addPropertyRes['message'],
+                          Colors.red,
+                        );
+                      }
                     });
                   }
                 });
@@ -301,6 +368,22 @@ class _StepPage2State extends State<StepPage2> {
                 });
               },
               child: Text(propertySaveLoading == true ? 'Saving' : 'Proceed'),
+            ),
+          ),
+          const SizedBox(height: 24),
+          SizedBox(
+            height: 48,
+            width: double.infinity,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: mintyGreen),
+              onPressed: () {
+                propertyPageController.animateToPage(
+                  2,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              },
+              child: const Text('Skip'),
             ),
           ),
         ],
