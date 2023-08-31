@@ -376,7 +376,7 @@ class _SignupState extends State<Signup> {
                 });
               },
               icon: Icon(
-                _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                _obscurePassword ? Icons.visibility_off : Icons.visibility,
                 color: Colors.grey,
               ),
             ),

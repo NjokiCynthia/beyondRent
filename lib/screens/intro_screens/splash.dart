@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x_rent/screens/intro_screens/onboarding_page.dart';
 
 class AnimatedScaleImage extends StatefulWidget {
@@ -16,6 +17,12 @@ class _AnimatedScaleImageState extends State<AnimatedScaleImage>
   @override
   void initState() {
     super.initState();
+
+
+    // Set the 'isFirstLaunch' flag to false
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setBool('isFirstLaunch', false);
+    });
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 1),
