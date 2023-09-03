@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:x_rent/utilities/constants.dart';
+import 'package:x_rent/screens/authentication/login.dart';
 import 'package:x_rent/property/property.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -228,6 +228,13 @@ class _ProfileState extends State<Profile> {
                     child: ElevatedButton.icon(
                       onPressed: () {
                         // Add your logout functionality here
+                        PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: const Login(),
+                          withNavBar: false,
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.cupertino,
+                        );
                       },
                       icon: const Icon(Icons.exit_to_app, color: Colors.red),
                       label: Text(

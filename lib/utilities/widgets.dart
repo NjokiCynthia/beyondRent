@@ -33,6 +33,23 @@ class EmptyTenants extends StatelessWidget {
   }
 }
 
+class EmptyUnits extends StatelessWidget {
+  const EmptyUnits({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Image.asset('assets/illustrations/tenant.png', width: 250),
+        Text(
+          'Unit list empty.',
+          style: Theme.of(context).textTheme.bodyMedium,
+          textAlign: TextAlign.center,
+        )
+      ],
+    );
+  }
+}
+
 class EmptyTransactions extends StatelessWidget {
   const EmptyTransactions({Key? key}) : super(key: key);
   @override
@@ -121,6 +138,8 @@ class DashboardAppbar extends StatelessWidget {
   final num? leftHeader;
   final dynamic icon;
   final bool? propertyNav;
+  final bool? backButton;
+  final String? backButtonText;
   final ValueSetter<dynamic>? callback;
   const DashboardAppbar({
     super.key,
@@ -129,6 +148,8 @@ class DashboardAppbar extends StatelessWidget {
     this.leftHeader,
     this.icon,
     this.propertyNav,
+    this.backButton,
+    this.backButtonText,
     this.callback,
   });
 
@@ -197,62 +218,90 @@ class DashboardAppbar extends StatelessWidget {
               ),
             ],
           )
-        : Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: leftHeader == 1
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            headerText!,
-                            style: Theme.of(context).textTheme.displayMedium,
-                          ),
-                          Text(
-                            headerBody!,
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
-                      )
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            headerText!,
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                          Text(
-                            headerBody!,
-                            style: Theme.of(context).textTheme.displayMedium,
-                          ),
-                        ],
+        : backButton == true
+            ? Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
                       ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  callback!('1');
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
+                      child: Image.asset(
+                        'assets/images/icons/left-arrow.png',
+                        width: 15,
                       ),
-                    ],
+                    ),
                   ),
-                  child: icon,
-                ),
-              ),
-            ],
-          );
+                  Container(
+                    margin: const EdgeInsets.only(left: 10),
+                    child: Text(backButtonText!),
+                  )
+                ],
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: leftHeader == 1
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                headerText!,
+                                style:
+                                    Theme.of(context).textTheme.displayMedium,
+                              ),
+                              Text(
+                                headerBody!,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ],
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                headerText!,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                              Text(
+                                headerBody!,
+                                style:
+                                    Theme.of(context).textTheme.displayMedium,
+                              ),
+                            ],
+                          ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      callback!('1');
+                    },
+                    child: icon,
+                    // child: Container(
+                    //   padding: const EdgeInsets.all(10),
+                    //   decoration: BoxDecoration(
+                    //     shape: BoxShape.circle,
+                    //     color: Colors.white,
+                    //     boxShadow: [
+                    //       BoxShadow(
+                    //         color: Colors.grey.withOpacity(0.2),
+                    //         spreadRadius: 2,
+                    //         blurRadius: 4,
+                    //         offset: const Offset(0, 2),
+                    //       ),
+                    //     ],
+                    //   ),
+                    //   child: icon,
+                    // ),
+                  ),
+                ],
+              );
   }
 }
 
@@ -435,16 +484,7 @@ class TenantWidget extends StatelessWidget {
                       ),
                       child: const Text('M'),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(name!),
-                        Text(
-                          'Elgon Court',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ],
-                    )
+                    Text(name!),
                   ],
                 ),
               ),
@@ -487,6 +527,78 @@ class TenantWidget extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+// Units Widget
+class UnitWidget extends StatelessWidget {
+  final String? name;
+  final String? tenant;
+  final num? amount;
+  final ValueSetter<dynamic>? callback;
+  const UnitWidget({
+    super.key,
+    this.name,
+    this.tenant,
+    this.amount,
+    this.callback,
+  });
+  @override
+  Widget build(BuildContext context) {
+    final backgroundColor = getRandomColor();
+    return Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 0.5,
+            blurRadius: 1,
+            offset: const Offset(0, 1),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.only(right: 10),
+                decoration: BoxDecoration(
+                  color: backgroundColor,
+                  shape: BoxShape.circle,
+                ),
+                child: const Text('M'),
+              ),
+              Text(name!),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Container(
+            height: 1,
+            color: Colors.black.withOpacity(0.1),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Tenant: None',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              Text(
+                'Unit not occupied',
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
           )
@@ -540,6 +652,8 @@ Widget _buildBottomModalContent(BuildContext context, Widget content) {
 }
 
 class CustomRequestButton extends StatefulWidget {
+  final String? authorization;
+  final String? cookie;
   final bool? buttonError;
   final String? buttonErrorMessage;
   final String? url;
@@ -550,6 +664,8 @@ class CustomRequestButton extends StatefulWidget {
 
   const CustomRequestButton({
     super.key,
+    this.authorization,
+    this.cookie,
     this.buttonError,
     this.buttonErrorMessage,
     this.url,
@@ -638,6 +754,8 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
     final headers = {
       'Versioncode': 99,
       'version': 99,
+      'Authorization': widget.authorization ?? '',
+      'Cookie': widget.cookie ?? ''
     };
     final options = Options(contentType: 'application/json', headers: headers);
     try {

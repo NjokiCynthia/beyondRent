@@ -41,8 +41,6 @@ class _PropertyListState extends State<PropertyList> {
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
-      'Cookie':
-          'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=rp9tk80huscienrtaogk28hqsq9likdk; identity=254766444600; remember_code=FMdTpp.zfXw8n7qu2x9Sku'
     };
     await apiClient
         .post('/mobile/get_property_by_user', postData, headers: headers)

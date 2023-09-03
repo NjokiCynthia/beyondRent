@@ -21,7 +21,9 @@ class _PropertyState extends State<Property> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: ((context) => const AddProperty())),
+                  MaterialPageRoute(
+                    builder: ((context) => const AddProperty()),
+                  ),
                 );
               },
               child: Column(

@@ -3,6 +3,7 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/screens/dashboard.dart';
 import 'package:x_rent/utilities/constants.dart';
+import 'package:x_rent/property/add_property.dart';
 
 class StepPage3 extends StatefulWidget {
   final int currentPageIndex;
@@ -31,6 +32,7 @@ class _StepPage3State extends State<StepPage3> {
   PhoneNumber number = PhoneNumber(isoCode: 'KE');
   @override
   Widget build(BuildContext context) {
+    PageController pageController = widget.pageController;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -319,6 +321,11 @@ class _StepPage3State extends State<StepPage3> {
                     builder: ((context) => const Dashboard()),
                   ),
                 );
+                pageController.animateToPage(
+                  0,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
               },
               child: const Text('Confirm'),
             ),
@@ -335,6 +342,11 @@ class _StepPage3State extends State<StepPage3> {
                   MaterialPageRoute(
                     builder: ((context) => const Dashboard()),
                   ),
+                );
+                pageController.animateToPage(
+                  0,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
                 );
               },
               child: const Text('Skip'),

@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 
 int _selectedIndex = 0;
 List unitList = [];
-PageController propertyPageController = PageController(initialPage: 0);
 int _currentPageIndex = 0;
 
 // This widget represents the modal content and its state
@@ -216,6 +215,7 @@ class AddProperty extends StatefulWidget {
 }
 
 class _AddPropertyState extends State<AddProperty> {
+  PageController propertyPageController = PageController(initialPage: 0);
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = [
@@ -294,10 +294,11 @@ class StepPage1 extends StatefulWidget {
   final int currentPageIndex;
   final PageController pageController;
 
-  const StepPage1(
-      {super.key,
-      required this.currentPageIndex,
-      required this.pageController});
+  const StepPage1({
+    super.key,
+    required this.currentPageIndex,
+    required this.pageController,
+  });
 
   @override
   _StepPage1State createState() => _StepPage1State();
@@ -307,6 +308,9 @@ class _StepPage1State extends State<StepPage1> {
   final TextEditingController propertyNameController = TextEditingController();
   final TextEditingController propertyLocationController =
       TextEditingController();
+
+  bool buttonError = true;
+  String buttonErrorMessage = 'Enter all fields';
 
   bool propertySaveLoading = false;
 
@@ -318,22 +322,22 @@ class _StepPage1State extends State<StepPage1> {
 
   propertyInputValidator() async {
     if (propertyNameController.text == '') {
-      showToast(
-        context,
-        'Error!',
-        'Enter property name',
-        Colors.red,
-      );
+      setState(() {
+        buttonError = true;
+        buttonErrorMessage = 'Enter property name';
+      });
       return false;
     } else if (propertyLocationController.text == '') {
-      showToast(
-        context,
-        'Error!',
-        'Enter property location',
-        Colors.red,
-      );
+      setState(() {
+        buttonError = true;
+        buttonErrorMessage = 'Enter property location';
+      });
       return false;
     } else {
+      setState(() {
+        buttonError = false;
+        buttonErrorMessage = 'Enter all fields';
+      });
       return true;
     }
   }
@@ -347,6 +351,7 @@ class _StepPage1State extends State<StepPage1> {
       context,
       listen: false,
     );
+
     final token = userProvider.user?.token;
 
     final postData = {
@@ -358,11 +363,12 @@ class _StepPage1State extends State<StepPage1> {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
       'Cookie':
-          'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=ibiggj095ls74kb814hjn11a0nd0r1ta; identity=254721882678; remember_code=EHvV.sbjT505bkXj.ZuN2O'
+          'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=oe8mu4ln2bs4t5n92ftedn4tqc6f3gue; identity=${userProvider.user?.phone}; remember_code=hRI1OErZyTwhcw63t98Wl.'
     };
     await apiClient
         .post('/mobile/create_property', postData, headers: headers)
         .then((response) {
+      print('response >>>>>>>>> $response   ********************************');
       var propertyReturned = response['response']['user_groups'][0];
 
       if (response['response']['status'] == 1) {
@@ -385,7 +391,21 @@ class _StepPage1State extends State<StepPage1> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    propertyInputValidator();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
     PageController pageController = widget.pageController;
 
     return SingleChildScrollView(
@@ -410,7 +430,9 @@ class _StepPage1State extends State<StepPage1> {
           const SizedBox(height: 10),
           TextFormField(
             controller: propertyNameController,
-            onChanged: (text) {},
+            onChanged: (value) {
+              propertyInputValidator();
+            },
             style: bodyText,
             decoration: InputDecoration(
               filled: true,
@@ -458,6 +480,9 @@ class _StepPage1State extends State<StepPage1> {
           ),
           const SizedBox(height: 10),
           TextFormField(
+            onChanged: (value) {
+              propertyInputValidator();
+            },
             controller: propertyLocationController,
             style: bodyText,
             decoration: InputDecoration(
@@ -493,32 +518,49 @@ class _StepPage1State extends State<StepPage1> {
             height: 24,
           ),
           const SizedBox(height: 24),
-          SizedBox(
-            height: 48,
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: mintyGreen),
-              onPressed: () async {
-                setState(() {
-                  propertySaveLoading = true;
-                });
-                await propertyInputValidator().then((value) {
-                  if (value == true) {
-                    addNewProperty().then((value) {
-                      pageController.animateToPage(
-                        1,
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                    });
-                  }
-                });
-                setState(() {
-                  propertySaveLoading = false;
-                });
-              },
-              child: Text(propertySaveLoading == true ? 'Saving' : 'Proceed'),
-            ),
+          CustomRequestButton(
+            cookie:
+                'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=oe8mu4ln2bs4t5n92ftedn4tqc6f3gue; identity=${userProvider.user?.phone}; remember_code=hRI1OErZyTwhcw63t98Wl.',
+            authorization: 'Bearer ${userProvider.user?.token}',
+            buttonError: buttonError,
+            buttonErrorMessage: buttonErrorMessage,
+            url: '/mobile/create_property',
+            method: 'POST',
+            buttonText: 'Proceed',
+            body: {
+              "property_name": propertyNameController.text,
+              "location": propertyLocationController.text,
+            },
+            onSuccess: (res) {
+              if (res['isSuccessful'] == true) {
+                var propertyReturned =
+                    res['data']['response']['user_groups'][0];
+
+                if (res['data']['response']['status'] == 1) {
+                  propertyProvider.setProperty(
+                    Property(
+                      propertyName: propertyReturned['name'],
+                      propertyLocation: '',
+                      id: propertyReturned['id'],
+                    ),
+                  );
+                  pageController.animateToPage(
+                    1,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                  print('res');
+                  print(res);
+                }
+              } else {
+                showToast(
+                  context,
+                  'Error!',
+                  res['error'],
+                  Colors.red,
+                );
+              }
+            },
           ),
         ],
       ),

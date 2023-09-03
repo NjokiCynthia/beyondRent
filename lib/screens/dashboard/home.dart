@@ -219,79 +219,84 @@ class _HomeState extends State<Home> {
           style: Theme.of(context).textTheme.bodySmall,
         ),
         const SizedBox(height: 10),
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: userPropertyListProvider.properties.length,
-          itemBuilder: (context, index) {
-            Property property = userPropertyListProvider.properties[index];
+        Container(
+          constraints: const BoxConstraints(
+            maxHeight: 200, // Set your desired max height here
+          ),
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: userPropertyListProvider.properties.length,
+            itemBuilder: (context, index) {
+              Property property = userPropertyListProvider.properties[index];
 
-            return GestureDetector(
-              onTap: () {
-                print('Tapped');
-                final propertyProvider = Provider.of<PropertyProvider>(
-                  context,
-                  listen: false,
-                );
-                propertyProvider.setProperty(
-                  Property(
-                    propertyName:
-                        userPropertyListProvider.properties[index].propertyName,
-                    propertyLocation: userPropertyListProvider
-                        .properties[index].propertyLocation,
-                    id: userPropertyListProvider.properties[index].id,
-                  ),
-                );
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((context) => const Dashboard()),
-                  ),
-                );
-              },
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                margin: const EdgeInsets.only(bottom: 10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
+              return GestureDetector(
+                onTap: () {
+                  print('Tapped');
+                  final propertyProvider = Provider.of<PropertyProvider>(
+                    context,
+                    listen: false,
+                  );
+                  propertyProvider.setProperty(
+                    Property(
+                      propertyName: userPropertyListProvider
+                          .properties[index].propertyName,
+                      propertyLocation: userPropertyListProvider
+                          .properties[index].propertyLocation,
+                      id: userPropertyListProvider.properties[index].id,
                     ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(right: 20),
-                            child: Image.asset(
-                              'assets/images/icons/home.png',
-                              width: 20,
-                            ),
-                          ),
-                          Text(
-                            property.propertyName,
-                          ),
-                        ],
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: ((context) => const Dashboard()),
+                    ),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  margin: const EdgeInsets.only(bottom: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
                       ),
-                    ),
-                    Text(
-                      'view',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(right: 20),
+                              child: Image.asset(
+                                'assets/images/icons/home.png',
+                                width: 20,
+                              ),
+                            ),
+                            Text(
+                              property.propertyName,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        'view',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
         const SizedBox(height: 20),
         Text(
@@ -356,7 +361,7 @@ class _HomeState extends State<Home> {
               const SizedBox(height: 20),
               DashboardAppbar(
                 headerText: 'Property',
-                headerBody: propertyProvider.property?.propertyName,
+                headerBody: propertyProvider.property?.propertyName ?? '',
                 icon: Image.asset(
                   'assets/images/icons/exchange.png',
                   width: 20,

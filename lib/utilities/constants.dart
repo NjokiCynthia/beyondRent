@@ -12,6 +12,9 @@ String propertyUser = 'Cynthia Njoki';
 String propertyUserPhone = '+254721882694';
 String propertyUserEmail = 'cynthia@gmail.com';
 
+// Selected Property Units
+List propertyUnitsList = [];
+
 PersistentTabController bottomNavigationController =
     PersistentTabController(initialIndex: 0);
 
