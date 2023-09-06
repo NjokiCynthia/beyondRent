@@ -230,7 +230,7 @@ class _TransactionsState extends State<Transactions> {
               const SizedBox(height: 20),
               DashboardAppbar(
                 headerText: 'Transactions',
-                headerBody: 'Total records: 1000',
+                headerBody: '',
                 leftHeader: 1,
                 icon: Image.asset(
                   'assets/images/icons/filter.png',
@@ -244,8 +244,8 @@ class _TransactionsState extends State<Transactions> {
                 },
               ),
               Container(
-                margin: EdgeInsets.only(top: 50),
-                child: Center(
+                margin: const EdgeInsets.only(top: 50),
+                child: const Center(
                   child: EmptyTransactions(),
                 ),
               ),

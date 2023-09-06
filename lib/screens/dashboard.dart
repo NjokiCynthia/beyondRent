@@ -82,6 +82,11 @@ class _DashboardState extends State<Dashboard> {
           duration: Duration(milliseconds: 200),
         ),
         navBarStyle: NavBarStyle.style1,
+        onItemSelected: (value) {
+          print('value');
+          print(value);
+          propertyUnitsList;
+        },
       ),
     );
   }

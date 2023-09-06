@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:x_rent/screens/dashboard/invoices.dart';
+import 'package:x_rent/screens/dashboard/units/unit_details.dart';
 import 'dart:math';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:dio/dio.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 Color getRandomColor() {
   final random = Random();
@@ -137,6 +139,7 @@ class DashboardAppbar extends StatelessWidget {
   final String? headerBody;
   final num? leftHeader;
   final dynamic icon;
+  final dynamic action;
   final bool? propertyNav;
   final bool? backButton;
   final String? backButtonText;
@@ -147,6 +150,7 @@ class DashboardAppbar extends StatelessWidget {
     this.headerBody,
     this.leftHeader,
     this.icon,
+    this.action,
     this.propertyNav,
     this.backButton,
     this.backButtonText,
@@ -220,27 +224,33 @@ class DashboardAppbar extends StatelessWidget {
           )
         : backButton == true
             ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Image.asset(
+                            'assets/images/icons/left-arrow.png',
+                            width: 15,
+                          ),
+                        ),
                       ),
-                      child: Image.asset(
-                        'assets/images/icons/left-arrow.png',
-                        width: 15,
-                      ),
-                    ),
+                      Container(
+                        margin: const EdgeInsets.only(left: 10),
+                        child: Text(backButtonText!),
+                      )
+                    ],
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 10),
-                    child: Text(backButtonText!),
-                  )
+                  action ?? Container()
                 ],
               )
             : Row(
@@ -540,88 +550,87 @@ class TenantWidget extends StatelessWidget {
 class UnitWidget extends StatelessWidget {
   final String? name;
   final String? tenant;
-  final num? amount;
+  final num? id;
   final ValueSetter<dynamic>? callback;
   const UnitWidget({
     super.key,
     this.name,
     this.tenant,
-    this.amount,
+    this.id,
     this.callback,
   });
   @override
   Widget build(BuildContext context) {
     final backgroundColor = getRandomColor();
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 0.5,
-            blurRadius: 1,
-            offset: const Offset(0, 1),
+    return GestureDetector(
+      onTap: () {
+        PersistentNavBarNavigator.pushNewScreen(
+          context,
+          screen: UnitDetails(
+            unitID: id,
           ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                margin: const EdgeInsets.only(right: 10),
-                decoration: BoxDecoration(
-                  color: backgroundColor,
-                  shape: BoxShape.circle,
+          withNavBar: false,
+          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 0.5,
+              blurRadius: 1,
+              offset: const Offset(0, 1),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.only(right: 10),
+                  decoration: BoxDecoration(
+                    color: backgroundColor,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Text('M'),
                 ),
-                child: const Text('M'),
-              ),
-              Text(name!),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Container(
-            height: 1,
-            color: Colors.black.withOpacity(0.1),
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Tenant: None',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              Text(
-                'Unit not occupied',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
-          )
-        ],
+                Text(name!),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Container(
+              height: 1,
+              color: Colors.black.withOpacity(0.1),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Tenant: None',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                Text(
+                  'Unit not occupied',
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
 }
 
 // Bottom Sheet Modal
-// showBottomModal(
-//   BuildContext context,
-//   Widget content,
-// ) {
-//   showModalBottomSheet<void>(
-//     useRootNavigator: true,
-//     context: context,
-//     backgroundColor: Colors.transparent,
-//     builder: (BuildContext context) {
-//       return _buildBottomModalContent(context, content);
-//     },
-//   );
-// }
 void showBottomModal(BuildContext context, Widget content) {
   showModalBottomSheet<void>(
     useRootNavigator: true,
@@ -636,9 +645,7 @@ void showBottomModal(BuildContext context, Widget content) {
 Widget _buildBottomModalContent(BuildContext context, Widget content) {
   return SingleChildScrollView(
     child: Container(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-      ),
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
       decoration: BoxDecoration(
         color: Theme.of(context).canvasColor,
         borderRadius: const BorderRadius.only(
@@ -760,7 +767,6 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
     final options = Options(contentType: 'application/json', headers: headers);
     try {
       if (widget.method == 'POST') {
-        print('url: ${ipAddress + widget.url!}');
         return _dio.post(
           ipAddress + widget.url!,
           data: widget.body,
@@ -858,11 +864,12 @@ class InvoiceCard extends StatelessWidget {
               invoice.timeline,
               style: Theme.of(context).textTheme.bodySmall,
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Row(
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, vertical: 4.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(4.0),
                     color: invoice.statusColor.withOpacity(0.2),

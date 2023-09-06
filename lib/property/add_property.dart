@@ -12,12 +12,11 @@ int _selectedIndex = 0;
 List unitList = [];
 int _currentPageIndex = 0;
 
-// This widget represents the modal content and its state
 class AddUnitsModalContent extends StatefulWidget {
   const AddUnitsModalContent({super.key});
 
   @override
-  _AddUnitsModalContentState createState() => _AddUnitsModalContentState();
+  State<AddUnitsModalContent> createState() => _AddUnitsModalContentState();
 }
 
 class _AddUnitsModalContentState extends State<AddUnitsModalContent> {
@@ -184,8 +183,6 @@ class _AddUnitsModalContentState extends State<AddUnitsModalContent> {
                     'units': 10,
                   });
                 });
-                print('unitList');
-                print(unitList);
               },
               child: Container(
                 width: double.infinity,
@@ -293,7 +290,6 @@ class _AddPropertyState extends State<AddProperty> {
 class StepPage1 extends StatefulWidget {
   final int currentPageIndex;
   final PageController pageController;
-
   const StepPage1({
     super.key,
     required this.currentPageIndex,
@@ -301,7 +297,7 @@ class StepPage1 extends StatefulWidget {
   });
 
   @override
-  _StepPage1State createState() => _StepPage1State();
+  State<StepPage1> createState() => _StepPage1State();
 }
 
 class _StepPage1State extends State<StepPage1> {
@@ -368,7 +364,6 @@ class _StepPage1State extends State<StepPage1> {
     await apiClient
         .post('/mobile/create_property', postData, headers: headers)
         .then((response) {
-      print('response >>>>>>>>> $response   ********************************');
       var propertyReturned = response['response']['user_groups'][0];
 
       if (response['response']['status'] == 1) {
@@ -384,8 +379,6 @@ class _StepPage1State extends State<StepPage1> {
       return false;
     }).catchError((error) {
       // Handle the error
-      print('error');
-      print(error);
       return false;
     });
   }
@@ -520,7 +513,7 @@ class _StepPage1State extends State<StepPage1> {
           const SizedBox(height: 24),
           CustomRequestButton(
             cookie:
-                'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=oe8mu4ln2bs4t5n92ftedn4tqc6f3gue; identity=${userProvider.user?.phone}; remember_code=hRI1OErZyTwhcw63t98Wl.',
+                'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=tef1t2q70l8nkdmqr5d983mfkfg54fac; identity=254721882678; remember_code=vOFnAK1LX8aLxVdAVbxQ0O',
             authorization: 'Bearer ${userProvider.user?.token}',
             buttonError: buttonError,
             buttonErrorMessage: buttonErrorMessage,
@@ -544,13 +537,24 @@ class _StepPage1State extends State<StepPage1> {
                       id: propertyReturned['id'],
                     ),
                   );
+                  // Add the property to list of properties
+                  final userPropertyListProvider =
+                      Provider.of<PropertyListProvider>(
+                    context,
+                    listen: false,
+                  );
+                  Property property = Property(
+                    propertyName: propertyReturned['name'],
+                    propertyLocation: '',
+                    id: propertyReturned['id'],
+                  );
+                  userPropertyListProvider.addProperty(property);
+
                   pageController.animateToPage(
                     1,
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                   );
-                  print('res');
-                  print(res);
                 }
               } else {
                 showToast(

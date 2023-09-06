@@ -6,7 +6,6 @@ import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/providers/property_provider.dart';
-import 'package:x_rent/providers/user_provider.dart';
 
 class PropertyList extends StatefulWidget {
   const PropertyList({super.key});
@@ -58,7 +57,6 @@ class _PropertyListState extends State<PropertyList> {
           );
           userPropertyListProvider.addProperty(property);
         }
-        print(userPropertyList);
       }
       setState(() {
         propertiesLoading = false;
@@ -66,8 +64,6 @@ class _PropertyListState extends State<PropertyList> {
       return response;
     }).catchError((error) {
       // Handle the error
-      print('error');
-      print(error);
       setState(() {
         propertiesLoading = false;
       });

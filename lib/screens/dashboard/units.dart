@@ -43,20 +43,16 @@ class _UnitsState extends State<Units> {
       await apiClient
           .post('/mobile/units/get_all', postData, headers: headers)
           .then((response) {
-        print('<<<<<<<<<<<<<<<<< fetchPropertyUnits >>>>>>>>>>>>>>>>>>>>>');
-        print(response);
         var status = response['response']['status'];
         if (status == 1) {
           var units = response['response']['units'];
           setState(() {
             propertyUnitsList = units;
           });
-          print('good to go');
         }
       }).catchError((error) {
         // Handle the error
-        print('error');
-        print(error);
+        return;
       });
       setState(() {
         unitsLoading = false;
@@ -86,7 +82,7 @@ class _UnitsState extends State<Units> {
               const SizedBox(height: 20),
               DashboardAppbar(
                 headerText: 'Units',
-                headerBody: 'Total units: 43',
+                headerBody: '',
                 leftHeader: 1,
                 icon: GestureDetector(
                   onTap: () {
@@ -154,7 +150,7 @@ class _UnitsState extends State<Units> {
                             itemCount: propertyUnitsList.length,
                             itemBuilder: (context, index) {
                               return UnitWidget(
-                                amount: 1,
+                                id: num.parse(propertyUnitsList[index]['id']),
                                 name: propertyUnitsList[index]['house_number'],
                                 tenant: '',
                                 callback: (value) {},

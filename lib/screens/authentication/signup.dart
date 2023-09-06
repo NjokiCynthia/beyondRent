@@ -245,90 +245,6 @@ class _SignupState extends State<Signup> {
           onSaved: (PhoneNumber number) {},
         ),
         const SizedBox(height: 20),
-        // Text(
-        //   'Enter Property Name',
-        //   style: Theme.of(context).textTheme.bodySmall,
-        // ),
-        // const SizedBox(height: 10),
-        // TextFormField(
-        //   onChanged: (text) {
-        //     validateSignupInputs();
-        //   },
-        //   keyboardType: TextInputType.text,
-        //   controller: property_name_ctrl,
-        //   style: bodyText,
-        //   decoration: InputDecoration(
-        //     filled: true,
-        //     fillColor: Colors.white,
-        //     labelText: 'Property name',
-        //     labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-        //         .copyWith(color: Colors.grey),
-        //     border: OutlineInputBorder(
-        //       borderSide: const BorderSide(
-        //         color: Colors.grey,
-        //         width: 1.0,
-        //       ),
-        //       borderRadius: BorderRadius.circular(8.0),
-        //     ),
-        //     enabledBorder: OutlineInputBorder(
-        //       borderSide: BorderSide(
-        //         color: Colors.grey.shade300,
-        //         width: 2.0,
-        //       ),
-        //       borderRadius: BorderRadius.circular(8.0),
-        //     ),
-        //     focusedBorder: OutlineInputBorder(
-        //       borderSide: const BorderSide(
-        //         color: Colors.grey,
-        //         width: 1.0,
-        //       ),
-        //       borderRadius: BorderRadius.circular(8.0),
-        //     ),
-        //   ),
-        // ),
-        // const SizedBox(height: 20),
-        // Text(
-        //   'Enter Property Location',
-        //   style: Theme.of(context).textTheme.bodySmall,
-        // ),
-        // const SizedBox(height: 10),
-        // TextFormField(
-        //   onChanged: (text) {
-        //     validateSignupInputs();
-        //   },
-        //   keyboardType: TextInputType.text,
-        //   controller: property_location_ctrl,
-        //   style: bodyText,
-        //   decoration: InputDecoration(
-        //     filled: true,
-        //     fillColor: Colors.white,
-        //     labelText: 'Property location',
-        //     labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-        //         .copyWith(color: Colors.grey),
-        //     border: OutlineInputBorder(
-        //       borderSide: const BorderSide(
-        //         color: Colors.grey,
-        //         width: 1.0,
-        //       ),
-        //       borderRadius: BorderRadius.circular(8.0),
-        //     ),
-        //     enabledBorder: OutlineInputBorder(
-        //       borderSide: BorderSide(
-        //         color: Colors.grey.shade300,
-        //         width: 2.0,
-        //       ),
-        //       borderRadius: BorderRadius.circular(8.0),
-        //     ),
-        //     focusedBorder: OutlineInputBorder(
-        //       borderSide: const BorderSide(
-        //         color: Colors.grey,
-        //         width: 1.0,
-        //       ),
-        //       borderRadius: BorderRadius.circular(8.0),
-        //     ),
-        //   ),
-        // ),
-        // const SizedBox(height: 20),
         Text(
           'Enter Password',
           style: Theme.of(context).textTheme.bodySmall,
@@ -446,7 +362,6 @@ class _SignupState extends State<Signup> {
                       },
                       onSuccess: (res) {
                         print('<<<<<<<<<<<< res >>>>>>>>>>>>>');
-                        print(password_ctrl.text.runtimeType);
                         print(res);
                         if (res['isSuccessful'] == false) {
                           return showToast(
@@ -479,30 +394,6 @@ class _SignupState extends State<Signup> {
               ),
             ),
           ),
-          // GestureDetector(
-          //   onTap: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //         builder: ((context) => const Dashboard()),
-          //       ),
-          //     );
-          //   },
-          //   child: Container(
-          //     padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-          //     margin: const EdgeInsets.only(bottom: 50),
-          //     decoration: BoxDecoration(
-          //       color: mintyGreen,
-          //       borderRadius: BorderRadius.circular(10),
-          //     ),
-          //     child: Text(
-          //       'Demo Account',
-          //       style: Theme.of(context).textTheme.titleLarge!.copyWith(
-          //           color: Colors.white,
-          //           fontWeight: FontWeight.w600,
-          //           fontSize: 15),
-          //     ),
-          //   ),
           // ),
           Container(
             margin: const EdgeInsets.only(left: 20, right: 20),
@@ -526,7 +417,6 @@ class _SignupState extends State<Signup> {
                 }
                 var userData = res['data']['response']['user'];
                 var accessToken = res['data']['response']['access_token'];
-                print('Access token: ' + accessToken);
                 final userProvider = context.read<UserProvider>();
                 userProvider.setUser(
                   User(
@@ -538,7 +428,6 @@ class _SignupState extends State<Signup> {
                     token: accessToken,
                   ),
                 );
-                print('userProvider token: ' + userProvider.user!.token);
                 Navigator.push(
                   context,
                   MaterialPageRoute(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/screens/dashboard/propertyDetails.dart';
+import 'package:x_rent/screens/dashboard/tenant/tenant.dart';
 import 'package:x_rent/property/add_property.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:intl/intl.dart';
@@ -31,12 +32,12 @@ class _HomeState extends State<Home> {
       initialDate: currentDate,
       firstDate: lastSelectableDate,
       lastDate: currentDate,
-      initialDatePickerMode: DatePickerMode.day, // Change this to day
+      initialDatePickerMode: DatePickerMode.day,
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.light(
-              primary: mintyGreen, // Change this to your desired color
+              primary: mintyGreen,
               onPrimary: Colors.white,
               surface: Colors.white,
               onSurface: Colors.black,
@@ -223,77 +224,82 @@ class _HomeState extends State<Home> {
           constraints: const BoxConstraints(
             maxHeight: 200, // Set your desired max height here
           ),
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: userPropertyListProvider.properties.length,
-            itemBuilder: (context, index) {
-              Property property = userPropertyListProvider.properties[index];
+          child: Consumer<PropertyListProvider>(
+            builder: (context, userPropertyListProvider, _) {
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: userPropertyListProvider.properties.length,
+                itemBuilder: (context, index) {
+                  Property property =
+                      userPropertyListProvider.properties[index];
 
-              return GestureDetector(
-                onTap: () {
-                  print('Tapped');
-                  final propertyProvider = Provider.of<PropertyProvider>(
-                    context,
-                    listen: false,
-                  );
-                  propertyProvider.setProperty(
-                    Property(
-                      propertyName: userPropertyListProvider
-                          .properties[index].propertyName,
-                      propertyLocation: userPropertyListProvider
-                          .properties[index].propertyLocation,
-                      id: userPropertyListProvider.properties[index].id,
-                    ),
-                  );
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: ((context) => const Dashboard()),
+                  return GestureDetector(
+                    onTap: () {
+                      print('Tapped');
+                      final propertyProvider = Provider.of<PropertyProvider>(
+                        context,
+                        listen: false,
+                      );
+                      propertyProvider.setProperty(
+                        Property(
+                          propertyName: userPropertyListProvider
+                              .properties[index].propertyName,
+                          propertyLocation: userPropertyListProvider
+                              .properties[index].propertyLocation,
+                          id: userPropertyListProvider.properties[index].id,
+                        ),
+                      );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => const Dashboard()),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                      margin: const EdgeInsets.only(bottom: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.only(right: 20),
+                                  child: Image.asset(
+                                    'assets/images/icons/home.png',
+                                    width: 20,
+                                  ),
+                                ),
+                                Text(
+                                  property.propertyName,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Text(
+                            'view',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  margin: const EdgeInsets.only(bottom: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(right: 20),
-                              child: Image.asset(
-                                'assets/images/icons/home.png',
-                                width: 20,
-                              ),
-                            ),
-                            Text(
-                              property.propertyName,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Text(
-                        'view',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ],
-                  ),
-                ),
               );
             },
           ),

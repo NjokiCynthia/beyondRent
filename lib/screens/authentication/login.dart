@@ -231,7 +231,6 @@ class _LoginState extends State<Login> {
                       }
                       var userData = res['data']['response']['user'];
                       var accessToken = res['data']['response']['access_token'];
-                      print('Access token: ' + accessToken);
                       final userProvider = context.read<UserProvider>();
                       userProvider.setUser(
                         User(
@@ -243,7 +242,6 @@ class _LoginState extends State<Login> {
                           token: accessToken,
                         ),
                       );
-                      print('userProvider token: ' + userProvider.user!.token);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -279,7 +277,6 @@ class _LoginState extends State<Login> {
               }
               var userData = res['data']['response']['user'];
               var accessToken = res['data']['response']['access_token'];
-              print('Access token: ' + accessToken);
               final userProvider = context.read<UserProvider>();
               userProvider.setUser(
                 User(
@@ -291,7 +288,6 @@ class _LoginState extends State<Login> {
                   token: accessToken,
                 ),
               );
-              print('userProvider token: ' + userProvider.user!.token);
               Navigator.push(
                 context,
                 MaterialPageRoute(

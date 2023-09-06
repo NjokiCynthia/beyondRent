@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:x_rent/constants/theme.dart';
-import 'package:x_rent/property/add_property.dart';
 import 'package:x_rent/screens/dashboard.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
-
-import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
-import 'package:x_rent/utilities/constants.dart';
-import 'package:x_rent/utilities/widgets.dart';
-import 'package:x_rent/property/step2.dart';
-import 'package:x_rent/property/step3.dart';
 import 'package:provider/provider.dart';
 
 class StepPage2 extends StatefulWidget {
@@ -32,7 +24,6 @@ class StepPage2 extends StatefulWidget {
 }
 
 class _StepPage2State extends State<StepPage2> {
-  int _selectedIndex = 0;
   bool propertySaveLoading = false;
   final TextEditingController controller = TextEditingController();
   String initialCountry = 'KE';
@@ -41,6 +32,7 @@ class _StepPage2State extends State<StepPage2> {
   final TextEditingController floorNoController = TextEditingController();
   final TextEditingController blockNoController = TextEditingController();
 
+  List unitsToSend = [];
   // unit types
   bool studioActive = false;
   bool oneBedroom = false;
@@ -54,10 +46,25 @@ class _StepPage2State extends State<StepPage2> {
   bool buttonError = true;
   String buttonErrorMessage = 'Enter all fields';
 
-  void _selectItem(int index) {
+  List<String> createNumberArray(int n) {
+    List<String> numberArray = [];
+    for (int i = 1; i <= n; i++) {
+      String numberString;
+      if (blockNoController.text.isNotEmpty) {
+        numberString = '${blockNoController.text}-$i';
+        numberArray.add(numberString);
+      } else {
+        numberString = 'A-$i';
+        numberArray.add(numberString);
+      }
+    }
     setState(() {
-      _selectedIndex = index;
+      unitsToSend = numberArray;
     });
+    print(
+        'unitsToSend ----------------------------------------------------------------');
+    print(unitsToSend);
+    return numberArray;
   }
 
   propertyInputValidator() async {
@@ -120,11 +127,16 @@ class _StepPage2State extends State<StepPage2> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Block.'),
+                    const Text('Block.'),
                     const SizedBox(height: 10),
                     TextFormField(
                       onChanged: (value) {
+                        print('done');
                         propertyInputValidator();
+                        if (unitNoController.text.isNotEmpty) {
+                          print('are we here');
+                          createNumberArray(int.parse(unitNoController.text));
+                        }
                       },
                       controller: blockNoController,
                       style: bodyText,
@@ -167,7 +179,7 @@ class _StepPage2State extends State<StepPage2> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('No. of floors'),
+                    const Text('No. of floors'),
                     const SizedBox(height: 10),
                     TextFormField(
                       onChanged: (value) {
@@ -219,11 +231,14 @@ class _StepPage2State extends State<StepPage2> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('No. of units'),
+                    const Text('No. of units'),
                     const SizedBox(height: 10),
                     TextFormField(
                       onChanged: (value) {
                         propertyInputValidator();
+                        List<String> result = createNumberArray(
+                          int.parse(value),
+                        );
                       },
                       controller: unitNoController,
                       style: bodyText,
@@ -293,8 +308,8 @@ class _StepPage2State extends State<StepPage2> {
                     });
                   },
                   child: Container(
-                    margin: EdgeInsets.only(right: 10),
-                    padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                    margin: const EdgeInsets.only(right: 10),
+                    padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(7),
                         color: studioActive == true
@@ -319,8 +334,8 @@ class _StepPage2State extends State<StepPage2> {
                     });
                   },
                   child: Container(
-                    margin: EdgeInsets.only(right: 10),
-                    padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                    margin: const EdgeInsets.only(right: 10),
+                    padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(7),
                         color: oneBedroom == true
@@ -345,8 +360,8 @@ class _StepPage2State extends State<StepPage2> {
                     });
                   },
                   child: Container(
-                    margin: EdgeInsets.only(right: 10),
-                    padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                    margin: const EdgeInsets.only(right: 10),
+                    padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(7),
                         color: twoBedroom == true
@@ -371,8 +386,8 @@ class _StepPage2State extends State<StepPage2> {
                     });
                   },
                   child: Container(
-                    margin: EdgeInsets.only(right: 10),
-                    padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                    margin: const EdgeInsets.only(right: 10),
+                    padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(7),
                         color: threeBedroom == true
@@ -397,8 +412,8 @@ class _StepPage2State extends State<StepPage2> {
                     });
                   },
                   child: Container(
-                    margin: EdgeInsets.only(right: 10),
-                    padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                    margin: const EdgeInsets.only(right: 10),
+                    padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(7),
                         color: fourBedroom == true
@@ -423,8 +438,8 @@ class _StepPage2State extends State<StepPage2> {
                     });
                   },
                   child: Container(
-                    margin: EdgeInsets.only(right: 10),
-                    padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                    margin: const EdgeInsets.only(right: 10),
+                    padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(7),
                         color: fiveBedroom == true
@@ -449,8 +464,8 @@ class _StepPage2State extends State<StepPage2> {
                     });
                   },
                   child: Container(
-                    margin: EdgeInsets.only(right: 10),
-                    padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                    margin: const EdgeInsets.only(right: 10),
+                    padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(7),
                         color: sixBedroom == true
@@ -475,8 +490,8 @@ class _StepPage2State extends State<StepPage2> {
                     });
                   },
                   child: Container(
-                    margin: EdgeInsets.only(right: 10),
-                    padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                    margin: const EdgeInsets.only(right: 10),
+                    padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(7),
                         color: sevenBedroom == true
@@ -512,14 +527,15 @@ class _StepPage2State extends State<StepPage2> {
                 buttonText: 'Skip',
                 body: {
                   "property_id": propertyProvider.property?.id,
-                  "house_numbers": ["B1", "B2", "B3", "B4"],
-                  "house_types": [1, 1, 2],
-                  "blocks": [1, 1, 1, 2],
-                  "floor": [2, 2, 3, 3],
-                  "tenant_id": [0, 0, 0, 0],
-                  "contribution_id": [0, 0, 0, 0]
+                  "house_numbers": unitsToSend,
+                  "house_types": const [1, 1, 2],
+                  "blocks": const [1, 1, 1, 2],
+                  "floor": const [2, 2, 3, 3],
+                  "tenant_id": const [0, 0, 0, 0],
+                  "contribution_id": const [0, 0, 0, 0]
                 },
                 onSuccess: (res) {
+                  print(res);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -531,40 +547,59 @@ class _StepPage2State extends State<StepPage2> {
             ),
             Expanded(
                 child: Container(
-              margin: EdgeInsets.only(left: 10),
+              margin: const EdgeInsets.only(left: 10),
               child: CustomRequestButton(
                 cookie:
                     'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=oe8mu4ln2bs4t5n92ftedn4tqc6f3gue; identity=${userProvider.user?.phone}; remember_code=hRI1OErZyTwhcw63t98Wl.',
                 authorization: 'Bearer ${userProvider.user?.token}',
                 buttonError: buttonError,
                 buttonErrorMessage: buttonErrorMessage,
-                url: '/mobile/units/create',
+                url: '/mobile/units/batch_create',
                 method: 'POST',
                 buttonText: 'Proceed',
                 body: {
                   "property_id": propertyProvider.property?.id,
-                  "house_numbers": ["B1", "B2", "B3", "B4"],
-                  "house_types": [1, 1, 2],
-                  "blocks": [1, 1, 1, 2],
-                  "floor": [2, 2, 3, 3],
-                  "tenant_id": [0, 0, 0, 0],
-                  "contribution_id": [0, 0, 0, 0]
+                  "house_numbers": unitsToSend,
+                  "house_types": const [1, 1, 2],
+                  "blocks": const [1, 1, 1, 2],
+                  "floor": const [2, 2, 3, 3],
+                  "tenant_id": const [0, 0, 0, 0],
+                  "contribution_id": const [0, 0, 0, 0]
                 },
                 onSuccess: (res) {
                   print('res ++++++++++++++');
                   print(res);
+                  print({
+                    "property_id": propertyProvider.property?.id,
+                    "house_numbers": unitsToSend,
+                    "house_types": [1, 1, 2],
+                    "blocks": [1, 1, 1, 2],
+                    "floor": [2, 2, 3, 3],
+                    "tenant_id": [0, 0, 0, 0],
+                    "contribution_id": [0, 0, 0, 0]
+                  });
                   if (res['isSuccessful'] == true) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: ((context) => const Dashboard()),
-                      ),
-                    );
+                    var response = res['data']['response']['status'];
+                    if (response == 1) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => const Dashboard()),
+                        ),
+                      );
+                    } else {
+                      showToast(
+                        context,
+                        'Error!',
+                        res['data']['response']['message'],
+                        Colors.red,
+                      );
+                    }
                   } else {
                     showToast(
                       context,
                       'Error!',
-                      res['error'],
+                      "Error saving unit",
                       Colors.red,
                     );
                   }

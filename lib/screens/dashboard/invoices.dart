@@ -34,7 +34,7 @@ class InvoicesScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
               const DashboardAppbar(
@@ -69,11 +69,10 @@ class InvoiceList extends StatelessWidget {
         return Column(
           children: [
             InvoiceCard(invoice: invoice),
-            SizedBox(height: 10.0), // Adding spacing between cards
+            const SizedBox(height: 10.0), // Adding spacing between cards
           ],
         );
       },
     );
   }
-
 }

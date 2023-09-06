@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:x_rent/constants/theme.dart';
-import 'package:x_rent/property/add_property.dart';
-import 'package:x_rent/screens/dashboard.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
-
-import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
-import 'package:x_rent/utilities/constants.dart';
-import 'package:x_rent/utilities/widgets.dart';
-import 'package:x_rent/property/step2.dart';
-import 'package:x_rent/property/step3.dart';
 import 'package:provider/provider.dart';
 
 class AddUnit extends StatefulWidget {
@@ -103,8 +94,6 @@ class _AddUnitState extends State<AddUnit> {
       return response['response'];
     } catch (error) {
       // Handle the error
-      print('error');
-      print(error);
       return {"status": 7, "time": 1693485381, "message": "Error saving unit"};
     }
   }
@@ -132,8 +121,6 @@ class _AddUnitState extends State<AddUnit> {
       await apiClient
           .post('/mobile/units/get_all', postData, headers: headers)
           .then((response) {
-        print('<<<<<<<<<<<<<<<<< fetchPropertyUnits >>>>>>>>>>>>>>>>>>>>>');
-        print(response);
         var status = response['response']['status'];
         if (status == 1) {
           var units = response['response']['units'];
@@ -141,14 +128,13 @@ class _AddUnitState extends State<AddUnit> {
             propertyUnitsList = units;
           });
           propertyUnitsList;
-          print('good to go');
         }
       }).catchError((error) {
         // Handle the error
-        print('error');
-        print(error);
       });
-    } catch (e) {}
+    } catch (e) {
+      return;
+    }
   }
 
   @override
@@ -190,7 +176,7 @@ class _AddUnitState extends State<AddUnit> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('House No.'),
+                          const Text('House No.'),
                           const SizedBox(height: 10),
                           TextFormField(
                             controller: houseNoController,
@@ -237,7 +223,7 @@ class _AddUnitState extends State<AddUnit> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Floor'),
+                          const Text('Floor'),
                           const SizedBox(height: 10),
                           TextFormField(
                             controller: floorNoController,
@@ -425,8 +411,6 @@ class _AddUnitState extends State<AddUnit> {
                           "contribution_id": 0
                         },
                         onSuccess: (res) {
-                          print('<<<<<<<<<<<<<<<<<< res >>>>>>>>>>>>>>>>>>>>');
-                          print(res);
                           if (res['isSuccessful'] == false) {
                             return showToast(
                               context,

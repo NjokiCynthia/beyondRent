@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/screens/authentication/login.dart';
+import 'package:x_rent/screens/dashboard/profile/communicate.dart';
 import 'package:x_rent/property/property.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -57,15 +58,15 @@ class _ProfileState extends State<Profile> {
                             offset: const Offset(0, -40),
                             child: Column(
                               children: [
-                                CircleAvatar(
+                                const CircleAvatar(
                                   backgroundImage: AssetImage(
                                       'assets/images/icons/user.png'),
                                   radius: 50,
                                 ),
-                                SizedBox(height: 5),
+                                const SizedBox(height: 5),
                                 Text(
                                   '${userProvider.user!.firstName} ${userProvider.user!.lastName}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -112,6 +113,51 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 const SizedBox(height: 10), // Adjust the spacing
+                GestureDetector(
+                  onTap: () {
+                    PersistentNavBarNavigator.pushNewScreen(
+                      context,
+                      screen: const Communicate(),
+                      withNavBar: false,
+                      pageTransitionAnimation:
+                          PageTransitionAnimation.cupertino,
+                    );
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          10.0), // Adjust the radius as needed
+                    ),
+                    elevation: 4,
+                    child: ListTile(
+                      leading: Container(
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(13, 201, 150, 1)
+                              .withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        child: const Icon(
+                          Icons.house,
+                          color: Color.fromRGBO(13, 201, 150, 1),
+                        ),
+                      ),
+                      title: const Text(
+                        'Communicate',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: const Text(
+                        'Communicate to tenants (SMS)',
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10, // Adjust spacing between card and reminders card
+                ),
                 GestureDetector(
                   onTap: () {
                     PersistentNavBarNavigator.pushNewScreen(
