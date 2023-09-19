@@ -7,6 +7,9 @@ import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
+List unitsToSend = [];
+List unitsForStep3 = [];
+
 class StepPage2 extends StatefulWidget {
   final String? fromPage;
   final int? currentPageIndex;
@@ -32,7 +35,6 @@ class _StepPage2State extends State<StepPage2> {
   final TextEditingController floorNoController = TextEditingController();
   final TextEditingController blockNoController = TextEditingController();
 
-  List unitsToSend = [];
   // unit types
   bool studioActive = false;
   bool oneBedroom = false;
@@ -518,7 +520,7 @@ class _StepPage2State extends State<StepPage2> {
             Expanded(
               child: CustomRequestButton(
                 cookie:
-                    'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=oe8mu4ln2bs4t5n92ftedn4tqc6f3gue; identity=${userProvider.user?.phone}; remember_code=hRI1OErZyTwhcw63t98Wl.',
+                    'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
                 authorization: 'Bearer ${userProvider.user?.token}',
                 buttonError: buttonError,
                 buttonErrorMessage: buttonErrorMessage,
@@ -535,7 +537,6 @@ class _StepPage2State extends State<StepPage2> {
                   "contribution_id": const [0, 0, 0, 0]
                 },
                 onSuccess: (res) {
-                  print(res);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -550,7 +551,7 @@ class _StepPage2State extends State<StepPage2> {
               margin: const EdgeInsets.only(left: 10),
               child: CustomRequestButton(
                 cookie:
-                    'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=oe8mu4ln2bs4t5n92ftedn4tqc6f3gue; identity=${userProvider.user?.phone}; remember_code=hRI1OErZyTwhcw63t98Wl.',
+                    'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
                 authorization: 'Bearer ${userProvider.user?.token}',
                 buttonError: buttonError,
                 buttonErrorMessage: buttonErrorMessage,
@@ -560,32 +561,25 @@ class _StepPage2State extends State<StepPage2> {
                 body: {
                   "property_id": propertyProvider.property?.id,
                   "house_numbers": unitsToSend,
-                  "house_types": const [1, 1, 2],
+                  "house_types": const [1, 2, 3, 4],
                   "blocks": const [1, 1, 1, 2],
-                  "floor": const [2, 2, 3, 3],
+                  "floor": const [1, 2, 3, 4, 5, 6],
                   "tenant_id": const [0, 0, 0, 0],
                   "contribution_id": const [0, 0, 0, 0]
                 },
                 onSuccess: (res) {
-                  print('res ++++++++++++++');
+                  print('<<<<<<<<<<< res >>>>>>>>>>>>>>');
                   print(res);
-                  print({
-                    "property_id": propertyProvider.property?.id,
-                    "house_numbers": unitsToSend,
-                    "house_types": [1, 1, 2],
-                    "blocks": [1, 1, 1, 2],
-                    "floor": [2, 2, 3, 3],
-                    "tenant_id": [0, 0, 0, 0],
-                    "contribution_id": [0, 0, 0, 0]
-                  });
                   if (res['isSuccessful'] == true) {
                     var response = res['data']['response']['status'];
                     if (response == 1) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: ((context) => const Dashboard()),
-                        ),
+                      setState(() {
+                        unitsForStep3 = res['data']['response']['units'];
+                      });
+                      pageController.animateToPage(
+                        2,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
                       );
                     } else {
                       showToast(

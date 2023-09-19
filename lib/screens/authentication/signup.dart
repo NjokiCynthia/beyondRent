@@ -31,8 +31,6 @@ class _SignupState extends State<Signup> {
   bool _obscurePassword = true;
 
   validateSignupInputs() {
-    print('phone_number_inpt');
-    print(phone_number_inpt);
     if (first_name_ctrl.text == '') {
       return setState(() {
         buttonError = true;

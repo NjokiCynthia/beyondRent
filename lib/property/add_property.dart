@@ -359,7 +359,7 @@ class _StepPage1State extends State<StepPage1> {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
       'Cookie':
-          'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=oe8mu4ln2bs4t5n92ftedn4tqc6f3gue; identity=${userProvider.user?.phone}; remember_code=hRI1OErZyTwhcw63t98Wl.'
+          'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou'
     };
     await apiClient
         .post('/mobile/create_property', postData, headers: headers)
@@ -513,7 +513,7 @@ class _StepPage1State extends State<StepPage1> {
           const SizedBox(height: 24),
           CustomRequestButton(
             cookie:
-                'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=tef1t2q70l8nkdmqr5d983mfkfg54fac; identity=254721882678; remember_code=vOFnAK1LX8aLxVdAVbxQ0O',
+                'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
             authorization: 'Bearer ${userProvider.user?.token}',
             buttonError: buttonError,
             buttonErrorMessage: buttonErrorMessage,
@@ -525,6 +525,8 @@ class _StepPage1State extends State<StepPage1> {
               "location": propertyLocationController.text,
             },
             onSuccess: (res) {
+              print('<<<<<<<<<<< res >>>>>>>>>>>>>>');
+              print(res);
               if (res['isSuccessful'] == true) {
                 var propertyReturned =
                     res['data']['response']['user_groups'][0];
@@ -560,7 +562,7 @@ class _StepPage1State extends State<StepPage1> {
                 showToast(
                   context,
                   'Error!',
-                  res['error'],
+                  res['data']['response']['message'],
                   Colors.red,
                 );
               }

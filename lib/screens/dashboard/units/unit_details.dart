@@ -330,7 +330,9 @@ class _UnitDetailsState extends State<UnitDetails> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: ((context) => const AddTenant()),
+                          builder: ((context) => AddTenant(
+                                unitID: widget.unitID,
+                              )),
                         ),
                       );
                     },

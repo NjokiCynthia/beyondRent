@@ -394,7 +394,7 @@ class _AddUnitState extends State<AddUnit> {
                       margin: const EdgeInsets.only(left: 10),
                       child: CustomRequestButton(
                         cookie:
-                            'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=oe8mu4ln2bs4t5n92ftedn4tqc6f3gue; identity=${userProvider.user?.phone}; remember_code=hRI1OErZyTwhcw63t98Wl.',
+                            'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
                         authorization: 'Bearer ${userProvider.user?.token}',
                         buttonError: buttonError,
                         buttonErrorMessage: buttonErrorMessage,

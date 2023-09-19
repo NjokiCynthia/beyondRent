@@ -65,11 +65,9 @@ class _DashboardState extends State<Dashboard> {
         backgroundColor: Colors.white,
         handleAndroidBackButtonPress: true,
         resizeToAvoidBottomInset: true,
-        stateManagement: true,
+        stateManagement: false,
         hideNavigationBarWhenKeyboardShows: true,
-        decoration: const NavBarDecoration(
-          colorBehindNavBar: Colors.white,
-        ),
+        decoration: const NavBarDecoration(colorBehindNavBar: Colors.white),
         popAllScreensOnTapOfSelectedTab: true,
         popActionScreens: PopActionScreensType.all,
         itemAnimationProperties: const ItemAnimationProperties(
@@ -83,8 +81,6 @@ class _DashboardState extends State<Dashboard> {
         ),
         navBarStyle: NavBarStyle.style1,
         onItemSelected: (value) {
-          print('value');
-          print(value);
           propertyUnitsList;
         },
       ),
