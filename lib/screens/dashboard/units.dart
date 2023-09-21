@@ -6,6 +6,7 @@ import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:x_rent/screens/dashboard/units/unit_details.dart';
 
 class Units extends StatefulWidget {
   const Units({Key? key}) : super(key: key);
@@ -92,12 +93,11 @@ class _UnitsState extends State<Units> {
                       withNavBar: false,
                       pageTransitionAnimation:
                           PageTransitionAnimation.cupertino,
+                    ).then(
+                      (_) => setState(() {
+                        fetchPropertyUnits();
+                      }),
                     );
-
-                    // Navigator.pushReplacement(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => AddProperty()),
-                    // );
                   },
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
@@ -151,9 +151,26 @@ class _UnitsState extends State<Units> {
                             itemBuilder: (context, index) {
                               return UnitWidget(
                                 id: num.parse(propertyUnitsList[index]['id']),
+                                unitNo: propertyUnitsList[index]
+                                    ['house_number'],
                                 name: propertyUnitsList[index]['house_number'],
-                                tenant: '',
-                                callback: (value) {},
+                                tenant: propertyUnitsList[index]['tenant_id'],
+                                callback: (value) {
+                                  PersistentNavBarNavigator.pushNewScreen(
+                                    context,
+                                    screen: UnitDetails(
+                                        unitID: value['id'],
+                                        unitNo: value['unitNo'],
+                                        tenantID: value['tenant']),
+                                    withNavBar: false,
+                                    pageTransitionAnimation:
+                                        PageTransitionAnimation.cupertino,
+                                  ).then(
+                                    (_) => setState(() {
+                                      fetchPropertyUnits();
+                                    }),
+                                  );
+                                },
                               );
                             },
                           ),

@@ -8,18 +8,27 @@ import 'package:provider/provider.dart';
 
 class UnitDetails extends StatefulWidget {
   final num? unitID;
-  const UnitDetails({Key? key, this.unitID}) : super(key: key);
+  final String? unitNo;
+  final String? tenantID;
+  const UnitDetails({
+    Key? key,
+    this.unitID,
+    this.unitNo,
+    this.tenantID,
+  }) : super(key: key);
 
   @override
   State<UnitDetails> createState() => _UnitDetailsState();
 }
 
 class _UnitDetailsState extends State<UnitDetails> {
-  bool unitInfoLoading = true;
+  bool tenantInfoLoading = true;
+  Map tenantDetails = {};
   Map unitDetails = {};
-  fetchUnitDetails() async {
+
+  fetchTenantDetails() async {
     setState(() {
-      unitInfoLoading = true;
+      tenantInfoLoading = true;
     });
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final token = userProvider.user?.token;
@@ -33,41 +42,26 @@ class _UnitDetailsState extends State<UnitDetails> {
     };
 
     try {
-      await apiClient
-          .post('/mobile/units/get', postData, headers: headers)
-          .then((response) {
-        print('<<<<<<<<<<<<<<<<< fetchUnitDetails >>>>>>>>>>>>>>>>>>>>>');
-        print(response);
-        if (response['response']['status'] == 1) {
-          setState(() {
-            unitDetails = response['response']['unit'];
-          });
-        } else {
-          showToast(
-            context,
-            'Success!',
-            'Error loading unit details',
-            Colors.red,
-          );
-        }
-      }).catchError((error) {
-        // Handle the error
-        print('error');
-        print(error);
-      });
+      var response =
+          await apiClient.post('/mobile/units/get', postData, headers: headers);
+      if (response['response']['status'] == 1) {
+        setState(() {
+          tenantDetails = response['response']['tenant'];
+        });
+      }
     } catch (e) {
       print('e');
       print(e);
     }
     setState(() {
-      unitInfoLoading = false;
+      tenantInfoLoading = false;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    fetchUnitDetails();
+    fetchTenantDetails();
   }
 
   @override
@@ -81,7 +75,7 @@ class _UnitDetailsState extends State<UnitDetails> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          unitInfoLoading == true
+          tenantInfoLoading == true
               ? const SizedBox(
                   height: 20,
                   width: 20,
@@ -90,9 +84,20 @@ class _UnitDetailsState extends State<UnitDetails> {
                     color: Colors.white,
                   ),
                 )
-              : Text(
-                  'House No. ${unitDetails['house_number']}',
-                  style: Theme.of(context).textTheme.titleLarge,
+              : Column(
+                  children: [
+                    Text(
+                      'Tenant: ${tenantDetails['user_id'] ?? "None"} ',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    Text(
+                      'House No. ${widget.unitNo}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(fontSize: 15),
+                    ),
+                  ],
                 ),
           const SizedBox(height: 10),
         ],
@@ -352,19 +357,20 @@ class _UnitDetailsState extends State<UnitDetails> {
                       ),
                       child: Row(
                         children: [
-                          const Padding(
-                            padding: EdgeInsets.only(right: 10),
-                            child: Icon(
-                              Icons.add,
-                              color: Colors.white,
-                            ),
-                          ),
                           Text(
-                            'Add Tenant',
+                            'Tenant',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
-                                ?.copyWith(color: Colors.white),
+                                ?.copyWith(color: Colors.white, fontSize: 14),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Icon(
+                              Icons.settings,
+                              color: Colors.white,
+                              size: 20,
+                            ),
                           ),
                         ],
                       ),

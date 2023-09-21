@@ -340,15 +340,6 @@ class _SignupState extends State<Signup> {
                       url: '/mobile/signup',
                       method: 'POST',
                       buttonText: 'Sign up',
-                      // body: {
-                      //   "request_id": "5v76g4v567344334355475cd4f",
-                      //   "first_name": first_name_ctrl.text,
-                      //   "last_name": last_name_ctrl.text,
-                      //   "identity": phone_number_inpt,
-                      //   "property_name": "Kirui Apartments",
-                      //   "location": "Buru Age 3",
-                      //   "password": password_ctrl.text
-                      // },
                       body: {
                         "request_id": "5v76g4v567344334355475cd4f",
                         "first_name": first_name_ctrl.text,

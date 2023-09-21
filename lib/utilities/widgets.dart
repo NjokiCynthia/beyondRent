@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:x_rent/screens/dashboard/invoices.dart';
-import 'package:x_rent/screens/dashboard/units/unit_details.dart';
 import 'dart:math';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:dio/dio.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 Color getRandomColor() {
   final random = Random();
@@ -551,12 +549,14 @@ class UnitWidget extends StatelessWidget {
   final String? name;
   final String? tenant;
   final num? id;
+  final String? unitNo;
   final ValueSetter<dynamic>? callback;
   const UnitWidget({
     super.key,
     this.name,
     this.tenant,
     this.id,
+    this.unitNo,
     this.callback,
   });
   @override
@@ -564,14 +564,8 @@ class UnitWidget extends StatelessWidget {
     final backgroundColor = getRandomColor();
     return GestureDetector(
       onTap: () {
-        PersistentNavBarNavigator.pushNewScreen(
-          context,
-          screen: UnitDetails(
-            unitID: id,
-          ),
-          withNavBar: false,
-          pageTransitionAnimation: PageTransitionAnimation.cupertino,
-        );
+        var theObj = {'id': id, 'unitNo': unitNo, 'tenant': tenant};
+        callback!(theObj);
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 20),
@@ -591,38 +585,33 @@ class UnitWidget extends StatelessWidget {
         child: Column(
           children: [
             Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  margin: const EdgeInsets.only(right: 10),
-                  decoration: BoxDecoration(
-                    color: backgroundColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Text('M'),
-                ),
-                Text(name!),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Container(
-              height: 1,
-              color: Colors.black.withOpacity(0.1),
-            ),
-            const SizedBox(height: 20),
-            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Tenant: None',
-                  style: Theme.of(context).textTheme.bodySmall,
+                Expanded(
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        margin: const EdgeInsets.only(right: 10),
+                        decoration: BoxDecoration(
+                          color: backgroundColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Text('U'),
+                      ),
+                      Text(name!),
+                    ],
+                  ),
                 ),
-                Text(
-                  'Unit not occupied',
-                  style: Theme.of(context).textTheme.bodySmall,
+                Expanded(
+                  child: Text(
+                    tenant == null ? 'Unit not occupied' : 'Unit occupied',
+                    style: Theme.of(context).textTheme.bodySmall,
+                    textAlign: TextAlign.right,
+                  ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),

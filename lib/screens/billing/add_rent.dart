@@ -127,8 +127,9 @@ class _AddRentState extends State<AddRent> {
                   filled: true,
                   fillColor: Colors.white,
                   labelText: 'Contribution name',
-                  labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                      .copyWith(color: Colors.grey),
+                  labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!.copyWith(
+                    color: Colors.grey,
+                  ),
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(
                       color: Colors.grey,

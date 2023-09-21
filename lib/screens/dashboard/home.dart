@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/screens/dashboard/propertyDetails.dart';
-import 'package:x_rent/screens/dashboard/tenant/tenant.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 import 'package:x_rent/property/add_property.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:intl/intl.dart';
@@ -21,6 +21,7 @@ class _HomeState extends State<Home> {
   DateTime selectedDate = DateTime.now();
   String currentMonth = '';
   List trasactionList = [];
+  num currentYear = 2023;
 
   Future<void> _showDayPicker(BuildContext context) async {
     DateTime currentDate = DateTime.now();
@@ -64,6 +65,401 @@ class _HomeState extends State<Home> {
     return abbreviation;
   }
 
+  BoxDecoration inactiveMonthDecoration = BoxDecoration(
+    borderRadius: BorderRadius.circular(4),
+    border: Border.all(
+      width: 2,
+      color: Colors.black.withOpacity(0.2),
+    ),
+  );
+  BoxDecoration activeMonthDecoration = BoxDecoration(
+    color: mintyGreen,
+    borderRadius: BorderRadius.circular(4),
+  );
+
+  void showMonthPickerModal(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          content: Container(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: mintyGreen,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  padding: EdgeInsets.all(20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          print('tapped');
+                          setState(() {
+                            currentYear = currentYear - 1;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(left: 10, right: 10),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                            color: Colors.white,
+                            width: 2.0,
+                          )),
+                          child: Text(
+                            '<',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(color: Colors.white, fontSize: 18),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        '$currentYear',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge!
+                            .copyWith(color: Colors.white, fontSize: 18),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          print('tapped');
+                          setState(() {
+                            currentYear = currentYear + 1;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(left: 10, right: 10),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                            color: Colors.white,
+                            width: 2.0,
+                          )),
+                          child: Text(
+                            '>',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(color: Colors.white, fontSize: 18),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  currentMonth = 'Jan';
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                  right: 5,
+                                ),
+                                padding: const EdgeInsets.all(10),
+                                decoration: currentMonth == 'Jan'
+                                    ? activeMonthDecoration
+                                    : inactiveMonthDecoration,
+                                child: const Text(
+                                  'JAN',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  currentMonth = 'Feb';
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                  right: 5,
+                                  left: 5,
+                                ),
+                                padding: const EdgeInsets.all(10),
+                                decoration: currentMonth == 'Feb'
+                                    ? activeMonthDecoration
+                                    : inactiveMonthDecoration,
+                                child: const Text(
+                                  'FEB',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  currentMonth = 'Mar';
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(left: 5),
+                                padding: const EdgeInsets.all(10),
+                                decoration: currentMonth == 'Mar'
+                                    ? activeMonthDecoration
+                                    : inactiveMonthDecoration,
+                                child: const Text(
+                                  'MAR',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  currentMonth = 'Apr';
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                  right: 5,
+                                ),
+                                padding: const EdgeInsets.all(10),
+                                decoration: currentMonth == 'Apr'
+                                    ? activeMonthDecoration
+                                    : inactiveMonthDecoration,
+                                child: Text(
+                                  'APR',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  currentMonth = 'May';
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                  right: 5,
+                                  left: 5,
+                                ),
+                                padding: const EdgeInsets.all(10),
+                                decoration: currentMonth == 'May'
+                                    ? activeMonthDecoration
+                                    : inactiveMonthDecoration,
+                                child: Text(
+                                  'MAY',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  currentMonth = 'Jun';
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(left: 5),
+                                padding: const EdgeInsets.all(10),
+                                decoration: currentMonth == 'Jun'
+                                    ? activeMonthDecoration
+                                    : inactiveMonthDecoration,
+                                child: Text(
+                                  'JUN',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  currentMonth = 'Jul';
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                  right: 5,
+                                ),
+                                padding: const EdgeInsets.all(10),
+                                decoration: currentMonth == 'Jul'
+                                    ? activeMonthDecoration
+                                    : inactiveMonthDecoration,
+                                child: Text(
+                                  'JUL',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  currentMonth = 'Aug';
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                  right: 5,
+                                  left: 5,
+                                ),
+                                padding: const EdgeInsets.all(10),
+                                decoration: currentMonth == 'Aug'
+                                    ? activeMonthDecoration
+                                    : inactiveMonthDecoration,
+                                child: Text(
+                                  'AUG',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  currentMonth = 'Sep';
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(left: 5),
+                                padding: const EdgeInsets.all(10),
+                                decoration: currentMonth == 'Sep'
+                                    ? activeMonthDecoration
+                                    : inactiveMonthDecoration,
+                                child: Text(
+                                  'SEP',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  currentMonth = 'Oct';
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                  right: 5,
+                                ),
+                                padding: const EdgeInsets.all(10),
+                                decoration: currentMonth == 'Oct'
+                                    ? activeMonthDecoration
+                                    : inactiveMonthDecoration,
+                                child: Text(
+                                  'OCT',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  currentMonth = 'Nov';
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(
+                                  right: 5,
+                                  left: 5,
+                                ),
+                                padding: const EdgeInsets.all(10),
+                                decoration: currentMonth == 'Nov'
+                                    ? activeMonthDecoration
+                                    : inactiveMonthDecoration,
+                                child: Text(
+                                  'NOV',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  currentMonth = 'Dec';
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(left: 5),
+                                padding: const EdgeInsets.all(10),
+                                decoration: currentMonth == 'Dec'
+                                    ? activeMonthDecoration
+                                    : inactiveMonthDecoration,
+                                child: Text(
+                                  'DEC',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -92,8 +488,9 @@ class _HomeState extends State<Home> {
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               GestureDetector(
-                onTap: () {
-                  _showDayPicker(context);
+                onTap: () async {
+                  // _showDayPicker(context);
+                  showMonthPickerModal(context);
                 },
                 child: Row(
                   children: [
@@ -165,11 +562,11 @@ class _HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Ksh, 0',
+                      'Ksh. 0',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     Text(
-                      'Ksh, 0',
+                      'Ksh. 0',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],
@@ -235,7 +632,6 @@ class _HomeState extends State<Home> {
 
                   return GestureDetector(
                     onTap: () {
-                      print('Tapped');
                       final propertyProvider = Provider.of<PropertyProvider>(
                         context,
                         listen: false,
@@ -249,6 +645,8 @@ class _HomeState extends State<Home> {
                           id: userPropertyListProvider.properties[index].id,
                         ),
                       );
+                      print('Tapped');
+                      print(userPropertyListProvider.properties[index].id);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
