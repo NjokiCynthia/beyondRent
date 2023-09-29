@@ -247,38 +247,6 @@ class _ProfileState extends State<Profile> {
                 const SizedBox(
                   height: 10, // Adjust spacing between card and reminders card
                 ),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        10.0), // Adjust the radius as needed
-                  ),
-                  elevation: 4,
-                  child: ListTile(
-                    leading: Container(
-                      decoration: BoxDecoration(
-                        color: const Color.fromRGBO(13, 201, 150, 1)
-                            .withOpacity(0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      padding: const EdgeInsets.all(8),
-                      child: const Icon(
-                        Icons.notifications,
-                        color: Color.fromRGBO(13, 201, 150, 1),
-                      ),
-                    ),
-                    title: const Text(
-                      'Reminders',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: const Text('Send out rent reminders'),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10, // Adjust spacing between card and reminders card
-                ),
 
                 Card(
                   shape: RoundedRectangleBorder(

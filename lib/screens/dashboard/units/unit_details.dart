@@ -25,6 +25,7 @@ class _UnitDetailsState extends State<UnitDetails> {
   bool tenantInfoLoading = true;
   Map tenantDetails = {};
   Map unitDetails = {};
+  String? tenantName;
 
   fetchTenantDetails() async {
     setState(() {
@@ -33,7 +34,7 @@ class _UnitDetailsState extends State<UnitDetails> {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final token = userProvider.user?.token;
 
-    final postData = {"id": widget.unitID};
+    final postData = {"id": widget.tenantID};
 
     final apiClient = ApiClient();
     final headers = {
@@ -42,11 +43,13 @@ class _UnitDetailsState extends State<UnitDetails> {
     };
 
     try {
-      var response =
-          await apiClient.post('/mobile/units/get', postData, headers: headers);
+      var response = await apiClient.post('/mobile/tenants/get', postData,
+          headers: headers);
       if (response['response']['status'] == 1) {
+        print(response['response']['tenant']);
         setState(() {
           tenantDetails = response['response']['tenant'];
+          tenantName = tenantDetails['first_name'];
         });
       }
     } catch (e) {
@@ -87,7 +90,7 @@ class _UnitDetailsState extends State<UnitDetails> {
               : Column(
                   children: [
                     Text(
-                      'Tenant: ${tenantDetails['user_id'] ?? "None"} ',
+                      'Tenant: ${tenantName ?? "None"} ',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     Text(
@@ -339,7 +342,13 @@ class _UnitDetailsState extends State<UnitDetails> {
                                 unitID: widget.unitID,
                               )),
                         ),
-                      );
+                      ).then((resp) {
+                        print('We got info');
+                        print(resp['tenantName']);
+                        setState(() {
+                          tenantName = resp['tenantName'];
+                        });
+                      });
                     },
                     child: Container(
                       padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),

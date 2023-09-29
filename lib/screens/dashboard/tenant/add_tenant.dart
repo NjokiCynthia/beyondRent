@@ -29,6 +29,7 @@ class _AddTenantState extends State<AddTenant> {
   final TextEditingController firstName = TextEditingController();
   final TextEditingController lastName = TextEditingController();
   final TextEditingController email = TextEditingController();
+  final TextEditingController identityDetails = TextEditingController();
   String phoneNoInpt = '';
   PhoneNumber number = PhoneNumber(isoCode: 'KE');
 
@@ -52,6 +53,12 @@ class _AddTenantState extends State<AddTenant> {
       return setState(() {
         buttonError = true;
         buttonErrorMessage = 'Enter email address';
+      });
+    }
+    if (identityDetails.text == '') {
+      return setState(() {
+        buttonError = true;
+        buttonErrorMessage = 'Enter ID details';
       });
     }
     if (phoneNoInpt == '') {
@@ -250,6 +257,57 @@ class _AddTenantState extends State<AddTenant> {
               const Row(
                 children: [
                   Icon(
+                    Icons.email,
+                    color: Color.fromRGBO(13, 201, 150, 1),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('Enter Tenant ID details'),
+                ],
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: identityDetails,
+                onChanged: (text) {
+                  validateSignupInputs();
+                },
+                style: bodyText,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  labelText: 'ID',
+                  labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                      .copyWith(color: Colors.grey),
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade300,
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              const Row(
+                children: [
+                  Icon(
                     Icons.phone,
                     color: Color.fromRGBO(13, 201, 150, 1),
                   ),
@@ -338,12 +396,6 @@ class _AddTenantState extends State<AddTenant> {
                         body: const {},
                         onSuccess: (res) {
                           Navigator.pop(context);
-                          showToast(
-                            context,
-                            'Success!',
-                            'Tenant added to unit successfully',
-                            mintyGreen,
-                          );
                         },
                       ),
                     ),
@@ -359,7 +411,7 @@ class _AddTenantState extends State<AddTenant> {
                         buttonErrorMessage: buttonErrorMessage,
                         url: '/mobile/tenants/create',
                         method: 'POST',
-                        buttonText: 'Proceed',
+                        buttonText: 'Save',
                         body: {
                           "property_id": propertyProvider.property?.id,
                           "first_name": firstName.text,
@@ -367,7 +419,7 @@ class _AddTenantState extends State<AddTenant> {
                           "email": email.text,
                           "phone": phoneNoInpt,
                           "date_of_birth": "09/10/1998",
-                          "id_number": "32323232",
+                          "id_number": identityDetails.text,
                           "unit_id": widget.unitID,
                           "contribution_id": 0
                         },
@@ -376,7 +428,10 @@ class _AddTenantState extends State<AddTenant> {
                             var serverStatus =
                                 res['data']['response']['status'];
                             if (serverStatus == 1) {
-                              Navigator.pop(context);
+                              Navigator.pop(context, {
+                                'tenantName':
+                                    '${firstName.text} ${lastName.text}',
+                              });
                               showToast(
                                 context,
                                 'Success!',

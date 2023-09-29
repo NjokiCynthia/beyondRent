@@ -31,7 +31,7 @@ class _UnitsState extends State<Units> {
     final postData = {
       "property_id": propertyProvider.property?.id,
       "lower_limit": 0,
-      "upper_limit": 10
+      "upper_limit": 20
     };
 
     final apiClient = ApiClient();

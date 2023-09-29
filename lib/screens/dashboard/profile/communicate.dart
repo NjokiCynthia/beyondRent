@@ -14,9 +14,49 @@ class Communicate extends StatefulWidget {
 }
 
 class _CommunicateState extends State<Communicate> {
+  bool tenantListLoaded = false;
+  List tenantList = [];
+  List selectedTenants = [2];
+
+  fetchTenants() async {
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
+    final token = userProvider.user?.token;
+
+    final postData = {"property_id": propertyProvider.property?.id};
+    final apiClient = ApiClient();
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      var response = await apiClient.post('/mobile/tenants/get_all', postData,
+          headers: headers);
+      var responseStatus = response['response']['status'];
+      if (responseStatus == 1) {
+        setState(() {
+          tenantList = response['response']['tenants'];
+        });
+      }
+    } catch (e) {
+      print('Error');
+      print(e);
+    }
+    setState(() {
+      tenantListLoaded = true;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    fetchTenants();
   }
 
   @override
@@ -26,8 +66,8 @@ class _CommunicateState extends State<Communicate> {
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
+            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const DashboardAppbar(
                 backButton: true,
@@ -112,19 +152,52 @@ class _CommunicateState extends State<Communicate> {
                 ),
               ),
               const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Select tenants below',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  Text(
-                    'Select all',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  )
-                ],
+              Text(
+                'Select tenants below',
+                style: Theme.of(context).textTheme.bodySmall,
               ),
+              const SizedBox(height: 24),
+              tenantListLoaded == false
+                  ? Center(
+                      child: SizedBox(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 4,
+                          color: mintyGreen,
+                        ),
+                      ),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      itemCount: tenantList.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              if (selectedTenants.contains(index)) {
+                                selectedTenants.remove(index);
+                              } else {
+                                selectedTenants.add(index);
+                              }
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: selectedTenants.contains(index)
+                                  ? mintyGreen.withOpacity(0.2)
+                                  : Colors.grey.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Text(
+                              '${tenantList[index]['first_name']} ${tenantList[index]['last_name']}',
+                            ),
+                          ),
+                        );
+                      },
+                    ),
               const SizedBox(height: 50),
               CustomRequestButton(
                 url: null,

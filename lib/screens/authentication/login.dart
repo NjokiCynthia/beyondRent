@@ -67,12 +67,12 @@ class _LoginState extends State<Login> {
                         Container(
                           margin: const EdgeInsets.only(right: 10),
                           child: Image.asset(
-                            'assets/images/icons/logo-green.png',
+                            'assets/images/icons/logo3.png',
                             width: 40,
                           ),
                         ),
                         Text(
-                          'XRent',
+                          'Kodi',
                           style: Theme.of(context)
                               .textTheme
                               .titleLarge!

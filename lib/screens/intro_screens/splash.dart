@@ -18,7 +18,6 @@ class _AnimatedScaleImageState extends State<AnimatedScaleImage>
   void initState() {
     super.initState();
 
-
     // Set the 'isFirstLaunch' flag to false
     SharedPreferences.getInstance().then((prefs) {
       prefs.setBool('isFirstLaunch', false);
@@ -47,12 +46,12 @@ class _AnimatedScaleImageState extends State<AnimatedScaleImage>
                 Container(
                   margin: const EdgeInsets.only(right: 10),
                   child: Image.asset(
-                    'assets/images/icons/logo-green.png',
+                    'assets/images/icons/logo3.png',
                     width: 40,
                   ),
                 ),
                 Text(
-                  'XRent',
+                  'Kodi',
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge!
