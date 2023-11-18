@@ -300,160 +300,167 @@ class _SignupState extends State<Signup> {
       ],
     );
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: Center(
-              child: Container(
-                margin: const EdgeInsets.only(left: 20, right: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 20, bottom: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(right: 10),
-                            child: Image.asset(
-                              'assets/images/icons/logo3.png',
-                              width: 40,
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Column(
+            children: [
+              Center(
+                child: Container(
+                  margin: const EdgeInsets.only(left: 20, right: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 20, bottom: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(right: 10),
+                              child: Image.asset(
+                                'assets/images/icons/logo3.png',
+                                width: 40,
+                              ),
                             ),
-                          ),
-                          Text(
-                            'Kodi',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(color: Colors.black),
-                          )
-                        ],
+                            Text(
+                              'Kodi',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(color: Colors.black),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    form,
-                    const SizedBox(height: 20),
-                    CustomRequestButton(
-                      buttonError: buttonError,
-                      buttonErrorMessage: buttonErrorMessage,
-                      url: '/mobile/signup',
-                      method: 'POST',
-                      buttonText: 'Sign up',
-                      body: {
-                        "request_id": "5v76g4v567344334355475cd4f",
-                        "first_name": first_name_ctrl.text,
-                        "last_name": last_name_ctrl.text,
-                        "identity": phone_number_inpt,
-                        "property_name": "Kirui Apartments",
-                        "location": "Buru Age 3",
-                        "password": password_ctrl.text
-                      },
-                      onSuccess: (res) {
-                        print('<<<<<<<<<<<< res >>>>>>>>>>>>>');
-                        print(res);
-                        if (res['isSuccessful'] == false) {
-                          return showToast(
+                      form,
+                      const SizedBox(height: 20),
+                      CustomRequestButton(
+                        buttonError: buttonError,
+                        buttonErrorMessage: buttonErrorMessage,
+                        url: '/mobile/signup',
+                        method: 'POST',
+                        buttonText: 'Sign up',
+                        body: {
+                          "request_id": "5v76g4v567344334355475cd4f",
+                          "first_name": first_name_ctrl.text,
+                          "last_name": last_name_ctrl.text,
+                          "identity": phone_number_inpt,
+                          "property_name": "Kirui Apartments",
+                          "location": "Buru Age 3",
+                          "password": password_ctrl.text
+                        },
+                        onSuccess: (res) {
+                          print('<<<<<<<<<<<< res >>>>>>>>>>>>>');
+                          print(res);
+                          if (res['isSuccessful'] == false) {
+                            return showToast(
+                              context,
+                              'Error!',
+                              res['error'] ?? 'Error, please try again later.',
+                              Colors.red,
+                            );
+                          }
+                          if (res['data']['response_code'] != '1') {
+                            return showToast(
+                              context,
+                              'Error!',
+                              res['data']['message'] ??
+                                  'Error, please try again later.',
+                              Colors.red,
+                            );
+                          }
+                          Navigator.push(
                             context,
-                            'Error!',
-                            res['error'] ?? 'Error, please try again later.',
-                            Colors.red,
+                            MaterialPageRoute(
+                              builder: ((context) =>
+                                  const Login(justSignedup: true)),
+                            ),
                           );
-                        }
-                        if (res['data']['response_code'] != '1') {
-                          return showToast(
-                            context,
-                            'Error!',
-                            res['data']['message'] ??
-                                'Error, please try again later.',
-                            Colors.red,
-                          );
-                        }
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: ((context) =>
-                                const Login(justSignedup: true)),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ),
-          // ),
-          Container(
-            margin: const EdgeInsets.only(left: 20, right: 20),
-            child: CustomRequestButton(
-              url: '/mobile/login',
-              method: 'POST',
-              buttonText: 'Demo Account',
-              body: const {
-                "phone": '254721882678',
-                "password": '00000000',
-                "remember": true
-              },
-              onSuccess: (res) {
-                if (res['data']['response']['status'] != 1) {
-                  return showToast(
+
+              // ),
+              SizedBox(
+                height: 30,
+              ),
+              Container(
+                margin: const EdgeInsets.only(left: 20, right: 20),
+                child: CustomRequestButton(
+                  url: '/mobile/login',
+                  method: 'POST',
+                  buttonText: 'Demo Account',
+                  body: const {
+                    "phone": '254721882678',
+                    "password": '00000000',
+                    "remember": true
+                  },
+                  onSuccess: (res) {
+                    if (res['data']['response']['status'] != 1) {
+                      return showToast(
+                        context,
+                        'Error!',
+                        res['data']['message'] ??
+                            'Error, please try again later.',
+                        Colors.red,
+                      );
+                    }
+                    var userData = res['data']['response']['user'];
+                    var accessToken = res['data']['response']['access_token'];
+                    final userProvider = context.read<UserProvider>();
+                    userProvider.setUser(
+                      User(
+                        firstName: userData['first_name'],
+                        lastName: userData['last_name'],
+                        phone: userData['phone'],
+                        email: userData['email'],
+                        id: userData['id'],
+                        token: accessToken,
+                      ),
+                    );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: ((context) => const PropertyList()),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
                     context,
-                    'Error!',
-                    res['data']['message'] ?? 'Error, please try again later.',
-                    Colors.red,
-                  );
-                }
-                var userData = res['data']['response']['user'];
-                var accessToken = res['data']['response']['access_token'];
-                final userProvider = context.read<UserProvider>();
-                userProvider.setUser(
-                  User(
-                    firstName: userData['first_name'],
-                    lastName: userData['last_name'],
-                    phone: userData['phone'],
-                    email: userData['email'],
-                    id: userData['id'],
-                    token: accessToken,
-                  ),
-                );
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: ((context) => const PropertyList()),
-                  ),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 20),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((context) => const Login(justSignedup: false)),
-                ),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: RichText(
-                text: TextSpan(
-                  text: 'Already have an account? ',
-                  style: const TextStyle(color: Colors.black),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: 'Login',
-                      style: TextStyle(color: mintyGreen),
+                    MaterialPageRoute(
+                      builder: ((context) => const Login(justSignedup: false)),
                     ),
-                  ],
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Already have an account? ',
+                      style: const TextStyle(color: Colors.black),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'Login',
+                          style: TextStyle(color: mintyGreen),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
+              const SizedBox(height: 20),
+            ],
           ),
-          const SizedBox(height: 20),
-        ],
+        ),
       ),
     );
   }
