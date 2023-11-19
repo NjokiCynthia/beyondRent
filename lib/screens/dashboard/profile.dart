@@ -20,7 +20,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.grey.withOpacity(0.1),
+      statusBarColor: Colors.grey.withOpacity(0.5),
     ));
     final userProvider = Provider.of<UserProvider>(
       context,

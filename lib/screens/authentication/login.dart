@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/property/property_list.dart';
@@ -48,6 +49,9 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Color.fromRGBO(247, 247, 247, 1),
+    ));
     return Scaffold(
         body: Column(
       children: [

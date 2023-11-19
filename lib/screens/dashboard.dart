@@ -79,7 +79,7 @@ class _DashboardState extends State<Dashboard> {
           curve: Curves.ease,
           duration: Duration(milliseconds: 200),
         ),
-        navBarStyle: NavBarStyle.style1,
+        navBarStyle: NavBarStyle.style6,
         onItemSelected: (value) {
           propertyUnitsList;
         },

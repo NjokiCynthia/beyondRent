@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:x_rent/screens/dashboard.dart';
 import 'package:x_rent/property/add_property.dart';
@@ -85,6 +86,9 @@ class _PropertyListState extends State<PropertyList> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Color.fromRGBO(247, 247, 247, 1),
+    ));
     Widget propertyListView = ListView.builder(
       shrinkWrap: true,
       itemCount: userPropertyList.length,
