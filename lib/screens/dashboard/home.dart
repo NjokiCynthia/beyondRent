@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/screens/dashboard/propertyDetails.dart';
@@ -468,6 +469,9 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Color.fromRGBO(247, 247, 247, 1),
+    ));
     final propertyProvider = Provider.of<PropertyProvider>(
       context,
       listen: false,
@@ -536,7 +540,7 @@ class _HomeState extends State<Home> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Total rent for September'),
+                const Text('Total rent for November'),
                 Text(
                   'Ksh. 0',
                   style: Theme.of(context).textTheme.displayLarge,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/screens/authentication/login.dart';
@@ -18,6 +19,9 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.grey.withOpacity(0.1),
+    ));
     final userProvider = Provider.of<UserProvider>(
       context,
       listen: false,
@@ -33,7 +37,7 @@ class _ProfileState extends State<Profile> {
               children: [
                 const DashboardAppbar(
                   headerText: 'My Profile',
-                  headerBody: 'Last updated two weeks ago',
+                  headerBody: '',
                   icon: Icon(
                     Icons.person,
                     color: Colors.black,
@@ -48,7 +52,7 @@ class _ProfileState extends State<Profile> {
                     borderRadius: BorderRadius.circular(
                         10.0), // Adjust the radius as needed
                   ),
-                  elevation: 4,
+                  elevation: 2,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -129,7 +133,7 @@ class _ProfileState extends State<Profile> {
                       borderRadius: BorderRadius.circular(
                           10.0), // Adjust the radius as needed
                     ),
-                    elevation: 4,
+                    elevation: 2,
                     child: ListTile(
                       leading: Container(
                         decoration: BoxDecoration(
@@ -139,7 +143,7 @@ class _ProfileState extends State<Profile> {
                         ),
                         padding: const EdgeInsets.all(8),
                         child: const Icon(
-                          Icons.house,
+                          Icons.money_off,
                           color: Color.fromRGBO(13, 201, 150, 1),
                         ),
                       ),
@@ -174,7 +178,7 @@ class _ProfileState extends State<Profile> {
                       borderRadius: BorderRadius.circular(
                           10.0), // Adjust the radius as needed
                     ),
-                    elevation: 4,
+                    elevation: 2,
                     child: ListTile(
                       leading: Container(
                         decoration: BoxDecoration(
@@ -184,7 +188,7 @@ class _ProfileState extends State<Profile> {
                         ),
                         padding: const EdgeInsets.all(8),
                         child: const Icon(
-                          Icons.house,
+                          Icons.email,
                           color: Color.fromRGBO(13, 201, 150, 1),
                         ),
                       ),
@@ -219,7 +223,7 @@ class _ProfileState extends State<Profile> {
                       borderRadius: BorderRadius.circular(
                           10.0), // Adjust the radius as needed
                     ),
-                    elevation: 4,
+                    elevation: 2,
                     child: ListTile(
                       leading: Container(
                         decoration: BoxDecoration(
@@ -252,7 +256,7 @@ class _ProfileState extends State<Profile> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  elevation: 4,
+                  elevation: 2,
                   child: ListTile(
                     leading: Container(
                       decoration: BoxDecoration(
@@ -303,7 +307,7 @@ class _ProfileState extends State<Profile> {
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        elevation: 4,
+                        elevation: 2,
                       ),
                     ),
                   ),

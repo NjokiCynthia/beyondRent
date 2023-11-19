@@ -176,9 +176,15 @@ class _PropertyListState extends State<PropertyList> {
             ),
             const SizedBox(height: 30),
             Text(
-              'Choose one of your properties',
+              userPropertyList.isEmpty
+                  ? 'Add properties to display in the list'
+                  : 'Choose one of your properties',
               style: Theme.of(context).textTheme.bodySmall,
             ),
+            // Text(
+            //   'Choose one of your properties',
+            //   style: Theme.of(context).textTheme.bodySmall,
+            // ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 20, top: 20),
