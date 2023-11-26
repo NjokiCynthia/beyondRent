@@ -10,12 +10,12 @@ import 'package:provider/provider.dart';
 List unitsToSend = [];
 List unitsForStep3 = [];
 
-class StepPage2 extends StatefulWidget {
+class AddUnits extends StatefulWidget {
   final String? fromPage;
   final int? currentPageIndex;
   final PageController? pageController;
 
-  const StepPage2({
+  const AddUnits({
     super.key,
     this.fromPage,
     required this.currentPageIndex,
@@ -23,10 +23,10 @@ class StepPage2 extends StatefulWidget {
   });
 
   @override
-  _StepPage2State createState() => _StepPage2State();
+  _AddUnitsState createState() => _AddUnitsState();
 }
 
-class _StepPage2State extends State<StepPage2> {
+class _AddUnitsState extends State<AddUnits> {
   bool propertySaveLoading = false;
   final TextEditingController controller = TextEditingController();
   String initialCountry = 'KE';
@@ -100,7 +100,7 @@ class _StepPage2State extends State<StepPage2> {
   @override
   void initState() {
     super.initState();
-    propertyInputValidator();
+    //propertyInputValidator();
   }
 
   @override
@@ -121,7 +121,17 @@ class _StepPage2State extends State<StepPage2> {
           const SizedBox(
             height: 24,
           ),
-
+          if (buttonError)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                buttonErrorMessage,
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 16,
+                ),
+              ),
+            ),
           Row(
             children: [
               Expanded(
@@ -515,94 +525,149 @@ class _StepPage2State extends State<StepPage2> {
             ),
           ),
           const SizedBox(height: 24),
-          // Expanded(child: Container()),
-          Row(
-            children: [
-              Expanded(
-                child: CustomRequestButton(
-                  cookie:
-                      'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
-                  authorization: 'Bearer ${userProvider.user?.token}',
-                  buttonError: buttonError,
-                  buttonErrorMessage: buttonErrorMessage,
-                  url: null,
-                  method: 'POST',
-                  buttonText: 'Skip',
-                  body: {
-                    "property_id": propertyProvider.property?.id,
-                    "house_numbers": unitsToSend,
-                    "house_types": const [1, 1, 2],
-                    "blocks": const [1, 1, 1, 2],
-                    "floor": const [2, 2, 3, 3],
-                    "tenant_id": const [0, 0, 0, 0],
-                    "contribution_id": const [0, 0, 0, 0]
-                  },
-                  onSuccess: (res) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: ((context) => const Dashboard()),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              Expanded(
-                  child: Container(
-                margin: const EdgeInsets.only(left: 10),
-                child: CustomRequestButton(
-                  cookie:
-                      'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
-                  authorization: 'Bearer ${userProvider.user?.token}',
-                  buttonError: buttonError,
-                  buttonErrorMessage: buttonErrorMessage,
-                  url: '/mobile/units/batch_create',
-                  method: 'POST',
-                  buttonText: 'Proceed',
-                  body: {
-                    "property_id": propertyProvider.property?.id,
-                    "house_numbers": unitsToSend,
-                    "house_types": const [1, 2, 3, 4],
-                    "blocks": const [1, 1, 1, 2],
-                    "floor": const [1, 2, 3, 4, 5, 6],
-                    "tenant_id": const [0, 0, 0, 0],
-                    "contribution_id": const [0, 0, 0, 0]
-                  },
-                  onSuccess: (res) {
-                    print('<<<<<<<<<<< res >>>>>>>>>>>>>>');
-                    print(res);
-                    if (res['isSuccessful'] == true) {
-                      var response = res['data']['response']['status'];
-                      if (response == 1) {
-                        setState(() {
-                          unitsForStep3 = res['data']['response']['units'];
-                        });
-                        pageController.animateToPage(
-                          2,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      } else {
-                        showToast(
-                          context,
-                          'Error!',
-                          res['data']['response']['message'],
-                          Colors.red,
-                        );
-                      }
+
+          SizedBox(
+            width: double.infinity,
+            child: CustomRequestButton(
+              cookie:
+                  'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
+              authorization: 'Bearer ${userProvider.user?.token}',
+              buttonError: buttonError,
+              buttonErrorMessage: buttonErrorMessage,
+              url: '/mobile/units/batch_create',
+              method: 'POST',
+              buttonText: 'Proceed',
+              body: {
+                "property_id": propertyProvider.property?.id,
+                "house_numbers": unitsToSend,
+                "house_types": const [1, 2, 3, 4],
+                "blocks": const [1, 1, 1, 2],
+                "floor": const [1, 2, 3, 4, 5, 6],
+                "tenant_id": const [0, 0, 0, 0],
+                "contribution_id": const [0, 0, 0, 0]
+              },
+              onSuccess: (res) {
+                if (!buttonError) {
+                  print('<<<<<<<<<<< res >>>>>>>>>>>>>>');
+                  print(res);
+                  if (res['isSuccessful'] == true) {
+                    var response = res['data']['response']['status'];
+                    if (response == 1) {
+                      setState(() {
+                        unitsForStep3 = res['data']['response']['units'];
+                      });
+                      pageController.animateToPage(
+                        2,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
                     } else {
                       showToast(
                         context,
                         'Error!',
-                        "Error saving unit",
+                        res['data']['response']['message'],
                         Colors.red,
                       );
                     }
-                  },
-                ),
-              ))
-            ],
+                  } else {
+                    showToast(
+                      context,
+                      'Error!',
+                      "Error saving unit",
+                      Colors.red,
+                    );
+                  }
+                }
+              },
+            ),
           ),
+          // Row(
+          //   children: [
+          //     Expanded(
+          //       child: CustomRequestButton(
+          //         cookie:
+          //             'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
+          //         authorization: 'Bearer ${userProvider.user?.token}',
+          //         buttonError: buttonError,
+          //         buttonErrorMessage: buttonErrorMessage,
+          //         url: null,
+          //         method: 'POST',
+          //         buttonText: 'Skip',
+          //         body: {
+          //           "property_id": propertyProvider.property?.id,
+          //           "house_numbers": unitsToSend,
+          //           "house_types": const [1, 1, 2],
+          //           "blocks": const [1, 1, 1, 2],
+          //           "floor": const [2, 2, 3, 3],
+          //           "tenant_id": const [0, 0, 0, 0],
+          //           "contribution_id": const [0, 0, 0, 0]
+          //         },
+          //         onSuccess: (res) {
+          //           Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //               builder: ((context) => const Dashboard()),
+          //             ),
+          //           );
+          //         },
+          //       ),
+          //     ),
+          //     Expanded(
+          //         child: Container(
+          //       margin: const EdgeInsets.only(left: 10),
+          //       child: CustomRequestButton(
+          //         cookie:
+          //             'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
+          //         authorization: 'Bearer ${userProvider.user?.token}',
+          //         buttonError: buttonError,
+          //         buttonErrorMessage: buttonErrorMessage,
+          //         url: '/mobile/units/batch_create',
+          //         method: 'POST',
+          //         buttonText: 'Proceed',
+          //         body: {
+          //           "property_id": propertyProvider.property?.id,
+          //           "house_numbers": unitsToSend,
+          //           "house_types": const [1, 2, 3, 4],
+          //           "blocks": const [1, 1, 1, 2],
+          //           "floor": const [1, 2, 3, 4, 5, 6],
+          //           "tenant_id": const [0, 0, 0, 0],
+          //           "contribution_id": const [0, 0, 0, 0]
+          //         },
+          //         onSuccess: (res) {
+          //           print('<<<<<<<<<<< res >>>>>>>>>>>>>>');
+          //           print(res);
+          //           if (res['isSuccessful'] == true) {
+          //             var response = res['data']['response']['status'];
+          //             if (response == 1) {
+          //               setState(() {
+          //                 unitsForStep3 = res['data']['response']['units'];
+          //               });
+          //               pageController.animateToPage(
+          //                 2,
+          //                 duration: const Duration(milliseconds: 300),
+          //                 curve: Curves.easeInOut,
+          //               );
+          //             } else {
+          //               showToast(
+          //                 context,
+          //                 'Error!',
+          //                 res['data']['response']['message'],
+          //                 Colors.red,
+          //               );
+          //             }
+          //           } else {
+          //             showToast(
+          //               context,
+          //               'Error!',
+          //               "Error saving unit",
+          //               Colors.red,
+          //             );
+          //           }
+          //         },
+          //       ),
+          //     ))
+          //   ],
+          // ),
         ],
       ),
     );

@@ -9,14 +9,14 @@ import 'package:x_rent/property/property.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({Key? key}) : super(key: key);
+class Settings extends StatefulWidget {
+  const Settings({Key? key}) : super(key: key);
 
   @override
-  State<Profile> createState() => _ProfileState();
+  State<Settings> createState() => _SettingsState();
 }
 
-class _ProfileState extends State<Profile> {
+class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(

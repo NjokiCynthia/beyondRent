@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/constants/theme.dart';
-import 'package:x_rent/screens/dashboard/tenant/add_tenant.dart';
+import 'package:x_rent/screens/dashboard/tenant/update_tenant.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -46,10 +46,13 @@ class _UnitDetailsState extends State<UnitDetails> {
       var response = await apiClient.post('/mobile/tenants/get', postData,
           headers: headers);
       if (response['response']['status'] == 1) {
+        print('This is my tenant details>>>>>>>>>>>');
         print(response['response']['tenant']);
+
         setState(() {
           tenantDetails = response['response']['tenant'];
           tenantName = tenantDetails['first_name'];
+          print(tenantDetails['first_name']);
         });
       }
     } catch (e) {
@@ -344,9 +347,13 @@ class _UnitDetailsState extends State<UnitDetails> {
                         ),
                       ).then((resp) {
                         print('We got info');
-                        print(resp['tenantName']);
+                        print('And here is the full response');
+                        print(resp);
+                        print('First Name: ${resp['first_name']}');
+                        print('Last Name: ${resp['last_name']}');
                         setState(() {
-                          tenantName = resp['tenantName'];
+                          tenantName =
+                              '${resp['first_name']} ${resp['last_name']}';
                         });
                       });
                     },

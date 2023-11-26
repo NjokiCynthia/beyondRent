@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
-import 'package:x_rent/property/step2.dart';
-import 'package:x_rent/property/step3.dart';
+import 'package:x_rent/property/add_unit.dart';
+import 'package:x_rent/property/tenant_setup.dart';
 import 'package:provider/provider.dart';
 
 int _selectedIndex = 0;
@@ -220,11 +221,11 @@ class _AddPropertyState extends State<AddProperty> {
         currentPageIndex: _currentPageIndex,
         pageController: propertyPageController,
       ),
-      StepPage2(
+      AddUnits(
         currentPageIndex: _currentPageIndex,
         pageController: propertyPageController,
       ),
-      StepPage3(
+      TenantSetUp(
         currentPageIndex: _currentPageIndex,
         pageController: propertyPageController,
       ),
@@ -300,9 +301,13 @@ class StepPage1 extends StatefulWidget {
   State<StepPage1> createState() => _StepPage1State();
 }
 
+enum AccountSettlementOption { yes, no }
+
 class _StepPage1State extends State<StepPage1> {
   final TextEditingController propertyNameController = TextEditingController();
   final TextEditingController propertyLocationController =
+      TextEditingController();
+  final TextEditingController propertyDescriptionController =
       TextEditingController();
 
   bool buttonError = true;
@@ -327,6 +332,12 @@ class _StepPage1State extends State<StepPage1> {
       setState(() {
         buttonError = true;
         buttonErrorMessage = 'Enter property location';
+      });
+      return false;
+    } else if (propertyDescriptionController.text == '') {
+      setState(() {
+        buttonError = true;
+        buttonErrorMessage = 'Enter property description';
       });
       return false;
     } else {
@@ -389,6 +400,12 @@ class _StepPage1State extends State<StepPage1> {
     propertyInputValidator();
   }
 
+  String? _selectedValue;
+  bool accountSettlement = true;
+  bool accountSettlementNo = false;
+
+  AccountSettlementOption? selectedOption;
+
   @override
   Widget build(BuildContext context) {
     final propertyProvider = Provider.of<PropertyProvider>(
@@ -420,6 +437,7 @@ class _StepPage1State extends State<StepPage1> {
               Text('Enter Property name'),
             ],
           ),
+          const SizedBox(height: 10),
           const SizedBox(height: 10),
           TextFormField(
             controller: propertyNameController,
@@ -510,7 +528,173 @@ class _StepPage1State extends State<StepPage1> {
           const SizedBox(
             height: 24,
           ),
+          const Row(
+            children: [
+              Icon(
+                Icons.edit_document,
+                color: Color.fromRGBO(13, 201, 150, 1),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text('Enter Property Description'),
+            ],
+          ),
+          const SizedBox(height: 10),
+          TextFormField(
+            onChanged: (value) {
+              propertyInputValidator();
+            },
+            controller: propertyDescriptionController,
+            style: bodyText,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              labelText: 'Property Description',
+              labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                  .copyWith(color: Colors.grey),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.grey.shade300,
+                  width: 2.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
+          ),
           const SizedBox(height: 24),
+          const Row(
+            children: [
+              Icon(
+                Icons.house_siding_outlined,
+                color: Color.fromRGBO(13, 201, 150, 1),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text('Select the nature of property'),
+            ],
+          ),
+          const SizedBox(height: 10),
+          DropdownButtonFormField<String>(
+            value: _selectedValue,
+            onChanged: (value) {
+              setState(() {
+                _selectedValue = value;
+              });
+            },
+            items: [
+              DropdownMenuItem(
+                value: 'Commercial',
+                child: Text('Commercial'),
+              ),
+              DropdownMenuItem(
+                value: 'Residential',
+                child: Text('Residential'),
+              ),
+            ],
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              labelText: 'Select nature',
+              labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                  .copyWith(color: Colors.grey),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.grey.shade300,
+                  width: 2.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+          const Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Do you wish to enable automatic account settlement once a tenant pays rent?',
+                  softWrap: true,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Row(
+                children: [
+                  Radio(
+                    value: AccountSettlementOption.yes,
+                    groupValue: selectedOption,
+                    onChanged: (AccountSettlementOption? value) {
+                      setState(() {
+                        selectedOption = value;
+                      });
+                    },
+                    activeColor: primaryDarkColor,
+                  ),
+                  Text(
+                    "Yes",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(color: Colors.black.withOpacity(0.5)),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Radio(
+                    value: AccountSettlementOption.no,
+                    groupValue: selectedOption,
+                    onChanged: (AccountSettlementOption? value) {
+                      setState(() {
+                        selectedOption = value;
+                      });
+                    },
+                    activeColor: primaryDarkColor,
+                  ),
+                  Text(
+                    "No",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(color: Colors.black.withOpacity(0.5)),
+                  ),
+                ],
+              ),
+            ],
+          ),
           CustomRequestButton(
             cookie:
                 'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',

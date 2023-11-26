@@ -20,7 +20,7 @@ class _DashboardState extends State<Dashboard> {
       const Home(),
       const Units(),
       const Transactions(),
-      const Profile(),
+      const Settings(),
     ];
   }
 
@@ -45,8 +45,8 @@ class _DashboardState extends State<Dashboard> {
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.person),
-        title: ("Profile"),
+        icon: const Icon(Icons.settings),
+        title: ("Settings"),
         activeColorPrimary: mintyGreen,
         inactiveColorPrimary: Colors.grey,
       ),

@@ -21,7 +21,7 @@ class _AddRentState extends State<AddRent> {
   String buttonErrorMessage = 'Enter all fields';
   bool propertySaveLoading = false;
 
-  String selectedValue = 'Regular Bill';
+  String selectedValue = 'F1';
 
   final TextEditingController contributionNameController =
       TextEditingController();
@@ -33,7 +33,7 @@ class _AddRentState extends State<AddRent> {
     if (contributionNameController.text == '') {
       setState(() {
         buttonError = true;
-        buttonErrorMessage = 'Enter contribution name';
+        buttonErrorMessage = 'Enter the rent amount';
       });
       return false;
     } else if (contributionAmountController.text == '') {
@@ -85,6 +85,52 @@ class _AddRentState extends State<AddRent> {
     }
   }
 
+  List<String> frequencyOptions = ['Every 8th', 'Every 7th', 'Every 10th'];
+  String? selectedFrequency;
+  TextEditingController customFrequencyController = TextEditingController();
+
+  Future<void> _showAddCustomFrequencyDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: TextFormField(
+            controller: customFrequencyController,
+            decoration: InputDecoration(
+              labelText: 'Custom Frequency',
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                String customFrequencyText =
+                    customFrequencyController.text.trim();
+                if (customFrequencyText.isNotEmpty) {
+                  int? customFrequency = int.tryParse(customFrequencyText);
+                  if (customFrequency != null && customFrequency > 0) {
+                    setState(() {
+                      String formattedFrequency = 'Every $customFrequency';
+                      frequencyOptions.add(formattedFrequency);
+                      selectedFrequency = formattedFrequency;
+                    });
+                  }
+                }
+                Navigator.of(context).pop();
+              },
+              child: Text('Add'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -120,7 +166,7 @@ class _AddRentState extends State<AddRent> {
                 const SizedBox(
                   height: 24,
                 ),
-                const Text('Contribution name'),
+                const Text('Rent Amount'),
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: contributionNameController,
@@ -131,7 +177,7 @@ class _AddRentState extends State<AddRent> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    labelText: 'Contribution name',
+                    labelText: 'KES 20,000',
                     labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!.copyWith(
                       color: Colors.grey,
                     ),
@@ -158,6 +204,44 @@ class _AddRentState extends State<AddRent> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Expected rent due date'),
+                    InkWell(
+                      onTap: () {
+                        _showAddCustomFrequencyDialog(context);
+                      },
+                      child: Text(
+                        'Set date',
+                        style: TextStyle(
+                          color: Colors.greenAccent,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                DropdownButtonFormField<String>(
+                  value: selectedFrequency,
+                  items: frequencyOptions.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? value) {
+                    setState(() {
+                      selectedFrequency = value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Select Frequency',
+                  ),
+                ),
+                SizedBox(height: 16.0),
                 const SizedBox(height: 24),
                 const Text('Contribution amount'),
                 const SizedBox(height: 10),
@@ -197,7 +281,7 @@ class _AddRentState extends State<AddRent> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                const Text('Block'),
+                const Text('Select unit to set rent'),
                 Container(
                   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                   decoration: BoxDecoration(
@@ -218,9 +302,9 @@ class _AddRentState extends State<AddRent> {
                       });
                     },
                     items: <String>[
-                      'Regular Bill',
-                      'One Time Bill',
-                      'Non Scheduled Bill',
+                      'F1',
+                      'F2',
+                      'F3',
                     ].map<DropdownMenuItem<String>>(
                       (String value) {
                         return DropdownMenuItem<String>(
@@ -232,7 +316,8 @@ class _AddRentState extends State<AddRent> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                Text('Disable arrears for this contribution'),
+                Text(
+                    'Do you wnat to invoice previous rent during monthly invoicing?'),
                 Row(
                   children: [
                     Checkbox(
@@ -254,33 +339,33 @@ class _AddRentState extends State<AddRent> {
                     ))
                   ],
                 ),
-                const SizedBox(height: 24),
-                Text(
-                    "Do you wish to display this contribution in the tenant's statement report?"),
-                Row(
-                  children: [
-                    Checkbox(
-                      checkColor: Colors.white,
-                      // fillColor: Colors.green,
-                      value: displayContributionBool,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          displayContributionBool = value!;
-                        });
-                      },
-                    ),
-                    Expanded(
-                      child: Text(
-                        "Display contribution in the tenant's statement",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .copyWith(color: Colors.black.withOpacity(0.5)),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 24),
+                // const SizedBox(height: 24),
+                // Text(
+                //     "Do you wish to display this contribution in the tenant's statement report?"),
+                // Row(
+                //   children: [
+                //     Checkbox(
+                //       checkColor: Colors.white,
+                //       // fillColor: Colors.green,
+                //       value: displayContributionBool,
+                //       onChanged: (bool? value) {
+                //         setState(() {
+                //           displayContributionBool = value!;
+                //         });
+                //       },
+                //     ),
+                //     Expanded(
+                //       child: Text(
+                //         "Display contribution in the tenant's statement",
+                //         style: Theme.of(context)
+                //             .textTheme
+                //             .bodySmall!
+                //             .copyWith(color: Colors.black.withOpacity(0.5)),
+                //       ),
+                //     )
+                //   ],
+                // ),
+                // const SizedBox(height: 24),
                 Row(
                   children: [
                     Expanded(

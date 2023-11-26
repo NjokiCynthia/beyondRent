@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:x_rent/constants/theme.dart';
+import 'package:x_rent/providers/tenants_provider.dart';
 import 'package:x_rent/screens/dashboard.dart';
 import 'package:x_rent/utilities/constants.dart';
-import 'package:x_rent/property/step2.dart';
+import 'package:x_rent/property/add_unit.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -72,20 +73,20 @@ class _DropdownWidgetState extends State<DropdownWidget> {
   }
 }
 
-class StepPage3 extends StatefulWidget {
+class TenantSetUp extends StatefulWidget {
   final int currentPageIndex;
   final PageController pageController;
 
-  const StepPage3(
+  const TenantSetUp(
       {super.key,
       required this.currentPageIndex,
       required this.pageController});
 
   @override
-  _StepPage3State createState() => _StepPage3State();
+  _TenantSetUpState createState() => _TenantSetUpState();
 }
 
-class _StepPage3State extends State<StepPage3> {
+class _TenantSetUpState extends State<TenantSetUp> {
   int _selectedIndex = 0;
 
   void _selectItem(int index) {
@@ -157,6 +158,8 @@ class _StepPage3State extends State<StepPage3> {
 
   @override
   Widget build(BuildContext context) {
+    final tenantsProvider =
+        Provider.of<TenantsProvider>(context, listen: false);
     PageController pageController = widget.pageController;
     final propertyProvider = Provider.of<PropertyProvider>(
       context,
@@ -198,7 +201,7 @@ class _StepPage3State extends State<StepPage3> {
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      labelText: 'Fist Name',
+                      labelText: 'First Name',
                       labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
                           .copyWith(color: Colors.grey),
                       border: OutlineInputBorder(
@@ -468,6 +471,17 @@ class _StepPage3State extends State<StepPage3> {
                       "contribution_id": 0
                     },
                     onSuccess: (res) {
+                      tenantsProvider.setGroupData({
+                        "property_id": propertyProvider.property?.id,
+                        "first_name": firstName.text,
+                        "last_name": lastName.text,
+                        "email": email.text,
+                        "phone": phoneNoInpt,
+                        "date_of_birth": "09/10/1998",
+                        "id_number": "32323232",
+                        "unit_id": selectedUnit?['id'],
+                        "contribution_id": 0
+                      });
                       if (res['isSuccessful'] == true) {
                         var serverStatus = res['data']['response']['status'];
                         if (serverStatus == 1) {

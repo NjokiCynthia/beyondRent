@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:x_rent/constants/theme.dart';
+import 'package:x_rent/providers/tenants_provider.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/providers/property_provider.dart';
@@ -16,13 +17,48 @@ class AddTenant extends StatefulWidget {
 }
 
 class _AddTenantState extends State<AddTenant> {
-  int _selectedIndex = 0;
+  bool tenantInfoLoading = true;
+  Map tenantDetails = {};
+  Map unitDetails = {};
+  String? tenantName;
 
-  void _selectItem(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  // fetchTenantDetails() async {
+  //   setState(() {
+  //     tenantInfoLoading = true;
+  //   });
+  //   final userProvider = Provider.of<UserProvider>(context, listen: false);
+  //   final tenantProvider = Provider.of<TenantsProvider>(context, listen: false);
+  //   final token = userProvider.user?.token;
+
+  //   final postData = {"id": widget.tenantID};
+
+  //   final apiClient = ApiClient();
+  //   final headers = {
+  //     'Content-Type': 'application/json',
+  //     'Authorization': 'Bearer $token',
+  //   };
+
+  //   try {
+  //     var response = await apiClient.post('/mobile/tenants/get', postData,
+  //         headers: headers);
+  //     if (response['response']['status'] == 1) {
+  //       print('This is my tenant details>>>>>>>>>>>');
+  //       print(response['response']['tenant']);
+
+  //       setState(() {
+  //         tenantDetails = response['response']['tenant'];
+  //         tenantName = tenantDetails['first_name'];
+  //         print(tenantDetails['first_name']);
+  //       });
+  //     }
+  //   } catch (e) {
+  //     print('e');
+  //     print(e);
+  //   }
+  //   setState(() {
+  //     tenantInfoLoading = false;
+  //   });
+  // }
 
   final TextEditingController controller = TextEditingController();
   String initialCountry = 'KE';
