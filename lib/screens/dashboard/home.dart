@@ -581,36 +581,47 @@ class _HomeState extends State<Home> {
         ),
       ],
     );
-    Widget transactionsWidget = Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 5, right: 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Transactions',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: Text(
-                  'All',
+    Widget transactionsWidget = Container(
+      height: MediaQuery.of(context).size.height,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 5, right: 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Transactions',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
-              ),
-            ],
+                GestureDetector(
+                  onTap: () {},
+                  child: Text(
+                    'All',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        const SizedBox(height: 20),
-        trasactionList.isEmpty
-            ? const EmptyTransactions()
-            : const TransactionCard(
-                name: 'Liam',
-                date: '22nd, Mar 2023',
-                amount: 20000,
-              ),
-      ],
+          const SizedBox(height: 20),
+          // trasactionList.isEmpty
+          //     ? const EmptyTransactions()
+          //     :
+
+          Expanded(
+            child: ListView.builder(
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return TransactionCard(
+                    name: 'Tenant',
+                    date: '22nd, Nov 2023',
+                    amount: 20000,
+                  );
+                }),
+          ),
+        ],
+      ),
     );
     Widget modalContent = Column(
       mainAxisSize: MainAxisSize.min,
@@ -623,7 +634,7 @@ class _HomeState extends State<Home> {
         const SizedBox(height: 10),
         Container(
           constraints: const BoxConstraints(
-            maxHeight: 200, // Set your desired max height here
+            maxHeight: 200,
           ),
           child: Consumer<PropertyListProvider>(
             builder: (context, userPropertyListProvider, _) {

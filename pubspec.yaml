@@ -44,6 +44,7 @@ dependencies:
   overlay_support: ^2.1.0
   shared_preferences: ^2.2.0
   month_year_picker: ^0.3.0+1
+  multiselect_formfield: ^0.1.7
 
 dev_dependencies:
   flutter_test:

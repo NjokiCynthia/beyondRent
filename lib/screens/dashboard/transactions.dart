@@ -243,12 +243,21 @@ class _TransactionsState extends State<Transactions> {
                   );
                 },
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 50),
-                child: const Center(
-                  child: EmptyTransactions(),
-                ),
-              ),
+              Expanded(
+                child: ListView.builder(itemBuilder: ((context, index) {
+                  return TransactionCard(
+                    name: 'Tenant',
+                    date: '22nd, Nov 2023',
+                    amount: 20000,
+                  );
+                })),
+              )
+              // Container(
+              //   margin: const EdgeInsets.only(top: 50),
+              //   child: const Center(
+              //     child: EmptyTransactions(),
+              //   ),
+              // ),
             ],
           ),
         ),

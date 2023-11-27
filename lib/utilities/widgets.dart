@@ -368,6 +368,7 @@ class TransactionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final backgroundColor = getRandomColor();
+    final firstLetter = name != null && name!.isNotEmpty ? name![0] : '';
     return Container(
       // margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
@@ -399,7 +400,14 @@ class TransactionCard extends StatelessWidget {
               color: backgroundColor,
               shape: BoxShape.circle,
             ),
-            child: const Text('M'),
+            child: Text(
+              firstLetter,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
           ),
           Expanded(
             child: Row(
@@ -424,7 +432,7 @@ class TransactionCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        '+ Kes. 40,000',
+                        'KES. 40,000',
                         style: Theme.of(context).textTheme.labelMedium,
                       ),
                       Text(

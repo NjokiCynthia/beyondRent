@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
@@ -131,10 +132,202 @@ class _AddRentState extends State<AddRent> {
     );
   }
 
+  List<String> enteredValues = [];
+
+  void _showBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        String itemName = '';
+        String amount = '';
+
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Container(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Item'),
+                    onChanged: (value) {
+                      setState(() {
+                        itemName = value;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 16.0),
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Amount'),
+                    onChanged: (value) {
+                      setState(() {
+                        amount = value;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 16.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          if (itemName.isNotEmpty && amount.isNotEmpty) {
+                            setState(() {
+                              enteredValues.add('$itemName: KES $amount');
+                              itemName = '';
+                              amount = '';
+                            });
+                            // Clear the text form fields
+                            // itemNameController.clear();
+                            // amountController.clear();
+                            Navigator.pop(context); // Close the bottom sheet
+                          }
+                        },
+                        child: Text('Confirm'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('Cancel'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     propertyInputValidator();
+  }
+
+  String utility = '';
+  String amount = '';
+
+  // Function to show the alert dialog
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Add utilities',
+            style: TextStyle(fontSize: 16),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  labelText: 'Utility',
+                  labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!.copyWith(
+                    color: Colors.grey,
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade300,
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    utility = value;
+                  });
+                },
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  labelText: 'Amount',
+                  labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!.copyWith(
+                    color: Colors.grey,
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade300,
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    amount = value;
+                  });
+                },
+              ),
+            ],
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: primaryDarkColor.withOpacity(0.2)),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  child: Text('Cancel'),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: primaryDarkColor),
+                  onPressed: () {
+                    print('Utility: $utility, Amount: $amount');
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -164,7 +357,7 @@ class _AddRentState extends State<AddRent> {
                   backButtonText: 'Add Rent Bill',
                 ),
                 const SizedBox(
-                  height: 24,
+                  height: 20,
                 ),
                 const Text('Rent Amount'),
                 const SizedBox(height: 10),
@@ -177,7 +370,8 @@ class _AddRentState extends State<AddRent> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    labelText: 'KES 20,000',
+                    hintText: 'KES 20,000',
+                    // labelText: 'KES 20,000',
                     labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!.copyWith(
                       color: Colors.grey,
                     ),
@@ -204,7 +398,7 @@ class _AddRentState extends State<AddRent> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -238,25 +432,12 @@ class _AddRentState extends State<AddRent> {
                     });
                   },
                   decoration: InputDecoration(
-                    labelText: 'Select Frequency',
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                const SizedBox(height: 24),
-                const Text('Contribution amount'),
-                const SizedBox(height: 10),
-                TextFormField(
-                  controller: contributionAmountController,
-                  style: bodyText,
-                  onChanged: (value) {
-                    propertyInputValidator();
-                  },
-                  decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    labelText: 'Contribution amount',
-                    labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                        .copyWith(color: Colors.grey),
+                    labelText: 'Select frequency',
+                    labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!.copyWith(
+                      color: Colors.grey,
+                    ),
                     border: OutlineInputBorder(
                       borderSide: const BorderSide(
                         color: Colors.grey,
@@ -280,7 +461,8 @@ class _AddRentState extends State<AddRent> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
+
+                const SizedBox(height: 20),
                 const Text('Select unit to set rent'),
                 Container(
                   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -315,9 +497,43 @@ class _AddRentState extends State<AddRent> {
                     ).toList(),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('View'),
+                    GestureDetector(
+                      onTap: _showDialog,
+                      child: Text(
+                        'or Add utilities',
+                        style: TextStyle(color: primaryDarkColor),
+                      ),
+                    )
+                  ],
+                ),
+
+                SizedBox(height: 20),
+                ListTile(
+                  shape: Border.all(color: primaryDarkColor.withOpacity(0.1)),
+                  leading: Container(
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(13, 201, 150, 1)
+                          .withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    padding: const EdgeInsets.all(8),
+                    child: const Icon(
+                      Icons.check,
+                      color: Color.fromRGBO(13, 201, 150, 1),
+                    ),
+                  ),
+                  title: Text('Utility: $utility'),
+                  subtitle: Text('Amount: KES $amount'),
+                ),
+
+                const SizedBox(height: 20),
                 Text(
-                    'Do you wnat to invoice previous rent during monthly invoicing?'),
+                    'Do you want to invoice previous rent during monthly invoicing?'),
                 Row(
                   children: [
                     Checkbox(
@@ -332,7 +548,7 @@ class _AddRentState extends State<AddRent> {
                     ),
                     Expanded(
                         child: Text(
-                      'Disable arrears for this contribution',
+                      'Disable arrears during invoicing',
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
                             color: Colors.black.withOpacity(0.5),
                           ),
