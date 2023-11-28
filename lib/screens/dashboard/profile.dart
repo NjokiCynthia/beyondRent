@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:x_rent/screens/billing/add_supplementary_bill.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/screens/authentication/login.dart';
@@ -20,7 +21,7 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.grey.withOpacity(0.5),
+      statusBarColor: Colors.grey.withOpacity(0.1),
     ));
     final userProvider = Provider.of<UserProvider>(
       context,
@@ -35,15 +36,6 @@ class _SettingsState extends State<Settings> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const DashboardAppbar(
-                  headerText: 'My Profile',
-                  headerBody: '',
-                  icon: Icon(
-                    Icons.person,
-                    color: Colors.black,
-                    size: 20,
-                  ),
-                ),
                 const SizedBox(
                   height: 40,
                 ),
@@ -149,6 +141,52 @@ class _SettingsState extends State<Settings> {
                       ),
                       subtitle: const Text(
                         'Add / Manage rent bills',
+                      ),
+                      title: const Text(
+                        'Rent bill set up',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10, // Adjust spacing between card and reminders card
+                ),
+                const SizedBox(height: 10), // Adjust the spacing
+                GestureDetector(
+                  onTap: () {
+                    PersistentNavBarNavigator.pushNewScreen(
+                      context,
+                      screen: SupplementaryBill(),
+                      withNavBar: false,
+                      pageTransitionAnimation:
+                          PageTransitionAnimation.cupertino,
+                    );
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          10.0), // Adjust the radius as needed
+                    ),
+                    elevation: 2,
+                    child: ListTile(
+                      leading: Container(
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(13, 201, 150, 1)
+                              .withOpacity(0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        child: const Icon(
+                          Icons.money_off,
+                          color: Color.fromRGBO(13, 201, 150, 1),
+                        ),
+                      ),
+                      subtitle: const Text(
+                        'Add / Manage supplementary bills',
                       ),
                       title: const Text(
                         'Bill Settings',

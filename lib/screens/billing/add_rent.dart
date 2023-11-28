@@ -86,7 +86,16 @@ class _AddRentState extends State<AddRent> {
     }
   }
 
-  List<String> frequencyOptions = ['Every 8th', 'Every 7th', 'Every 10th'];
+  List<String> frequencyOptions = [
+    'Daily',
+    'Weekly',
+    'Monthly',
+    'Fortnightly',
+    'Bimonthly',
+    'Quarterly',
+    'Biannually',
+    'Annually',
+  ];
   String? selectedFrequency;
   TextEditingController customFrequencyController = TextEditingController();
 
@@ -132,202 +141,19 @@ class _AddRentState extends State<AddRent> {
     );
   }
 
-  List<String> enteredValues = [];
-
-  void _showBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        String itemName = '';
-        String amount = '';
-
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return Container(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  TextFormField(
-                    decoration: InputDecoration(labelText: 'Item'),
-                    onChanged: (value) {
-                      setState(() {
-                        itemName = value;
-                      });
-                    },
-                  ),
-                  SizedBox(height: 16.0),
-                  TextFormField(
-                    decoration: InputDecoration(labelText: 'Amount'),
-                    onChanged: (value) {
-                      setState(() {
-                        amount = value;
-                      });
-                    },
-                  ),
-                  SizedBox(height: 16.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          if (itemName.isNotEmpty && amount.isNotEmpty) {
-                            setState(() {
-                              enteredValues.add('$itemName: KES $amount');
-                              itemName = '';
-                              amount = '';
-                            });
-                            // Clear the text form fields
-                            // itemNameController.clear();
-                            // amountController.clear();
-                            Navigator.pop(context); // Close the bottom sheet
-                          }
-                        },
-                        child: Text('Confirm'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text('Cancel'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
+  String? selectedDayOfWeek;
+  int? selectedDayOfMonth;
+  String? selectedDayOfWeekMonthly;
+  String? selectedDayOfWeekFortnightly;
+  int? selectedWeekNumberFortnightly;
+  String? selectedDayOfWeekBimonthly;
+  int? selectedDayOfMonthBimonthly;
+  String? selectedStartingMonthBimonthly;
 
   @override
   void initState() {
     super.initState();
     propertyInputValidator();
-  }
-
-  String utility = '';
-  String amount = '';
-
-  // Function to show the alert dialog
-  void _showDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            'Add utilities',
-            style: TextStyle(fontSize: 16),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'Utility',
-                  labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!.copyWith(
-                    color: Colors.grey,
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade300,
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    utility = value;
-                  });
-                },
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'Amount',
-                  labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!.copyWith(
-                    color: Colors.grey,
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade300,
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    amount = value;
-                  });
-                },
-              ),
-            ],
-          ),
-          actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryDarkColor.withOpacity(0.2)),
-                  onPressed: () {
-                    Navigator.of(context).pop(); // Close the dialog
-                  },
-                  child: Text('Cancel'),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryDarkColor),
-                  onPressed: () {
-                    print('Utility: $utility, Amount: $amount');
-                    Navigator.of(context).pop(); // Close the dialog
-                  },
-                  child: Text('OK'),
-                ),
-              ],
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -346,9 +172,9 @@ class _AddRentState extends State<AddRent> {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(247, 247, 247, 1),
       body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          child: SingleChildScrollView(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -399,24 +225,7 @@ class _AddRentState extends State<AddRent> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Expected rent due date'),
-                    InkWell(
-                      onTap: () {
-                        _showAddCustomFrequencyDialog(context);
-                      },
-                      child: Text(
-                        'Set date',
-                        style: TextStyle(
-                          color: Colors.greenAccent,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                Text('What is the preferred payment frequency?'),
                 const SizedBox(height: 10),
                 DropdownButtonFormField<String>(
                   value: selectedFrequency,
@@ -429,12 +238,28 @@ class _AddRentState extends State<AddRent> {
                   onChanged: (String? value) {
                     setState(() {
                       selectedFrequency = value;
+                      if (selectedFrequency == 'Weekly') {
+                        selectedDayOfWeek = null;
+                      }
+                      if (selectedFrequency == 'Monthly') {
+                        selectedDayOfMonth = null;
+                        selectedDayOfWeekMonthly = null;
+                      }
+                      if (selectedFrequency == 'Fortnightly') {
+                        selectedDayOfWeekFortnightly = null;
+                        selectedWeekNumberFortnightly = null;
+                      }
+                      if (selectedFrequency == 'Bimonthly') {
+                        selectedDayOfWeekBimonthly = null;
+                        selectedDayOfMonthBimonthly = null;
+                        selectedStartingMonthBimonthly = null;
+                      }
                     });
                   },
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    labelText: 'Select frequency',
+                    hintText: 'Select frequency',
                     labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!.copyWith(
                       color: Colors.grey,
                     ),
@@ -461,8 +286,474 @@ class _AddRentState extends State<AddRent> {
                     ),
                   ),
                 ),
-
-                const SizedBox(height: 20),
+                Visibility(
+                  visible: selectedFrequency == 'Bimonthly' ||
+                      selectedFrequency == 'Quarterly' ||
+                      selectedFrequency == 'Biannually' ||
+                      selectedFrequency == 'Annually',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 20),
+                      Text('Select Day of the Week'),
+                      DropdownButtonFormField<String>(
+                        value: selectedDayOfWeekBimonthly,
+                        items: [
+                          'Monday',
+                          'Tuesday',
+                          'Wednesday',
+                          'Thursday',
+                          'Friday',
+                          'Saturday',
+                          'Sunday',
+                        ].map<DropdownMenuItem<String>>(
+                          (String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedDayOfWeekBimonthly = value;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Select day of the week',
+                          labelStyle:
+                              MyTheme.darkTheme.textTheme.bodyLarge!.copyWith(
+                            color: Colors.grey,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade300,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text('Select Day of the Month'),
+                      DropdownButtonFormField<int>(
+                        value: selectedDayOfMonthBimonthly,
+                        items: List.generate(31, (index) => index + 1)
+                            .map<DropdownMenuItem<int>>(
+                          (int value) {
+                            return DropdownMenuItem<int>(
+                              value: value,
+                              child: Text(value.toString()),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (int? value) {
+                          setState(() {
+                            selectedDayOfMonthBimonthly = value;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Day of the month',
+                          labelStyle:
+                              MyTheme.darkTheme.textTheme.bodyLarge!.copyWith(
+                            color: Colors.grey,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade300,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text('Select Starting Month'),
+                      DropdownButtonFormField<String>(
+                        value: selectedStartingMonthBimonthly,
+                        items: [
+                          'January',
+                          'February',
+                          'March',
+                          'April',
+                          'May',
+                          'June',
+                          'July',
+                          'August',
+                          'September',
+                          'October',
+                          'November',
+                          'December',
+                        ].map<DropdownMenuItem<String>>(
+                          (String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedStartingMonthBimonthly = value;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Starting month',
+                          labelStyle:
+                              MyTheme.darkTheme.textTheme.bodyLarge!.copyWith(
+                            color: Colors.grey,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade300,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Visibility(
+                  visible: selectedFrequency == 'Fortnightly',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 20),
+                      Text('Select Day of the Week'),
+                      DropdownButtonFormField<String>(
+                        value: selectedDayOfWeekFortnightly,
+                        items: [
+                          'Monday',
+                          'Tuesday',
+                          'Wednesday',
+                          'Thursday',
+                          'Friday',
+                          'Saturday',
+                          'Sunday',
+                        ].map<DropdownMenuItem<String>>(
+                          (String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedDayOfWeekFortnightly = value;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Select day of the week',
+                          labelStyle:
+                              MyTheme.darkTheme.textTheme.bodyLarge!.copyWith(
+                            color: Colors.grey,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade300,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text('Select Number of the Week'),
+                      DropdownButtonFormField<int>(
+                        value: selectedWeekNumberFortnightly,
+                        items: [1, 2].map<DropdownMenuItem<int>>(
+                          (int value) {
+                            return DropdownMenuItem<int>(
+                              value: value,
+                              child: Text('Every week $value'),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (int? value) {
+                          setState(() {
+                            selectedWeekNumberFortnightly = value;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Select week',
+                          labelStyle:
+                              MyTheme.darkTheme.textTheme.bodyLarge!.copyWith(
+                            color: Colors.grey,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade300,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Visibility(
+                  visible: selectedFrequency == 'Monthly',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 20),
+                      Text('Select Day of the Month'),
+                      DropdownButtonFormField<int>(
+                        value: selectedDayOfMonth,
+                        items: List.generate(31, (index) => index + 1)
+                            .map<DropdownMenuItem<int>>(
+                          (int value) {
+                            return DropdownMenuItem<int>(
+                              value: value,
+                              child: Text(value.toString()),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (int? value) {
+                          setState(() {
+                            selectedDayOfMonth = value;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Select date',
+                          labelStyle:
+                              MyTheme.darkTheme.textTheme.bodyLarge!.copyWith(
+                            color: Colors.grey,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade300,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                      Text('Select Day of the Week'),
+                      DropdownButtonFormField<String>(
+                        value: selectedDayOfWeekMonthly,
+                        items: [
+                          'Monday',
+                          'Tuesday',
+                          'Wednesday',
+                          'Thursday',
+                          'Friday',
+                          'Saturday',
+                          'Sunday',
+                        ].map<DropdownMenuItem<String>>(
+                          (String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedDayOfWeekMonthly = value;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Select day',
+                          labelStyle:
+                              MyTheme.darkTheme.textTheme.bodyLarge!.copyWith(
+                            color: Colors.grey,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade300,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 20),
+                Visibility(
+                  visible: selectedFrequency == 'Weekly',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Select Day of the Week'),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      DropdownButtonFormField<String>(
+                        value: selectedDayOfWeek,
+                        items: [
+                          'Monday',
+                          'Tuesday',
+                          'Wednesday',
+                          'Thursday',
+                          'Friday',
+                          'Saturday',
+                          'Sunday',
+                        ].map<DropdownMenuItem<String>>(
+                          (String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedDayOfWeek = value;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: 'Select day of the week',
+                          labelStyle:
+                              MyTheme.darkTheme.textTheme.bodyLarge!.copyWith(
+                            color: Colors.grey,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.grey.shade300,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.grey,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 const Text('Select unit to set rent'),
                 Container(
                   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -498,40 +789,6 @@ class _AddRentState extends State<AddRent> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('View'),
-                    GestureDetector(
-                      onTap: _showDialog,
-                      child: Text(
-                        'or Add utilities',
-                        style: TextStyle(color: primaryDarkColor),
-                      ),
-                    )
-                  ],
-                ),
-
-                SizedBox(height: 20),
-                ListTile(
-                  shape: Border.all(color: primaryDarkColor.withOpacity(0.1)),
-                  leading: Container(
-                    decoration: BoxDecoration(
-                      color: const Color.fromRGBO(13, 201, 150, 1)
-                          .withOpacity(0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    padding: const EdgeInsets.all(8),
-                    child: const Icon(
-                      Icons.check,
-                      color: Color.fromRGBO(13, 201, 150, 1),
-                    ),
-                  ),
-                  title: Text('Utility: $utility'),
-                  subtitle: Text('Amount: KES $amount'),
-                ),
-
-                const SizedBox(height: 20),
                 Text(
                     'Do you want to invoice previous rent during monthly invoicing?'),
                 Row(
@@ -555,33 +812,6 @@ class _AddRentState extends State<AddRent> {
                     ))
                   ],
                 ),
-                // const SizedBox(height: 24),
-                // Text(
-                //     "Do you wish to display this contribution in the tenant's statement report?"),
-                // Row(
-                //   children: [
-                //     Checkbox(
-                //       checkColor: Colors.white,
-                //       // fillColor: Colors.green,
-                //       value: displayContributionBool,
-                //       onChanged: (bool? value) {
-                //         setState(() {
-                //           displayContributionBool = value!;
-                //         });
-                //       },
-                //     ),
-                //     Expanded(
-                //       child: Text(
-                //         "Display contribution in the tenant's statement",
-                //         style: Theme.of(context)
-                //             .textTheme
-                //             .bodySmall!
-                //             .copyWith(color: Colors.black.withOpacity(0.5)),
-                //       ),
-                //     )
-                //   ],
-                // ),
-                // const SizedBox(height: 24),
                 Row(
                   children: [
                     Expanded(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:x_rent/constants/color_contants.dart';
+import 'package:x_rent/screens/dashboard/transactions.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/screens/dashboard/propertyDetails.dart';
@@ -595,10 +597,19 @@ class _HomeState extends State<Home> {
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    PersistentNavBarNavigator.pushNewScreen(context,
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                        withNavBar: false,
+                        screen: Transactions());
+                  },
                   child: Text(
-                    'All',
-                    style: Theme.of(context).textTheme.bodySmall,
+                    'View All',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: primaryDarkColor),
                   ),
                 ),
               ],

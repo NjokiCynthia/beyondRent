@@ -40,7 +40,7 @@ class _DashboardState extends State<Dashboard> {
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.list),
-        title: ("Transactions"),
+        title: ("Invoices"),
         activeColorPrimary: mintyGreen,
         inactiveColorPrimary: Colors.grey,
       ),

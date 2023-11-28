@@ -5,7 +5,7 @@ import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
-import 'package:x_rent/property/add_unit.dart';
+import 'package:x_rent/property/unit_setup.dart';
 import 'package:x_rent/property/tenant_setup.dart';
 import 'package:provider/provider.dart';
 
