@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:x_rent/constants/color_contants.dart';
+import 'package:x_rent/screens/dashboard/invoices/create_invoice.dart';
 
 class ListInvoices extends StatefulWidget {
   const ListInvoices({super.key});
@@ -19,9 +21,33 @@ class _ListInvoicesState extends State<ListInvoices> {
           Icons.arrow_back_ios,
           color: primaryDarkColor,
         ),
-        title: Text(
-          'Invoices sent',
-          style: TextStyle(color: Colors.black, fontSize: 16),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Invoices sent',
+              style: TextStyle(color: Colors.black, fontSize: 16),
+            ),
+            GestureDetector(
+              onTap: () {
+                PersistentNavBarNavigator.pushNewScreen(context,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                    withNavBar: false,
+                    screen: CreateInvoice());
+              },
+              child: Container(
+                  decoration: BoxDecoration(
+                      color: primaryDarkColor.withOpacity(0.1),
+                      shape: BoxShape.circle),
+                  child: Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Icon(
+                      Icons.add,
+                      color: primaryDarkColor,
+                    ),
+                  )),
+            )
+          ],
         ),
       ),
       body: SafeArea(
@@ -85,8 +111,9 @@ class _ListInvoicesState extends State<ListInvoices> {
                               children: [
                                 Text(
                                   'House 1',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.normal),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 13),
                                 ),
                                 Text(
                                   'KES 20,000',
