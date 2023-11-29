@@ -12,8 +12,7 @@ class MyTheme {
     fontFamily: Strings.fontName,
     bottomSheetTheme:
         const BottomSheetThemeData(backgroundColor: primaryDarkColor),
-    appBarTheme:
-        const AppBarTheme(backgroundColor: primaryDarkColor, elevation: 0),
+    appBarTheme: const AppBarTheme(backgroundColor: backColor, elevation: 0),
     inputDecorationTheme: InputDecorationTheme(
       isDense: true,
       border: OutlineInputBorder(
