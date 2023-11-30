@@ -31,7 +31,7 @@ class _SettingsState extends State<Settings> {
       backgroundColor: Colors.grey.withOpacity(0.1),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(10),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -44,7 +44,6 @@ class _SettingsState extends State<Settings> {
                     borderRadius: BorderRadius.circular(
                         10.0), // Adjust the radius as needed
                   ),
-                  elevation: 2,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -109,7 +108,7 @@ class _SettingsState extends State<Settings> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 10), // Adjust the spacing
+
                 GestureDetector(
                   onTap: () {
                     PersistentNavBarNavigator.pushNewScreen(
@@ -125,7 +124,6 @@ class _SettingsState extends State<Settings> {
                       borderRadius: BorderRadius.circular(
                           10.0), // Adjust the radius as needed
                     ),
-                    elevation: 2,
                     child: ListTile(
                       leading: Container(
                         decoration: BoxDecoration(
@@ -152,10 +150,7 @@ class _SettingsState extends State<Settings> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 10, // Adjust spacing between card and reminders card
-                ),
-                const SizedBox(height: 10), // Adjust the spacing
+
                 GestureDetector(
                   onTap: () {
                     PersistentNavBarNavigator.pushNewScreen(
@@ -171,7 +166,6 @@ class _SettingsState extends State<Settings> {
                       borderRadius: BorderRadius.circular(
                           10.0), // Adjust the radius as needed
                     ),
-                    elevation: 2,
                     child: ListTile(
                       leading: Container(
                         decoration: BoxDecoration(
@@ -198,9 +192,7 @@ class _SettingsState extends State<Settings> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 10, // Adjust spacing between card and reminders card
-                ),
+
                 GestureDetector(
                   onTap: () {
                     PersistentNavBarNavigator.pushNewScreen(
@@ -216,7 +208,6 @@ class _SettingsState extends State<Settings> {
                       borderRadius: BorderRadius.circular(
                           10.0), // Adjust the radius as needed
                     ),
-                    elevation: 2,
                     child: ListTile(
                       leading: Container(
                         decoration: BoxDecoration(
@@ -243,9 +234,7 @@ class _SettingsState extends State<Settings> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 10, // Adjust spacing between card and reminders card
-                ),
+
                 GestureDetector(
                   onTap: () {
                     PersistentNavBarNavigator.pushNewScreen(
@@ -261,7 +250,6 @@ class _SettingsState extends State<Settings> {
                       borderRadius: BorderRadius.circular(
                           10.0), // Adjust the radius as needed
                     ),
-                    elevation: 2,
                     child: ListTile(
                       leading: Container(
                         decoration: BoxDecoration(
@@ -286,15 +274,11 @@ class _SettingsState extends State<Settings> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 10, // Adjust spacing between card and reminders card
-                ),
 
                 Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  elevation: 2,
                   child: ListTile(
                     leading: Container(
                       decoration: BoxDecoration(
@@ -345,7 +329,6 @@ class _SettingsState extends State<Settings> {
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        elevation: 2,
                       ),
                     ),
                   ),

@@ -340,16 +340,22 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
                       ),
                       Column(
                         children: [
+                          SizedBox(
+                            height: 10,
+                          ),
                           if (bills.isNotEmpty)
                             ListView.builder(
                               shrinkWrap: true,
                               itemCount: bills.length,
                               itemBuilder: (BuildContext context, int index) {
                                 Map<String, dynamic> bill = bills[index];
-                                return buildUtilityListTile(
-                                  bill['billName'],
-                                  bill['billOption'],
-                                  bill['amount'],
+                                return Padding(
+                                  padding: EdgeInsets.only(top: 10),
+                                  child: buildUtilityListTile(
+                                    bill['billName'],
+                                    bill['billOption'],
+                                    bill['amount'],
+                                  ),
                                 );
                               },
                             )
@@ -460,7 +466,10 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
   ListTile buildUtilityListTile(
       String billName, String billOption, String amount) {
     return ListTile(
-      shape: Border.all(color: primaryDarkColor.withOpacity(0.1)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0), // Adjust the value as needed
+        side: BorderSide(color: primaryDarkColor.withOpacity(0.1)),
+      ),
       leading: Container(
         decoration: BoxDecoration(
           color: const Color.fromRGBO(13, 201, 150, 1).withOpacity(0.1),
