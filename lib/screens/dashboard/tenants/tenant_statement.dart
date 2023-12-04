@@ -126,6 +126,10 @@ class _TenantStatementState extends State<TenantStatement> {
             Expanded(
               child: SingleChildScrollView(
                 child: Table(
+                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                  columnWidths: {
+                    0: FixedColumnWidth(130.0), // Adjust the width as needed
+                  },
                   border: TableBorder.all(
                       color: const Color.fromARGB(255, 237, 235, 235)),
                   children: [
