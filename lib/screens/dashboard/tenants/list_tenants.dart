@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:x_rent/constants/color_contants.dart';
+import 'package:x_rent/screens/dashboard/tenants/tenant_statement.dart';
 
 class ListTenants extends StatefulWidget {
   const ListTenants({super.key});
@@ -10,6 +13,132 @@ class ListTenants extends StatefulWidget {
 class _ListTenantsState extends State<ListTenants> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: backColor.withOpacity(0.02),
+        elevation: 0,
+        leading: Icon(
+          Icons.arrow_back_ios,
+          color: primaryDarkColor,
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Tenant Statements',
+              style: TextStyle(color: Colors.black, fontSize: 16),
+            ),
+            // Container(
+            //     decoration: BoxDecoration(
+            //         color: primaryDarkColor.withOpacity(0.1),
+            //         shape: BoxShape.circle),
+            //     child: Padding(
+            //       padding: EdgeInsets.all(8),
+            //       child: Icon(
+            //         Icons.check,
+            //         color: primaryDarkColor,
+            //       ),
+            //     )),
+          ],
+        ),
+      ),
+      body: SafeArea(
+          child: Padding(
+              padding: EdgeInsets.all(10),
+              child: ListView.builder(
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: 10),
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              PersistentNavBarNavigator.pushNewScreen(context,
+                                  withNavBar: false,
+                                  pageTransitionAnimation:
+                                      PageTransitionAnimation.cupertino,
+                                  screen: TenantStatement());
+                            },
+                            child: ListTile(
+                              leading: Container(
+                                  decoration: BoxDecoration(
+                                      color: primaryDarkColor.withOpacity(0.1),
+                                      shape: BoxShape.circle),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Icon(
+                                      Icons.person,
+                                      color: primaryDarkColor,
+                                    ),
+                                  )),
+                              title: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Tenant A'),
+                                      Text('079198765')
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'House 1',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 13,
+                                            color: Colors.grey),
+                                      ),
+                                      Text(
+                                        'tenant@gmail.com',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 13,
+                                            color: Colors.grey),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              subtitle: Padding(
+                                padding: EdgeInsets.only(top: 10, bottom: 5),
+                                child: Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          color: primaryDarkColor
+                                              .withOpacity(0.1)),
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 10,
+                                            right: 10,
+                                            top: 2,
+                                            bottom: 2),
+                                        child: Text(
+                                          'View rent statement',
+                                          style: TextStyle(
+                                              color: primaryDarkColor,
+                                              fontSize: 12),
+                                        ),
+                                      )),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Divider(
+                            color: Color.fromARGB(255, 219, 218, 218),
+                            height: 1,
+                          )
+                        ],
+                      ),
+                    );
+                  }))),
+    );
   }
 }

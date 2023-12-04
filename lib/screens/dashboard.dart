@@ -4,6 +4,7 @@ import 'package:x_rent/screens/dashboard/home.dart';
 import 'package:x_rent/screens/dashboard/invoices.dart';
 import 'package:x_rent/screens/dashboard/invoices/list_invoices.dart';
 import 'package:x_rent/screens/dashboard/profile.dart';
+import 'package:x_rent/screens/dashboard/tenants/list_tenants.dart';
 import 'package:x_rent/screens/dashboard/units.dart';
 import 'package:x_rent/screens/dashboard/transactions.dart';
 import 'package:x_rent/utilities/constants.dart';
@@ -19,8 +20,9 @@ class _DashboardState extends State<Dashboard> {
   List<Widget> _buildScreens() {
     return [
       const Home(),
+      const ListTenants(),
       const Units(),
-      ListInvoices(),
+      const ListInvoices(),
       const Settings(),
     ];
   }
@@ -30,6 +32,12 @@ class _DashboardState extends State<Dashboard> {
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.home),
         title: ("Home"),
+        activeColorPrimary: mintyGreen,
+        inactiveColorPrimary: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(Icons.people_outline_outlined),
+        title: ("Tenants"),
         activeColorPrimary: mintyGreen,
         inactiveColorPrimary: Colors.grey,
       ),
