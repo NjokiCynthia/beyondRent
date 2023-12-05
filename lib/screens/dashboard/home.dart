@@ -22,7 +22,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool transactionListLoaded = false;
-  List transactionsList = [];
+  List<Map<String, dynamic>> transactionsList = [];
 
   fetchTransactionsList() async {
     print('I am here to load transactions');
@@ -47,15 +47,21 @@ class _HomeState extends State<Home> {
 
     try {
       var response = await apiClient.post(
-          '/mobile/contributions/get_property_contributions', postData,
-          headers: headers);
+        '/mobile/contributions/get_property_contributions',
+        postData,
+        headers: headers,
+      );
+
       var responseStatus = response['response']['status'];
 
       if (responseStatus == 1) {
         print('These are my transaction details below here >>>>>>>>>>>');
         print(response['response']['contributions']);
+
         setState(() {
-          transactionsList = response['response']['contributions'];
+          transactionsList = List<Map<String, dynamic>>.from(
+            response['response']['contributions'],
+          );
         });
       }
     } catch (e) {
@@ -86,7 +92,7 @@ class _HomeState extends State<Home> {
 
     final postData = {
       "property_id": propertyProvider.property?.id,
-      "month": selectedMonth,
+      "month": selectedMonth.toString(),
     };
     print('This is my property id here');
     print(
@@ -731,23 +737,29 @@ class _HomeState extends State<Home> {
             ),
           ),
           const SizedBox(height: 20),
-          trasactionList.isEmpty
-              ? const EmptyTransactions()
-              : const SizedBox(height: 20),
           Expanded(
-            child: transactionsList.isEmpty
-                ? const EmptyTransactions()
-                : ListView.builder(
-                    itemCount: transactionsList.length,
-                    itemBuilder: (context, index) {
-                      var transaction = transactionsList[index];
-                      return TransactionCard(
-                        name: transaction['name'] ?? 'Tenant',
-                        date: transaction['contribution_date'] ?? '',
-                        amount: transaction['amount'] ?? 0,
-                      );
-                    },
-                  ),
+            child: transactionsList == false
+                ? Center(
+                    child: SizedBox(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 4,
+                        color: mintyGreen,
+                      ),
+                    ),
+                  )
+                : transactionsList.isEmpty
+                    ? const EmptyTransactions()
+                    : ListView.builder(
+                        itemCount: transactionsList.length,
+                        itemBuilder: (context, index) {
+                          var transaction = transactionsList[index];
+                          return TransactionCard(
+                              name: transaction['name'] ?? 'Tenant',
+                              date: transaction['contribution_date'] ?? '',
+                              amount: transaction['amount'] ?? 0,
+                              type: transaction['type'] ?? "");
+                        },
+                      ),
           ),
         ],
       ),

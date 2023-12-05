@@ -33,6 +33,23 @@ class EmptyTenants extends StatelessWidget {
   }
 }
 
+class EmptyInvoices extends StatelessWidget {
+  const EmptyInvoices({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Image.asset('assets/illustrations/transaction.png', width: 250),
+        Text(
+          'Invoice list empty.',
+          style: Theme.of(context).textTheme.bodyMedium,
+          textAlign: TextAlign.center,
+        )
+      ],
+    );
+  }
+}
+
 class EmptyUnits extends StatelessWidget {
   const EmptyUnits({Key? key}) : super(key: key);
   @override
@@ -355,13 +372,15 @@ class ProgressBar extends StatelessWidget {
 class TransactionCard extends StatelessWidget {
   final String? name;
   final String? date;
-  final num? amount;
+  final String? amount;
+  final String? type;
   final ValueSetter<dynamic>? callback;
   const TransactionCard({
     super.key,
     this.name,
     this.date,
     this.amount,
+    this.type,
     this.callback,
   });
 
@@ -432,11 +451,11 @@ class TransactionCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'KES. 40,000',
+                        'KES. $amount',
                         style: Theme.of(context).textTheme.labelMedium,
                       ),
                       Text(
-                        'House Rent',
+                        '$type',
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(
                               fontSize: 12,
                             ),

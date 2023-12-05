@@ -126,69 +126,88 @@ class _ListTenantsState extends State<ListTenants> {
                                             color: primaryDarkColor,
                                           ),
                                         )),
-                                    title: Column(
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              '${tenantList[index]['first_name']} ${tenantList[index]['last_name']}',
-                                            ),
-                                            Text(
-                                              '${tenantList[index]['phone']}',
-                                            )
-                                          ],
+                                        Text(
+                                          '${tenantList[index]['first_name']} ${tenantList[index]['last_name']}',
                                         ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              'House 1',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  fontSize: 13,
-                                                  color: Colors.grey),
-                                            ),
-                                            Text(
-                                              '${tenantList[index]['email']}' ??
-                                                  " ",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  fontSize: 13,
-                                                  color: Colors.grey),
-                                            ),
-                                          ],
+                                        Text(
+                                          '${tenantList[index]['phone']}',
                                         )
                                       ],
                                     ),
+
                                     subtitle: Padding(
-                                      padding:
-                                          EdgeInsets.only(top: 10, bottom: 5),
-                                      child: Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                color: primaryDarkColor
-                                                    .withOpacity(0.1)),
-                                            child: Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: 10,
-                                                  right: 10,
-                                                  top: 2,
-                                                  bottom: 2),
-                                              child: Text(
-                                                'View rent statement',
-                                                style: TextStyle(
-                                                    color: primaryDarkColor,
-                                                    fontSize: 12),
-                                              ),
-                                            )),
+                                      padding: EdgeInsets.only(top: 10),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'House 1',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 13,
+                                                color: Colors.grey),
+                                          ),
+                                          // Text(
+                                          //   '${tenantList[index]['email']}' ??
+                                          //       " ",
+                                          //   style: TextStyle(
+                                          //       fontWeight: FontWeight.normal,
+                                          //       fontSize: 13,
+                                          //       color: Colors.grey),
+                                          // ),
+                                          Container(
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  color: primaryDarkColor
+                                                      .withOpacity(0.1)),
+                                              child: Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 10,
+                                                    right: 10,
+                                                    top: 2,
+                                                    bottom: 2),
+                                                child: Text(
+                                                  'View rent statement',
+                                                  style: TextStyle(
+                                                      color: primaryDarkColor,
+                                                      fontSize: 12),
+                                                ),
+                                              ))
+                                        ],
                                       ),
                                     ),
+                                    // subtitle: Padding(
+                                    //   padding:
+                                    //       EdgeInsets.only(top: 10, bottom: 5),
+                                    //   child: Align(
+                                    //     alignment: Alignment.bottomRight,
+                                    //     child: Container(
+                                    //         decoration: BoxDecoration(
+                                    //             borderRadius:
+                                    //                 BorderRadius.circular(12),
+                                    //             color: primaryDarkColor
+                                    //                 .withOpacity(0.1)),
+                                    //         child: Padding(
+                                    //           padding: EdgeInsets.only(
+                                    //               left: 10,
+                                    //               right: 10,
+                                    //               top: 2,
+                                    //               bottom: 2),
+                                    //           child: Text(
+                                    //             'View rent statement',
+                                    //             style: TextStyle(
+                                    //                 color: primaryDarkColor,
+                                    //                 fontSize: 12),
+                                    //           ),
+                                    //         )),
+                                    //   ),
+                                    // ),
                                   ),
                                 ),
                                 Divider(

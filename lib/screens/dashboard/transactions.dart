@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:x_rent/providers/property_provider.dart';
+import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/constants/theme.dart';
@@ -11,6 +14,66 @@ class Transactions extends StatefulWidget {
 }
 
 class _TransactionsState extends State<Transactions> {
+  bool transactionListLoaded = false;
+  List<Map<String, dynamic>> transactionsList = [];
+
+  fetchTransactionsList() async {
+    print('I am here to load transactions');
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
+    final token = userProvider.user?.token;
+
+    final postData = {"property_id": propertyProvider.property?.id};
+    print('This is my property id while fetching transactions');
+    print(propertyProvider.property?.id);
+    final apiClient = ApiClient();
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    try {
+      var response = await apiClient.post(
+        '/mobile/contributions/get_property_contributions',
+        postData,
+        headers: headers,
+      );
+
+      var responseStatus = response['response']['status'];
+
+      if (responseStatus == 1) {
+        print('These are my transaction details below here >>>>>>>>>>>');
+        print(response['response']['contributions']);
+
+        setState(() {
+          transactionsList = List<Map<String, dynamic>>.from(
+            response['response']['contributions'],
+          );
+        });
+      }
+    } catch (e) {
+      print('Error');
+      print(e);
+    }
+
+    setState(() {
+      transactionListLoaded = true;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    fetchTransactionsList();
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget paymentModalContent = Column(
@@ -244,13 +307,27 @@ class _TransactionsState extends State<Transactions> {
                 },
               ),
               Expanded(
-                child: ListView.builder(itemBuilder: ((context, index) {
-                  return TransactionCard(
-                    name: 'Tenant',
-                    date: '22nd, Nov 2023',
-                    amount: 20000,
-                  );
-                })),
+                child: transactionListLoaded == false
+                    ? Center(
+                        child: SizedBox(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 4,
+                            color: mintyGreen,
+                          ),
+                        ),
+                      )
+                    : transactionsList.isEmpty
+                        ? const EmptyTransactions()
+                        : ListView.builder(
+                            itemCount: transactionsList.length,
+                            itemBuilder: ((context, index) {
+                              var transaction = transactionsList[index];
+                              return TransactionCard(
+                                  name: transaction['name'] ?? 'Tenant',
+                                  date: transaction['contribution_date'] ?? '',
+                                  amount: transaction['amount'] ?? 0,
+                                  type: transaction['type'] ?? '');
+                            })),
               )
               // Container(
               //   margin: const EdgeInsets.only(top: 50),
