@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:x_rent/constants/color_contants.dart';
+import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/screens/dashboard/transactions.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/screens/dashboard/propertyDetails.dart';
-import 'package:month_year_picker/month_year_picker.dart';
 import 'package:x_rent/property/add_property.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:intl/intl.dart';
@@ -21,8 +21,110 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  bool transactionListLoaded = false;
+  List transactionsList = [];
+
+  fetchTransactionsList() async {
+    print('I am here to load transactions');
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
+    final token = userProvider.user?.token;
+
+    final postData = {"property_id": propertyProvider.property?.id};
+    print('This is my property id while fetching transactions');
+    print(propertyProvider.property?.id);
+    final apiClient = ApiClient();
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    try {
+      var response = await apiClient.post(
+          '/mobile/contributions/get_property_contributions', postData,
+          headers: headers);
+      var responseStatus = response['response']['status'];
+
+      if (responseStatus == 1) {
+        print('These are my transaction details below here >>>>>>>>>>>');
+        print(response['response']['contributions']);
+        setState(() {
+          transactionsList = response['response']['contributions'];
+        });
+      }
+    } catch (e) {
+      print('Error');
+      print(e);
+    }
+
+    setState(() {
+      transactionListLoaded = true;
+    });
+  }
+
+  bool rentInfoLoaded = false;
+  Map<String, dynamic> rentInfo = {};
+
+  fetchRentInfo(int selectedMonth) async {
+    print('I am here trying to fetch rent info');
+    print('Fetching rent info for month $selectedMonth');
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
+    final token = userProvider.user?.token;
+
+    final postData = {
+      "property_id": propertyProvider.property?.id,
+      "month": selectedMonth,
+    };
+    print('This is my property id here');
+    print(
+      propertyProvider.property?.id,
+    );
+    final apiClient = ApiClient();
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      var response = await apiClient.post(
+        '/mobile/reports/rent_collected_per_month',
+        postData,
+        headers: headers,
+      );
+
+      var responseData = response['response'];
+      if (responseData != null) {
+        print('Rent Collected Details for the selected month >>>>>>>>>>>');
+        print(responseData);
+        setState(() {
+          rentInfo = responseData;
+        });
+      }
+    } catch (e) {
+      print('Error');
+      print(e);
+      print('Error in API call: $e');
+    }
+    setState(() {
+      rentInfoLoaded = true;
+    });
+  }
+
   DateTime selectedDate = DateTime.now();
   String currentMonth = '';
+  //String selectedMonth = '';
   List trasactionList = [];
   num currentYear = 2023;
 
@@ -80,8 +182,9 @@ class _HomeState extends State<Home> {
     borderRadius: BorderRadius.circular(4),
   );
 
-  void showMonthPickerModal(BuildContext context) {
-    showDialog(
+  Future<void> showMonthPickerModal(BuildContext context) async {
+    final selected = await showDialog<String>(
+      //showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -461,12 +564,23 @@ class _HomeState extends State<Home> {
         );
       },
     );
+
+    if (currentMonth != null) {
+      setState(() {
+        currentMonth = currentMonth;
+      });
+
+      // Call the fetchRentInfo function with the selected month
+      await fetchRentInfo(monthToNumber(currentMonth));
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    currentMonth = getMonthAbbreviation(selectedDate);
+    currentMonth = getMonthAbbreviation(DateTime.now());
+    fetchRentInfo(DateTime.now().month);
+    fetchTransactionsList();
   }
 
   @override
@@ -542,9 +656,10 @@ class _HomeState extends State<Home> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Total rent for November'),
+                Text('Total rent for $currentMonth'),
                 Text(
-                  'Ksh. 0',
+                  'KES. ${rentInfo['amount_expected']}',
+                  //'Ksh. 0',
                   style: Theme.of(context).textTheme.displayLarge,
                 ),
                 const SizedBox(height: 10),
@@ -568,11 +683,11 @@ class _HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Ksh. 0',
+                      'KES. ${rentInfo['amount_collected']}',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     Text(
-                      'Ksh. 0',
+                      'KES. ${rentInfo['amount_in_arrears']}',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],
@@ -616,20 +731,23 @@ class _HomeState extends State<Home> {
             ),
           ),
           const SizedBox(height: 20),
-          // trasactionList.isEmpty
-          //     ? const EmptyTransactions()
-          //     :
-
+          trasactionList.isEmpty
+              ? const EmptyTransactions()
+              : const SizedBox(height: 20),
           Expanded(
-            child: ListView.builder(
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return TransactionCard(
-                    name: 'Tenant',
-                    date: '22nd, Nov 2023',
-                    amount: 20000,
-                  );
-                }),
+            child: transactionsList.isEmpty
+                ? const EmptyTransactions()
+                : ListView.builder(
+                    itemCount: transactionsList.length,
+                    itemBuilder: (context, index) {
+                      var transaction = transactionsList[index];
+                      return TransactionCard(
+                        name: transaction['name'] ?? 'Tenant',
+                        date: transaction['contribution_date'] ?? '',
+                        amount: transaction['amount'] ?? 0,
+                      );
+                    },
+                  ),
           ),
         ],
       ),
@@ -820,5 +938,36 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  int monthToNumber(String monthAbbreviation) {
+    switch (monthAbbreviation) {
+      case 'Jan':
+        return 1;
+      case 'Feb':
+        return 2;
+      case 'Mar':
+        return 3;
+      case 'Apr':
+        return 4;
+      case 'May':
+        return 5;
+      case 'Jun':
+        return 6;
+      case 'Jul':
+        return 7;
+      case 'Aug':
+        return 8;
+      case 'Sep':
+        return 9;
+      case 'Oct':
+        return 10;
+      case 'Nov':
+        return 11;
+      case 'Dec':
+        return 12;
+      default:
+        return 1;
+    }
   }
 }
