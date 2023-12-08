@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:dio/dio.dart';
 
@@ -107,3 +108,5 @@ class ApiClient {
     }
   }
 }
+
+final currencyFormat = new NumberFormat("#,##0.00", "en_KE");

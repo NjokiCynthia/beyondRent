@@ -23,11 +23,11 @@ class _TenantStatementState extends State<TenantStatement> {
       appBar: AppBar(
         backgroundColor: backColor.withOpacity(0.02),
         elevation: 0,
-        leading: Icon(
+        leading: const Icon(
           Icons.arrow_back_ios,
           color: primaryDarkColor,
         ),
-        title: Row(
+        title: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
@@ -53,22 +53,22 @@ class _TenantStatementState extends State<TenantStatement> {
               ),
               child: ListTile(
                 leading: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         //color: primaryDarkColor.withOpacity(0.1),
                         color: Colors.white,
                         shape: BoxShape.circle),
                     child: Padding(
-                      padding: EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8),
                       child: Icon(
                         Icons.person_2_outlined,
                         color: primaryDarkColor.withOpacity(0.5),
                       ),
                     )),
-                title: Text(
+                title: const Text(
                   'Tenant A',
                   style: TextStyle(fontSize: 16),
                 ),
-                subtitle: Column(
+                subtitle: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -83,10 +83,10 @@ class _TenantStatementState extends State<TenantStatement> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.all(10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -120,7 +120,7 @@ class _TenantStatementState extends State<TenantStatement> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Expanded(
@@ -128,19 +128,19 @@ class _TenantStatementState extends State<TenantStatement> {
                 child: Table(
                   defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                   columnWidths: {
-                    0: FixedColumnWidth(130.0), // Adjust the width as needed
+                    0: const FixedColumnWidth(130.0), // Adjust the width as needed
                   },
                   border: TableBorder.all(
                       color: const Color.fromARGB(255, 237, 235, 235)),
                   children: [
-                    TableRow(
+                    const TableRow(
                       decoration: BoxDecoration(
                         color: primaryDarkColor,
                       ),
                       children: [
                         TableCell(
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
                             child: Center(
                               child: Text(
                                 'Date',
@@ -154,7 +154,7 @@ class _TenantStatementState extends State<TenantStatement> {
                         ),
                         TableCell(
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
                             child: Center(
                               child: Text(
                                 'Due(KES)',
@@ -168,7 +168,7 @@ class _TenantStatementState extends State<TenantStatement> {
                         ),
                         TableCell(
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
                             child: Center(
                               child: Text(
                                 'Paid(KES)',
@@ -182,7 +182,7 @@ class _TenantStatementState extends State<TenantStatement> {
                         ),
                         TableCell(
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
                             child: Center(
                               child: Text(
                                 'Bal(KES)',
@@ -211,15 +211,15 @@ class _TenantStatementState extends State<TenantStatement> {
                               child: Text(statement['amount'].toString()),
                             ),
                           ),
-                          TableCell(
+                          const TableCell(
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.all(8.0),
                               child: Text('4500'), // Add paid amount logic here
                             ),
                           ),
-                          TableCell(
+                          const TableCell(
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.all(8.0),
                               child: Text('500'),
                             ),
                           ),

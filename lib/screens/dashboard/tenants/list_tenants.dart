@@ -69,11 +69,11 @@ class _ListTenantsState extends State<ListTenants> {
       appBar: AppBar(
         backgroundColor: backColor.withOpacity(0.02),
         elevation: 0,
-        leading: Icon(
+        leading: const Icon(
           Icons.arrow_back_ios,
           color: primaryDarkColor,
         ),
-        title: Row(
+        title: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
@@ -85,7 +85,7 @@ class _ListTenantsState extends State<ListTenants> {
       ),
       body: SafeArea(
         child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: tenantListLoaded == false
                 ? Center(
                     child: SizedBox(
@@ -101,7 +101,7 @@ class _ListTenantsState extends State<ListTenants> {
                         itemCount: tenantList.length,
                         itemBuilder: (context, index) {
                           return Padding(
-                            padding: EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.only(bottom: 10),
                             child: Column(
                               children: [
                                 GestureDetector(
@@ -111,7 +111,7 @@ class _ListTenantsState extends State<ListTenants> {
                                         withNavBar: false,
                                         pageTransitionAnimation:
                                             PageTransitionAnimation.cupertino,
-                                        screen: TenantStatement());
+                                        screen: const TenantStatement());
                                   },
                                   child: ListTile(
                                     leading: Container(
@@ -119,7 +119,7 @@ class _ListTenantsState extends State<ListTenants> {
                                             color: primaryDarkColor
                                                 .withOpacity(0.1),
                                             shape: BoxShape.circle),
-                                        child: Padding(
+                                        child: const Padding(
                                           padding: EdgeInsets.all(8),
                                           child: Icon(
                                             Icons.person,
@@ -140,12 +140,12 @@ class _ListTenantsState extends State<ListTenants> {
                                     ),
 
                                     subtitle: Padding(
-                                      padding: EdgeInsets.only(top: 10),
+                                      padding: const EdgeInsets.only(top: 10),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
+                                          const Text(
                                             'House 1',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.normal,
@@ -166,7 +166,7 @@ class _ListTenantsState extends State<ListTenants> {
                                                       BorderRadius.circular(12),
                                                   color: primaryDarkColor
                                                       .withOpacity(0.1)),
-                                              child: Padding(
+                                              child: const Padding(
                                                 padding: EdgeInsets.only(
                                                     left: 10,
                                                     right: 10,
@@ -210,7 +210,7 @@ class _ListTenantsState extends State<ListTenants> {
                                     // ),
                                   ),
                                 ),
-                                Divider(
+                                const Divider(
                                   color: Color.fromARGB(255, 219, 218, 218),
                                   height: 1,
                                 )

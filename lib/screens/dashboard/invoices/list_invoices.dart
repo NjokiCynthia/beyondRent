@@ -71,14 +71,14 @@ class _ListInvoicesState extends State<ListInvoices> {
       appBar: AppBar(
         backgroundColor: backColor.withOpacity(0.02),
         elevation: 0,
-        leading: Icon(
+        leading: const Icon(
           Icons.arrow_back_ios,
           color: primaryDarkColor,
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               'Invoices sent',
               style: TextStyle(color: Colors.black, fontSize: 16),
             ),
@@ -87,13 +87,13 @@ class _ListInvoicesState extends State<ListInvoices> {
                 PersistentNavBarNavigator.pushNewScreen(context,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                     withNavBar: false,
-                    screen: CreateInvoice());
+                    screen: const CreateInvoice());
               },
               child: Container(
                   decoration: BoxDecoration(
                       color: primaryDarkColor.withOpacity(0.1),
                       shape: BoxShape.circle),
-                  child: Padding(
+                  child: const Padding(
                     padding: EdgeInsets.all(8),
                     child: Icon(
                       Icons.add,
@@ -106,7 +106,7 @@ class _ListInvoicesState extends State<ListInvoices> {
       ),
       body: SafeArea(
           child: Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: invoiceListLoaded == false
                   ? Center(
                       child: SizedBox(
@@ -123,9 +123,9 @@ class _ListInvoicesState extends State<ListInvoices> {
                           itemBuilder: (context, index) {
                             var invoice = invoiceList[index];
                             return Padding(
-                              padding: EdgeInsets.only(bottom: 10),
+                              padding: const EdgeInsets.only(bottom: 10),
                               child: Container(
-                                padding: EdgeInsets.all(10),
+                                padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.fromBorderSide(BorderSide(
@@ -141,10 +141,10 @@ class _ListInvoicesState extends State<ListInvoices> {
                                   children: [
                                     Text(
                                       '${invoice['type']}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.grey, fontSize: 13),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 5,
                                     ),
                                     Text(invoice['tenant']),
@@ -154,7 +154,7 @@ class _ListInvoicesState extends State<ListInvoices> {
                                       children: [
                                         Text(
                                           invoice['invoice_date'],
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               color: Colors.grey, fontSize: 12),
                                         ),
                                         Container(
@@ -164,14 +164,14 @@ class _ListInvoicesState extends State<ListInvoices> {
                                               borderRadius:
                                                   BorderRadius.circular(10)),
                                           child: Padding(
-                                            padding: EdgeInsets.only(
+                                            padding: const EdgeInsets.only(
                                                 left: 10,
                                                 right: 10,
                                                 top: 2,
                                                 bottom: 2),
                                             child: Text(
                                               'KES ${invoice['amount_payable']}',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   color: primaryDarkColor,
                                                   fontSize: 14),
                                             ),
@@ -179,20 +179,20 @@ class _ListInvoicesState extends State<ListInvoices> {
                                         ),
                                       ],
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 5,
                                     ),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
+                                        const Text(
                                           'Invoice due date',
                                           style: TextStyle(fontSize: 12),
                                         ),
                                         Text(
                                           invoice['due_date'],
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               color: Colors.grey, fontSize: 12),
                                         )
                                       ],

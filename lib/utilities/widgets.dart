@@ -330,17 +330,19 @@ class DashboardAppbar extends StatelessWidget {
   }
 }
 
-// Progress Bar
 class ProgressBar extends StatelessWidget {
-  final double? progress;
-  final ValueSetter<dynamic>? callback;
+  final int? collectedAmount;
+  final int? expectedAmount;
+
   const ProgressBar({
-    super.key,
-    this.progress,
-    this.callback,
+    this.collectedAmount,
+    this.expectedAmount,
   });
+
   @override
   Widget build(BuildContext context) {
+    double percentage = (collectedAmount ?? 0) / (expectedAmount ?? 1) * 100;
+
     return Stack(
       children: [
         FractionallySizedBox(
@@ -354,7 +356,7 @@ class ProgressBar extends StatelessWidget {
           ),
         ),
         FractionallySizedBox(
-          widthFactor: progress! / 100,
+          widthFactor: percentage / 100,
           child: Container(
             height: 10,
             decoration: BoxDecoration(
@@ -367,6 +369,44 @@ class ProgressBar extends StatelessWidget {
     );
   }
 }
+
+// // Progress Bar
+// class ProgressBar extends StatelessWidget {
+//   final double? progress;
+//   final ValueSetter<dynamic>? callback;
+//   const ProgressBar({
+//     super.key,
+//     this.progress,
+//     this.callback,
+//   });
+//   @override
+//   Widget build(BuildContext context) {
+//     return Stack(
+//       children: [
+//         FractionallySizedBox(
+//           widthFactor: 1,
+//           child: Container(
+//             height: 10,
+//             decoration: BoxDecoration(
+//               color: Colors.black.withOpacity(0.1),
+//               borderRadius: BorderRadius.circular(10),
+//             ),
+//           ),
+//         ),
+//         FractionallySizedBox(
+//           widthFactor: progress! / 100,
+//           child: Container(
+//             height: 10,
+//             decoration: BoxDecoration(
+//               color: mintyGreen,
+//               borderRadius: BorderRadius.circular(10),
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 // Transaction card
 class TransactionCard extends StatelessWidget {
@@ -421,7 +461,7 @@ class TransactionCard extends StatelessWidget {
             ),
             child: Text(
               firstLetter,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -908,7 +948,7 @@ class InvoiceCard extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             Text(
-              '\Kes ${invoice.amount.toStringAsFixed(2)}',
+              'Kes ${invoice.amount.toStringAsFixed(2)}',
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],

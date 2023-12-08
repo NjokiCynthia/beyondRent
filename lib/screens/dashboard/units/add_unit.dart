@@ -147,7 +147,7 @@ class _AddUnitState extends State<AddUnit> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Color.fromRGBO(247, 247, 247, 1),
     ));
     final propertyProvider = Provider.of<PropertyProvider>(
@@ -442,7 +442,7 @@ class _AddUnitState extends State<AddUnit> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: ((context) => Units()),
+                                    builder: ((context) => const Units()),
                                   ),
                                 );
                               });

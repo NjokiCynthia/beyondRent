@@ -106,7 +106,7 @@ class _AddRentState extends State<AddRent> {
         return AlertDialog(
           content: TextFormField(
             controller: customFrequencyController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Custom Frequency',
             ),
           ),
@@ -115,7 +115,7 @@ class _AddRentState extends State<AddRent> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
@@ -133,7 +133,7 @@ class _AddRentState extends State<AddRent> {
                 }
                 Navigator.of(context).pop();
               },
-              child: Text('Add'),
+              child: const Text('Add'),
             ),
           ],
         );
@@ -158,7 +158,7 @@ class _AddRentState extends State<AddRent> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Color.fromRGBO(247, 247, 247, 1),
     ));
     final propertyProvider = Provider.of<PropertyProvider>(
@@ -225,7 +225,7 @@ class _AddRentState extends State<AddRent> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Text('What is the preferred payment frequency?'),
+                const Text('What is the preferred payment frequency?'),
                 const SizedBox(height: 10),
                 DropdownButtonFormField<String>(
                   value: selectedFrequency,
@@ -294,8 +294,8 @@ class _AddRentState extends State<AddRent> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 20),
-                      Text('Select Day of the Week'),
+                      const SizedBox(height: 20),
+                      const Text('Select Day of the Week'),
                       DropdownButtonFormField<String>(
                         value: selectedDayOfWeekBimonthly,
                         items: [
@@ -350,8 +350,8 @@ class _AddRentState extends State<AddRent> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Text('Select Day of the Month'),
+                      const SizedBox(height: 20),
+                      const Text('Select Day of the Month'),
                       DropdownButtonFormField<int>(
                         value: selectedDayOfMonthBimonthly,
                         items: List.generate(31, (index) => index + 1)
@@ -399,8 +399,8 @@ class _AddRentState extends State<AddRent> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Text('Select Starting Month'),
+                      const SizedBox(height: 20),
+                      const Text('Select Starting Month'),
                       DropdownButtonFormField<String>(
                         value: selectedStartingMonthBimonthly,
                         items: [
@@ -468,8 +468,8 @@ class _AddRentState extends State<AddRent> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 20),
-                      Text('Select Day of the Week'),
+                      const SizedBox(height: 20),
+                      const Text('Select Day of the Week'),
                       DropdownButtonFormField<String>(
                         value: selectedDayOfWeekFortnightly,
                         items: [
@@ -524,8 +524,8 @@ class _AddRentState extends State<AddRent> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Text('Select Number of the Week'),
+                      const SizedBox(height: 20),
+                      const Text('Select Number of the Week'),
                       DropdownButtonFormField<int>(
                         value: selectedWeekNumberFortnightly,
                         items: [1, 2].map<DropdownMenuItem<int>>(
@@ -580,8 +580,8 @@ class _AddRentState extends State<AddRent> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 20),
-                      Text('Select Day of the Month'),
+                      const SizedBox(height: 20),
+                      const Text('Select Day of the Month'),
                       DropdownButtonFormField<int>(
                         value: selectedDayOfMonth,
                         items: List.generate(31, (index) => index + 1)
@@ -629,7 +629,7 @@ class _AddRentState extends State<AddRent> {
                           ),
                         ),
                       ),
-                      Text('Select Day of the Week'),
+                      const Text('Select Day of the Week'),
                       DropdownButtonFormField<String>(
                         value: selectedDayOfWeekMonthly,
                         items: [
@@ -687,14 +687,14 @@ class _AddRentState extends State<AddRent> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Visibility(
                   visible: selectedFrequency == 'Weekly',
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Select Day of the Week'),
-                      SizedBox(
+                      const Text('Select Day of the Week'),
+                      const SizedBox(
                         height: 10,
                       ),
                       DropdownButtonFormField<String>(
@@ -756,7 +756,7 @@ class _AddRentState extends State<AddRent> {
                 ),
                 const Text('Select unit to set rent'),
                 Container(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8.0),
@@ -789,7 +789,7 @@ class _AddRentState extends State<AddRent> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                Text(
+                const Text(
                     'Do you want to invoice previous rent during monthly invoicing?'),
                 Row(
                   children: [

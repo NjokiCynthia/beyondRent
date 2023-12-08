@@ -23,17 +23,17 @@ class _CreateInvoiceState extends State<CreateInvoice> {
       lastDate: DateTime(2101),
       selectableDayPredicate: (DateTime day) {
         // Allow selecting only days from today and onward
-        return day.isAfter(DateTime.now().subtract(Duration(days: 1)));
+        return day.isAfter(DateTime.now().subtract(const Duration(days: 1)));
       },
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.dark().copyWith(
             primaryColor: primaryDarkColor,
-            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-            colorScheme: ColorScheme.light(primary: primaryDarkColor)
+            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            colorScheme: const ColorScheme.light(primary: primaryDarkColor)
                 .copyWith(secondary: primaryDarkColor),
             dialogBackgroundColor: Colors.white,
-            textTheme: TextTheme(
+            textTheme: const TextTheme(
               displayLarge:
                   TextStyle(color: Colors.white), // Change number color
               bodyLarge:
@@ -63,17 +63,17 @@ class _CreateInvoiceState extends State<CreateInvoice> {
       lastDate: DateTime(2101),
       selectableDayPredicate: (DateTime day) {
         // Allow selecting only days from today and onward
-        return day.isAfter(DateTime.now().subtract(Duration(days: 1)));
+        return day.isAfter(DateTime.now().subtract(const Duration(days: 1)));
       },
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.dark().copyWith(
             primaryColor: primaryDarkColor,
-            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-            colorScheme: ColorScheme.light(primary: primaryDarkColor)
+            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            colorScheme: const ColorScheme.light(primary: primaryDarkColor)
                 .copyWith(secondary: primaryDarkColor),
             dialogBackgroundColor: Colors.white,
-            textTheme: TextTheme(
+            textTheme: const TextTheme(
               displayLarge:
                   TextStyle(color: Colors.white), // Change number color
               bodyLarge:
@@ -131,7 +131,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Enter the bill name'),
+                      const Text('Enter the bill name'),
                       const SizedBox(height: 10),
                       TextFormField(
                         controller: billNameController,
@@ -171,9 +171,9 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                           });
                         },
                       ),
-                      SizedBox(height: 10),
-                      Text('Select the Bill Option: '),
-                      SizedBox(
+                      const SizedBox(height: 10),
+                      const Text('Select the Bill Option: '),
+                      const SizedBox(
                         height: 10,
                       ),
                       DropdownButtonFormField<String>(
@@ -221,10 +221,10 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                           );
                         }).toList(),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       if (billOption == 'Varying')
-                        Text('Specify the bill amount'),
-                      SizedBox(
+                        const Text('Specify the bill amount'),
+                      const SizedBox(
                         height: 10,
                       ),
                       TextFormField(
@@ -264,7 +264,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                           });
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
                       Row(
@@ -274,7 +274,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: Text(
+                            child: const Text(
                               'Cancel',
                               style: TextStyle(color: primaryDarkColor),
                             ),
@@ -304,7 +304,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: primaryDarkColor),
-                            child: Text('Confirm'),
+                            child: const Text('Confirm'),
                           ),
                         ],
                       ),
@@ -325,14 +325,14 @@ class _CreateInvoiceState extends State<CreateInvoice> {
       appBar: AppBar(
         backgroundColor: backColor.withOpacity(0.02),
         elevation: 0,
-        leading: Icon(
+        leading: const Icon(
           Icons.arrow_back_ios,
           color: primaryDarkColor,
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               'Create an invoice',
               style: TextStyle(color: Colors.black, fontSize: 16),
             ),
@@ -340,7 +340,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                 decoration: BoxDecoration(
                     color: primaryDarkColor.withOpacity(0.1),
                     shape: BoxShape.circle),
-                child: Padding(
+                child: const Padding(
                   padding: EdgeInsets.all(8),
                   child: Icon(
                     Icons.check,
@@ -353,14 +353,14 @@ class _CreateInvoiceState extends State<CreateInvoice> {
       body: SafeArea(
           child: SingleChildScrollView(
               child: Padding(
-        padding: EdgeInsets.all(15),
+        padding: const EdgeInsets.all(15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Row(
+            const Row(
               children: [
                 Icon(
                   Icons.price_change_outlined,
@@ -372,7 +372,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                 Text('Select your preferred invoice type'),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             DropdownButtonFormField<String>(
@@ -423,10 +423,10 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Row(
+            const Row(
               children: [
                 Icon(
                   Icons.home_outlined,
@@ -438,7 +438,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                 Text('Select unit to invoice'),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             DropdownButtonFormField<String>(
@@ -491,10 +491,10 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Row(
+            const Row(
               children: [
                 Icon(
                   Icons.people_alt_outlined,
@@ -506,7 +506,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                 Text('Select tenants option to invoice'),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             DropdownButtonFormField<String>(
@@ -561,10 +561,10 @@ class _CreateInvoiceState extends State<CreateInvoice> {
               visible: selectedTenantsOption == 'Individual Tenants',
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  Row(
+                  const Row(
                     children: [
                       Icon(
                         Icons.person,
@@ -576,7 +576,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                       Text('Select tenant to invoice'),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   DropdownButtonFormField<String>(
@@ -627,10 +627,10 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  Row(
+                  const Row(
                     children: [
                       Icon(
                         Icons.money_off,
@@ -644,7 +644,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   TextFormField(
@@ -682,7 +682,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Visibility(
@@ -702,20 +702,20 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                       });
                     },
                   ),
-                  Text('Include supplementary bills'),
+                  const Text('Include supplementary bills'),
                 ],
               ),
             ),
             if (includeSupplementaryBills)
               Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Select bill'),
+                      const Text('Select bill'),
                       GestureDetector(
                         onTap: () async {
                           // Show the add bill bottom sheet and wait for the result
@@ -729,7 +729,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                             ));
                           });
                         },
-                        child: Row(
+                        child: const Row(
                           children: [
                             Icon(
                               Icons.add,
@@ -744,7 +744,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                       )
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   DropdownButtonFormField<String>(
@@ -786,10 +786,10 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                   ),
                 ],
               ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Row(
+            const Row(
               children: [
                 Icon(
                   Icons.calendar_month_rounded,
@@ -803,7 +803,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             TextFormField(
@@ -811,7 +811,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
               onTap: () => _selectDate(context),
               readOnly: true,
               decoration: InputDecoration(
-                suffixIcon: Icon(
+                suffixIcon: const Icon(
                   Icons.arrow_drop_down,
                   color: primaryDarkColor,
                 ),
@@ -844,10 +844,10 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Row(
+            const Row(
               children: [
                 Icon(
                   Icons.calendar_month_outlined,
@@ -861,7 +861,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             TextFormField(
@@ -869,7 +869,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
               onTap: () => _selectDueDate(context),
               readOnly: true,
               decoration: InputDecoration(
-                suffixIcon: Icon(
+                suffixIcon: const Icon(
                   Icons.arrow_drop_down,
                   color: primaryDarkColor,
                 ),
@@ -902,10 +902,10 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Row(
+            const Row(
               children: [
                 Icon(
                   Icons.edit_document,
@@ -919,7 +919,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             TextFormField(
@@ -955,7 +955,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               children: [
                 Checkbox(
@@ -967,8 +967,8 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                     });
                   },
                 ),
-                Text('Send Email'),
-                SizedBox(width: 20),
+                const Text('Send Email'),
+                const SizedBox(width: 20),
                 Checkbox(
                   activeColor: primaryDarkColor,
                   value: sendSMS,
@@ -978,10 +978,10 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                     });
                   },
                 ),
-                Text('Send SMS'),
+                const Text('Send SMS'),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             SizedBox(
@@ -994,9 +994,9 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: ((context) => ListInvoices())));
+                            builder: ((context) => const ListInvoices())));
                   },
-                  child: Text('Confirm')),
+                  child: const Text('Confirm')),
             )
           ],
         ),

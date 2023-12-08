@@ -597,7 +597,7 @@ class _StepPage1State extends State<StepPage1> {
                 _selectedValue = value;
               });
             },
-            items: [
+            items: const [
               DropdownMenuItem(
                 value: 'Commercial',
                 child: Text('Commercial'),

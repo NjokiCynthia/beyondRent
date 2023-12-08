@@ -77,9 +77,9 @@ class _HomeState extends State<Home> {
   bool rentInfoLoaded = false;
   Map<String, dynamic> rentInfo = {};
 
-  fetchRentInfo(int selectedMonth) async {
-    print('I am here trying to fetch rent info');
-    print('Fetching rent info for month $selectedMonth');
+  fetchRentInfo() async {
+    print('I am here trying to fetch the total rent info');
+
     final userProvider = Provider.of<UserProvider>(
       context,
       listen: false,
@@ -92,7 +92,6 @@ class _HomeState extends State<Home> {
 
     final postData = {
       "property_id": propertyProvider.property?.id,
-      "month": selectedMonth.toString(),
     };
     print('This is my property id here');
     print(
@@ -105,17 +104,23 @@ class _HomeState extends State<Home> {
     };
     try {
       var response = await apiClient.post(
-        '/mobile/reports/rent_collected_per_month',
+        '/mobile/reports/total_rent_collected',
         postData,
         headers: headers,
       );
 
       var responseData = response['response'];
       if (responseData != null) {
-        print('Rent Collected Details for the selected month >>>>>>>>>>>');
+        print('Rent Collected Details>>>>>>>>>>>');
+
         print(responseData);
+
+        // Adjust the response parsing based on your actual response structure
         setState(() {
-          rentInfo = responseData;
+          rentInfo = {
+            "property_id": responseData["property_id"].toString(),
+            "amount_collected": responseData["amount_collected"]?.toString(),
+          };
         });
       }
     } catch (e) {
@@ -128,464 +133,11 @@ class _HomeState extends State<Home> {
     });
   }
 
-  DateTime selectedDate = DateTime.now();
-  String currentMonth = '';
-  //String selectedMonth = '';
   List trasactionList = [];
-  num currentYear = 2023;
-
-  Future<void> _showDayPicker(BuildContext context) async {
-    DateTime currentDate = DateTime.now();
-    DateTime lastSelectableDate =
-        DateTime(currentDate.year - 1, currentDate.month);
-
-    DateTime? selected = await showDatePicker(
-      context: context,
-      initialDate: currentDate,
-      firstDate: lastSelectableDate,
-      lastDate: currentDate,
-      initialDatePickerMode: DatePickerMode.day,
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
-              primary: mintyGreen,
-              onPrimary: Colors.white,
-              surface: Colors.white,
-              onSurface: Colors.black,
-            ),
-            buttonTheme: const ButtonThemeData(
-              textTheme: ButtonTextTheme.primary,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (selected != null) {
-      setState(() {
-        selectedDate = selected;
-        currentMonth = getMonthAbbreviation(selected);
-      });
-    }
-  }
-
-  String getMonthAbbreviation(DateTime date) {
-    String abbreviation = DateFormat.MMM().format(date);
-    return abbreviation;
-  }
-
-  BoxDecoration inactiveMonthDecoration = BoxDecoration(
-    borderRadius: BorderRadius.circular(4),
-    border: Border.all(
-      width: 2,
-      color: Colors.black.withOpacity(0.2),
-    ),
-  );
-  BoxDecoration activeMonthDecoration = BoxDecoration(
-    color: mintyGreen,
-    borderRadius: BorderRadius.circular(4),
-  );
-
-  Future<void> showMonthPickerModal(BuildContext context) async {
-    final selected = await showDialog<String>(
-      //showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          contentPadding: EdgeInsets.zero,
-          content: Container(
-            width: MediaQuery.of(context).size.width * 0.8,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: mintyGreen,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  padding: EdgeInsets.all(20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          print('tapped');
-                          setState(() {
-                            currentYear = currentYear - 1;
-                          });
-                        },
-                        child: Container(
-                          padding: EdgeInsets.only(left: 10, right: 10),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                            color: Colors.white,
-                            width: 2.0,
-                          )),
-                          child: Text(
-                            '<',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(color: Colors.white, fontSize: 18),
-                          ),
-                        ),
-                      ),
-                      Text(
-                        '$currentYear',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge!
-                            .copyWith(color: Colors.white, fontSize: 18),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          print('tapped');
-                          setState(() {
-                            currentYear = currentYear + 1;
-                          });
-                        },
-                        child: Container(
-                          padding: EdgeInsets.only(left: 10, right: 10),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                            color: Colors.white,
-                            width: 2.0,
-                          )),
-                          child: Text(
-                            '>',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(color: Colors.white, fontSize: 18),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.all(20),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  currentMonth = 'Jan';
-                                });
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                  right: 5,
-                                ),
-                                padding: const EdgeInsets.all(10),
-                                decoration: currentMonth == 'Jan'
-                                    ? activeMonthDecoration
-                                    : inactiveMonthDecoration,
-                                child: const Text(
-                                  'JAN',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  currentMonth = 'Feb';
-                                });
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                  right: 5,
-                                  left: 5,
-                                ),
-                                padding: const EdgeInsets.all(10),
-                                decoration: currentMonth == 'Feb'
-                                    ? activeMonthDecoration
-                                    : inactiveMonthDecoration,
-                                child: const Text(
-                                  'FEB',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  currentMonth = 'Mar';
-                                });
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(left: 5),
-                                padding: const EdgeInsets.all(10),
-                                decoration: currentMonth == 'Mar'
-                                    ? activeMonthDecoration
-                                    : inactiveMonthDecoration,
-                                child: const Text(
-                                  'MAR',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 15),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  currentMonth = 'Apr';
-                                });
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                  right: 5,
-                                ),
-                                padding: const EdgeInsets.all(10),
-                                decoration: currentMonth == 'Apr'
-                                    ? activeMonthDecoration
-                                    : inactiveMonthDecoration,
-                                child: Text(
-                                  'APR',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  currentMonth = 'May';
-                                });
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                  right: 5,
-                                  left: 5,
-                                ),
-                                padding: const EdgeInsets.all(10),
-                                decoration: currentMonth == 'May'
-                                    ? activeMonthDecoration
-                                    : inactiveMonthDecoration,
-                                child: Text(
-                                  'MAY',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  currentMonth = 'Jun';
-                                });
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(left: 5),
-                                padding: const EdgeInsets.all(10),
-                                decoration: currentMonth == 'Jun'
-                                    ? activeMonthDecoration
-                                    : inactiveMonthDecoration,
-                                child: Text(
-                                  'JUN',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 15),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  currentMonth = 'Jul';
-                                });
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                  right: 5,
-                                ),
-                                padding: const EdgeInsets.all(10),
-                                decoration: currentMonth == 'Jul'
-                                    ? activeMonthDecoration
-                                    : inactiveMonthDecoration,
-                                child: Text(
-                                  'JUL',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  currentMonth = 'Aug';
-                                });
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                  right: 5,
-                                  left: 5,
-                                ),
-                                padding: const EdgeInsets.all(10),
-                                decoration: currentMonth == 'Aug'
-                                    ? activeMonthDecoration
-                                    : inactiveMonthDecoration,
-                                child: Text(
-                                  'AUG',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  currentMonth = 'Sep';
-                                });
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(left: 5),
-                                padding: const EdgeInsets.all(10),
-                                decoration: currentMonth == 'Sep'
-                                    ? activeMonthDecoration
-                                    : inactiveMonthDecoration,
-                                child: Text(
-                                  'SEP',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 15),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  currentMonth = 'Oct';
-                                });
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                  right: 5,
-                                ),
-                                padding: const EdgeInsets.all(10),
-                                decoration: currentMonth == 'Oct'
-                                    ? activeMonthDecoration
-                                    : inactiveMonthDecoration,
-                                child: Text(
-                                  'OCT',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  currentMonth = 'Nov';
-                                });
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(
-                                  right: 5,
-                                  left: 5,
-                                ),
-                                padding: const EdgeInsets.all(10),
-                                decoration: currentMonth == 'Nov'
-                                    ? activeMonthDecoration
-                                    : inactiveMonthDecoration,
-                                child: Text(
-                                  'NOV',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  currentMonth = 'Dec';
-                                });
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(left: 5),
-                                padding: const EdgeInsets.all(10),
-                                decoration: currentMonth == 'Dec'
-                                    ? activeMonthDecoration
-                                    : inactiveMonthDecoration,
-                                child: Text(
-                                  'DEC',
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-
-    if (currentMonth != null) {
-      setState(() {
-        currentMonth = currentMonth;
-      });
-
-      // Call the fetchRentInfo function with the selected month
-      await fetchRentInfo(monthToNumber(currentMonth));
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    currentMonth = getMonthAbbreviation(DateTime.now());
-    fetchRentInfo(DateTime.now().month);
+
     fetchTransactionsList();
   }
 
@@ -614,92 +166,105 @@ class _HomeState extends State<Home> {
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               GestureDetector(
-                onTap: () async {
-                  // _showDayPicker(context);
-                  showMonthPickerModal(context);
+                onTap: () {
+                  PersistentNavBarNavigator.pushNewScreen(
+                    context,
+                    screen: const PropertyDetails(),
+                    withNavBar: false,
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
                 },
-                child: Row(
-                  children: [
-                    Text(
-                      currentMonth,
-                      style: Theme.of(context).textTheme.bodySmall,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: primaryDarkColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 10, right: 10, top: 2, bottom: 2),
+                    child: Row(
+                      children: [
+                        Text(
+                          'View Summary',
+                          style: const TextStyle(
+                              color: primaryDarkColor, fontSize: 14),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: primaryDarkColor,
+                          size: 15,
+                        )
+                      ],
                     ),
-                    Icon(
-                      Icons.keyboard_arrow_down,
-                      color: Colors.black.withOpacity(0.2),
-                      size: 20,
-                    )
-                  ],
+                  ),
                 ),
               ),
             ],
           ),
         ),
         const SizedBox(height: 10),
-        GestureDetector(
-          onTap: () {
-            PersistentNavBarNavigator.pushNewScreen(
-              context,
-              screen: const PropertyDetails(),
-              withNavBar: false,
-              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-            );
-          },
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 4,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Total rent for $currentMonth'),
-                Text(
-                  'KES. ${rentInfo['amount_expected']}',
-                  //'Ksh. 0',
-                  style: Theme.of(context).textTheme.displayLarge,
-                ),
-                const SizedBox(height: 10),
-                const ProgressBar(progress: 0),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Collected',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    Text(
-                      'Pending',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'KES. ${rentInfo['amount_collected']}',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    Text(
-                      'KES. ${rentInfo['amount_in_arrears']}',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Text('Total rent for $currentMonth'),
+              Text('Total rent collected'),
+
+              Text(
+                'KES ${currencyFormat.format(rentInfo['amount_collected'] ?? 0)}',
+                // 'KES. ${rentInfo['amount_expected']}',
+                //'Ksh. 0',
+                style: Theme.of(context).textTheme.displayLarge,
+              ),
+              const SizedBox(height: 10),
+              ProgressBar(
+                  // collectedAmount: rentInfo['amount_collected'],
+                  // expectedAmount: rentInfo['amount_expected'],
+                  ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Amount available',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  Text(
+                    'Pending amount',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'KES ${currencyFormat.format(rentInfo['amount_collected'] ?? 0)}',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  Text(
+                    'KES ${currencyFormat.format(rentInfo['amount_collected'] ?? 0)}',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ],
@@ -725,31 +290,46 @@ class _HomeState extends State<Home> {
                         withNavBar: false,
                         screen: Transactions());
                   },
-                  child: Text(
-                    'View All',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: primaryDarkColor),
+                  child: Row(
+                    children: [
+                      Text(
+                        'View All',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(color: primaryDarkColor),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios_sharp,
+                        size: 15,
+                        color: primaryDarkColor,
+                      )
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: transactionsList == false
-                ? Center(
-                    child: SizedBox(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 4,
-                        color: mintyGreen,
-                      ),
-                    ),
+          transactionListLoaded == false
+              ? Center(
+                  child: SizedBox(
+                      child: LinearProgressIndicator(
+                    color: mintyGreen,
+                    minHeight: 4,
                   )
-                : transactionsList.isEmpty
-                    ? const EmptyTransactions()
-                    : ListView.builder(
+                      // CircularProgressIndicator(
+                      //   strokeWidth: 4,
+                      //   color: mintyGreen,
+                      // ),
+                      ),
+                )
+              : transactionsList.isEmpty
+                  ? const EmptyTransactions()
+                  : Expanded(
+                      child: ListView.builder(
+                        // itemCount: transactionsList.length > 6
+                        //     ? 6
+                        //     : transactionsList.length,
                         itemCount: transactionsList.length,
                         itemBuilder: (context, index) {
                           var transaction = transactionsList[index];
@@ -760,7 +340,7 @@ class _HomeState extends State<Home> {
                               type: transaction['type'] ?? "");
                         },
                       ),
-          ),
+                    )
         ],
       ),
     );
@@ -939,9 +519,37 @@ class _HomeState extends State<Home> {
               Expanded(
                   child: ListView(
                 children: [
-                  const SizedBox(height: 30),
                   rentWidget,
-                  const SizedBox(height: 30),
+                  Padding(
+                    padding: EdgeInsets.all(25),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border:
+                              Border.all(color: primaryDarkColor, width: 3.0)),
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Withdraw',
+                              style: TextStyle(color: primaryDarkColor),
+                            ),
+                            SizedBox(
+                              width: 30,
+                            ),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              color: primaryDarkColor,
+                              weight: 2,
+                              size: 18,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   transactionsWidget,
                 ],
               ))
