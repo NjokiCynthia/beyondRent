@@ -334,10 +334,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                                 Navigator.pop(context);
                               },
                               child: Container(
-                                margin: const EdgeInsets.only(
-                                  right: 5,
-                                  left: 5,
-                                ),
+                                margin: const EdgeInsets.only(left: 5),
                                 padding: const EdgeInsets.all(10),
                                 decoration: currentMonth == 'Aug'
                                     ? activeMonthDecoration
@@ -462,7 +459,73 @@ class _PropertyDetailsState extends State<PropertyDetails> {
 
       // Call the fetchRentInfo function with the selected month
       await fetchRentInfo(monthToNumber(currentMonth));
+      await fetchTransactionsList(monthToNumber(currentMonth));
     }
+  }
+
+  bool transactionListLoaded = false;
+  List<Map<String, dynamic>> transactionsList = [];
+  fetchTransactionsList(int selectedMonth) async {
+    print('I am here to load transactions paid');
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
+    final token = userProvider.user?.token;
+
+    print('This is my property id while fetching transactions');
+
+    print(propertyProvider.property?.id);
+    print('This is the month i am fetching transactions for');
+    print(selectedMonth.toString());
+
+    final postData = {
+      "property_id": propertyProvider.property?.id,
+      "month": selectedMonth.toString(),
+      "tenants": []
+    };
+    print(postData);
+
+    final apiClient = ApiClient();
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    try {
+      var response = await apiClient.post(
+        '/mobile/deposits/get_deposits_list',
+        postData,
+        headers: headers,
+      );
+
+      if (response != null && response['response'] != null) {
+        var responseStatus = response['response']['status'];
+
+        if (responseStatus == 1) {
+          var deposits = response['response']['deposits'];
+          if (deposits != null && deposits is List) {
+            print('These are my transaction details below here >>>>>>>>>>>');
+            print(deposits);
+
+            setState(() {
+              transactionsList = deposits.cast<Map<String, dynamic>>();
+            });
+          }
+        }
+      }
+    } catch (e) {
+      print('Error');
+      print(e);
+    }
+
+    setState(() {
+      transactionListLoaded = true;
+    });
   }
 
   bool rentInfoLoaded = false;
@@ -524,6 +587,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
     super.initState();
     currentMonth = getMonthAbbreviation(DateTime.now());
     fetchRentInfo(DateTime.now().month);
+    fetchTransactionsList(DateTime.now().month);
   }
 
   @override
@@ -662,7 +726,59 @@ class _PropertyDetailsState extends State<PropertyDetails> {
             ),
           ),
           const SizedBox(height: 30),
-          const EmptyTransactions(),
+          transactionListLoaded == false
+              ? Center(
+                  child: SizedBox(
+                      child: LinearProgressIndicator(
+                    color: mintyGreen,
+                    minHeight: 4,
+                  )
+                      // CircularProgressIndicator(
+                      //   strokeWidth: 4,
+                      //   color: mintyGreen,
+                      // ),
+                      ),
+                )
+              : transactionsList.isEmpty
+                  ? const EmptyTransactions()
+                  : Expanded(
+                      child: ListView.builder(
+                        itemCount: transactionsList.length,
+                        itemBuilder: (context, index) {
+                          var transaction = transactionsList[index];
+                          return TransactionCard(
+                            tenant: transaction['tenant'],
+                            date: transaction['date'],
+                            amount: transaction['amount'],
+                            type: transaction['type'],
+                            unit: transaction['unit'],
+                            bill: transaction['bill'],
+                            reconciliation: transaction['reconciliation'],
+                            narrative: transaction['narative'],
+                            id: transaction['id'],
+                          );
+                        },
+                      ),
+                    )
+
+          // : Expanded(
+          //     child: ListView.builder(
+          //       // itemCount: transactionsList.length > 6
+          //       //     ? 6
+          //       //     : transactionsList.length,
+          //       itemCount: transactionsList.length,
+          //       itemBuilder: (context, index) {
+          //         var transaction = transactionsList[index];
+          //         return TransactionCard(
+          //             // name: transaction['name'] ?? 'Tenant',
+          //             // date: transaction['contribution_date'] ?? '',
+          //             // amount: transaction['amount'] ?? 0,
+          //             // type: transaction['type'] ?? "");
+          //             );
+          //       },
+          //     ),
+          //   )
+          // const EmptyTransactions(),
         ],
       ),
     );

@@ -407,48 +407,47 @@ class ProgressBar extends StatelessWidget {
 //     );
 //   }
 // }
-
 // Transaction card
 class TransactionCard extends StatelessWidget {
-  final String? name;
+  final String? type;
   final String? date;
   final String? amount;
-  final String? type;
-  final ValueSetter<dynamic>? callback;
+  final Map<String, dynamic>? unit;
+  final Map<String, dynamic>? bill;
+  final String? reconciliation;
+  final String? tenant;
+  final String? narrative;
+  final String? id;
+  final String? house_number;
+
   const TransactionCard({
-    super.key,
-    this.name,
+    Key? key,
+    this.type,
     this.date,
     this.amount,
-    this.type,
-    this.callback,
-  });
+    this.unit,
+    this.bill,
+    this.reconciliation,
+    this.tenant,
+    this.narrative,
+    this.id,
+    this.house_number,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final backgroundColor = getRandomColor();
-    final firstLetter = name != null && name!.isNotEmpty ? name![0] : '';
+    final firstLetter = tenant != null && tenant!.isNotEmpty ? tenant![0] : '';
+
     return Container(
-      // margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
       decoration: BoxDecoration(
-        // color: Colors.white,
         border: Border(
           bottom: BorderSide(
-            //                   <--- left side
             color: Colors.grey.withOpacity(0.1),
             width: 1.0,
           ),
         ),
-        // borderRadius: BorderRadius.circular(10),
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: Colors.grey.withOpacity(0.3),
-        //     spreadRadius: 0.5,
-        //     blurRadius: 1,
-        //     offset: const Offset(0, 1),
-        //   ),
-        // ],
       ),
       child: Row(
         children: [
@@ -476,9 +475,12 @@ class TransactionCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(name!),
+                      Text('$tenant'),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Text(
-                        date!,
+                        '$date',
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(
                               fontSize: 12,
                             ),
@@ -491,11 +493,25 @@ class TransactionCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'KES. $amount',
-                        style: Theme.of(context).textTheme.labelMedium,
+                        '${unit?['house_number'] ?? '0'}',
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontSize: 14,
+                            ),
+                      ),
+                      SizedBox(
+                        height: 5,
                       ),
                       Text(
-                        '$type',
+                        'KES ${currencyFormat.format(double.parse(amount.toString() ?? "0"))}',
+                        //'KES. $amount',
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        '${unit?['name'] ?? 'Unit Name'}',
+                        // '$unit',
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(
                               fontSize: 12,
                             ),

@@ -18,7 +18,7 @@ class _TransactionsState extends State<Transactions> {
   List<Map<String, dynamic>> transactionsList = [];
 
   fetchTransactionsList() async {
-    print('I am here to load transactions');
+    print('I am here to load transactions paid');
     final userProvider = Provider.of<UserProvider>(
       context,
       listen: false,
@@ -40,7 +40,7 @@ class _TransactionsState extends State<Transactions> {
 
     try {
       var response = await apiClient.post(
-        '/mobile/contributions/get_property_contributions',
+        '/mobile/deposits/get_deposits_list',
         postData,
         headers: headers,
       );
@@ -49,11 +49,11 @@ class _TransactionsState extends State<Transactions> {
 
       if (responseStatus == 1) {
         print('These are my transaction details below here >>>>>>>>>>>');
-        print(response['response']['contributions']);
+        print(response['response']['deposits']);
 
         setState(() {
           transactionsList = List<Map<String, dynamic>>.from(
-            response['response']['contributions'],
+            response['response']['deposits'],
           );
         });
       }
@@ -203,13 +203,7 @@ class _TransactionsState extends State<Transactions> {
         Row(
           children: [
             GestureDetector(
-              onTap: () {
-                // Navigator.pop(context);
-                // showBottomModal(
-                //   context,
-                //   paymentModalContent,
-                // );
-              },
+              onTap: () {},
               child: Container(
                 margin: const EdgeInsets.only(right: 20),
                 padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -323,10 +317,16 @@ class _TransactionsState extends State<Transactions> {
                             itemBuilder: ((context, index) {
                               var transaction = transactionsList[index];
                               return TransactionCard(
-                                  name: transaction['name'] ?? 'Tenant',
-                                  date: transaction['contribution_date'] ?? '',
-                                  amount: transaction['amount'] ?? 0,
-                                  type: transaction['type'] ?? '');
+                                tenant: transaction['tenant'],
+                                date: transaction['date'],
+                                amount: transaction['amount'],
+                                type: transaction['type'],
+                                unit: transaction['unit'],
+                                bill: transaction['bill'],
+                                reconciliation: transaction['reconciliation'],
+                                narrative: transaction['narative'],
+                                id: transaction['id'],
+                              );
                             })),
               )
               // Container(

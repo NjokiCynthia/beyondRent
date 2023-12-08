@@ -20,9 +20,9 @@ class _DashboardState extends State<Dashboard> {
   List<Widget> _buildScreens() {
     return [
       const Home(),
-      const ListTenants(),
       const Units(),
       const ListInvoices(),
+      const ListTenants(),
       const Settings(),
     ];
   }
@@ -36,12 +36,6 @@ class _DashboardState extends State<Dashboard> {
         inactiveColorPrimary: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(Icons.people_outline_outlined),
-        title: ("Tenants"),
-        activeColorPrimary: mintyGreen,
-        inactiveColorPrimary: Colors.grey,
-      ),
-      PersistentBottomNavBarItem(
         icon: const Icon(Icons.apartment),
         title: ("Units"),
         activeColorPrimary: mintyGreen,
@@ -50,6 +44,12 @@ class _DashboardState extends State<Dashboard> {
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.list),
         title: ("Invoices"),
+        activeColorPrimary: mintyGreen,
+        inactiveColorPrimary: Colors.grey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(Icons.people_outline_outlined),
+        title: ("Tenants"),
         activeColorPrimary: mintyGreen,
         inactiveColorPrimary: Colors.grey,
       ),

@@ -145,12 +145,22 @@ class _ListTenantsState extends State<ListTenants> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          const Text(
-                                            'House 1',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.normal,
-                                                fontSize: 13,
-                                                color: Colors.grey),
+                                          Row(
+                                            children: [
+                                              const Text(
+                                                'House Number:',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                    fontSize: 13,
+                                                    color: Colors.grey),
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                  '${tenantList[index]['house_number']}'),
+                                            ],
                                           ),
                                           // Text(
                                           //   '${tenantList[index]['email']}' ??
