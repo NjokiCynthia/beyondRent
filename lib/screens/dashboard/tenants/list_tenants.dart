@@ -106,12 +106,16 @@ class _ListTenantsState extends State<ListTenants> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
+                                    final selectedTenantId =
+                                        int.parse(tenantList[index]['id']);
                                     PersistentNavBarNavigator.pushNewScreen(
-                                        context,
-                                        withNavBar: false,
-                                        pageTransitionAnimation:
-                                            PageTransitionAnimation.cupertino,
-                                        screen: const TenantStatement());
+                                      context,
+                                      withNavBar: false,
+                                      pageTransitionAnimation:
+                                          PageTransitionAnimation.cupertino,
+                                      screen: TenantStatement(
+                                          tenantId: selectedTenantId),
+                                    );
                                   },
                                   child: ListTile(
                                     leading: Container(
@@ -138,7 +142,6 @@ class _ListTenantsState extends State<ListTenants> {
                                         )
                                       ],
                                     ),
-
                                     subtitle: Padding(
                                       padding: const EdgeInsets.only(top: 10),
                                       child: Row(
@@ -162,14 +165,6 @@ class _ListTenantsState extends State<ListTenants> {
                                                   '${tenantList[index]['house_number']}'),
                                             ],
                                           ),
-                                          // Text(
-                                          //   '${tenantList[index]['email']}' ??
-                                          //       " ",
-                                          //   style: TextStyle(
-                                          //       fontWeight: FontWeight.normal,
-                                          //       fontSize: 13,
-                                          //       color: Colors.grey),
-                                          // ),
                                           Container(
                                               decoration: BoxDecoration(
                                                   borderRadius:
@@ -192,32 +187,6 @@ class _ListTenantsState extends State<ListTenants> {
                                         ],
                                       ),
                                     ),
-                                    // subtitle: Padding(
-                                    //   padding:
-                                    //       EdgeInsets.only(top: 10, bottom: 5),
-                                    //   child: Align(
-                                    //     alignment: Alignment.bottomRight,
-                                    //     child: Container(
-                                    //         decoration: BoxDecoration(
-                                    //             borderRadius:
-                                    //                 BorderRadius.circular(12),
-                                    //             color: primaryDarkColor
-                                    //                 .withOpacity(0.1)),
-                                    //         child: Padding(
-                                    //           padding: EdgeInsets.only(
-                                    //               left: 10,
-                                    //               right: 10,
-                                    //               top: 2,
-                                    //               bottom: 2),
-                                    //           child: Text(
-                                    //             'View rent statement',
-                                    //             style: TextStyle(
-                                    //                 color: primaryDarkColor,
-                                    //                 fontSize: 12),
-                                    //           ),
-                                    //         )),
-                                    //   ),
-                                    // ),
                                   ),
                                 ),
                                 const Divider(

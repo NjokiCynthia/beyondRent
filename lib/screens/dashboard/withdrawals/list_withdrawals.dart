@@ -8,14 +8,14 @@ import 'package:x_rent/screens/dashboard/invoices/create_invoice.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 
-class ListWithdrawals extends StatefulWidget {
-  const ListWithdrawals({super.key});
+class Withdrawals extends StatefulWidget {
+  const Withdrawals({super.key});
 
   @override
-  State<ListWithdrawals> createState() => _ListWithdrawalsState();
+  State<Withdrawals> createState() => _WithdrawalsState();
 }
 
-class _ListWithdrawalsState extends State<ListWithdrawals> {
+class _WithdrawalsState extends State<Withdrawals> {
   bool withdrawalListLoaded = false;
   List withdrawalList = [];
 
@@ -77,7 +77,7 @@ class _ListWithdrawalsState extends State<ListWithdrawals> {
       onWillPop: () async {
         // Handle navigation when the back button is pressed
         // Use Navigator.popUntil to navigate back approximately three steps
-        int popCount = 3; // Set the number of steps you want to go back
+        int popCount = 1; // Set the number of steps you want to go back
         Navigator.popUntil(context, (route) {
           popCount--;
           return popCount < 0;

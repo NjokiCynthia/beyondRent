@@ -170,7 +170,8 @@ class _ListInvoicesState extends State<ListInvoices> {
                                                 top: 2,
                                                 bottom: 2),
                                             child: Text(
-                                              'KES ${invoice['amount_payable']}',
+                                              'KES ${currencyFormat.format(double.parse(invoice['amount_payable'].toString() ?? "0"))}',
+                                              // 'KES ${invoice['amount_payable']}',
                                               style: const TextStyle(
                                                   color: primaryDarkColor,
                                                   fontSize: 14),

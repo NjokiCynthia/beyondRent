@@ -705,6 +705,8 @@ class UnitWidget extends StatelessWidget {
 // Bottom Sheet Modal
 void showBottomModal(BuildContext context, Widget content) {
   showModalBottomSheet<void>(
+    isScrollControlled: true,
+    isDismissible: true,
     useRootNavigator: true,
     context: context,
     backgroundColor: Colors.transparent,
@@ -964,7 +966,84 @@ class InvoiceCard extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             Text(
-              'Kes ${invoice.amount.toStringAsFixed(2)}',
+              'Kes ${invoice.amount}',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class WithdrawalCard extends StatelessWidget {
+  final Invoice invoice;
+
+  WithdrawalCard({required this.invoice});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+      decoration: BoxDecoration(
+        // color: Colors.white,
+        border: Border(
+          bottom: BorderSide(
+            //                   <--- left side
+            color: Colors.grey.withOpacity(0.1),
+            width: 1.0,
+          ),
+        ),
+        // borderRadius: BorderRadius.circular(10),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.grey.withOpacity(0.3),
+        //     spreadRadius: 0.5,
+        //     blurRadius: 1,
+        //     offset: const Offset(0, 1),
+        //   ),
+        // ],
+      ),
+      child: ListTile(
+        title: Text(invoice.title),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              invoice.timeline,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            const SizedBox(height: 8.0),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, vertical: 4.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4.0),
+                    color: invoice.statusColor.withOpacity(0.2),
+                    border: Border.all(),
+                  ),
+                  child: Text(
+                    invoice.status,
+                    style: TextStyle(color: invoice.statusColor),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        trailing: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Rent',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            Text(
+              'Kes ${invoice.amount}',
+              //'Kes ${invoice.amount.toStringAsFixed(2)}',
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
