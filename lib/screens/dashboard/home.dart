@@ -890,7 +890,7 @@ class _HomeState extends State<Home> {
                     child: Text(
   'SEND TO MOBILE MONEY',
   style: TextStyle(
-    fontSize: 10.0,
+    fontSize: 12.0,
     fontFamily: 'Roboto',
     color: Colors.white
     ,
@@ -1043,9 +1043,19 @@ class _HomeState extends State<Home> {
                       },
                     );
                   },
-                  child: Text('SEND TO BANK'),
+                  child: Text(
+  'SEND TO BANK ',
+  style: TextStyle(
+    fontSize: 12.0,
+    fontFamily: 'Roboto',
+    color: Colors.white
+    ,
+    fontWeight: FontWeight.bold,
+    letterSpacing: 1.0,
+  ),
+),),
                 ),
-              ),
+              
               SizedBox(
                 height: 30,
               ),

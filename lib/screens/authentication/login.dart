@@ -54,6 +54,7 @@ class _LoginState extends State<Login> {
     ));
     return Scaffold(
         body: SafeArea(
+          child: SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -331,6 +332,7 @@ class _LoginState extends State<Login> {
           const SizedBox(height: 20),
         ],
       ),
+          ),
     ));
   }
 }
