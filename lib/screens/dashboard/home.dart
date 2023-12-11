@@ -4,6 +4,7 @@ import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/screens/dashboard/transactions.dart';
+import 'package:x_rent/screens/intro_screens/onboarding_page.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/screens/dashboard/propertyDetails.dart';
@@ -164,6 +165,7 @@ class _HomeState extends State<Home> {
     fetchTransactionsList();
   }
 
+  String? selectedOption;
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -678,7 +680,7 @@ class _HomeState extends State<Home> {
                 style: TextStyle(color: Colors.black),
               ),
               Text(
-                "",
+                'KES ${currencyFormat.format(double.parse(rentInfo['current_balance'] ?? '0.0'))}',
                 // 'KES ${currencyFormat.format(rentInfo['amount_collected'] ?? 0)}',
                 style: Theme.of(context).textTheme.displayLarge,
               ),
@@ -707,6 +709,62 @@ class _HomeState extends State<Home> {
               filled: true,
               fillColor: Colors.white,
               hintText: 'ENTER AMOUNT',
+              labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                  .copyWith(color: Colors.grey),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.grey.shade300,
+                  width: 2.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
+          ),
+          SizedBox(height: 10.0),
+          Text(
+            'Select withdrawal purpose',
+            style: TextStyle(fontSize: 18.0),
+          ),
+          SizedBox(height: 10.0),
+          DropdownButtonFormField(
+            value: selectedOption,
+            items: [
+              DropdownMenuItem(
+                child: Text('Expense Payment'),
+                value: 'expense_payment',
+              ),
+              DropdownMenuItem(
+                child: Text('Tenant Refund'),
+                value: 'tenant_refund',
+              ),
+              DropdownMenuItem(
+                child: Text('Account Transfer'),
+                value: 'account_transfer',
+              ),
+            ],
+            onChanged: (value) {
+              setState(() {
+                selectedOption = value;
+              });
+            },
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white,
+              hintText: 'Select purpose',
               labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
                   .copyWith(color: Colors.grey),
               border: OutlineInputBorder(
@@ -815,7 +873,27 @@ class _HomeState extends State<Home> {
                                           style: ElevatedButton.styleFrom(
                                               backgroundColor:
                                                   primaryDarkColor),
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            showToast(
+                                              context,
+                                              'Success!',
+                                              'You have successfully withdrawn KES. 3000',
+                                              mintyGreen,
+                                            );
+
+                                            Future.delayed(
+                                                const Duration(seconds: 2), () {
+                                              // Delay for 2 seconds (adjust as needed)
+                                              Navigator.pop(context);
+                                              // Navigator.push(
+                                              //   context,
+                                              //   MaterialPageRoute(
+                                              //     builder: ((context) =>
+                                              //         const Home()),
+                                              //   ),
+                                              // );
+                                            });
+                                          },
                                           child: Text('Confirm')),
                                     ),
                                   ],
