@@ -402,13 +402,13 @@ class _HomeState extends State<Home> {
         const Row(
           children: [
             Icon(
-              Icons.money_off,
+              Icons.credit_card,
               color: Color.fromRGBO(13, 201, 150, 1),
             ),
             SizedBox(
               width: 10,
             ),
-            Text('Price of unit'),
+            Text('Account name'),
           ],
         ),
         const SizedBox(height: 10),
@@ -418,7 +418,7 @@ class _HomeState extends State<Home> {
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
-            labelText: 'Price of the unit',
+            labelText: 'Account name',
             labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
                 .copyWith(color: Colors.grey),
             border: OutlineInputBorder(
@@ -455,17 +455,17 @@ class _HomeState extends State<Home> {
             SizedBox(
               width: 10,
             ),
-            Text('Price of unit'),
+            Text('Account number'),
           ],
         ),
-        const SizedBox(height: 10),
+         const SizedBox(height: 10),
         TextFormField(
           style: bodyText,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
-            labelText: 'Price of the unit',
+            labelText: 'Account number',
             labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
                 .copyWith(color: Colors.grey),
             border: OutlineInputBorder(
@@ -492,16 +492,22 @@ class _HomeState extends State<Home> {
           ),
         ),
         const SizedBox(height: 10),
+        const SizedBox(height: 10),
+        
+        
+        const SizedBox(height: 40),
         Row(
           children: [
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+              
+              },
               child: Container(
                 margin: const EdgeInsets.only(right: 20),
                 padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.2),
@@ -528,8 +534,10 @@ class _HomeState extends State<Home> {
                     ),
                   ],
                 ),
+                
               ),
             ),
+            const Spacer(),
             GestureDetector(
               onTap: () {},
               child: Container(
@@ -749,7 +757,7 @@ class _HomeState extends State<Home> {
               SizedBox(
                 width: 10,
               ),
-              Text('Enter amount you would like to withdraw'),
+              Text('Enter amount'),
             ],
           ),
           const SizedBox(height: 10),
@@ -879,7 +887,17 @@ class _HomeState extends State<Home> {
                         },
                       );
                     },
-                    child: Text('SEND TO MOBILE MONEY')),
+                    child: Text(
+  'SEND TO MOBILE MONEY',
+  style: TextStyle(
+    fontSize: 10.0,
+    fontFamily: 'Roboto',
+    color: Colors.white
+    ,
+    fontWeight: FontWeight.bold,
+    letterSpacing: 1.0,
+  ),
+),),
               ),
               SizedBox(
                 width: 30,
