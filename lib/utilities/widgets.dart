@@ -706,7 +706,6 @@ class UnitWidget extends StatelessWidget {
 void showBottomModal(BuildContext context, Widget content) {
   showModalBottomSheet<void>(
     isScrollControlled: true,
-    isDismissible: true,
     useRootNavigator: true,
     context: context,
     backgroundColor: Colors.transparent,

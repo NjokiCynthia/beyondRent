@@ -96,6 +96,7 @@ class _HomeState extends State<Home> {
   };
   String selectedBankAccount = 'Select Bank';
   String selectedBranchValue = '';
+  String? selectedBankValue;
   bool fetchingBanks = false;
   List<String> bankModelsDropdownList = [];
   List<Banks> bankModels = [];
@@ -156,7 +157,7 @@ class _HomeState extends State<Home> {
         setState(() {
           bankModels = tempBankModels;
           selectedBankAccount =
-              '${bankModels[0].bankName} ${bankModels[0].accountNumber}';
+              '${bankModels[0].bankName} (${bankModels[0].bankBranch}) ${bankModels[0].accountName} ${bankModels[0].accountName}';
           bankModelsDropdownList = tempBankModels
               .map((bankAccount) =>
                   '${bankAccount.bankName} ${bankAccount.accountNumber}')
@@ -246,6 +247,418 @@ class _HomeState extends State<Home> {
     fetchRentInfo();
 
     fetchTransactionsList();
+  }
+
+  void showBottom() {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (_) {
+          return Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  Text(
+                    'CURRENT AVAILABLE BALANCE:',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    'KES ${currencyFormat.format(double.parse(rentInfo['current_balance'] ?? '0.0'))}',
+                    // 'KES ${currencyFormat.format(rentInfo['amount_collected'] ?? 0)}',
+                    style: Theme.of(context).textTheme.displayLarge,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  const Row(
+                    children: [
+                      Icon(
+                        Icons.money_off,
+                        color: Color.fromRGBO(13, 201, 150, 1),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text('Enter amount to withdraw'),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    style: bodyText,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'ENTER AMOUNT',
+                      labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                          .copyWith(color: Colors.grey),
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  Text(
+                    'Select withdrawal purpose',
+                    style: TextStyle(fontSize: 18.0),
+                  ),
+                  SizedBox(height: 10.0),
+                  DropdownButtonFormField(
+                    value: selectedOption,
+                    items: [
+                      DropdownMenuItem(
+                        child: Text('Expense Payment'),
+                        value: 'expense_payment',
+                      ),
+                      DropdownMenuItem(
+                        child: Text('Tenant Refund'),
+                        value: 'tenant_refund',
+                      ),
+                      DropdownMenuItem(
+                        child: Text('Account Transfer'),
+                        value: 'account_transfer',
+                      ),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        selectedOption = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'Select purpose',
+                      labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                          .copyWith(color: Colors.grey),
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Choose payment method',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: primaryDarkColor),
+                          onPressed: () {
+                            final userProvider = Provider.of<UserProvider>(
+                              context,
+                              listen: false,
+                            );
+                            final phone = userProvider.user?.phone;
+                            TextEditingController _phoneNumberController =
+                                TextEditingController(text: phone);
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Padding(
+                                  padding: EdgeInsets.all(30),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: AlertDialog(
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Confirm phone number'),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          TextFormField(
+                                            controller: _phoneNumberController,
+                                            style: bodyText,
+                                            keyboardType: TextInputType.number,
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              hintText: 'ENTER AMOUNT',
+                                              labelStyle: MyTheme.darkTheme
+                                                  .textTheme.bodyLarge!
+                                                  .copyWith(color: Colors.grey),
+                                              border: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                  color: Colors.grey,
+                                                  width: 1.0,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Colors.grey.shade300,
+                                                  width: 2.0,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                  color: Colors.grey,
+                                                  width: 1.0,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        primaryDarkColor),
+                                                onPressed: () {
+                                                  showToast(
+                                                    context,
+                                                    'Success!',
+                                                    'Your withdrawal request is successful!',
+                                                    mintyGreen,
+                                                  );
+
+                                                  Future.delayed(
+                                                      const Duration(
+                                                          seconds: 2), () {
+                                                    // Delay for 2 seconds (adjust as needed)
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: ((context) =>
+                                                                ListWithdrawals())));
+                                                  });
+                                                },
+                                                child: Text('Confirm')),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: Text(
+                            'SEND TO MOBILE',
+                            // style: TextStyle(
+                            //   fontSize: 10.0,
+                            //   fontFamily: 'Roboto',
+                            //   color: Colors.white,
+                            //   fontWeight: FontWeight.bold,
+                            //   letterSpacing: 1.0,
+                            // ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 30,
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: primaryDarkColor,
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Text(
+                                          'Select preferred bank and branches'),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      DropdownButtonFormField<String>(
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          hintText: 'Select Bank',
+                                          labelStyle: MyTheme
+                                              .darkTheme.textTheme.bodyLarge!
+                                              .copyWith(color: Colors.grey),
+                                          border: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Colors.grey.shade300,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                        ),
+                                        value:
+                                            selectedBankValue, // Set the selected value if needed
+                                        items:
+                                            bankModelsDropdownList.map((bank) {
+                                          return DropdownMenuItem<String>(
+                                            value: bank,
+                                            child: Text(bank),
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedBankValue = value;
+                                            // You can add additional logic if needed
+                                          });
+                                        },
+                                      ),
+
+                                      SizedBox(height: 20),
+                                      // DropdownButtonFormField<String>(
+                                      //   decoration: InputDecoration(
+                                      //     filled: true,
+                                      //     fillColor: Colors.white,
+                                      //     hintText: 'Select Branch',
+                                      //     labelStyle: MyTheme
+                                      //         .darkTheme.textTheme.bodyLarge!1
+                                      //         .copyWith(color: Colors.grey),
+                                      //     border: OutlineInputBorder(
+                                      //       borderSide: const BorderSide(
+                                      //         color: Colors.grey,
+                                      //         width: 1.0,
+                                      //       ),
+                                      //       borderRadius: BorderRadius.circular(8.0),
+                                      //     ),
+                                      //     enabledBorder: OutlineInputBorder(
+                                      //       borderSide: BorderSide(
+                                      //         color: Colors.grey.shade300,
+                                      //         width: 2.0,
+                                      //       ),
+                                      //       borderRadius: BorderRadius.circular(8.0),
+                                      //     ),
+                                      //     focusedBorder: OutlineInputBorder(
+                                      //       borderSide: const BorderSide(
+                                      //         color: Colors.grey,
+                                      //         width: 1.0,
+                                      //       ),
+                                      //       borderRadius: BorderRadius.circular(8.0),
+                                      //     ),
+                                      //   ),
+                                      //   value: selectedBranchValue,
+                                      //   items: selectedBankValue != 'Select Bank' &&
+                                      //           bankBranches
+                                      //               .containsKey(selectedBankValue)
+                                      //       ? [
+                                      //           'Select Branch',
+                                      //           ...bankBranches[selectedBankValue]!
+                                      //         ].map((branch) {
+                                      //           return DropdownMenuItem<String>(
+                                      //             value: branch,
+                                      //             child: Text(branch),
+                                      //           );
+                                      //         }).toList()
+                                      //       : [],
+                                      //   onChanged: (value) {
+                                      //     setState(() {
+                                      //       selectedBranchValue = value!;
+                                      //     });
+                                      //   },
+                                      // ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      SizedBox(
+                                        width: double.infinity,
+                                        height: 48,
+                                        child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    primaryDarkColor),
+                                            onPressed: () {
+                                              // showBottomModal(context, bankContent);
+                                            },
+                                            child: Text('Confirm')),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: Text('SEND TO BANK'),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                    ],
+                  )
+                ],
+              ));
+        });
   }
 
   String? selectedOption;
@@ -462,153 +875,153 @@ class _HomeState extends State<Home> {
       context,
       listen: false,
     );
-    Widget bankContent = Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 20),
-        Row(
-          children: [
-            Text(
-              'Bank Name:',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              bankModels.isNotEmpty ? bankModels[0]?.bankName ?? 'N/A' : 'N/A',
-              style: Theme.of(context)
-                  .textTheme
-                  .displayLarge!
-                  .copyWith(fontSize: 16),
-            ),
-          ],
-        ),
-        const SizedBox(height: 20),
-        Row(
-          children: [
-            Text(
-              'Bank Branch:',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              bankModels.isNotEmpty
-                  ? bankModels[0]?.bankBranch ?? 'N/A'
-                  : 'N/A',
-              style: Theme.of(context)
-                  .textTheme
-                  .displayLarge!
-                  .copyWith(fontSize: 16),
-            ),
-          ],
-        ),
-        const SizedBox(height: 20),
-        Row(
-          children: [
-            Text(
-              'Account Name:',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              bankModels.isNotEmpty
-                  ? bankModels[0]?.accountName ?? 'N/A'
-                  : 'N/A',
-              style: Theme.of(context)
-                  .textTheme
-                  .displayLarge!
-                  .copyWith(fontSize: 16),
-            ),
-          ],
-        ),
-        const SizedBox(height: 20),
-        Row(
-          children: [
-            Text(
-              'Account Number:',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              bankModels.isNotEmpty
-                  ? bankModels[0]?.accountNumber ?? 'N/A'
-                  : 'N/A',
-              style: Theme.of(context)
-                  .textTheme
-                  .displayLarge!
-                  .copyWith(fontSize: 16),
-            ),
-          ],
-        ),
-        const SizedBox(height: 20),
-        Container(
-          margin: const EdgeInsets.only(left: 10),
-          child: CustomRequestButton(
-            cookie:
-                'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
-            authorization: 'Bearer ${userProvider.user?.token}',
-            // buttonError: buttonError,
-            //buttonErrorMessage: buttonErrorMessage,
-            url: '/mobile/withdrawals/request_funds_transfer',
-            method: 'POST',
-            buttonText: 'COnfirm',
-            body: {
-              "user_id": userProvider.user?.id,
-              "property_id": propertyProvider.property?.id,
-              "amount": 100,
-              "recipient": "3",
-              "withdrawal_for": 5,
-              "phone": "",
-              "expense_category_id": "",
-              "bank_id": "9488",
-              "account_number": "01109123441200",
-              "account_name": "JAMES NJUGUNA NGURUI",
-              "transfer_from": "bank-9429",
-              "transfer_to": "bank-9488",
-              "tenant_id": "",
-              "contribution_id": "",
-            },
-            onSuccess: (res) {
-              if (res['isSuccessful'] == false) {
-                return showToast(
-                  context,
-                  'Error!',
-                  res['error'],
-                  Colors.red,
-                );
-              } else {
-                // Handle success case
-                // Do any additional processing or navigation
-                showToast(
-                  context,
-                  'Success!',
-                  'Withdrawal Request successful',
-                  mintyGreen,
-                );
+    // Widget bankContent = Column(
+    //   mainAxisSize: MainAxisSize.min,
+    //   crossAxisAlignment: CrossAxisAlignment.start,
+    //   children: [
+    //     const SizedBox(height: 20),
+    //     Row(
+    //       children: [
+    //         Text(
+    //           'Bank Name:',
+    //           style: Theme.of(context).textTheme.bodySmall,
+    //         ),
+    //         SizedBox(
+    //           width: 10,
+    //         ),
+    //         Text(
+    //           bankModels.isNotEmpty ? bankModels[0]?.bankName ?? 'N/A' : 'N/A',
+    //           style: Theme.of(context)
+    //               .textTheme
+    //               .displayLarge!
+    //               .copyWith(fontSize: 16),
+    //         ),
+    //       ],
+    //     ),
+    //     const SizedBox(height: 20),
+    //     Row(
+    //       children: [
+    //         Text(
+    //           'Bank Branch:',
+    //           style: Theme.of(context).textTheme.bodySmall,
+    //         ),
+    //         SizedBox(
+    //           width: 10,
+    //         ),
+    //         Text(
+    //           bankModels.isNotEmpty
+    //               ? bankModels[0]?.bankBranch ?? 'N/A'
+    //               : 'N/A',
+    //           style: Theme.of(context)
+    //               .textTheme
+    //               .displayLarge!
+    //               .copyWith(fontSize: 16),
+    //         ),
+    //       ],
+    //     ),
+    //     const SizedBox(height: 20),
+    //     Row(
+    //       children: [
+    //         Text(
+    //           'Account Name:',
+    //           style: Theme.of(context).textTheme.bodySmall,
+    //         ),
+    //         SizedBox(
+    //           width: 10,
+    //         ),
+    //         Text(
+    //           bankModels.isNotEmpty
+    //               ? bankModels[0]?.accountName ?? 'N/A'
+    //               : 'N/A',
+    //           style: Theme.of(context)
+    //               .textTheme
+    //               .displayLarge!
+    //               .copyWith(fontSize: 16),
+    //         ),
+    //       ],
+    //     ),
+    //     const SizedBox(height: 20),
+    //     Row(
+    //       children: [
+    //         Text(
+    //           'Account Number:',
+    //           style: Theme.of(context).textTheme.bodySmall,
+    //         ),
+    //         SizedBox(
+    //           width: 10,
+    //         ),
+    //         Text(
+    //           bankModels.isNotEmpty
+    //               ? bankModels[0]?.accountNumber ?? 'N/A'
+    //               : 'N/A',
+    //           style: Theme.of(context)
+    //               .textTheme
+    //               .displayLarge!
+    //               .copyWith(fontSize: 16),
+    //         ),
+    //       ],
+    //     ),
+    //     const SizedBox(height: 20),
+    //     Container(
+    //       margin: const EdgeInsets.only(left: 10),
+    //       child: CustomRequestButton(
+    //         cookie:
+    //             'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
+    //         authorization: 'Bearer ${userProvider.user?.token}',
+    //         // buttonError: buttonError,
+    //         //buttonErrorMessage: buttonErrorMessage,
+    //         url: '/mobile/withdrawals/request_funds_transfer',
+    //         method: 'POST',
+    //         buttonText: 'COnfirm',
+    //         body: {
+    //           "user_id": userProvider.user?.id,
+    //           "property_id": propertyProvider.property?.id,
+    //           "amount": 100,
+    //           "recipient": "3",
+    //           "withdrawal_for": 5,
+    //           "phone": "",
+    //           "expense_category_id": "",
+    //           "bank_id": "9488",
+    //           "account_number": "01109123441200",
+    //           "account_name": "JAMES NJUGUNA NGURUI",
+    //           "transfer_from": "bank-9429",
+    //           "transfer_to": "bank-9488",
+    //           "tenant_id": "",
+    //           "contribution_id": "",
+    //         },
+    //         onSuccess: (res) {
+    //           if (res['isSuccessful'] == false) {
+    //             return showToast(
+    //               context,
+    //               'Error!',
+    //               res['error'],
+    //               Colors.red,
+    //             );
+    //           } else {
+    //             // Handle success case
+    //             // Do any additional processing or navigation
+    //             showToast(
+    //               context,
+    //               'Success!',
+    //               'Withdrawal Request successful',
+    //               mintyGreen,
+    //             );
 
-                Future.delayed(const Duration(seconds: 2), () {
-                  // Delay for 2 seconds (adjust as needed)
-                  // Example navigation:
-                  PersistentNavBarNavigator.pushNewScreen(context,
-                      withNavBar: false,
-                      pageTransitionAnimation:
-                          PageTransitionAnimation.cupertino,
-                      screen: ListWithdrawals());
-                });
-              }
-            },
-          ),
-        ),
-      ],
-    );
+    //             Future.delayed(const Duration(seconds: 2), () {
+    //               // Delay for 2 seconds (adjust as needed)
+    //               // Example navigation:
+    //               PersistentNavBarNavigator.pushNewScreen(context,
+    //                   withNavBar: false,
+    //                   pageTransitionAnimation:
+    //                       PageTransitionAnimation.cupertino,
+    //                   screen: ListWithdrawals());
+    //             });
+    //           }
+    //         },
+    //       ),
+    //     ),
+    //   ],
+    // );
     Widget modalContent = Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -757,411 +1170,6 @@ class _HomeState extends State<Home> {
       ],
     );
 
-    Widget bottomContent = Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 20),
-        Text(
-          'CURRENT AVAILABLE BALANCE:',
-          style: TextStyle(color: Colors.black),
-        ),
-        SizedBox(
-          height: 5,
-        ),
-        Text(
-          'KES ${currencyFormat.format(double.parse(rentInfo['current_balance'] ?? '0.0'))}',
-          // 'KES ${currencyFormat.format(rentInfo['amount_collected'] ?? 0)}',
-          style: Theme.of(context).textTheme.displayLarge,
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        const Row(
-          children: [
-            Icon(
-              Icons.money_off,
-              color: Color.fromRGBO(13, 201, 150, 1),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text('Enter amount to withdraw'),
-          ],
-        ),
-        const SizedBox(height: 10),
-        TextFormField(
-          style: bodyText,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            hintText: 'ENTER AMOUNT',
-            labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                .copyWith(color: Colors.grey),
-            border: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey.shade300,
-                width: 2.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
-        ),
-        SizedBox(height: 10.0),
-        Text(
-          'Select withdrawal purpose',
-          style: TextStyle(fontSize: 18.0),
-        ),
-        SizedBox(height: 10.0),
-        DropdownButtonFormField(
-          value: selectedOption,
-          items: [
-            DropdownMenuItem(
-              child: Text('Expense Payment'),
-              value: 'expense_payment',
-            ),
-            DropdownMenuItem(
-              child: Text('Tenant Refund'),
-              value: 'tenant_refund',
-            ),
-            DropdownMenuItem(
-              child: Text('Account Transfer'),
-              value: 'account_transfer',
-            ),
-          ],
-          onChanged: (value) {
-            setState(() {
-              selectedOption = value;
-            });
-          },
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            hintText: 'Select purpose',
-            labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                .copyWith(color: Colors.grey),
-            border: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey.shade300,
-                width: 2.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        Text(
-          'Choose payment method',
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                style:
-                    ElevatedButton.styleFrom(backgroundColor: primaryDarkColor),
-                onPressed: () {
-                  final userProvider = Provider.of<UserProvider>(
-                    context,
-                    listen: false,
-                  );
-                  final phone = userProvider.user?.phone;
-                  TextEditingController _phoneNumberController =
-                      TextEditingController(text: phone);
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Padding(
-                        padding: EdgeInsets.all(30),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: AlertDialog(
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Confirm phone number'),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                TextFormField(
-                                  controller: _phoneNumberController,
-                                  style: bodyText,
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: Colors.white,
-                                    hintText: 'ENTER AMOUNT',
-                                    labelStyle: MyTheme
-                                        .darkTheme.textTheme.bodyLarge!
-                                        .copyWith(color: Colors.grey),
-                                    border: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                        color: Colors.grey,
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.grey.shade300,
-                                        width: 2.0,
-                                      ),
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: const BorderSide(
-                                        color: Colors.grey,
-                                        width: 1.0,
-                                      ),
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          backgroundColor: primaryDarkColor),
-                                      onPressed: () {
-                                        showToast(
-                                          context,
-                                          'Success!',
-                                          'Your withdrawal request is successful!',
-                                          mintyGreen,
-                                        );
-
-                                        Future.delayed(
-                                            const Duration(seconds: 2), () {
-                                          // Delay for 2 seconds (adjust as needed)
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: ((context) =>
-                                                      ListWithdrawals())));
-
-                                          // Navigator.push(
-                                          //   context,
-                                          //   MaterialPageRoute(
-                                          //     builder: ((context) =>
-                                          //         const Home()),
-                                          //   ),
-                                          // );
-                                        });
-                                      },
-                                      child: Text('Confirm')),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: Text(
-                  'SEND TO MOBILE',
-                  // style: TextStyle(
-                  //   fontSize: 10.0,
-                  //   fontFamily: 'Roboto',
-                  //   color: Colors.white,
-                  //   fontWeight: FontWeight.bold,
-                  //   letterSpacing: 1.0,
-                  // ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 30,
-            ),
-            Expanded(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: primaryDarkColor,
-                ),
-                onPressed: () {
-                  // showDialog(
-                  //   context: context,
-                  //   builder: (BuildContext context) {
-                  //     return AlertDialog(
-                  //       content: Column(
-                  //         mainAxisSize: MainAxisSize.min,
-                  //         children: [
-                  //           SizedBox(
-                  //             height: 20,
-                  //           ),
-                  //           Text('Select preferred bank and branches'),
-                  //           SizedBox(
-                  //             height: 10,
-                  //           ),
-                  //           // DropdownButtonFormField<String>(
-                  //           //   decoration: InputDecoration(
-                  //           //     filled: true,
-                  //           //     fillColor: Colors.white,
-                  //           //     hintText: 'Select Bank',
-                  //           //     labelStyle: MyTheme
-                  //           //         .darkTheme.textTheme.bodyLarge!
-                  //           //         .copyWith(color: Colors.grey),
-                  //           //     border: OutlineInputBorder(
-                  //           //       borderSide: const BorderSide(
-                  //           //         color: Colors.grey,
-                  //           //         width: 1.0,
-                  //           //       ),
-                  //           //       borderRadius: BorderRadius.circular(8.0),
-                  //           //     ),
-                  //           //     enabledBorder: OutlineInputBorder(
-                  //           //       borderSide: BorderSide(
-                  //           //         color: Colors.grey.shade300,
-                  //           //         width: 2.0,
-                  //           //       ),
-                  //           //       borderRadius: BorderRadius.circular(8.0),
-                  //           //     ),
-                  //           //     focusedBorder: OutlineInputBorder(
-                  //           //       borderSide: const BorderSide(
-                  //           //         color: Colors.grey,
-                  //           //         width: 1.0,
-                  //           //       ),
-                  //           //       borderRadius: BorderRadius.circular(8.0),
-                  //           //     ),
-                  //           //   ),
-                  //           //   value: selectedBankValue,
-                  //           //   items: [
-                  //           //     'Select Bank',
-                  //           //     'KCB',
-                  //           //     'EQUITY',
-                  //           //     'COOPERATIVE BANK'
-                  //           //   ].map((bank) {
-                  //           //     return DropdownMenuItem<String>(
-                  //           //       value: bank,
-                  //           //       child: Text(bank),
-                  //           //     );
-                  //           //   }).toList(),
-                  //           //   onChanged: (value) {
-                  //           //     setState(() {
-                  //           //       selectedBankValue = value!;
-                  //           //       selectedBranchValue =
-                  //           //           ''; // Clear branch when bank changes
-                  //           //     });
-                  //           //   },
-                  //           // ),
-                  //           SizedBox(height: 20),
-                  //           // DropdownButtonFormField<String>(
-                  //           //   decoration: InputDecoration(
-                  //           //     filled: true,
-                  //           //     fillColor: Colors.white,
-                  //           //     hintText: 'Select Branch',
-                  //           //     labelStyle: MyTheme
-                  //           //         .darkTheme.textTheme.bodyLarge!1
-                  //           //         .copyWith(color: Colors.grey),
-                  //           //     border: OutlineInputBorder(
-                  //           //       borderSide: const BorderSide(
-                  //           //         color: Colors.grey,
-                  //           //         width: 1.0,
-                  //           //       ),
-                  //           //       borderRadius: BorderRadius.circular(8.0),
-                  //           //     ),
-                  //           //     enabledBorder: OutlineInputBorder(
-                  //           //       borderSide: BorderSide(
-                  //           //         color: Colors.grey.shade300,
-                  //           //         width: 2.0,
-                  //           //       ),
-                  //           //       borderRadius: BorderRadius.circular(8.0),
-                  //           //     ),
-                  //           //     focusedBorder: OutlineInputBorder(
-                  //           //       borderSide: const BorderSide(
-                  //           //         color: Colors.grey,
-                  //           //         width: 1.0,
-                  //           //       ),
-                  //           //       borderRadius: BorderRadius.circular(8.0),
-                  //           //     ),
-                  //           //   ),
-                  //           //   value: selectedBranchValue,
-                  //           //   items: selectedBankValue != 'Select Bank' &&
-                  //           //           bankBranches
-                  //           //               .containsKey(selectedBankValue)
-                  //           //       ? [
-                  //           //           'Select Branch',
-                  //           //           ...bankBranches[selectedBankValue]!
-                  //           //         ].map((branch) {
-                  //           //           return DropdownMenuItem<String>(
-                  //           //             value: branch,
-                  //           //             child: Text(branch),
-                  //           //           );
-                  //           //         }).toList()
-                  //           //       : [],
-                  //           //   onChanged: (value) {
-                  //           //     setState(() {
-                  //           //       selectedBranchValue = value!;
-                  //           //     });
-                  //           //   },
-                  //           // ),
-                  //           SizedBox(
-                  //             height: 20,
-                  //           ),
-                  //           SizedBox(
-                  //             width: double.infinity,
-                  //             height: 48,
-                  //             child: ElevatedButton(
-                  //                 style: ElevatedButton.styleFrom(
-                  //                     backgroundColor: primaryDarkColor),
-                  //                 onPressed: () {
-                  //                   showBottomModal(context, bankContent);
-                  //                 },
-                  //                 child: Text('Confirm')),
-                  //           )
-                  //         ],
-                  //       ),
-                  //     );
-                  //   },
-                  // );
-
-                  showBottomModal(context, bankContent);
-                },
-                child: Text('SEND TO BANK'),
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-          ],
-        )
-      ],
-    );
-
     return Scaffold(
       backgroundColor: const Color.fromRGBO(247, 247, 247, 1),
       body: SafeArea(
@@ -1197,7 +1205,8 @@ class _HomeState extends State<Home> {
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              showBottomModal(context, bottomContent);
+                              showBottom();
+                              //showBottomModal(context, bottomContent);
                             },
                             child: Padding(
                               padding: EdgeInsets.all(10),
