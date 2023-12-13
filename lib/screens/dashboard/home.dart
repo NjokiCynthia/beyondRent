@@ -250,6 +250,16 @@ class _HomeState extends State<Home> {
   }
 
   void showBottom() {
+    TextEditingController amountController = TextEditingController();
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    final userID = userProvider.user?.id;
+    final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -289,6 +299,7 @@ class _HomeState extends State<Home> {
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
+                    controller: amountController,
                     style: bodyText,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
@@ -455,21 +466,78 @@ class _HomeState extends State<Home> {
                                           SizedBox(
                                             height: 20,
                                           ),
-                                          SizedBox(
-                                            width: double.infinity,
-                                            height: 48,
-                                            child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        primaryDarkColor),
-                                                onPressed: () {
+                                          // SizedBox(
+                                          //   width: double.infinity,
+                                          //   height: 48,
+                                          //   child: ElevatedButton(
+                                          //       style: ElevatedButton.styleFrom(
+                                          //           backgroundColor:
+                                          //               primaryDarkColor),
+                                          //       onPressed: () {
+                                          //         showToast(
+                                          //           context,
+                                          //           'Success!',
+                                          //           'Your withdrawal request is successful!',
+                                          //           mintyGreen,
+                                          //         );
+
+                                          //         Future.delayed(
+                                          //             const Duration(
+                                          //                 seconds: 2), () {
+                                          //           // Delay for 2 seconds (adjust as needed)
+                                          //           Navigator.push(
+                                          //               context,
+                                          //               MaterialPageRoute(
+                                          //                   builder: ((context) =>
+                                          //                       ListWithdrawals())));
+                                          //         });
+                                          //       },
+                                          //       child: Text('CONFIRM')),
+                                          // ),
+                                          CustomRequestButton(
+                                            cookie:
+                                                'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
+                                            authorization:
+                                                'Bearer ${userProvider.user?.token}',
+                                            url:
+                                                '/mobile/withdrawals/request_funds_transfer',
+                                            method: 'POST',
+                                            buttonText: 'CONFIRM',
+                                            body: {
+                                              "user_id": userID,
+                                              'property_id': propertyProvider
+                                                      .property?.id
+                                                      .toString() ??
+                                                  '',
+                                              "amount": amountController.text,
+                                              "recipient": "3",
+                                              "withdrawal_for": 5,
+                                              "phone": "",
+                                              "expense_category_id": "",
+                                              "bank_id": "9488",
+                                              "account_number":
+                                                  "01109123441200",
+                                              "account_name":
+                                                  "JAMES NJUGUNA NGURUI",
+                                              "transfer_from": "bank-9429",
+                                              "transfer_to": "bank-9488",
+                                              "tenant_id": "",
+                                              "contribution_id": ""
+                                            },
+                                            onSuccess: (res) {
+                                              print(
+                                                  '<<<<<<<<<<< res >>>>>>>>>>>>>>');
+                                              print(res);
+                                              if (res['isSuccessful'] == true) {
+                                                if (res['data']['response']
+                                                        ['status'] ==
+                                                    1) {
                                                   showToast(
                                                     context,
                                                     'Success!',
                                                     'Your withdrawal request is successful!',
                                                     mintyGreen,
                                                   );
-
                                                   Future.delayed(
                                                       const Duration(
                                                           seconds: 2), () {
@@ -480,8 +548,18 @@ class _HomeState extends State<Home> {
                                                             builder: ((context) =>
                                                                 ListWithdrawals())));
                                                   });
-                                                },
-                                                child: Text('CONFIRM')),
+                                                }
+                                                ;
+                                              } else {
+                                                showToast(
+                                                  context,
+                                                  'Error!',
+                                                  res['data']['response']
+                                                      ['message'],
+                                                  Colors.red,
+                                                );
+                                              }
+                                            },
                                           ),
                                         ],
                                       ),
@@ -761,11 +839,11 @@ class _HomeState extends State<Home> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Text('Total rent for $currentMonth'),
-              Text('Total rent collected'),
+              Text('Withdrawable amount'),
 
               Text(
                 // 'KES ${currencyFormat.format(rentInfo['amount_collected'] ?? 0)}',
-                'KES ${currencyFormat.format(double.parse(rentInfo['amount_collected'] ?? '0.0'))}',
+                'KES ${currencyFormat.format(double.parse(rentInfo['current_balance'] ?? '0.0'))}',
                 //'Ksh. 0',
                 style: Theme.of(context).textTheme.displayLarge,
               ),
@@ -779,7 +857,7 @@ class _HomeState extends State<Home> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Withdrawable amount',
+                    'Total rent collected',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   Text(
@@ -793,7 +871,7 @@ class _HomeState extends State<Home> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'KES ${currencyFormat.format(double.parse(rentInfo['current_balance'] ?? '0.0'))}',
+                    'KES ${currencyFormat.format(double.parse(rentInfo['amount_collected'] ?? '0.0'))}',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   Text(

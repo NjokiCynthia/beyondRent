@@ -17,7 +17,7 @@ class ListWithdrawals extends StatefulWidget {
 
 class _ListWithdrawalsState extends State<ListWithdrawals> {
   bool withdrawalListLoaded = false;
-  List withdrawalList = [];
+  List<Map<String, dynamic>> withdrawalList = [];
 
   fetchWithdrawals() async {
     print('I am here to fetch withdrawals');
@@ -30,18 +30,24 @@ class _ListWithdrawalsState extends State<ListWithdrawals> {
       listen: false,
     );
     final token = userProvider.user?.token;
+    final id = userProvider.user?.id;
 
     final postData = {
+      "user_id": id,
       "property_id": propertyProvider.property?.id,
+      "sort_by": "date_desc",
+      "status": [2]
     };
+
     final apiClient = ApiClient();
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token',
     };
+
     try {
       var response = await apiClient.post(
-        '/mobile/withdrawals/get_group_withdrawal_list',
+        '/mobile/withdrawals/withdrawal_request_list',
         postData,
         headers: headers,
       );
@@ -49,9 +55,13 @@ class _ListWithdrawalsState extends State<ListWithdrawals> {
       var responseStatus = response['response']['status'];
       if (responseStatus == 1) {
         print('These are my withdrawal details below here >>>>>>>>>>>');
-        print(response['response']['withdrawals']);
+        print(response['response']['posts']);
+
+        List<Map<String, dynamic>> posts =
+            List.from(response['response']['posts']);
+
         setState(() {
-          withdrawalList = response['response']['withdrawals'];
+          withdrawalList = posts;
         });
       }
     } catch (e) {
@@ -106,7 +116,7 @@ class _ListWithdrawalsState extends State<ListWithdrawals> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'List Withdrawals',
+                'List Approved Withdrawals',
                 style: TextStyle(color: Colors.black, fontSize: 16),
               ),
             ],
@@ -156,7 +166,7 @@ class _ListWithdrawalsState extends State<ListWithdrawals> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            '${withdrawal['withdrawal_date']}',
+                                            '${withdrawal['date']}',
                                             style: const TextStyle(
                                                 color: Colors.grey,
                                                 fontSize: 13),
@@ -190,7 +200,7 @@ class _ListWithdrawalsState extends State<ListWithdrawals> {
                                       const SizedBox(
                                         height: 5,
                                       ),
-                                      Text('${withdrawal['type']}',
+                                      Text('${withdrawal['status']}',
                                           style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 14)),
