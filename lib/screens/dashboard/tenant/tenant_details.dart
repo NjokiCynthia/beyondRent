@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
@@ -48,13 +49,16 @@ class _ViewTenantState extends State<ViewTenant> {
       var response = await apiClient.post(
           '/mobile/invoices/get_property_invoices', postData,
           headers: headers);
+      print('API Response:');
+      print(response);
       if (response['response']['status'] == 1) {
         print('This is my tenant invoice details>>>>>>>>>>>');
+
         print(response['response']);
 
         setState(() {
+          print('............................');
           tenantDetails = response['response'];
-          tenantName = tenantDetails['tenant'];
         });
       }
     } catch (e) {
@@ -96,23 +100,105 @@ class _ViewTenantState extends State<ViewTenant> {
               : Column(
                   children: [
                     Text(
-                      '',
-                      // 'Tenant: ${tenantName ?? "None"} ',
+                      '${tenantDetails['invoices'][0]['tenant'] ?? "None"}',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                    Text(
-                      'Tenant. ', //${widget.unitNo}',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(fontSize: 15),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          'Amount payable:',
+                          style: TextStyle(color: primaryDarkColor),
+                        ),
+                        Text(
+                          'KES ${currencyFormat.format(double.parse(tenantDetails['total_amount_payable'].toString() ?? "0"))}',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ],
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          'Amount paid:',
+                          style: TextStyle(color: primaryDarkColor),
+                        ),
+                        Text(
+                          'KES ${currencyFormat.format(double.parse(tenantDetails['total_amount_paid'].toString() ?? "0"))}',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
                   ],
                 ),
           const SizedBox(height: 10),
         ],
       ),
     );
+
+    Widget invoiceItem(Map invoice) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            border: Border.fromBorderSide(BorderSide(
+                strokeAlign: BorderSide.strokeAlignOutside,
+                color: primaryDarkColor.withOpacity(0.1))),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 5,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    //'',
+                    '${invoice?['invoice_date'] ?? "No date"}',
+                    style: const TextStyle(color: Colors.grey, fontSize: 13),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: primaryDarkColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 10, right: 10, top: 2, bottom: 2),
+                      child: Text(
+                        'KES ${currencyFormat.format(double.parse(invoice['amount_payable'].toString() ?? "0"))}',
+                        style: const TextStyle(
+                            color: primaryDarkColor, fontSize: 14),
+                      ),
+                    ),
+                  ),
+                  // Text(
+                  //   'KES ${currencyFormat.format(double.parse(withdrawal['amount'].toString() ?? "0"))}',
+                  // ),
+                ],
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                '',
+                //'${invoice['type']}',
+                style: const TextStyle(color: Colors.black, fontSize: 14),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     Widget propertyDetails = Container(
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
@@ -126,7 +212,7 @@ class _ViewTenantState extends State<ViewTenant> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'History',
+            'Summary',
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           Container(
@@ -138,8 +224,16 @@ class _ViewTenantState extends State<ViewTenant> {
             ),
           ),
           const SizedBox(height: 30),
-          const Center(
-            child: const EmptyTransactions(),
+          Flexible(
+            child: tenantDetails['invoices'] != null
+                ? ListView.builder(
+                    itemCount: tenantDetails['invoices'].length,
+                    itemBuilder: (context, index) {
+                      var invoice = tenantDetails['invoices'][index];
+                      return invoiceItem(invoice);
+                    },
+                  )
+                : Center(child: EmptyTransactions()),
           ),
         ],
       ),
@@ -338,26 +432,7 @@ class _ViewTenantState extends State<ViewTenant> {
                   backButton: true,
                   backButtonText: 'Tenant Details',
                   action: GestureDetector(
-                    onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: ((context) => AddTenant(
-                      //           unitID: widget.unitID,
-                      //         )),
-                      //   ),
-                      // ).then((resp) {
-                      //   print('We got info');
-                      //   print('And here is the full response');
-                      //   print(resp);
-                      //   print('First Name: ${resp['first_name']}');
-                      //   print('Last Name: ${resp['last_name']}');
-                      //   setState(() {
-                      //     // tenantName =
-                      //     //     '${resp['first_name']} ${resp['last_name']}';
-                      //   });
-                      // });
-                    },
+                    onTap: () {},
                     child: Container(
                       padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                       decoration: BoxDecoration(
