@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
+import 'package:x_rent/models/bank_model.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/screens/dashboard/transactions.dart';
+import 'package:x_rent/screens/dashboard/withdrawals/list_withdrawals.dart';
+import 'package:x_rent/screens/dashboard/withdrawals/withdrawals.dart';
+import 'package:x_rent/screens/intro_screens/onboarding_page.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/screens/dashboard/propertyDetails.dart';
@@ -90,8 +94,88 @@ class _HomeState extends State<Home> {
     'Equity': ['Select Branch', 'BranchA', 'BranchB', 'BranchC'],
     'Cooperative Bank': ['Select Branch', 'BranchX', 'BranchY', 'BranchZ'],
   };
-  String selectedBankValue = 'Select Bank';
+  String selectedBankAccount = 'Select Bank';
   String selectedBranchValue = '';
+  String? selectedBankValue;
+  bool fetchingBanks = false;
+  List<String> bankModelsDropdownList = [];
+  List<Banks> bankModels = [];
+  Future<void> _fetchBanks(BuildContext context) async {
+    print('I am here to fetch banks');
+    try {
+      setState(() {
+        fetchingBanks = true;
+      });
+
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final token = userProvider.user?.token;
+      final userId = userProvider.user?.id;
+      final propertyProvider = Provider.of<PropertyProvider>(
+        context,
+        listen: false,
+      );
+
+      final postData = {
+        'user_id': userId?.toString() ?? '',
+        'property_id': propertyProvider.property?.id.toString() ?? '',
+      };
+
+      final apiClient = ApiClient();
+      final headers = {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      };
+
+      final response = await apiClient.post(
+        '/mobile/bank_accounts/get_property_recipients_bank_accounts_list',
+        postData,
+        headers: headers,
+      );
+
+      print('Banks Response: $response');
+
+      setState(() {
+        bankModels = [];
+        bankModelsDropdownList = [];
+      });
+
+      if (response['response']['status'] == 1 &&
+          response['response']['banks'] != null) {
+        final data =
+            List<Map<String, dynamic>>.from(response['response']['banks']);
+
+        final tempBankModels = data.map((bankData) {
+          return Banks(
+            id: bankData['id'].toString(),
+            accountNumber: bankData['account_number'].toString(),
+            accountName: bankData['account_name'].toString(),
+            bankBranch: bankData['bank_branch'].toString(),
+            bankName: bankData['bank_name'].toString(),
+          );
+        }).toList();
+
+        setState(() {
+          bankModels = tempBankModels;
+          selectedBankAccount =
+              '${bankModels[0].bankName} (${bankModels[0].bankBranch}) ${bankModels[0].accountName} ${bankModels[0].accountName}';
+          bankModelsDropdownList = tempBankModels
+              .map((bankAccount) =>
+                  '${bankAccount.bankName} ${bankAccount.accountNumber}')
+              .toList();
+        });
+      } else {
+        print('No or invalid banks found in the response');
+        // Handle the case when 'status' is not 1 or 'banks' is null
+      }
+    } catch (error) {
+      print('Error fetching banks: $error');
+      // Handle the error
+    } finally {
+      setState(() {
+        fetchingBanks = false;
+      });
+    }
+  }
 
   bool rentInfoLoaded = false;
   Map<String, dynamic> rentInfo = {};
@@ -159,11 +243,425 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    _fetchBanks(context);
     fetchRentInfo();
 
     fetchTransactionsList();
   }
 
+  void showBottom() {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (_) {
+          return Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  Text(
+                    'CURRENT AVAILABLE BALANCE:',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    'KES ${currencyFormat.format(double.parse(rentInfo['current_balance'] ?? '0.0'))}',
+                    // 'KES ${currencyFormat.format(rentInfo['amount_collected'] ?? 0)}',
+                    style: Theme.of(context).textTheme.displayLarge,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  const Row(
+                    children: [
+                      Icon(
+                        Icons.money_off,
+                        color: Color.fromRGBO(13, 201, 150, 1),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text('Enter amount to withdraw'),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    style: bodyText,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'ENTER AMOUNT',
+                      labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                          .copyWith(color: Colors.grey),
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10.0),
+                  Text(
+                    'Select withdrawal purpose',
+                    style: TextStyle(fontSize: 18.0),
+                  ),
+                  SizedBox(height: 10.0),
+                  DropdownButtonFormField(
+                    value: selectedOption,
+                    items: [
+                      DropdownMenuItem(
+                        child: Text('Expense Payment'),
+                        value: 'expense_payment',
+                      ),
+                      DropdownMenuItem(
+                        child: Text('Tenant Refund'),
+                        value: 'tenant_refund',
+                      ),
+                      DropdownMenuItem(
+                        child: Text('Account Transfer'),
+                        value: 'account_transfer',
+                      ),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        selectedOption = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'Select purpose',
+                      labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                          .copyWith(color: Colors.grey),
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Choose payment method',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: primaryDarkColor),
+                          onPressed: () {
+                            final userProvider = Provider.of<UserProvider>(
+                              context,
+                              listen: false,
+                            );
+                            final phone = userProvider.user?.phone;
+                            TextEditingController _phoneNumberController =
+                                TextEditingController(text: phone);
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Padding(
+                                  padding: EdgeInsets.all(30),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: AlertDialog(
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Confirm phone number'),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          TextFormField(
+                                            controller: _phoneNumberController,
+                                            style: bodyText,
+                                            keyboardType: TextInputType.number,
+                                            decoration: InputDecoration(
+                                              filled: true,
+                                              fillColor: Colors.white,
+                                              hintText: 'ENTER AMOUNT',
+                                              labelStyle: MyTheme.darkTheme
+                                                  .textTheme.bodyLarge!
+                                                  .copyWith(color: Colors.grey),
+                                              border: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                  color: Colors.grey,
+                                                  width: 1.0,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                              ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Colors.grey.shade300,
+                                                  width: 2.0,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: const BorderSide(
+                                                  color: Colors.grey,
+                                                  width: 1.0,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        primaryDarkColor),
+                                                onPressed: () {
+                                                  showToast(
+                                                    context,
+                                                    'Success!',
+                                                    'Your withdrawal request is successful!',
+                                                    mintyGreen,
+                                                  );
+
+                                                  Future.delayed(
+                                                      const Duration(
+                                                          seconds: 2), () {
+                                                    // Delay for 2 seconds (adjust as needed)
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: ((context) =>
+                                                                ListWithdrawals())));
+                                                  });
+                                                },
+                                                child: Text('Confirm')),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: Text(
+                            'SEND TO MOBILE',
+                            // style: TextStyle(
+                            //   fontSize: 10.0,
+                            //   fontFamily: 'Roboto',
+                            //   color: Colors.white,
+                            //   fontWeight: FontWeight.bold,
+                            //   letterSpacing: 1.0,
+                            // ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 30,
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: primaryDarkColor,
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Text(
+                                          'Select preferred bank and branches'),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      DropdownButtonFormField<String>(
+                                        decoration: InputDecoration(
+                                          filled: true,
+                                          fillColor: Colors.white,
+                                          hintText: 'Select Bank',
+                                          labelStyle: MyTheme
+                                              .darkTheme.textTheme.bodyLarge!
+                                              .copyWith(color: Colors.grey),
+                                          border: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Colors.grey.shade300,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                              color: Colors.grey,
+                                              width: 1.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                        ),
+                                        value:
+                                            selectedBankValue, // Set the selected value if needed
+                                        items:
+                                            bankModelsDropdownList.map((bank) {
+                                          return DropdownMenuItem<String>(
+                                            value: bank,
+                                            child: Text(bank),
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedBankValue = value;
+                                            // You can add additional logic if needed
+                                          });
+                                        },
+                                      ),
+
+                                      SizedBox(height: 20),
+                                      // DropdownButtonFormField<String>(
+                                      //   decoration: InputDecoration(
+                                      //     filled: true,
+                                      //     fillColor: Colors.white,
+                                      //     hintText: 'Select Branch',
+                                      //     labelStyle: MyTheme
+                                      //         .darkTheme.textTheme.bodyLarge!1
+                                      //         .copyWith(color: Colors.grey),
+                                      //     border: OutlineInputBorder(
+                                      //       borderSide: const BorderSide(
+                                      //         color: Colors.grey,
+                                      //         width: 1.0,
+                                      //       ),
+                                      //       borderRadius: BorderRadius.circular(8.0),
+                                      //     ),
+                                      //     enabledBorder: OutlineInputBorder(
+                                      //       borderSide: BorderSide(
+                                      //         color: Colors.grey.shade300,
+                                      //         width: 2.0,
+                                      //       ),
+                                      //       borderRadius: BorderRadius.circular(8.0),
+                                      //     ),
+                                      //     focusedBorder: OutlineInputBorder(
+                                      //       borderSide: const BorderSide(
+                                      //         color: Colors.grey,
+                                      //         width: 1.0,
+                                      //       ),
+                                      //       borderRadius: BorderRadius.circular(8.0),
+                                      //     ),
+                                      //   ),
+                                      //   value: selectedBranchValue,
+                                      //   items: selectedBankValue != 'Select Bank' &&
+                                      //           bankBranches
+                                      //               .containsKey(selectedBankValue)
+                                      //       ? [
+                                      //           'Select Branch',
+                                      //           ...bankBranches[selectedBankValue]!
+                                      //         ].map((branch) {
+                                      //           return DropdownMenuItem<String>(
+                                      //             value: branch,
+                                      //             child: Text(branch),
+                                      //           );
+                                      //         }).toList()
+                                      //       : [],
+                                      //   onChanged: (value) {
+                                      //     setState(() {
+                                      //       selectedBranchValue = value!;
+                                      //     });
+                                      //   },
+                                      // ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      SizedBox(
+                                        width: double.infinity,
+                                        height: 48,
+                                        child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    primaryDarkColor),
+                                            onPressed: () {
+                                              // showBottomModal(context, bankContent);
+                                            },
+                                            child: Text('Confirm')),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: Text('SEND TO BANK'),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                    ],
+                  )
+                ],
+              ));
+        });
+  }
+
+  String? selectedOption;
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -257,7 +755,7 @@ class _HomeState extends State<Home> {
               const SizedBox(height: 10),
               ProgressBar(
                   // collectedAmount: rentInfo['amount_collected'],
-                  // expectedAmount: rentInfo['amount_expected'],
+                  // expectedAmount: rentInfo['amount_in_arrears'],
                   ),
               const SizedBox(height: 10),
               Row(
@@ -279,14 +777,10 @@ class _HomeState extends State<Home> {
                 children: [
                   Text(
                     'KES ${currencyFormat.format(double.parse(rentInfo['current_balance'] ?? '0.0'))}',
-
-                    // 'KES ${currencyFormat.format(rentInfo['amount_collected'] ?? 0)}',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   Text(
                     'KES ${currencyFormat.format(double.parse(rentInfo['amount_in_arrears'] ?? '0.0'))}',
-                    //'KES ${rentInfo['amount_in_arrears']}',
-                    //'KES ${currencyFormat.format(rentInfo['amount_collected'] ?? 0)}',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
@@ -377,206 +871,157 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
-    Widget bankContent = Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 20),
-        Row(
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              'Selected Bank:',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            Text(
-              'EQUITY BANK',
-              style: Theme.of(context).textTheme.displayLarge,
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        const SizedBox(height: 10),
-        const Row(
-          children: [
-            Icon(
-              Icons.credit_card,
-              color: Color.fromRGBO(13, 201, 150, 1),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text('Account name'),
-          ],
-        ),
-        const SizedBox(height: 10),
-        TextFormField(
-          style: bodyText,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            labelText: 'Account name',
-            labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                .copyWith(color: Colors.grey),
-            border: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey.shade300,
-                width: 2.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        const SizedBox(height: 10),
-        const Row(
-          children: [
-            Icon(
-              Icons.money_off,
-              color: Color.fromRGBO(13, 201, 150, 1),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text('Account number'),
-          ],
-        ),
-         const SizedBox(height: 10),
-        TextFormField(
-          style: bodyText,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            labelText: 'Account number',
-            labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                .copyWith(color: Colors.grey),
-            border: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.grey.shade300,
-                width: 2.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Colors.grey,
-                width: 1.0,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        const SizedBox(height: 10),
-        
-        
-        const SizedBox(height: 40),
-        Row(
-          children: [
-            GestureDetector(
-              onTap: () {
-              
-              },
-              child: Container(
-                margin: const EdgeInsets.only(right: 20),
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Wrap(
-                  direction: Axis.vertical,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/images/icons/home.png',
-                      width: 30,
-                    ),
-                    Text(
-                      'Mobile Money',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(color: Colors.black),
-                    ),
-                  ],
-                ),
-                
-              ),
-            ),
-            const Spacer(),
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Wrap(
-                  direction: Axis.vertical,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/images/icons/bank.png',
-                      width: 30,
-                    ),
-                    Text(
-                      'Bank Transfer',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(color: Colors.black),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        )
-      ],
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
     );
+    // Widget bankContent = Column(
+    //   mainAxisSize: MainAxisSize.min,
+    //   crossAxisAlignment: CrossAxisAlignment.start,
+    //   children: [
+    //     const SizedBox(height: 20),
+    //     Row(
+    //       children: [
+    //         Text(
+    //           'Bank Name:',
+    //           style: Theme.of(context).textTheme.bodySmall,
+    //         ),
+    //         SizedBox(
+    //           width: 10,
+    //         ),
+    //         Text(
+    //           bankModels.isNotEmpty ? bankModels[0]?.bankName ?? 'N/A' : 'N/A',
+    //           style: Theme.of(context)
+    //               .textTheme
+    //               .displayLarge!
+    //               .copyWith(fontSize: 16),
+    //         ),
+    //       ],
+    //     ),
+    //     const SizedBox(height: 20),
+    //     Row(
+    //       children: [
+    //         Text(
+    //           'Bank Branch:',
+    //           style: Theme.of(context).textTheme.bodySmall,
+    //         ),
+    //         SizedBox(
+    //           width: 10,
+    //         ),
+    //         Text(
+    //           bankModels.isNotEmpty
+    //               ? bankModels[0]?.bankBranch ?? 'N/A'
+    //               : 'N/A',
+    //           style: Theme.of(context)
+    //               .textTheme
+    //               .displayLarge!
+    //               .copyWith(fontSize: 16),
+    //         ),
+    //       ],
+    //     ),
+    //     const SizedBox(height: 20),
+    //     Row(
+    //       children: [
+    //         Text(
+    //           'Account Name:',
+    //           style: Theme.of(context).textTheme.bodySmall,
+    //         ),
+    //         SizedBox(
+    //           width: 10,
+    //         ),
+    //         Text(
+    //           bankModels.isNotEmpty
+    //               ? bankModels[0]?.accountName ?? 'N/A'
+    //               : 'N/A',
+    //           style: Theme.of(context)
+    //               .textTheme
+    //               .displayLarge!
+    //               .copyWith(fontSize: 16),
+    //         ),
+    //       ],
+    //     ),
+    //     const SizedBox(height: 20),
+    //     Row(
+    //       children: [
+    //         Text(
+    //           'Account Number:',
+    //           style: Theme.of(context).textTheme.bodySmall,
+    //         ),
+    //         SizedBox(
+    //           width: 10,
+    //         ),
+    //         Text(
+    //           bankModels.isNotEmpty
+    //               ? bankModels[0]?.accountNumber ?? 'N/A'
+    //               : 'N/A',
+    //           style: Theme.of(context)
+    //               .textTheme
+    //               .displayLarge!
+    //               .copyWith(fontSize: 16),
+    //         ),
+    //       ],
+    //     ),
+    //     const SizedBox(height: 20),
+    //     Container(
+    //       margin: const EdgeInsets.only(left: 10),
+    //       child: CustomRequestButton(
+    //         cookie:
+    //             'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
+    //         authorization: 'Bearer ${userProvider.user?.token}',
+    //         // buttonError: buttonError,
+    //         //buttonErrorMessage: buttonErrorMessage,
+    //         url: '/mobile/withdrawals/request_funds_transfer',
+    //         method: 'POST',
+    //         buttonText: 'COnfirm',
+    //         body: {
+    //           "user_id": userProvider.user?.id,
+    //           "property_id": propertyProvider.property?.id,
+    //           "amount": 100,
+    //           "recipient": "3",
+    //           "withdrawal_for": 5,
+    //           "phone": "",
+    //           "expense_category_id": "",
+    //           "bank_id": "9488",
+    //           "account_number": "01109123441200",
+    //           "account_name": "JAMES NJUGUNA NGURUI",
+    //           "transfer_from": "bank-9429",
+    //           "transfer_to": "bank-9488",
+    //           "tenant_id": "",
+    //           "contribution_id": "",
+    //         },
+    //         onSuccess: (res) {
+    //           if (res['isSuccessful'] == false) {
+    //             return showToast(
+    //               context,
+    //               'Error!',
+    //               res['error'],
+    //               Colors.red,
+    //             );
+    //           } else {
+    //             // Handle success case
+    //             // Do any additional processing or navigation
+    //             showToast(
+    //               context,
+    //               'Success!',
+    //               'Withdrawal Request successful',
+    //               mintyGreen,
+    //             );
+
+    //             Future.delayed(const Duration(seconds: 2), () {
+    //               // Delay for 2 seconds (adjust as needed)
+    //               // Example navigation:
+    //               PersistentNavBarNavigator.pushNewScreen(context,
+    //                   withNavBar: false,
+    //                   pageTransitionAnimation:
+    //                       PageTransitionAnimation.cupertino,
+    //                   screen: ListWithdrawals());
+    //             });
+    //           }
+    //         },
+    //       ),
+    //     ),
+    //   ],
+    // );
     Widget modalContent = Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -725,346 +1170,6 @@ class _HomeState extends State<Home> {
       ],
     );
 
-    Widget bottomContent = SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'CURRENT AVAILABLE BALANCE:',
-                style: TextStyle(color: Colors.black),
-              ),
-              Text(
-                "",
-                // 'KES ${currencyFormat.format(rentInfo['amount_collected'] ?? 0)}',
-                style: Theme.of(context).textTheme.displayLarge,
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          const Row(
-            children: [
-              Icon(
-                Icons.money_off,
-                color: Color.fromRGBO(13, 201, 150, 1),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text('Enter amount'),
-            ],
-          ),
-          const SizedBox(height: 10),
-          TextFormField(
-            style: bodyText,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              hintText: 'ENTER AMOUNT',
-              labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                  .copyWith(color: Colors.grey),
-              border: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.grey.shade300,
-                  width: 2.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  color: Colors.grey,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'Choose payment method',
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryDarkColor),
-                    onPressed: () {
-                      final userProvider = Provider.of<UserProvider>(
-                        context,
-                        listen: false,
-                      );
-                      final phone = userProvider.user?.phone;
-                      TextEditingController _phoneNumberController =
-                          TextEditingController(text: phone);
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Padding(
-                            padding: EdgeInsets.all(30),
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: AlertDialog(
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Confirm phone number'),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    TextFormField(
-                                      controller: _phoneNumberController,
-                                      style: bodyText,
-                                      keyboardType: TextInputType.number,
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        hintText: 'ENTER AMOUNT',
-                                        labelStyle: MyTheme
-                                            .darkTheme.textTheme.bodyLarge!
-                                            .copyWith(color: Colors.grey),
-                                        border: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                            color: Colors.grey,
-                                            width: 1.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.grey.shade300,
-                                            width: 2.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: const BorderSide(
-                                            color: Colors.grey,
-                                            width: 1.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 20,
-                                    ),
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  primaryDarkColor),
-                                          onPressed: () {},
-                                          child: Text('Confirm')),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Text(
-  'SEND TO MOBILE MONEY',
-  style: TextStyle(
-    fontSize: 12.0,
-    fontFamily: 'Roboto',
-    color: Colors.white
-    ,
-    fontWeight: FontWeight.bold,
-    letterSpacing: 1.0,
-  ),
-),),
-              ),
-              SizedBox(
-                width: 30,
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryDarkColor,
-                  ),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Text('Select preferred bank and branches'),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              DropdownButtonFormField<String>(
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  hintText: 'Select Bank',
-                                  labelStyle: MyTheme
-                                      .darkTheme.textTheme.bodyLarge!
-                                      .copyWith(color: Colors.grey),
-                                  border: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Colors.grey,
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.grey.shade300,
-                                      width: 2.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Colors.grey,
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
-                                ),
-                                value: selectedBankValue,
-                                items: [
-                                  'Select Bank',
-                                  'KCB',
-                                  'EQUITY',
-                                  'COOPERATIVE BANK'
-                                ].map((bank) {
-                                  return DropdownMenuItem<String>(
-                                    value: bank,
-                                    child: Text(bank),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedBankValue = value!;
-                                    selectedBranchValue =
-                                        ''; // Clear branch when bank changes
-                                  });
-                                },
-                              ),
-                              SizedBox(height: 20),
-                              DropdownButtonFormField<String>(
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  hintText: 'Select Branch',
-                                  labelStyle: MyTheme
-                                      .darkTheme.textTheme.bodyLarge!
-                                      .copyWith(color: Colors.grey),
-                                  border: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Colors.grey,
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.grey.shade300,
-                                      width: 2.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Colors.grey,
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
-                                ),
-                                value: selectedBranchValue,
-                                items: selectedBankValue != 'Select Bank' &&
-                                        bankBranches
-                                            .containsKey(selectedBankValue)
-                                    ? [
-                                        'Select Branch',
-                                        ...bankBranches[selectedBankValue]!
-                                      ].map((branch) {
-                                        return DropdownMenuItem<String>(
-                                          value: branch,
-                                          child: Text(branch),
-                                        );
-                                      }).toList()
-                                    : [],
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedBranchValue = value!;
-                                  });
-                                },
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              SizedBox(
-                                width: double.infinity,
-                                height: 48,
-                                child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: primaryDarkColor),
-                                    onPressed: () {
-                                      showBottomModal(context, bankContent);
-                                    },
-                                    child: Text('Confirm')),
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  child: Text(
-  'SEND TO BANK ',
-  style: TextStyle(
-    fontSize: 12.0,
-    fontFamily: 'Roboto',
-    color: Colors.white
-    ,
-    fontWeight: FontWeight.bold,
-    letterSpacing: 1.0,
-  ),
-),),
-                ),
-              
-              SizedBox(
-                height: 30,
-              ),
-            ],
-          )
-        ],
-      ),
-    );
-
     return Scaffold(
       backgroundColor: const Color.fromRGBO(247, 247, 247, 1),
       body: SafeArea(
@@ -1094,40 +1199,82 @@ class _HomeState extends State<Home> {
                   child: ListView(
                 children: [
                   rentWidget,
-                  GestureDetector(
-                    onTap: () {
-                      showBottomModal(context, bottomContent);
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.all(25),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: primaryDarkColor, width: 3.0)),
-                        child: Padding(
-                          padding: EdgeInsets.all(10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Withdraw',
-                                style: TextStyle(color: primaryDarkColor),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              showBottom();
+                              //showBottomModal(context, bottomContent);
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: primaryDarkColor, width: 3.0)),
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Withdraw',
+                                        style:
+                                            TextStyle(color: primaryDarkColor),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: primaryDarkColor,
+                                        weight: 2,
+                                        size: 18,
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
-                              SizedBox(
-                                width: 30,
-                              ),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                color: primaryDarkColor,
-                                weight: 2,
-                                size: 18,
-                              )
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              PersistentNavBarNavigator.pushNewScreen(context,
+                                  screen: Withdrawals(),
+                                  withNavBar: false,
+                                  pageTransitionAnimation:
+                                      PageTransitionAnimation.cupertino);
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: primaryDarkColor, width: 3.0)),
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'History',
+                                        style:
+                                            TextStyle(color: primaryDarkColor),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: primaryDarkColor,
+                                        weight: 2,
+                                        size: 18,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ]),
                   const SizedBox(height: 10),
                   transactionsWidget,
                 ],
