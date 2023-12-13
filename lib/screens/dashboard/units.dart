@@ -136,6 +136,21 @@ class _UnitsState extends State<Units> {
               ),
               const SizedBox(height: 20),
               Expanded(
+  child: Column(
+    children: [
+      SafeArea(
+        top: false,
+        child: Container(
+           width: MediaQuery.of(context).size.width, // Set width to fill the screen
+          height: 150,
+          padding: const EdgeInsets.all(20),
+          child: Text(
+            'Total Units: ${propertyUnitsList.length}',
+            style: const TextStyle(fontSize: 16, color: Colors.white),
+          ),
+        ),
+      ),
+              Expanded(
                 child: unitsLoading == true
                     ? Center(
                         child: SizedBox(
@@ -181,6 +196,9 @@ class _UnitsState extends State<Units> {
               ),
             ],
           ),
+        ),
+            ],
+      ),
         ),
       ),
     );

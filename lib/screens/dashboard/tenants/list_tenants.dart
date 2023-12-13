@@ -84,7 +84,40 @@ class _ListTenantsState extends State<ListTenants> {
         ),
       ),
       body: SafeArea(
-        child: Padding(
+  child: Column(
+    children: [
+      // Add a new SafeArea here
+      SafeArea(
+        top: false,
+        child: Container(
+           width: MediaQuery.of(context).size.width, // Set width to fill the screen
+          height: 150,
+          padding: const EdgeInsets.all(20),
+          decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              Color.fromRGBO(205, 228, 228, 1),
+                              Color.fromRGBO(241, 233, 223, 1)
+                            ],
+                          ),
+                        
+                        ),
+          // Change this color as needed
+           child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Total Tenants:            ${tenantList.length}',
+              style: const TextStyle(fontSize: 16, color: Colors.black),
+            ),
+          ),
+        ),
+      ),
+      Expanded(
+        child: SafeArea(
+          top: false,
+          child: Padding(
             padding: const EdgeInsets.all(10),
             child: tenantListLoaded == false
                 ? Center(
@@ -197,6 +230,10 @@ class _ListTenantsState extends State<ListTenants> {
                             ),
                           );
                         })),
+      ),
+      ),
+    ],
+  ),
       ),
     );
   }
