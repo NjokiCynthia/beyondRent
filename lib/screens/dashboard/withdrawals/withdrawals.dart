@@ -77,7 +77,7 @@ class _ListWithdrawalsState extends State<ListWithdrawals> {
       onWillPop: () async {
         // Handle navigation when the back button is pressed
         // Use Navigator.popUntil to navigate back approximately three steps
-        int popCount = 3; // Set the number of steps you want to go back
+        int popCount = 2; // Set the number of steps you want to go back
         Navigator.popUntil(context, (route) {
           popCount--;
           return popCount < 0;
@@ -88,9 +88,19 @@ class _ListWithdrawalsState extends State<ListWithdrawals> {
         appBar: AppBar(
           backgroundColor: backColor.withOpacity(0.02),
           elevation: 0,
-          leading: const Icon(
-            Icons.arrow_back_ios,
-            color: primaryDarkColor,
+          leading: GestureDetector(
+            onTap: () {
+              int popCount = 2; // Set the number of steps you want to go back
+              Navigator.popUntil(context, (route) {
+                popCount--;
+                return popCount < 0;
+              });
+              // return false;
+            },
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: primaryDarkColor,
+            ),
           ),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -99,25 +109,6 @@ class _ListWithdrawalsState extends State<ListWithdrawals> {
                 'List Withdrawals',
                 style: TextStyle(color: Colors.black, fontSize: 16),
               ),
-              // GestureDetector(
-              //   onTap: () {
-              //     PersistentNavBarNavigator.pushNewScreen(context,
-              //         pageTransitionAnimation: PageTransitionAnimation.cupertino,
-              //         withNavBar: false,
-              //         screen: const CreateInvoice());
-              //   },
-              //   child: Container(
-              //       decoration: BoxDecoration(
-              //           color: primaryDarkColor.withOpacity(0.1),
-              //           shape: BoxShape.circle),
-              //       child: const Padding(
-              //         padding: EdgeInsets.all(8),
-              //         child: Icon(
-              //           Icons.add,
-              //           color: primaryDarkColor,
-              //         ),
-              //       )),
-              // )
             ],
           ),
         ),

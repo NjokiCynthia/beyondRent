@@ -157,10 +157,10 @@ class _HomeState extends State<Home> {
         setState(() {
           bankModels = tempBankModels;
           selectedBankAccount =
-              '${bankModels[0].bankName} (${bankModels[0].bankBranch}) ${bankModels[0].accountName} ${bankModels[0].accountName}';
+              '${bankModels[0].bankName} (${bankModels[0].bankBranch}) ${bankModels[0].accountName} ${bankModels[0].accountNumber}';
           bankModelsDropdownList = tempBankModels
               .map((bankAccount) =>
-                  '${bankAccount.bankName} ${bankAccount.accountNumber}')
+                  '${bankModels[0].bankName} (${bankModels[0].bankBranch}) ${bankModels[0].accountName} ${bankModels[0].accountNumber}')
               .toList();
         });
       } else {
@@ -270,7 +270,6 @@ class _HomeState extends State<Home> {
                   ),
                   Text(
                     'KES ${currencyFormat.format(double.parse(rentInfo['current_balance'] ?? '0.0'))}',
-                    // 'KES ${currencyFormat.format(rentInfo['amount_collected'] ?? 0)}',
                     style: Theme.of(context).textTheme.displayLarge,
                   ),
                   SizedBox(
@@ -403,10 +402,11 @@ class _HomeState extends State<Home> {
                               builder: (BuildContext context) {
                                 return Padding(
                                   padding: EdgeInsets.all(30),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: AlertDialog(
-                                      content: Column(
+                                  child: AlertDialog(
+                                    insetPadding: const EdgeInsets.all(10),
+                                    content: SizedBox(
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -457,6 +457,7 @@ class _HomeState extends State<Home> {
                                           ),
                                           SizedBox(
                                             width: double.infinity,
+                                            height: 48,
                                             child: ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
                                                     backgroundColor:
@@ -480,7 +481,7 @@ class _HomeState extends State<Home> {
                                                                 ListWithdrawals())));
                                                   });
                                                 },
-                                                child: Text('Confirm')),
+                                                child: Text('CONFIRM')),
                                           ),
                                         ],
                                       ),
@@ -517,16 +518,18 @@ class _HomeState extends State<Home> {
                                 return AlertDialog(
                                   content: Column(
                                     mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(
                                         height: 20,
                                       ),
-                                      Text(
-                                          'Select preferred bank and branches'),
+                                      Text('Select preferred bank'),
                                       SizedBox(
                                         height: 10,
                                       ),
                                       DropdownButtonFormField<String>(
+                                        isExpanded: true,
                                         decoration: InputDecoration(
                                           filled: true,
                                           fillColor: Colors.white,
@@ -571,7 +574,6 @@ class _HomeState extends State<Home> {
                                         onChanged: (value) {
                                           setState(() {
                                             selectedBankValue = value;
-                                            // You can add additional logic if needed
                                           });
                                         },
                                       ),
@@ -638,9 +640,24 @@ class _HomeState extends State<Home> {
                                                 backgroundColor:
                                                     primaryDarkColor),
                                             onPressed: () {
-                                              // showBottomModal(context, bankContent);
+                                              showToast(
+                                                context,
+                                                'Success!',
+                                                'Your withdrawal request is successful!',
+                                                mintyGreen,
+                                              );
+
+                                              Future.delayed(
+                                                  const Duration(seconds: 2),
+                                                  () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: ((context) =>
+                                                            ListWithdrawals())));
+                                              });
                                             },
-                                            child: Text('Confirm')),
+                                            child: Text('CONFIRM')),
                                       )
                                     ],
                                   ),
