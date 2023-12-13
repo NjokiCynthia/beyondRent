@@ -144,12 +144,27 @@ class _UnitsState extends State<Units> {
            width: MediaQuery.of(context).size.width, // Set width to fill the screen
           height: 150,
           padding: const EdgeInsets.all(20),
-          child: Text(
-            'Total Units: ${propertyUnitsList.length}',
-            style: const TextStyle(fontSize: 16, color: Colors.white),
+           decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              Color.fromRGBO(205, 228, 228, 1),
+                              Color.fromRGBO(241, 233, 223, 1)
+                            ],
+                          ),
+                        
+                        ),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+            'Total Units:          ${propertyUnitsList.length}',
+            style: const TextStyle(fontSize: 16, color: Colors.black),
           ),
         ),
       ),
+      ),
+      const SizedBox(height: 20),
               Expanded(
                 child: unitsLoading == true
                     ? Center(
