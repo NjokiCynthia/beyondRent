@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
+import 'package:x_rent/screens/dashboard/tenant/tenant.dart';
+import 'package:x_rent/screens/dashboard/tenant/tenant_details.dart';
 import 'package:x_rent/screens/dashboard/tenants/tenant_statement.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
@@ -146,7 +148,7 @@ class _ListTenantsState extends State<ListTenants> {
                                       withNavBar: false,
                                       pageTransitionAnimation:
                                           PageTransitionAnimation.cupertino,
-                                      screen: TenantStatement(
+                                      screen: ViewTenant(
                                           tenantId: selectedTenantId),
                                     );
                                   },
