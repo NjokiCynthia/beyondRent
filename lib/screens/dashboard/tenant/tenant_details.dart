@@ -26,6 +26,7 @@ class _ViewTenantState extends State<ViewTenant> {
     setState(() {
       tenantInfoLoading = true;
     });
+
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final token = userProvider.user?.token;
     final propertyProvider = Provider.of<PropertyProvider>(
@@ -37,7 +38,7 @@ class _ViewTenantState extends State<ViewTenant> {
       "property_id": propertyProvider.property?.id,
       "tenant_ids": [tenantId]
     };
-    print('This is what i am sending while fetching');
+    print('This is what I am sending while fetching');
     print(postData);
     final apiClient = ApiClient();
     final headers = {
@@ -47,8 +48,10 @@ class _ViewTenantState extends State<ViewTenant> {
 
     try {
       var response = await apiClient.post(
-          '/mobile/invoices/get_property_invoices', postData,
-          headers: headers);
+        '/mobile/invoices/get_property_invoices',
+        postData,
+        headers: headers,
+      );
       print('API Response:');
       print(response);
       if (response['response']['status'] == 1) {
@@ -58,7 +61,12 @@ class _ViewTenantState extends State<ViewTenant> {
 
         setState(() {
           print('............................');
-          tenantDetails = response['response'];
+          var responseData = response['response'];
+          tenantDetails = {
+            'total_amount_payable': responseData['total_amount_payable'],
+            'total_amount_paid': responseData['total_amount_paid'],
+            'invoices': responseData['invoices'],
+          };
         });
       }
     } catch (e) {
@@ -82,7 +90,7 @@ class _ViewTenantState extends State<ViewTenant> {
     Widget propertySummary = Container(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
       margin: const EdgeInsets.only(
-        top: 40,
+        top: 20,
         bottom: 20,
       ),
       child: Column(
@@ -100,37 +108,75 @@ class _ViewTenantState extends State<ViewTenant> {
               : Column(
                   children: [
                     Text(
-                      '${tenantDetails['invoices'][0]['tenant'] ?? "None"}',
+                      '${tenantDetails['invoices'].isNotEmpty ? tenantDetails['invoices'][0]['tenant'].toString() : "None"}',
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text(
-                          'Amount payable:',
-                          style: TextStyle(color: primaryDarkColor),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Amount payable:',
+                              style: TextStyle(fontSize: 13),
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Text(
+                              'Amount paid:',
+                              style: TextStyle(fontSize: 13),
+                            ),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            Text(
+                              'Pending amount:',
+                              style: TextStyle(fontSize: 13),
+                            ),
+                          ],
                         ),
-                        Text(
-                          'KES ${currencyFormat.format(double.parse(tenantDetails['total_amount_payable'].toString() ?? "0"))}',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'KES ${currencyFormat.format(double.parse(tenantDetails['total_amount_payable'].toString() ?? "0"))}',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Text(
+                              'KES ${currencyFormat.format(double.parse(tenantDetails['total_amount_paid'].toString() ?? "0"))}',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  color:
+                                      const Color.fromARGB(255, 251, 239, 239),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10, right: 10, top: 2, bottom: 2),
+                                child: Text(
+                                  'KES ${currencyFormat.format(double.parse((tenantDetails['total_amount_payable'] - tenantDetails['total_amount_paid']).toString() ?? "0"))}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(
+                                          color: Colors.red, fontSize: 14),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          'Amount paid:',
-                          style: TextStyle(color: primaryDarkColor),
-                        ),
-                        Text(
-                          'KES ${currencyFormat.format(double.parse(tenantDetails['total_amount_paid'].toString() ?? "0"))}',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
                   ],
                 ),
           const SizedBox(height: 10),
@@ -159,10 +205,40 @@ class _ViewTenantState extends State<ViewTenant> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    //'',
                     '${invoice?['invoice_date'] ?? "No date"}',
                     style: const TextStyle(color: Colors.grey, fontSize: 13),
                   ),
+                ],
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                '${invoice['type']}',
+                style: const TextStyle(color: Colors.black, fontSize: 14),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Amount invoiced',
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                  ),
+                  Text(
+                    'Amount paid',
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
                   Container(
                     decoration: BoxDecoration(
                         color: primaryDarkColor.withOpacity(0.1),
@@ -177,21 +253,21 @@ class _ViewTenantState extends State<ViewTenant> {
                       ),
                     ),
                   ),
-                  // Text(
-                  //   'KES ${currencyFormat.format(double.parse(withdrawal['amount'].toString() ?? "0"))}',
-                  // ),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: primaryDarkColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 10, right: 10, top: 2, bottom: 2),
+                      child: Text(
+                        'KES ${currencyFormat.format(double.parse(invoice['amount_paid'].toString() ?? "0"))}',
+                        style: const TextStyle(
+                            color: primaryDarkColor, fontSize: 14),
+                      ),
+                    ),
+                  ),
                 ],
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Text(
-                '',
-                //'${invoice['type']}',
-                style: const TextStyle(color: Colors.black, fontSize: 14),
-              ),
-              const SizedBox(
-                height: 5,
               ),
             ],
           ),
@@ -217,24 +293,33 @@ class _ViewTenantState extends State<ViewTenant> {
           ),
           Container(
             height: 7,
-            width: 40,
+            width: 50,
             decoration: BoxDecoration(
               color: mintyGreen,
               borderRadius: BorderRadius.circular(30),
             ),
           ),
-          const SizedBox(height: 30),
-          Flexible(
-            child: tenantDetails['invoices'] != null
-                ? ListView.builder(
-                    itemCount: tenantDetails['invoices'].length,
-                    itemBuilder: (context, index) {
-                      var invoice = tenantDetails['invoices'][index];
-                      return invoiceItem(invoice);
-                    },
-                  )
-                : Center(child: EmptyTransactions()),
+          SizedBox(
+            height: 15,
           ),
+          tenantInfoLoading == true
+              ? const Center(
+                  child: LinearProgressIndicator(
+                    color: primaryDarkColor,
+                  ),
+                )
+              : Flexible(
+                  child: tenantDetails['invoices'] != null &&
+                          tenantDetails['invoices'].isNotEmpty
+                      ? ListView.builder(
+                          itemCount: tenantDetails['invoices'].length,
+                          itemBuilder: (context, index) {
+                            var invoice = tenantDetails['invoices'][index];
+                            return invoiceItem(invoice);
+                          },
+                        )
+                      : Center(child: EmptyTransactions()),
+                ),
         ],
       ),
     );
@@ -431,43 +516,6 @@ class _ViewTenantState extends State<ViewTenant> {
                 child: DashboardAppbar(
                   backButton: true,
                   backButtonText: 'Tenant Details',
-                  action: GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                      decoration: BoxDecoration(
-                        color: mintyGreen,
-                        borderRadius: BorderRadius.circular(7),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            'Tenant',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(color: Colors.white, fontSize: 14),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Icon(
-                              Icons.settings,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
                 ),
               ),
               Expanded(

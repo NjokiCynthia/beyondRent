@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:x_rent/constants/color_contants.dart';
+import 'package:x_rent/models/invoice.dart';
 import 'package:x_rent/screens/dashboard/invoices.dart';
 import 'dart:math';
 import 'package:x_rent/utilities/constants.dart';
@@ -504,7 +506,10 @@ class TransactionCard extends StatelessWidget {
                       Text(
                         'KES ${currencyFormat.format(double.parse(amount.toString() ?? "0"))}',
                         //'KES. $amount',
-                        style: Theme.of(context).textTheme.labelMedium,
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelMedium!
+                            .copyWith(color: primaryDarkColor),
                       ),
                       SizedBox(
                         height: 5,
@@ -970,6 +975,122 @@ class InvoiceCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class InvoicesCard extends StatelessWidget {
+  final PendingInvoice invoice;
+
+  const InvoicesCard({Key? key, required this.invoice}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final backgroundColor = getRandomColor();
+    final firstLetter = invoice.tenant != null && invoice.tenant!.isNotEmpty
+        ? invoice.tenant![0]
+        : '';
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey.withOpacity(0.1),
+            width: 1.0,
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.only(right: 10),
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              shape: BoxShape.circle,
+            ),
+            child: Text(
+              firstLetter,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('${invoice.tenant}'),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'Invoice due date:',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(fontSize: 12, color: Colors.black),
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            '${invoice.dueDate}',
+                            style:
+                                Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      fontSize: 12,
+                                    ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        '',
+                        //'${invoice.unit?['house_number'] ?? '0'}',
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontSize: 14,
+                            ),
+                      ),
+                      // Text(
+                      //   '${invoice.unit != null ? 'House ${invoice.unit!.houseNumber}, Floor ${invoice.unit!.floor}, Block ${invoice.unit!.block}' : 'N/A'}',
+                      //   style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      //         fontSize: 14,
+                      //       ),
+                      // ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'KES ${currencyFormat.format(double.parse(invoice.amountPayable.toString() ?? "0"))}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelMedium!
+                            .copyWith(color: primaryDarkColor),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -240,11 +240,72 @@ class _HomeState extends State<Home> {
   }
 
   List trasactionList = [];
+
+  bool monthRentLoaded = false;
+  Map<String, dynamic> monthRent = {};
+
+  fetchRentInfoForCurrentMonth() async {
+    print('I am here trying to fetch rent info');
+
+    // Get the current month
+    final currentMonth = DateTime.now().month;
+
+    print('Fetching rent info for current month: $currentMonth');
+
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
+    final token = userProvider.user?.token;
+
+    final postData = {
+      "property_id": propertyProvider.property?.id,
+      "month": currentMonth.toString(),
+    };
+    print('This is my property id here');
+    print(propertyProvider.property?.id);
+    final apiClient = ApiClient();
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    try {
+      var response = await apiClient.post(
+        '/mobile/reports/rent_collected_per_month',
+        postData,
+        headers: headers,
+      );
+
+      var responseData = response['response'];
+      if (responseData != null) {
+        print('Rent Collected Details for the current month >>>>>>>>>>>');
+        print(responseData);
+        setState(() {
+          monthRent = responseData;
+        });
+      }
+    } catch (e) {
+      print('Error');
+      print(e);
+      print('Error in API call: $e');
+    }
+
+    setState(() {
+      monthRentLoaded = true;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _fetchBanks(context);
     fetchRentInfo();
+    fetchRentInfoForCurrentMonth();
 
     fetchTransactionsList();
   }
@@ -466,34 +527,6 @@ class _HomeState extends State<Home> {
                                           SizedBox(
                                             height: 20,
                                           ),
-                                          // SizedBox(
-                                          //   width: double.infinity,
-                                          //   height: 48,
-                                          //   child: ElevatedButton(
-                                          //       style: ElevatedButton.styleFrom(
-                                          //           backgroundColor:
-                                          //               primaryDarkColor),
-                                          //       onPressed: () {
-                                          //         showToast(
-                                          //           context,
-                                          //           'Success!',
-                                          //           'Your withdrawal request is successful!',
-                                          //           mintyGreen,
-                                          //         );
-
-                                          //         Future.delayed(
-                                          //             const Duration(
-                                          //                 seconds: 2), () {
-                                          //           // Delay for 2 seconds (adjust as needed)
-                                          //           Navigator.push(
-                                          //               context,
-                                          //               MaterialPageRoute(
-                                          //                   builder: ((context) =>
-                                          //                       ListWithdrawals())));
-                                          //         });
-                                          //       },
-                                          //       child: Text('CONFIRM')),
-                                          // ),
                                           CustomRequestButton(
                                             cookie:
                                                 'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
@@ -781,42 +814,6 @@ class _HomeState extends State<Home> {
                 'Rent',
                 style: Theme.of(context).textTheme.bodySmall,
               ),
-              GestureDetector(
-                onTap: () {
-                  PersistentNavBarNavigator.pushNewScreen(
-                    context,
-                    screen: const PropertyDetails(),
-                    withNavBar: false,
-                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: primaryDarkColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 10, right: 10, top: 2, bottom: 2),
-                    child: Row(
-                      children: [
-                        Text(
-                          'View Summary',
-                          style: const TextStyle(
-                              color: primaryDarkColor, fontSize: 14),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          color: primaryDarkColor,
-                          size: 15,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
@@ -880,11 +877,191 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
+              SizedBox(height: 10),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      showBottom();
+                      //showBottomModal(context, bottomContent);
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: primaryDarkColor),
+                            color: primaryDarkColor.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Withdraw',
+                                style: const TextStyle(
+                                    color: primaryDarkColor, fontSize: 14),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: primaryDarkColor,
+                                size: 15,
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      PersistentNavBarNavigator.pushNewScreen(context,
+                          screen: Withdrawals(),
+                          withNavBar: false,
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.cupertino);
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: primaryDarkColor),
+                            color: primaryDarkColor.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'View History',
+                                style: const TextStyle(
+                                    color: primaryDarkColor, fontSize: 14),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: primaryDarkColor,
+                                size: 15,
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ]),
             ],
           ),
         ),
       ],
     );
+    Widget monthWidget = Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 5, right: 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [],
+          ),
+        ),
+        const SizedBox(height: 10),
+        Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Total rent collected this month'),
+              Text(
+                'KES ${currencyFormat.format(double.parse(monthRent['amount_collected']?.toString() ?? '0.0'))}',
+                style: Theme.of(context).textTheme.displayLarge,
+              ),
+              const SizedBox(height: 10),
+              ProgressBar(),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Rent expected',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  Text(
+                    'Amount in arrears',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'KES ${currencyFormat.format(double.parse(monthRent?['amount_expected']?.toString() ?? '0.0'))}',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  Text(
+                    'KES ${currencyFormat.format(double.parse(monthRent?['amount_in_arrears']?.toString() ?? '0.0'))}',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                    color: primaryDarkColor.withOpacity(0.1),
+                    border: Border.all(color: primaryDarkColor),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'View Monthly Summary',
+                        style: const TextStyle(
+                            color: primaryDarkColor, fontSize: 14),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: primaryDarkColor,
+                        size: 15,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+
     Widget transactionsWidget = Container(
       height: MediaQuery.of(context).size.height,
       child: Column(
@@ -1294,82 +1471,17 @@ class _HomeState extends State<Home> {
                   child: ListView(
                 children: [
                   rentWidget,
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              showBottom();
-                              //showBottomModal(context, bottomContent);
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: primaryDarkColor, width: 3.0)),
-                                child: Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Withdraw',
-                                        style:
-                                            TextStyle(color: primaryDarkColor),
-                                      ),
-                                      Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: primaryDarkColor,
-                                        weight: 2,
-                                        size: 18,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              PersistentNavBarNavigator.pushNewScreen(context,
-                                  screen: Withdrawals(),
-                                  withNavBar: false,
-                                  pageTransitionAnimation:
-                                      PageTransitionAnimation.cupertino);
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: primaryDarkColor, width: 3.0)),
-                                child: Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        'History',
-                                        style:
-                                            TextStyle(color: primaryDarkColor),
-                                      ),
-                                      Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: primaryDarkColor,
-                                        weight: 2,
-                                        size: 18,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ]),
+                  GestureDetector(
+                      onTap: () {
+                        PersistentNavBarNavigator.pushNewScreen(
+                          context,
+                          screen: const PropertyDetails(),
+                          withNavBar: false,
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.cupertino,
+                        );
+                      },
+                      child: monthWidget),
                   const SizedBox(height: 10),
                   transactionsWidget,
                 ],

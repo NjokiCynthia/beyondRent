@@ -71,9 +71,14 @@ class _ListTenantsState extends State<ListTenants> {
       appBar: AppBar(
         backgroundColor: backColor.withOpacity(0.02),
         elevation: 0,
-        leading: const Icon(
-          Icons.arrow_back_ios,
-          color: primaryDarkColor,
+        leading: GestureDetector(
+          onTap: () {
+            
+          },
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: primaryDarkColor,
+          ),
         ),
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
