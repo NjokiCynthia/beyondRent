@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
+import 'package:x_rent/screens/dashboard/home.dart';
 import 'package:x_rent/screens/dashboard/tenant/tenant.dart';
 import 'package:x_rent/screens/dashboard/tenant/tenant_details.dart';
 import 'package:x_rent/screens/dashboard/tenants/tenant_statement.dart';
@@ -71,9 +72,17 @@ class _ListTenantsState extends State<ListTenants> {
       appBar: AppBar(
         backgroundColor: backColor.withOpacity(0.02),
         elevation: 0,
-        leading: const Icon(
-          Icons.arrow_back_ios,
-          color: primaryDarkColor,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home()), // Replace HomeScreen with your actual home page
+            );
+          },
+          child: const Icon(
+            Icons.arrow_back_ios,
+            color: Color.fromARGB(255, 114, 198, 117), // You can change the color as needed
+          ),
         ),
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

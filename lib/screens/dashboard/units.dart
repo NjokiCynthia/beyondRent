@@ -141,6 +141,7 @@ class _UnitsState extends State<Units> {
       SafeArea(
         top: false,
         child: Container(
+          
            width: MediaQuery.of(context).size.width, // Set width to fill the screen
           height: 150,
           padding: const EdgeInsets.all(20),
@@ -151,9 +152,11 @@ class _UnitsState extends State<Units> {
                             colors: [
                               Color.fromRGBO(205, 228, 228, 1),
                               Color.fromRGBO(241, 233, 223, 1)
+                              
                             ],
                           ),
-                        
+                          
+  
                         ),
           child: Align(
             alignment: Alignment.centerLeft,

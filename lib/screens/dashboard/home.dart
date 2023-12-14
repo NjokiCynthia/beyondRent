@@ -23,6 +23,8 @@ class Home extends StatefulWidget {
 
   @override
   State<Home> createState() => _HomeState();
+
+  void setBottomControllerToZero() {}
 }
 
 class _HomeState extends State<Home> {
