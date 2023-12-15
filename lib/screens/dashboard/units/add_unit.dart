@@ -340,7 +340,7 @@ class _AddUnitState extends State<AddUnit> {
                     SizedBox(
                       width: 10,
                     ),
-                    Text('House type'),
+                    Text('Number of bedrooms'),
                   ],
                 ),
                 const SizedBox(
