@@ -204,88 +204,97 @@ class _UnitsState extends State<Units> {
                     SafeArea(
                         top: false,
                         child: Container(
-                          width: MediaQuery.of(context)
-                              .size
-                              .width, // Set width to fill the screen
-
-                          padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                                colors: [
-                                  Color.fromRGBO(205, 228, 228, 1),
-                                  Color.fromRGBO(241, 233, 223, 1)
-                                ],
-                              ),
-                              borderRadius: BorderRadius.circular(8)),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8)),
-                            child: Padding(
-                              padding: EdgeInsets.only(top: 2, bottom: 2),
-                              child: Row(
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        'Total Number of Units:',
-                                        style: const TextStyle(
-                                            fontSize: 13, color: Colors.grey),
-                                      ),
-                                      Text(
-                                        'Number of occupied units:',
-                                        style: const TextStyle(
-                                            fontSize: 13, color: Colors.grey),
-                                      ),
-                                      Text(
-                                        'Number of unoccupied units:',
-                                        style: const TextStyle(
-                                            fontSize: 13, color: Colors.grey),
-                                      ),
-                                      Text(
-                                        'Number of tenants:',
-                                        style: const TextStyle(
-                                            fontSize: 13, color: Colors.grey),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        '${responseData['total_units'] ?? '0'}',
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      Text(
-                                        '${responseData['total_occupied_units'] ?? '0'}',
-                                        style: const TextStyle(
-                                            fontSize: 16, color: Colors.black),
-                                      ),
-                                      Text(
-                                        '${responseData['total_vacant_units'] ?? '0'}',
-                                        style: const TextStyle(
-                                            fontSize: 16, color: Colors.black),
-                                      ),
-                                      Text(
-                                        '${responseData['total_occupied_units'] ?? '0'}',
-                                        style: const TextStyle(
-                                            fontSize: 16, color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                            gradient: LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [
+                                Color.fromRGBO(205, 228, 228, 1),
+                                Color.fromRGBO(241, 233, 223, 1)
+                              ],
                             ),
                           ),
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                          // margin: const EdgeInsets.only(
+                          //   top: 40,
+                          //   bottom: 20,
+                          // ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Center(
+                                child: Text(
+                                  'Total number of units',
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Center(
+                                child: Text(
+                                  '${responseData['total_units'] ?? '0'}',
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              //const ProgressBar(progress: 0),
+                              const SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Occupied units',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(
+                                            color:
+                                                Colors.black.withOpacity(0.5)),
+                                  ),
+                                  Text(
+                                    'Vacant units',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(
+                                            color:
+                                                Colors.black.withOpacity(0.5)),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '${responseData['total_occupied_units'] ?? '0'}',
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                  Text(
+                                    '${responseData['total_vacant_units'] ?? '0'}',
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                'Total number of tenants: ${responseData['total_occupied_units'] ?? '0'}',
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                              SizedBox(
+                                height: 5,
+                              )
+                            ],
+                          ),
                         )),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     Expanded(
                       child: unitsLoading == true
                           ? Center(
