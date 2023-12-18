@@ -423,119 +423,178 @@ class _TenantSetUpState extends State<TenantSetUp> {
               validateSignupInputs();
             },
           ),
+          // const SizedBox(height: 24),
+          // Row(
+          //   children: [
+          //     Expanded(
+          //       child: Container(
+          //         margin: const EdgeInsets.only(right: 10),
+          //         child: CustomRequestButton(
+          //           buttonError: buttonError,
+          //           buttonErrorMessage: buttonErrorMessage,
+          //           url: null,
+          //           method: 'POST',
+          //           buttonText: 'Skip',
+          //           body: const {},
+          //           onSuccess: (res) {
+          //             Navigator.push(
+          //               context,
+          //               MaterialPageRoute(
+          //                 builder: ((context) => const Dashboard()),
+          //               ),
+          //             );
+          //           },
+          //         ),
+          //       ),
+          //     ),
+          //     Expanded(
+          //       child: Container(
+          //         margin: const EdgeInsets.only(left: 10),
+          //         child: CustomRequestButton(
+          //           cookie:
+          //               'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
+          //           authorization: 'Bearer ${userProvider.user?.token}',
+          //           buttonError: buttonError,
+          //           buttonErrorMessage: buttonErrorMessage,
+          //           url: '/mobile/tenants/create',
+          //           method: 'POST',
+          //           buttonText: 'Add',
+          //           body: {
+          //             "property_id": propertyProvider.property?.id,
+          //             "first_name": firstName.text,
+          //             "last_name": lastName.text,
+          //             "email": email.text,
+          //             "phone": phoneNoInpt,
+          //             "date_of_birth": "09/10/1998",
+          //             "id_number": "32323232",
+          //             "unit_id": selectedUnit?['id'],
+          //             "contribution_id": 0
+          //           },
+          //           onSuccess: (res) {
+          //             tenantsProvider.setGroupData({
+          //               "property_id": propertyProvider.property?.id,
+          //               "first_name": firstName.text,
+          //               "last_name": lastName.text,
+          //               "email": email.text,
+          //               "phone": phoneNoInpt,
+          //               "date_of_birth": "09/10/1998",
+          //               "id_number": "32323232",
+          //               "unit_id": selectedUnit?['id'],
+          //               "contribution_id": 0
+          //             });
+          //             if (res['isSuccessful'] == true) {
+          //               var serverStatus = res['data']['response']['status'];
+          //               if (serverStatus == 1) {
+          //                 showToast(
+          //                   context,
+          //                   'Success!',
+          //                   'Tenant added successfully',
+          //                   mintyGreen,
+          //                 );
+          //               } else {
+          //                 var serverMsg = res['data']['response']['message'];
+          //                 showToast(
+          //                   context,
+          //                   'Error!',
+          //                   serverMsg,
+          //                   Colors.red,
+          //                 );
+          //               }
+          //             } else {
+          //               showToast(
+          //                 context,
+          //                 'Error!',
+          //                 res['error'] ?? 'Error adding tenant',
+          //                 Colors.red,
+          //               );
+          //             }
+          //           },
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
           const SizedBox(height: 24),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  child: CustomRequestButton(
-                    buttonError: buttonError,
-                    buttonErrorMessage: buttonErrorMessage,
-                    url: null,
-                    method: 'POST',
-                    buttonText: 'Skip',
-                    body: const {},
-                    onSuccess: (res) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: ((context) => const Dashboard()),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(left: 10),
-                  child: CustomRequestButton(
-                    cookie:
-                        'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
-                    authorization: 'Bearer ${userProvider.user?.token}',
-                    buttonError: buttonError,
-                    buttonErrorMessage: buttonErrorMessage,
-                    url: '/mobile/tenants/create',
-                    method: 'POST',
-                    buttonText: 'Add',
-                    body: {
-                      "property_id": propertyProvider.property?.id,
-                      "first_name": firstName.text,
-                      "last_name": lastName.text,
-                      "email": email.text,
-                      "phone": phoneNoInpt,
-                      "date_of_birth": "09/10/1998",
-                      "id_number": "32323232",
-                      "unit_id": selectedUnit?['id'],
-                      "contribution_id": 0
-                    },
-                    onSuccess: (res) {
-                      tenantsProvider.setGroupData({
-                        "property_id": propertyProvider.property?.id,
-                        "first_name": firstName.text,
-                        "last_name": lastName.text,
-                        "email": email.text,
-                        "phone": phoneNoInpt,
-                        "date_of_birth": "09/10/1998",
-                        "id_number": "32323232",
-                        "unit_id": selectedUnit?['id'],
-                        "contribution_id": 0
-                      });
-                      if (res['isSuccessful'] == true) {
-                        var serverStatus = res['data']['response']['status'];
-                        if (serverStatus == 1) {
-                          showToast(
-                            context,
-                            'Success!',
-                            'Tenant added successfully',
-                            mintyGreen,
-                          );
-                        } else {
-                          var serverMsg = res['data']['response']['message'];
-                          showToast(
-                            context,
-                            'Error!',
-                            serverMsg,
-                            Colors.red,
-                          );
-                        }
-                      } else {
-                        showToast(
-                          context,
-                          'Error!',
-                          res['error'] ?? 'Error adding tenant',
-                          Colors.red,
-                        );
-                      }
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          SizedBox(
-            height: 48,
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: mintyGreen),
-              onPressed: () {
-                Navigator.push(
+          CustomRequestButton(
+            cookie:
+                'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
+            authorization: 'Bearer ${userProvider.user?.token}',
+            buttonError: buttonError,
+            buttonErrorMessage: buttonErrorMessage,
+            url: '/mobile/tenants/create',
+            method: 'POST',
+            buttonText: 'Add',
+            body: {
+              "property_id": propertyProvider.property?.id,
+              "first_name": firstName.text,
+              "last_name": lastName.text,
+              "email": email.text,
+              "phone": phoneNoInpt,
+              "date_of_birth": "09/10/1998",
+              "id_number": "32323232",
+              "unit_id": selectedUnit?['id'],
+              "contribution_id": 0
+            },
+            onSuccess: (res) {
+              tenantsProvider.setGroupData({
+                "property_id": propertyProvider.property?.id,
+                "first_name": firstName.text,
+                "last_name": lastName.text,
+                "email": email.text,
+                "phone": phoneNoInpt,
+                "date_of_birth": "09/10/1998",
+                "id_number": "32323232",
+                "unit_id": selectedUnit?['id'],
+                "contribution_id": 0
+              });
+              if (res['isSuccessful'] == true) {
+                var serverStatus = res['data']['response']['status'];
+                if (serverStatus == 1) {
+                  showToast(
+                    context,
+                    'Success!',
+                    'Tenant added successfully',
+                    mintyGreen,
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: ((context) => const Dashboard()),
+                    ),
+                  );
+                  pageController.animateToPage(
+                    0,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+                } else {
+                  var serverMsg = res['data']['response']['message'];
+                  showToast(
+                    context,
+                    'Error!',
+                    serverMsg,
+                    Colors.red,
+                  );
+                }
+              } else {
+                showToast(
                   context,
-                  MaterialPageRoute(
-                    builder: ((context) => const Dashboard()),
-                  ),
+                  'Error!',
+                  res['error'] ?? 'Error adding tenant',
+                  Colors.red,
                 );
-                pageController.animateToPage(
-                  0,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
-              },
-              child: const Text('Proceed'),
-            ),
+              }
+            },
           ),
+          // SizedBox(
+          //   height: 48,
+          //   width: double.infinity,
+          //   child: ElevatedButton(
+          //     style: ElevatedButton.styleFrom(backgroundColor: mintyGreen),
+          //     onPressed: () {},
+          //     child: const Text('Proceed'),
+          //   ),
+          // ),
         ],
       ),
     );

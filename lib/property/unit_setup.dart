@@ -556,11 +556,28 @@ class _AddUnitsState extends State<AddUnits> {
                       setState(() {
                         unitsForStep3 = res['data']['response']['units'];
                       });
+                      showToast(
+                        context,
+                        'Success!',
+                        'Property added successfully',
+                        mintyGreen,
+                      );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => const Dashboard()),
+                        ),
+                      );
                       pageController.animateToPage(
-                        2,
+                        0,
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                       );
+                      // pageController.animateToPage(
+                      //   2,
+                      //   duration: const Duration(milliseconds: 300),
+                      //   curve: Curves.easeInOut,
+                      //);
                     } else {
                       showToast(
                         context,

@@ -463,6 +463,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
       // Call the fetchRentInfo function with the selected month
       await fetchRentInfo(monthToNumber(currentMonth));
       await fetchTransactionsList(monthToNumber(currentMonth));
+      await fetchPendingInfo(monthToNumber(currentMonth));
     }
   }
 
@@ -775,7 +776,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                           shape: BoxShape.circle,
                         ),
                         child: Text(
-                          '0',
+                          transactionsList.length.toString(),
                           style:
                               Theme.of(context).textTheme.bodySmall!.copyWith(
                                     color: _selectedTabIndex == 0
@@ -818,7 +819,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                           shape: BoxShape.circle,
                         ),
                         child: Text(
-                          '0',
+                          invoices.length.toString(),
                           style:
                               Theme.of(context).textTheme.bodySmall!.copyWith(
                                     color: _selectedTabIndex == 1

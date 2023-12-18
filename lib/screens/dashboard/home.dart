@@ -26,6 +26,68 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  bool propertiesLoading = true;
+  List userPropertyList = [];
+
+  fetchPropertiesByUser(context) async {
+    print('I am here to fetch my properties');
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    final userPropertyListProvider = Provider.of<PropertyListProvider>(
+      context,
+      listen: false,
+    );
+    final token = userProvider.user?.token;
+    final userID = userProvider.user?.id;
+
+    final postData = {
+      'user_id': userID,
+    };
+    final apiClient = ApiClient();
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    await apiClient
+        .post('/mobile/get_property_by_user', postData, headers: headers)
+        .then((response) {
+      print('Here is my properties');
+      print(response);
+      var responseStatus = response['response']['status'];
+      if (responseStatus == 0) {
+        setState(() {
+          userPropertyList = response['response']['properties'];
+        });
+        for (var propertyData in userPropertyList) {
+          Property property = Property(
+            propertyName: propertyData['name'],
+            propertyLocation: '',
+            id: int.parse(propertyData['id']),
+          );
+          userPropertyListProvider.addProperty(property);
+        }
+      }
+      setState(() {
+        propertiesLoading = false;
+      });
+      return response;
+    }).catchError((error) {
+      // Handle the error
+      setState(() {
+        propertiesLoading = false;
+      });
+      return {
+        "response": {
+          "status": 4,
+          "message": "Property not found",
+          "time": 1693471190
+        }
+      };
+    });
+  }
+
   bool transactionListLoaded = false;
   List<Map<String, dynamic>> transactionsList = [];
 
@@ -308,6 +370,7 @@ class _HomeState extends State<Home> {
     fetchRentInfoForCurrentMonth();
 
     fetchTransactionsList();
+    fetchPropertiesByUser(context);
   }
 
   void showBottom() {
@@ -1311,75 +1374,68 @@ class _HomeState extends State<Home> {
             builder: (context, userPropertyListProvider, _) {
               return ListView.builder(
                 shrinkWrap: true,
-                itemCount: userPropertyListProvider.properties.length,
+                itemCount: userPropertyList.length,
                 itemBuilder: (context, index) {
-                  Property property =
-                      userPropertyListProvider.properties[index];
-
-                  return GestureDetector(
-                    onTap: () {
-                      final propertyProvider = Provider.of<PropertyProvider>(
-                        context,
-                        listen: false,
-                      );
-                      propertyProvider.setProperty(
-                        Property(
-                          propertyName: userPropertyListProvider
-                              .properties[index].propertyName,
-                          propertyLocation: userPropertyListProvider
-                              .properties[index].propertyLocation,
-                          id: userPropertyListProvider.properties[index].id,
-                        ),
-                      );
-                      print('Tapped');
-                      print(userPropertyListProvider.properties[index].id);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: ((context) => const Dashboard()),
-                        ),
-                      );
-                    },
+                  var currentPropertyID =
+                      int.parse(userPropertyList[index]['id']);
+                  var currentPropertyName = userPropertyList[index]['name'];
+                  return Center(
                     child: Container(
-                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                      margin: const EdgeInsets.only(bottom: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        top: 10,
+                        bottom: 10,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  margin: const EdgeInsets.only(right: 20),
-                                  child: Image.asset(
-                                    'assets/images/icons/home.png',
-                                    width: 20,
-                                  ),
-                                ),
-                                Text(
-                                  property.propertyName,
-                                ),
-                              ],
+                      decoration: BoxDecoration(
+                        color: mintyGreen.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: GestureDetector(
+                        onTap: () async {
+                          final propertyProvider =
+                              Provider.of<PropertyProvider>(
+                            context,
+                            listen: false,
+                          );
+                          propertyProvider.setProperty(
+                            Property(
+                              propertyName: currentPropertyName,
+                              propertyLocation: '',
+                              id: currentPropertyID,
                             ),
-                          ),
-                          Text(
-                            'view',
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        ],
+                          );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: ((context) => const Dashboard()),
+                            ),
+                          );
+                        },
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Icon(
+                                Icons.house_rounded,
+                                color: mintyGreen,
+                              ),
+                            ),
+                            Expanded(
+                              child: Text(
+                                userPropertyList[index]['name'],
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(
+                                        color: Colors.black.withOpacity(0.7),
+                                        fontSize: 20),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   );
