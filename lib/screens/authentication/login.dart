@@ -77,7 +77,7 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                         Text(
-                          'Kodi',
+                          'BeyondRent',
                           style: Theme.of(context)
                               .textTheme
                               .titleLarge!

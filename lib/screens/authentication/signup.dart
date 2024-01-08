@@ -324,7 +324,7 @@ class _SignupState extends State<Signup> {
                               ),
                             ),
                             Text(
-                              'Kodi',
+                              'BeyondRent',
                               style: Theme.of(context)
                                   .textTheme
                                   .titleLarge!
