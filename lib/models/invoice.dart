@@ -6,8 +6,9 @@ class PendingInvoice {
   String? tenant;
   String? type;
   String? amountPayable;
-  double? amountPaid; // Change the type to double
-  Unit? unit; // Include the unit field
+  double? amountPaid;
+  Unit? unit;
+  dynamic? pendingAmount;
 
   PendingInvoice({
     this.id,
@@ -19,9 +20,9 @@ class PendingInvoice {
     this.amountPayable,
     this.amountPaid,
     this.unit,
+    this.pendingAmount,
   });
 
-  // Factory method to create a PendingInvoice from a JSON object
   factory PendingInvoice.fromJson(Map<String, dynamic> json) {
     return PendingInvoice(
       id: json['id'],
@@ -32,10 +33,11 @@ class PendingInvoice {
       type: json['type'],
       amountPayable: json['amount_payable'],
       amountPaid: json['amount_paid'] != null
-          ? (json['amount_paid'] is int
-              ? (json['amount_paid'] as int).toDouble()
+          ? (json['amount_paid'] is String
+              ? double.parse(json['amount_paid'])
               : json['amount_paid'].toDouble())
           : null,
+      pendingAmount: json['pending_amount'],
       unit: json['unit'] != null ? Unit.fromJson(json['unit']) : null,
     );
   }

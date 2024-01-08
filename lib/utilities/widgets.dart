@@ -1038,7 +1038,7 @@ class InvoicesCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      'KES ${currencyFormat.format(double.parse(invoice.amountPayable.toString() ?? "0"))}',
+                      'KES ${currencyFormat.format(double.parse(invoice.pendingAmount.toString() ?? "0"))}',
                       style: Theme.of(context)
                           .textTheme
                           .labelMedium!

@@ -513,8 +513,8 @@ class _PropertyDetailsState extends State<PropertyDetails> {
         if (responseStatus == 1) {
           var deposits = response['response']['deposits'];
           if (deposits != null && deposits is List) {
-            // print('These are my transaction details below here >>>>>>>>>>>');
-            // print(deposits);
+            print('These are my transaction details below here >>>>>>>>>>>');
+            print(deposits);
 
             setState(() {
               transactionsList = deposits.cast<Map<String, dynamic>>();
@@ -633,20 +633,21 @@ class _PropertyDetailsState extends State<PropertyDetails> {
             'total_amount_payable': responseData['total_amount_payable'],
             'total_amount_paid': responseData['total_amount_paid'],
             'total_counts': responseData['total_counts'],
+            'total_pending_amount': responseData['total_pending_amount'],
             'invoices': responseData['invoices'],
           };
 
           invoices = (responseData['invoices'] as List)
               .map((invoiceData) => PendingInvoice(
-                    id: invoiceData['id'],
-                    invoiceDate: invoiceData['invoice_date'],
-                    month: invoiceData['month'],
-                    dueDate: invoiceData['due_date'],
-                    tenant: invoiceData['tenant'],
-                    type: invoiceData['type'],
-                    amountPayable: invoiceData['amount_payable'],
-                    // amountPaid: invoiceData['amount_paid'],
-                  ))
+                  id: invoiceData['id'],
+                  invoiceDate: invoiceData['invoice_date'],
+                  month: invoiceData['month'],
+                  dueDate: invoiceData['due_date'],
+                  tenant: invoiceData['tenant'],
+                  type: invoiceData['type'],
+                  amountPayable: invoiceData['amount_payable'],
+                  // amountPaid: invoiceData['amount_paid'],
+                  pendingAmount: invoiceData['pending_amount']))
               .toList();
         });
       } else {
