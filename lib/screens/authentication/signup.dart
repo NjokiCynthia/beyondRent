@@ -324,7 +324,7 @@ class _SignupState extends State<Signup> {
                               ),
                             ),
                             Text(
-                              'Kodi',
+                              'beyondRent',
                               style: Theme.of(context)
                                   .textTheme
                                   .titleLarge!
@@ -388,49 +388,49 @@ class _SignupState extends State<Signup> {
               SizedBox(
                 height: 30,
               ),
-              // Container(
-              //   margin: const EdgeInsets.only(left: 20, right: 20),
-              //   child: CustomRequestButton(
-              //     url: '/mobile/login',
-              //     method: 'POST',
-              //     buttonText: 'Demo Account',
-              //     body: const {
-              //       "phone": '254721882678',
-              //       "password": '00000000',
-              //       "remember": true
-              //     },
-              //     onSuccess: (res) {
-              //       if (res['data']['response']['status'] != 1) {
-              //         return showToast(
-              //           context,
-              //           'Error!',
-              //           res['data']['message'] ??
-              //               'Error, please try again later.',
-              //           Colors.red,
-              //         );
-              //       }
-              //       var userData = res['data']['response']['user'];
-              //       var accessToken = res['data']['response']['access_token'];
-              //       final userProvider = context.read<UserProvider>();
-              //       userProvider.setUser(
-              //         User(
-              //           firstName: userData['first_name'],
-              //           lastName: userData['last_name'],
-              //           phone: userData['phone'],
-              //           email: userData['email'],
-              //           id: userData['id'],
-              //           token: accessToken,
-              //         ),
-              //       );
-              //       Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //           builder: ((context) => const PropertyList()),
-              //         ),
-              //       );
-              //     },
-              //   ),
-              // ),
+              Container(
+                margin: const EdgeInsets.only(left: 20, right: 20),
+                child: CustomRequestButton(
+                  url: '/mobile/login',
+                  method: 'POST',
+                  buttonText: 'Demo Account',
+                  body: const {
+                    "phone": '2547398712777',
+                    "password": 'innovations1234',
+                    "remember": true
+                  },
+                  onSuccess: (res) {
+                    if (res['data']['response']['status'] != 1) {
+                      return showToast(
+                        context,
+                        'Error!',
+                        res['data']['message'] ??
+                            'Error, please try again later.',
+                        Colors.red,
+                      );
+                    }
+                    var userData = res['data']['response']['user'];
+                    var accessToken = res['data']['response']['access_token'];
+                    final userProvider = context.read<UserProvider>();
+                    userProvider.setUser(
+                      User(
+                        firstName: userData['first_name'],
+                        lastName: userData['last_name'],
+                        phone: userData['phone'],
+                        email: userData['email'],
+                        id: userData['id'],
+                        token: accessToken,
+                      ),
+                    );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: ((context) => const PropertyList()),
+                      ),
+                    );
+                  },
+                ),
+              ),
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: () {

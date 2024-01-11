@@ -54,6 +54,7 @@ class _LoginState extends State<Login> {
     ));
     return Scaffold(
         body: SafeArea(
+<<<<<<< HEAD
           child: SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -68,6 +69,42 @@ class _LoginState extends State<Login> {
                   margin: const EdgeInsets.only(bottom: 50),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
+=======
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 50),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(right: 10),
+                          child: Image.asset(
+                            'assets/images/icons/logo3.png',
+                            width: 40,
+                          ),
+                        ),
+                        Text(
+                          'beyondRent',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .copyWith(color: Colors.black),
+                        )
+                      ],
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+>>>>>>> bc36da92134ccb5b466923926250e806b006da50
                     children: [
                       Container(
                         margin: const EdgeInsets.only(right: 10),
@@ -233,6 +270,7 @@ class _LoginState extends State<Login> {
                             'Error, please try again later.',
                         Colors.red,
                       );
+<<<<<<< HEAD
                     }
                     var userData = res['data']['response']['user'];
                     var accessToken = res['data']['response']['access_token'];
@@ -245,6 +283,125 @@ class _LoginState extends State<Login> {
                         email: userData['email'],
                         id: userData['id'],
                         token: accessToken,
+=======
+                    },
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 20, right: 20),
+              child: CustomRequestButton(
+                url: '/mobile/login',
+                method: 'POST',
+                buttonText: 'Demo Account',
+                body: const {
+                  "phone": '2547398712777',
+                  "password": 'innovations1234',
+                  "remember": true
+                },
+                onSuccess: (res) {
+                  if (res['data']['response']['status'] != 1) {
+                    return showToast(
+                      context,
+                      'Error!',
+                      res['data']['message'] ??
+                          'Error, please try again later.',
+                      Colors.red,
+                    );
+                  }
+                  var userData = res['data']['response']['user'];
+                  var accessToken = res['data']['response']['access_token'];
+                  final userProvider = context.read<UserProvider>();
+                  userProvider.setUser(
+                    User(
+                      firstName: userData['first_name'],
+                      lastName: userData['last_name'],
+                      phone: userData['phone'],
+                      email: userData['email'],
+                      id: userData['id'],
+                      token: accessToken,
+                    ),
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: ((context) => const PropertyList()),
+                    ),
+                  );
+                },
+              ),
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            Container(
+              margin: const EdgeInsets.only(left: 20, right: 20),
+              child: CustomRequestButton(
+                url: '/mobile/login',
+                method: 'POST',
+                buttonText: 'CNN TEST ACCOUNT',
+                body: const {
+                  "phone": '254723752602',
+                  "password": 'password',
+                  "remember": true
+                },
+                onSuccess: (res) {
+                  if (res['data']['response']['status'] != 1) {
+                    return showToast(
+                      context,
+                      'Error!',
+                      res['data']['message'] ??
+                          'Error, please try again later.',
+                      Colors.red,
+                    );
+                  }
+                  var userData = res['data']['response']['user'];
+                  var accessToken = res['data']['response']['access_token'];
+                  final userProvider = context.read<UserProvider>();
+                  userProvider.setUser(
+                    User(
+                      firstName: userData['first_name'],
+                      lastName: userData['last_name'],
+                      phone: userData['phone'],
+                      email: userData['email'],
+                      id: userData['id'],
+                      token: accessToken,
+                    ),
+                  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: ((context) => const PropertyList()),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: ((context) => const Signup()),
+                  ),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: RichText(
+                  text: TextSpan(
+                    text: "Don't have an account? ",
+                    style: const TextStyle(color: Colors.black),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: 'Signup',
+                        style: TextStyle(color: mintyGreen),
+>>>>>>> bc36da92134ccb5b466923926250e806b006da50
                       ),
                     );
                     Navigator.push(

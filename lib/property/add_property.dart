@@ -40,7 +40,7 @@ class _AddUnitsModalContentState extends State<AddUnitsModalContent> {
               children: [
                 Icon(
                   Icons.king_bed_rounded,
-                  color: Color.fromRGBO(13, 201, 150, 1),
+                  color: primaryDarkColor,
                 ),
                 SizedBox(width: 10),
                 Text('Bedrooms'),
@@ -133,7 +133,7 @@ class _AddUnitsModalContentState extends State<AddUnitsModalContent> {
               children: [
                 Icon(
                   Icons.numbers,
-                  color: Color.fromRGBO(13, 201, 150, 1),
+                  color: primaryDarkColor,
                 ),
                 SizedBox(
                   width: 10,
@@ -340,6 +340,12 @@ class _StepPage1State extends State<StepPage1> {
         buttonErrorMessage = 'Enter property description';
       });
       return false;
+    } else if (propertyDescriptionController.text == '') {
+      setState(() {
+        buttonError = true;
+        buttonErrorMessage = 'Enter the nature of property';
+      });
+      return false;
     } else {
       setState(() {
         buttonError = false;
@@ -425,6 +431,17 @@ class _StepPage1State extends State<StepPage1> {
           const SizedBox(
             height: 24,
           ),
+          if (buttonError)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                buttonErrorMessage,
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 16,
+                ),
+              ),
+            ),
           const Row(
             children: [
               Icon(
@@ -696,62 +713,77 @@ class _StepPage1State extends State<StepPage1> {
             ],
           ),
           CustomRequestButton(
-            cookie:
-                'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
-            authorization: 'Bearer ${userProvider.user?.token}',
-            buttonError: buttonError,
-            buttonErrorMessage: buttonErrorMessage,
-            url: '/mobile/create_property',
-            method: 'POST',
-            buttonText: 'Proceed',
-            body: {
-              "property_name": propertyNameController.text,
-              "location": propertyLocationController.text,
-            },
-            onSuccess: (res) {
-              print('<<<<<<<<<<< res >>>>>>>>>>>>>>');
-              print(res);
-              if (res['isSuccessful'] == true) {
-                var propertyReturned =
-                    res['data']['response']['user_groups'][0];
+              cookie:
+                  'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
+              authorization: 'Bearer ${userProvider.user?.token}',
+              buttonError: buttonError,
+              buttonErrorMessage: buttonErrorMessage,
+              url: '/mobile/create_property',
+              method: 'POST',
+              buttonText: 'Proceed',
+              body: {
+                "property_name": propertyNameController.text,
+                "location": propertyLocationController.text,
+              },
+              onSuccess: (res) {
+                if (!buttonError) {
+                  print('<<<<<<<<<<< res >>>>>>>>>>>>>>');
+                  print(res);
 
-                if (res['data']['response']['status'] == 1) {
-                  propertyProvider.setProperty(
-                    Property(
-                      propertyName: propertyReturned['name'],
-                      propertyLocation: '',
-                      id: propertyReturned['id'],
-                    ),
-                  );
-                  // Add the property to list of properties
-                  final userPropertyListProvider =
-                      Provider.of<PropertyListProvider>(
+                  if (res['isSuccessful'] == true) {
+                    var propertyReturned =
+                        res['data']['response']['user_groups'][0];
+
+                    if (res['data']['response']['status'] == 1) {
+                      propertyProvider.setProperty(
+                        Property(
+                          propertyName: propertyReturned['name'],
+                          propertyLocation: '',
+                          id: propertyReturned['id'],
+                        ),
+                      );
+
+                      final userPropertyListProvider =
+                          Provider.of<PropertyListProvider>(
+                        context,
+                        listen: false,
+                      );
+                      Property property = Property(
+                        propertyName: propertyReturned['name'],
+                        propertyLocation: '',
+                        id: propertyReturned['id'],
+                      );
+                      userPropertyListProvider.addProperty(property);
+                      showToast(
+                        context,
+                        'Success!',
+                        res['data']['response']['message'],
+                        mintyGreen,
+                      );
+
+                      pageController.animateToPage(
+                        1,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    }
+                  } else {
+                    showToast(
+                      context,
+                      'Error!',
+                      res['data']['response']['message'],
+                      Colors.red,
+                    );
+                  }
+                } else {
+                  showToast(
                     context,
-                    listen: false,
-                  );
-                  Property property = Property(
-                    propertyName: propertyReturned['name'],
-                    propertyLocation: '',
-                    id: propertyReturned['id'],
-                  );
-                  userPropertyListProvider.addProperty(property);
-
-                  pageController.animateToPage(
-                    1,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
+                    'Error!',
+                    "Please enter all fields",
+                    Colors.red,
                   );
                 }
-              } else {
-                showToast(
-                  context,
-                  'Error!',
-                  res['data']['response']['message'],
-                  Colors.red,
-                );
-              }
-            },
-          ),
+              }),
         ],
       ),
     );

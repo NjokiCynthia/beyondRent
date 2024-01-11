@@ -74,11 +74,13 @@ class _ListTenantsState extends State<ListTenants> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            
+            // Navigate back to the home screen
+            Navigator.popUntil(context, (route) => true);
+            bottomNavigationController.jumpToTab(0);
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back_ios,
-            color: primaryDarkColor,
+            color: Color.fromARGB(255, 114, 198, 117),
           ),
         ),
         title: const Row(
@@ -137,7 +139,7 @@ class _ListTenantsState extends State<ListTenants> {
                     ),
                   )
                 : tenantList.isEmpty
-                    ? const EmptyTenants()
+                    ? Center(child: const EmptyTenants())
                     : ListView.builder(
                         itemCount: tenantList.length,
                         itemBuilder: (context, index) {

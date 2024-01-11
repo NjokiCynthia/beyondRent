@@ -656,8 +656,8 @@ class UnitWidget extends StatelessWidget {
         callback!(theObj);
       },
       child: Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        padding: const EdgeInsets.all(20),
+        margin: const EdgeInsets.only(bottom: 18),
+        padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -1002,90 +1002,69 @@ class InvoicesCard extends StatelessWidget {
           ),
         ),
       ),
-      child: Row(
+      child: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            margin: const EdgeInsets.only(right: 10),
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              shape: BoxShape.circle,
-            ),
-            child: Text(
-              firstLetter,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('${invoice.tenant}'),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            'Invoice due date:',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
-                                .copyWith(fontSize: 12, color: Colors.black),
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            '${invoice.dueDate}',
-                            style:
-                                Theme.of(context).textTheme.bodySmall!.copyWith(
-                                      fontSize: 12,
-                                    ),
-                          ),
-                        ],
-                      ),
-                    ],
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.only(right: 10),
+                decoration: BoxDecoration(
+                  color: backgroundColor,
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  firstLetter,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
                   ),
                 ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        '',
-                        //'${invoice.unit?['house_number'] ?? '0'}',
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              fontSize: 14,
-                            ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${invoice.tenant}'),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'KES ${currencyFormat.format(double.parse(invoice.pendingAmount.toString() ?? "0"))}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelMedium!
+                          .copyWith(color: primaryDarkColor),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 40),
+            child: Row(
+              children: [
+                Text(
+                  'Invoice due date:',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(fontSize: 13, color: Colors.black),
+                ),
+                Text(
+                  '${invoice.dueDate}',
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        fontSize: 12,
                       ),
-                      // Text(
-                      //   '${invoice.unit != null ? 'House ${invoice.unit!.houseNumber}, Floor ${invoice.unit!.floor}, Block ${invoice.unit!.block}' : 'N/A'}',
-                      //   style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      //         fontSize: 14,
-                      //       ),
-                      // ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'KES ${currencyFormat.format(double.parse(invoice.amountPayable.toString() ?? "0"))}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelMedium!
-                            .copyWith(color: primaryDarkColor),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                    ],
-                  ),
                 ),
               ],
             ),

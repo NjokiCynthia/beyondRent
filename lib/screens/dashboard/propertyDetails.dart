@@ -19,7 +19,7 @@ class PropertyDetails extends StatefulWidget {
 
 class _PropertyDetailsState extends State<PropertyDetails> {
   String currentMonth = '';
-  num currentYear = 2023;
+  num currentYear = 2024;
   DateTime selectedDate = DateTime.now();
 
   Future<void> _showDayPicker(BuildContext context) async {
@@ -152,6 +152,13 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                       ),
                     ],
                   ),
+                ),
+                Text(
+                  '$currentYear',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(color: Colors.white, fontSize: 18),
                 ),
                 Container(
                   padding: EdgeInsets.all(20),
@@ -463,6 +470,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
       // Call the fetchRentInfo function with the selected month
       await fetchRentInfo(monthToNumber(currentMonth));
       await fetchTransactionsList(monthToNumber(currentMonth));
+      await fetchPendingInfo(monthToNumber(currentMonth));
     }
   }
 
@@ -512,8 +520,8 @@ class _PropertyDetailsState extends State<PropertyDetails> {
         if (responseStatus == 1) {
           var deposits = response['response']['deposits'];
           if (deposits != null && deposits is List) {
-            // print('These are my transaction details below here >>>>>>>>>>>');
-            // print(deposits);
+            print('These are my transaction details below here >>>>>>>>>>>');
+            print(deposits);
 
             setState(() {
               transactionsList = deposits.cast<Map<String, dynamic>>();
@@ -632,20 +640,21 @@ class _PropertyDetailsState extends State<PropertyDetails> {
             'total_amount_payable': responseData['total_amount_payable'],
             'total_amount_paid': responseData['total_amount_paid'],
             'total_counts': responseData['total_counts'],
+            'total_pending_amount': responseData['total_pending_amount'],
             'invoices': responseData['invoices'],
           };
 
           invoices = (responseData['invoices'] as List)
               .map((invoiceData) => PendingInvoice(
-                    id: invoiceData['id'],
-                    invoiceDate: invoiceData['invoice_date'],
-                    month: invoiceData['month'],
-                    dueDate: invoiceData['due_date'],
-                    tenant: invoiceData['tenant'],
-                    type: invoiceData['type'],
-                    amountPayable: invoiceData['amount_payable'],
-                    // amountPaid: invoiceData['amount_paid'],
-                  ))
+                  id: invoiceData['id'],
+                  invoiceDate: invoiceData['invoice_date'],
+                  month: invoiceData['month'],
+                  dueDate: invoiceData['due_date'],
+                  tenant: invoiceData['tenant'],
+                  type: invoiceData['type'],
+                  amountPayable: invoiceData['amount_payable'],
+                  // amountPaid: invoiceData['amount_paid'],
+                  pendingAmount: invoiceData['pending_amount']))
               .toList();
         });
       } else {
@@ -775,7 +784,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                           shape: BoxShape.circle,
                         ),
                         child: Text(
-                          '0',
+                          transactionsList.length.toString(),
                           style:
                               Theme.of(context).textTheme.bodySmall!.copyWith(
                                     color: _selectedTabIndex == 0
@@ -818,7 +827,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                           shape: BoxShape.circle,
                         ),
                         child: Text(
-                          '0',
+                          invoices.length.toString(),
                           style:
                               Theme.of(context).textTheme.bodySmall!.copyWith(
                                     color: _selectedTabIndex == 1

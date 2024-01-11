@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/screens/dashboard.dart';
 import 'package:x_rent/utilities/constants.dart';
@@ -100,7 +101,6 @@ class _AddUnitsState extends State<AddUnits> {
   @override
   void initState() {
     super.initState();
-    //propertyInputValidator();
   }
 
   @override
@@ -298,7 +298,7 @@ class _AddUnitsState extends State<AddUnits> {
             children: [
               Icon(
                 Icons.king_bed_rounded,
-                color: Color.fromRGBO(13, 201, 150, 1),
+                color: primaryDarkColor,
               ),
               SizedBox(width: 10),
               Text('Select number of bedrooms'),
@@ -556,6 +556,14 @@ class _AddUnitsState extends State<AddUnits> {
                       setState(() {
                         unitsForStep3 = res['data']['response']['units'];
                       });
+                      showToast(
+                        context,
+                        'Success!',
+                        'Unit added successfully',
+                        mintyGreen,
+                      );
+
+                     
                       pageController.animateToPage(
                         2,
                         duration: const Duration(milliseconds: 300),

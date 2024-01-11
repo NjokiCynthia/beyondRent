@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/constants/theme.dart';
@@ -22,6 +23,70 @@ class UnitDetails extends StatefulWidget {
 }
 
 class _UnitDetailsState extends State<UnitDetails> {
+  bool transactionListLoaded = false;
+  List<Map<String, dynamic>> transactionsList = [];
+  fetchTransactionsList() async {
+    print('I am here to load transactions paid');
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
+    final token = userProvider.user?.token;
+
+    print('This is my property id while fetching transactions');
+
+    print(propertyProvider.property?.id);
+
+    final postData = {
+      "property_id": propertyProvider.property?.id,
+      "month": "",
+      "tenants": [widget.tenantID]
+    };
+    print('Data sent wehn fetching transactions');
+    print(postData);
+
+    final apiClient = ApiClient();
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    try {
+      var response = await apiClient.post(
+        '/mobile/deposits/get_deposits_list',
+        postData,
+        headers: headers,
+      );
+
+      if (response != null && response['response'] != null) {
+        var responseStatus = response['response']['status'];
+
+        if (responseStatus == 1) {
+          var deposits = response['response']['deposits'];
+          if (deposits != null && deposits is List) {
+            print('These are my transaction details below here >>>>>>>>>>>');
+            print(deposits);
+
+            setState(() {
+              transactionsList = deposits.cast<Map<String, dynamic>>();
+            });
+          }
+        }
+      }
+    } catch (e) {
+      print('Error');
+      print(e);
+    }
+
+    setState(() {
+      transactionListLoaded = true;
+    });
+  }
+
   bool tenantInfoLoading = true;
   Map tenantDetails = {};
   Map unitDetails = {};
@@ -68,6 +133,7 @@ class _UnitDetailsState extends State<UnitDetails> {
   void initState() {
     super.initState();
     fetchTenantDetails();
+    fetchTransactionsList();
   }
 
   @override
@@ -137,9 +203,43 @@ class _UnitDetailsState extends State<UnitDetails> {
             ),
           ),
           const SizedBox(height: 30),
-          const Center(
-            child: const EmptyTransactions(),
-          ),
+          transactionListLoaded == false
+              ? Center(
+                  child: SizedBox(
+                      child: LinearProgressIndicator(
+                    color: mintyGreen,
+                    minHeight: 4,
+                  )
+                      // CircularProgressIndicator(
+                      //   strokeWidth: 4,
+                      //   color: mintyGreen,
+                      // ),
+                      ),
+                )
+              : transactionsList.isEmpty
+                  ? const EmptyTransactions()
+                  : Expanded(
+                      child: ListView.builder(
+                        // itemCount: transactionsList.length > 6
+                        //     ? 6
+                        //     : transactionsList.length,
+                        itemCount: transactionsList.length,
+                        itemBuilder: (context, index) {
+                          var transaction = transactionsList[index];
+                          return TransactionCard(
+                            tenant: transaction['tenant'],
+                            date: transaction['date'],
+                            amount: transaction['amount'],
+                            type: transaction['type'],
+                            unit: transaction['unit'],
+                            bill: transaction['bill'],
+                            reconciliation: transaction['reconciliation'],
+                            narrative: transaction['narative'],
+                            id: transaction['id'],
+                          );
+                        },
+                      ),
+                    )
         ],
       ),
     );

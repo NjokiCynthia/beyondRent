@@ -23,6 +23,7 @@ class _PropertyListState extends State<PropertyList> {
   List userPropertyList = [];
 
   fetchPropertiesByUser(context) async {
+    print('I am here to fetch my properties');
     final userProvider = Provider.of<UserProvider>(
       context,
       listen: false,
@@ -45,6 +46,8 @@ class _PropertyListState extends State<PropertyList> {
     await apiClient
         .post('/mobile/get_property_by_user', postData, headers: headers)
         .then((response) {
+      print('Here is my properties');
+      print(response);
       var responseStatus = response['response']['status'];
       if (responseStatus == 0) {
         setState(() {
@@ -169,7 +172,7 @@ class _PropertyListState extends State<PropertyList> {
                     ),
                   ),
                   Text(
-                    'Kodi',
+                    'beyondRent',
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge!

@@ -237,7 +237,8 @@ class _UnitsState extends State<Units> {
                               Center(
                                 child: Text(
                                   '${responseData['total_units'] ?? '0'}',
-                                  style: Theme.of(context).textTheme.bodyLarge,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
                                 ),
                               ),
                               const SizedBox(height: 10),
@@ -284,10 +285,28 @@ class _UnitsState extends State<Units> {
                                 ],
                               ),
                               const SizedBox(height: 10),
-                              Text(
-                                'Total number of tenants: ${responseData['total_occupied_units'] ?? '0'}',
-                                style: Theme.of(context).textTheme.bodyLarge,
+                              Row(
+                                children: [
+                                  Text(
+                                    'Total number of tenants:',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(
+                                            color:
+                                                Colors.black.withOpacity(0.5)),
+                                  ),
+                                  Text(
+                                    ' ${responseData['total_tenants'] ?? '0'}',
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                ],
                               ),
+                              // Text(
+                              //   'Total number of tenants: ${responseData['total_tenants'] ?? '0'}',
+                              //   style: Theme.of(context).textTheme.bodyLarge,
+                              // ),
                               SizedBox(
                                 height: 5,
                               )
