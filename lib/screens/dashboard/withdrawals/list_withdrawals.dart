@@ -19,9 +19,33 @@ class _WithdrawalsState extends State<Withdrawals>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   bool withdrawalListLoaded = false;
+  int _currentTabIndex = 0;
   List<Map<String, dynamic>> withdrawalList = [];
+  int _getStatusForTabIndex(int index) {
+    switch (index) {
+      case 0:
+        return 2; // DISBURSED
+      case 1:
+        return 15; // PENDING
+      case 2:
+        return 16; // DECLINED
+      default:
+        return 15; // Default to DISBURSED
+    }
+  }
+
+  // int _getStatusForTabIndex(int index) {
+  //   // Define the mapping of tab index to status values
+  //   const List<int> tabStatusValues = [15, 2, 3];
+
+  //   // Return the corresponding status value based on the tab index
+  //   return tabStatusValues[index];
+  // }
 
   fetchWithdrawals(int status) async {
+    setState(() {
+      withdrawalListLoaded = false;
+    });
     final userProvider = Provider.of<UserProvider>(
       context,
       listen: false,
@@ -64,6 +88,7 @@ class _WithdrawalsState extends State<Withdrawals>
 
         setState(() {
           withdrawalList = posts;
+          withdrawalListLoaded = true;
         });
       }
     } catch (e) {
@@ -80,15 +105,17 @@ class _WithdrawalsState extends State<Withdrawals>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _tabController.addListener(() {
+    _tabController.animation?.addListener(() {
       if (_tabController.indexIsChanging) {
         // Tab is changing, fetch data for the selected tab
-        fetchWithdrawals(
-            _tabController.index + 1); // +1 because your statuses start from 1
+        if (_currentTabIndex != _tabController.index) {
+          _currentTabIndex = _tabController.index;
+          fetchWithdrawals(_getStatusForTabIndex(_currentTabIndex));
+        }
       }
     });
 
-    fetchWithdrawals(1); // Initial fetch for the first tab
+    fetchWithdrawals(_getStatusForTabIndex(0));
   }
 
   @override
@@ -136,10 +163,10 @@ class _WithdrawalsState extends State<Withdrawals>
             indicator: BoxDecoration(color: primaryDarkColor.withOpacity(0.5)),
             tabs: [
               Tab(
-                text: 'DISBURSED',
+                text: 'PENDING DISBURSEMENT',
               ),
-              Tab(text: 'PENDING'),
-              Tab(text: 'DECLINED'),
+              Tab(text: 'DISBURSED'),
+              Tab(text: 'FAILED'),
             ],
           ),
         ),
@@ -174,7 +201,7 @@ class _WithdrawalsState extends State<Withdrawals>
   Widget buildWithdrawalsList() {
     return Padding(
       padding: const EdgeInsets.all(20),
-      child: withdrawalListLoaded == false
+      child: !withdrawalListLoaded
           ? Center(
               child: SizedBox(
                 child: CircularProgressIndicator(
@@ -235,12 +262,18 @@ class _WithdrawalsState extends State<Withdrawals>
                             const SizedBox(
                               height: 5,
                             ),
-                            Text('${withdrawal['status']}',
+                            Text(
+                                '${withdrawal['status']} to ${withdrawal['name']}',
                                 style: const TextStyle(
                                     color: Colors.black, fontSize: 14)),
                             const SizedBox(
                               height: 5,
                             ),
+                            Text('Recepient:'),
+                            Text(
+                                '${withdrawal['recipient']} to ${withdrawal['name']}',
+                                style: const TextStyle(
+                                    color: Colors.grey, fontSize: 14)),
                           ],
                         ),
                       ),

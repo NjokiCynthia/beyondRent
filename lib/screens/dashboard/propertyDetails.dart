@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:x_rent/constants/color_contants.dart';
+import 'package:x_rent/models/invoice.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
+import 'package:x_rent/screens/dashboard/invoices.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/constants/theme.dart';
@@ -509,8 +512,8 @@ class _PropertyDetailsState extends State<PropertyDetails> {
         if (responseStatus == 1) {
           var deposits = response['response']['deposits'];
           if (deposits != null && deposits is List) {
-            print('These are my transaction details below here >>>>>>>>>>>');
-            print(deposits);
+            // print('These are my transaction details below here >>>>>>>>>>>');
+            // print(deposits);
 
             setState(() {
               transactionsList = deposits.cast<Map<String, dynamic>>();
@@ -582,13 +585,92 @@ class _PropertyDetailsState extends State<PropertyDetails> {
     });
   }
 
+  bool pendingInfoLoaded = false;
+  Map<String, dynamic> pendingInfo = {};
+  List<PendingInvoice> invoices = [];
+
+  fetchPendingInfo(int selectedMonth) async {
+    print('I am here trying to fetch pending rent info');
+    print('Fetching pending info for month $selectedMonth');
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
+    final token = userProvider.user?.token;
+
+    final postData = {
+      "property_id": propertyProvider.property?.id,
+      "month": selectedMonth.toString(),
+      "tenant_ids": []
+    };
+    print('This is my property id here');
+    print(
+      propertyProvider.property?.id,
+    );
+    final apiClient = ApiClient();
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      var response = await apiClient.post(
+        '/mobile/invoices/get_property_invoices_pending_payment',
+        postData,
+        headers: headers,
+      );
+
+      var responseData = response['response'];
+      if (responseData != null && responseData['status'] == 1) {
+        print('Pending Collected Details for the selected month >>>>>>>>>>>');
+        print(responseData);
+        setState(() {
+          pendingInfo = {
+            'total_amount_payable': responseData['total_amount_payable'],
+            'total_amount_paid': responseData['total_amount_paid'],
+            'total_counts': responseData['total_counts'],
+            'invoices': responseData['invoices'],
+          };
+
+          invoices = (responseData['invoices'] as List)
+              .map((invoiceData) => PendingInvoice(
+                    id: invoiceData['id'],
+                    invoiceDate: invoiceData['invoice_date'],
+                    month: invoiceData['month'],
+                    dueDate: invoiceData['due_date'],
+                    tenant: invoiceData['tenant'],
+                    type: invoiceData['type'],
+                    amountPayable: invoiceData['amount_payable'],
+                    // amountPaid: invoiceData['amount_paid'],
+                  ))
+              .toList();
+        });
+      } else {
+        print('API request failed with status: ${responseData['status']}');
+      }
+    } catch (e) {
+      print('Error');
+      print(e);
+      print('Error in API call: $e');
+    }
+    setState(() {
+      pendingInfoLoaded = true;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     currentMonth = getMonthAbbreviation(DateTime.now());
     fetchRentInfo(DateTime.now().month);
+    fetchPendingInfo(DateTime.now().month);
     fetchTransactionsList(DateTime.now().month);
   }
+
+  int _selectedTabIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -653,135 +735,157 @@ class _PropertyDetailsState extends State<PropertyDetails> {
       ),
     );
     Widget propertyDetails = Container(
-      padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(
             children: [
-              Container(
-                margin: const EdgeInsets.only(right: 30),
-                child: Row(
-                  children: [
-                    Text(
-                      'Collected',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(7, 7, 7, 7),
-                      margin: const EdgeInsets.only(left: 10),
-                      decoration: BoxDecoration(
-                        color: mintyGreen.withOpacity(0.1),
-                        shape: BoxShape.circle,
+              GestureDetector(
+                onTap: () {
+                  // Update _selectedTabIndex to 0 when 'Collected' is tapped
+                  setState(() {
+                    _selectedTabIndex = 0;
+                  });
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(right: 30),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Collected',
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: _selectedTabIndex == 0
+                                  ? mintyGreen
+                                  : Colors.black.withOpacity(0.5),
+                            ),
                       ),
-                      child: Text(
-                        '0',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .copyWith(color: mintyGreen),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(7, 7, 7, 7),
+                        margin: const EdgeInsets.only(left: 10),
+                        decoration: BoxDecoration(
+                          color: _selectedTabIndex == 0
+                              ? mintyGreen.withOpacity(0.1)
+                              : Colors.transparent,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          '0',
+                          style:
+                              Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    color: _selectedTabIndex == 0
+                                        ? mintyGreen
+                                        : Colors.black.withOpacity(0.5),
+                                  ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-              Row(
-                children: [
-                  Text(
-                    'Pending',
-                    style: Theme.of(context).textTheme.bodyMedium,
+              GestureDetector(
+                onTap: () {
+                  // Update _selectedTabIndex to 1 when 'Pending' is tapped
+                  setState(() {
+                    _selectedTabIndex = 1;
+                  });
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(right: 30),
+                  child: Row(
+                    children: [
+                      Text(
+                        'Pending',
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: _selectedTabIndex == 1
+                                  ? Colors.red.withOpacity(0.7)
+                                  : Colors.black.withOpacity(0.5),
+                            ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(7, 7, 7, 7),
+                        margin: const EdgeInsets.only(left: 10),
+                        decoration: BoxDecoration(
+                          color: _selectedTabIndex == 1
+                              ? Color.fromARGB(255, 248, 164, 151)
+                                  .withOpacity(0.1)
+                              : Colors.transparent,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          '0',
+                          style:
+                              Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    color: _selectedTabIndex == 1
+                                        ? Colors.red
+                                        //   primaryDarkColor.withOpacity(0.7)
+                                        : Colors.black.withOpacity(0.5),
+                                  ),
+                        ),
+                      ),
+                    ],
                   ),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(7, 7, 7, 7),
-                    margin: const EdgeInsets.only(left: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      '0',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(color: Colors.red.withOpacity(0.7)),
-                    ),
-                  ),
-                ],
-              )
+                ),
+              ),
             ],
           ),
           Container(
             height: 7,
             width: 40,
             decoration: BoxDecoration(
-              color: mintyGreen,
+              color: _selectedTabIndex == 0 ? mintyGreen : Colors.transparent,
               borderRadius: BorderRadius.circular(30),
             ),
           ),
           const SizedBox(height: 30),
-          transactionListLoaded == false
-              ? Center(
-                  child: SizedBox(
-                      child: LinearProgressIndicator(
-                    color: mintyGreen,
-                    minHeight: 4,
-                  )
-                      // CircularProgressIndicator(
-                      //   strokeWidth: 4,
-                      //   color: mintyGreen,
-                      // ),
-                      ),
-                )
-              : transactionsList.isEmpty
+          _selectedTabIndex == 0
+              ? transactionListLoaded == false
+                  ? Center(
+                      child: SizedBox(
+                          child: LinearProgressIndicator(
+                        color: mintyGreen,
+                        minHeight: 4,
+                      )),
+                    )
+                  : transactionsList.isEmpty
+                      ? const EmptyTransactions()
+                      : Expanded(
+                          child: ListView.builder(
+                            itemCount: transactionsList.length,
+                            itemBuilder: (context, index) {
+                              var transaction = transactionsList[index];
+                              return TransactionCard(
+                                tenant: transaction['tenant'],
+                                date: transaction['date'],
+                                amount: transaction['amount'],
+                                type: transaction['type'],
+                                unit: transaction['unit'],
+                                bill: transaction['bill'],
+                                reconciliation: transaction['reconciliation'],
+                                narrative: transaction['narative'],
+                                id: transaction['id'],
+                              );
+                            },
+                          ),
+                        )
+              : invoices.isEmpty
                   ? const EmptyTransactions()
                   : Expanded(
                       child: ListView.builder(
-                        itemCount: transactionsList.length,
+                        itemCount: invoices.length,
                         itemBuilder: (context, index) {
-                          var transaction = transactionsList[index];
-                          return TransactionCard(
-                            tenant: transaction['tenant'],
-                            date: transaction['date'],
-                            amount: transaction['amount'],
-                            type: transaction['type'],
-                            unit: transaction['unit'],
-                            bill: transaction['bill'],
-                            reconciliation: transaction['reconciliation'],
-                            narrative: transaction['narative'],
-                            id: transaction['id'],
-                          );
+                          var invoice = invoices[index];
+                          return InvoicesCard(invoice: invoice);
                         },
                       ),
                     )
+        ]));
 
-          // : Expanded(
-          //     child: ListView.builder(
-          //       // itemCount: transactionsList.length > 6
-          //       //     ? 6
-          //       //     : transactionsList.length,
-          //       itemCount: transactionsList.length,
-          //       itemBuilder: (context, index) {
-          //         var transaction = transactionsList[index];
-          //         return TransactionCard(
-          //             // name: transaction['name'] ?? 'Tenant',
-          //             // date: transaction['contribution_date'] ?? '',
-          //             // amount: transaction['amount'] ?? 0,
-          //             // type: transaction['type'] ?? "");
-          //             );
-          //       },
-          //     ),
-          //   )
-          // const EmptyTransactions(),
-        ],
-      ),
-    );
     Widget customeInvoiceContent = Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,

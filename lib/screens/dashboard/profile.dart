@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/screens/billing/add_supplementary_bill.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:provider/provider.dart';
@@ -74,14 +75,13 @@ class _SettingsState extends State<Settings> {
                       ListTile(
                         leading: Container(
                           decoration: BoxDecoration(
-                            color: const Color.fromRGBO(13, 201, 150, 1)
-                                .withOpacity(0.1),
+                            color: primaryDarkColor.withOpacity(0.1),
                             shape: BoxShape.circle,
                           ),
                           padding: const EdgeInsets.all(8),
                           child: const Icon(
                             Icons.phone,
-                            color: Color.fromRGBO(13, 201, 150, 1),
+                            color: primaryDarkColor,
                           ),
                         ),
                         title: Text(
@@ -91,14 +91,13 @@ class _SettingsState extends State<Settings> {
                       ListTile(
                         leading: Container(
                           decoration: BoxDecoration(
-                            color: const Color.fromRGBO(13, 201, 150, 1)
-                                .withOpacity(0.1),
+                            color: primaryDarkColor.withOpacity(0.1),
                             shape: BoxShape.circle,
                           ),
                           padding: const EdgeInsets.all(8),
                           child: const Icon(
                             Icons.location_city,
-                            color: Color.fromRGBO(13, 201, 150, 1),
+                            color: primaryDarkColor,
                           ),
                         ),
                         title: const Text(
@@ -127,14 +126,13 @@ class _SettingsState extends State<Settings> {
                     child: ListTile(
                       leading: Container(
                         decoration: BoxDecoration(
-                          color: const Color.fromRGBO(13, 201, 150, 1)
-                              .withOpacity(0.1),
+                          color: primaryDarkColor.withOpacity(0.1),
                           shape: BoxShape.circle,
                         ),
                         padding: const EdgeInsets.all(8),
                         child: const Icon(
                           Icons.money_off,
-                          color: Color.fromRGBO(13, 201, 150, 1),
+                          color: primaryDarkColor,
                         ),
                       ),
                       subtitle: const Text(
@@ -169,14 +167,13 @@ class _SettingsState extends State<Settings> {
                     child: ListTile(
                       leading: Container(
                         decoration: BoxDecoration(
-                          color: const Color.fromRGBO(13, 201, 150, 1)
-                              .withOpacity(0.1),
+                          color: primaryDarkColor.withOpacity(0.1),
                           shape: BoxShape.circle,
                         ),
                         padding: const EdgeInsets.all(8),
                         child: const Icon(
                           Icons.money_off,
-                          color: Color.fromRGBO(13, 201, 150, 1),
+                          color: primaryDarkColor,
                         ),
                       ),
                       subtitle: const Text(
@@ -211,14 +208,13 @@ class _SettingsState extends State<Settings> {
                     child: ListTile(
                       leading: Container(
                         decoration: BoxDecoration(
-                          color: const Color.fromRGBO(13, 201, 150, 1)
-                              .withOpacity(0.1),
+                          color: primaryDarkColor.withOpacity(0.1),
                           shape: BoxShape.circle,
                         ),
                         padding: const EdgeInsets.all(8),
                         child: const Icon(
                           Icons.email,
-                          color: Color.fromRGBO(13, 201, 150, 1),
+                          color: primaryDarkColor,
                         ),
                       ),
                       title: const Text(
@@ -253,14 +249,13 @@ class _SettingsState extends State<Settings> {
                     child: ListTile(
                       leading: Container(
                         decoration: BoxDecoration(
-                          color: const Color.fromRGBO(13, 201, 150, 1)
-                              .withOpacity(0.1),
+                          color: primaryDarkColor.withOpacity(0.1),
                           shape: BoxShape.circle,
                         ),
                         padding: const EdgeInsets.all(8),
                         child: const Icon(
                           Icons.house,
-                          color: Color.fromRGBO(13, 201, 150, 1),
+                          color: primaryDarkColor,
                         ),
                       ),
                       title: const Text(
@@ -282,15 +277,12 @@ class _SettingsState extends State<Settings> {
                   child: ListTile(
                     leading: Container(
                       decoration: BoxDecoration(
-                        color: const Color.fromRGBO(13, 201, 150, 1)
-                            .withOpacity(0.1),
+                        color: primaryDarkColor.withOpacity(0.1),
                         shape: BoxShape.circle,
                       ),
                       padding: const EdgeInsets.all(8),
-                      child: const Icon(
-                        Icons.language,
-                        color: Color.fromRGBO(13, 201, 150, 1),
-                      ),
+                      child:
+                          const Icon(Icons.language, color: primaryDarkColor),
                     ),
                     title: const Text(
                       'Language',

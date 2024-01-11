@@ -74,14 +74,11 @@ class _ListTenantsState extends State<ListTenants> {
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Home()), // Replace HomeScreen with your actual home page
-            );
+            
           },
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_ios,
-            color: Color.fromARGB(255, 114, 198, 117), // You can change the color as needed
+            color: primaryDarkColor,
           ),
         ),
         title: const Row(

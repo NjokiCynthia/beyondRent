@@ -301,7 +301,7 @@ class _AddUnitsState extends State<AddUnits> {
                 color: Color.fromRGBO(13, 201, 150, 1),
               ),
               SizedBox(width: 10),
-              Text('Select type of units'),
+              Text('Select number of bedrooms'),
             ],
           ),
           const SizedBox(
