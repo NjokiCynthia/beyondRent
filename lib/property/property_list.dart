@@ -172,7 +172,7 @@ class _PropertyListState extends State<PropertyList> {
                     ),
                   ),
                   Text(
-                    'BeyondRent',
+                    'beyondRent',
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge!

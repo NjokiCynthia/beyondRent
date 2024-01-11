@@ -19,7 +19,7 @@ class PropertyDetails extends StatefulWidget {
 
 class _PropertyDetailsState extends State<PropertyDetails> {
   String currentMonth = '';
-  num currentYear = 2023;
+  num currentYear = 2024;
   DateTime selectedDate = DateTime.now();
 
   Future<void> _showDayPicker(BuildContext context) async {
@@ -152,6 +152,13 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                       ),
                     ],
                   ),
+                ),
+                Text(
+                  '$currentYear',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(color: Colors.white, fontSize: 18),
                 ),
                 Container(
                   padding: EdgeInsets.all(20),

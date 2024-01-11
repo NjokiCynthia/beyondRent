@@ -51,7 +51,7 @@ class _AnimatedScaleImageState extends State<AnimatedScaleImage>
                   ),
                 ),
                 Text(
-                  'BeyondRent',
+                  'beyondRent',
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge!
