@@ -41,12 +41,12 @@ class _DashboardState extends State<Dashboard> {
         activeColorPrimary: mintyGreen,
         inactiveColorPrimary: Colors.grey,
       ),
-      PersistentBottomNavBarItem(
-        icon: const Icon(Icons.list),
-        title: ("Invoices"),
-        activeColorPrimary: mintyGreen,
-        inactiveColorPrimary: Colors.grey,
-      ),
+      // PersistentBottomNavBarItem(
+      //   icon: const Icon(Icons.list),
+      //   title: ("Invoices"),
+      //   activeColorPrimary: mintyGreen,
+      //   inactiveColorPrimary: Colors.grey,
+      // ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.people_outline_outlined),
         title: ("Statements"),

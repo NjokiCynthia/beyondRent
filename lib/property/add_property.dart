@@ -263,7 +263,10 @@ class _AddPropertyState extends State<AddProperty> {
                       _currentPageIndex = index;
                     });
                   },
-                  children: pages,
+                  physics: _currentPageIndex == 0 || _currentPageIndex == 1
+        ? NeverScrollableScrollPhysics()
+        : PageScrollPhysics(),
+    children: pages,
                 ),
               ),
             ],
