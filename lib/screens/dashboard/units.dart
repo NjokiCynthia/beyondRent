@@ -22,7 +22,7 @@ class _UnitsState extends State<Units> {
   Map<String, dynamic> responseData = {};
 
   fetchUnitDetails() async {
-    print('I am here to fetch unit details');
+    print('I am here to fetch units information');
     setState(() {
       unitDetailsLoading = true;
     });
@@ -61,9 +61,9 @@ class _UnitsState extends State<Units> {
           propertyUnitsList = units;
           // Update other UI elements with the new data
           // For example, you can access other values like this:
-          var totalUnits = responseData['total_units'];
-          var totalVacantUnits = responseData['total_vacant_units'];
-          // Update UI elements with totalUnits and totalVacantUnits
+          // var totalUnits = responseData['total_units'];
+          // var totalVacantUnits = responseData['total_vacant_units'];
+          // // Update UI elements with totalUnits and totalVacantUnits
         });
       } else {
         // Handle other status cases if needed
@@ -81,6 +81,7 @@ class _UnitsState extends State<Units> {
   bool unitsLoading = true;
 
   fetchPropertyUnits() async {
+    print('I am here to fetch units');
     setState(() {
       unitsLoading = true;
     });
@@ -109,9 +110,12 @@ class _UnitsState extends State<Units> {
         var status = response['response']['status'];
         if (status == 1) {
           var units = response['response']['units'];
+
           setState(() {
             propertyUnitsList = units;
           });
+          print('this is my units fetched');
+          print(response['response']['units']);
         }
       }).catchError((error) {
         // Handle the error
@@ -365,7 +369,7 @@ class _UnitsState extends State<Units> {
                 ),
               ),
             ],
-      ),
+          ),
         ),
       ),
     );
