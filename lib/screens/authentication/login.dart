@@ -266,8 +266,8 @@ class _LoginState extends State<Login> {
             method: 'POST',
             buttonText: 'Demo Account',
             body: const {
-              "phone": '254721882678',
-              "password": '00000000',
+              "phone": '2547398712777',
+              "password": 'innovations1234',
               "remember": true
             },
             onSuccess: (res) {

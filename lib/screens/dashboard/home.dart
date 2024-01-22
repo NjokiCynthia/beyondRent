@@ -882,7 +882,7 @@ class _HomeState extends State<Home> {
         ),
         const SizedBox(height: 10),
         Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -1038,7 +1038,7 @@ class _HomeState extends State<Home> {
         ),
         const SizedBox(height: 10),
         Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -1505,7 +1505,7 @@ class _HomeState extends State<Home> {
           padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
           child: Column(
             children: [
-              const SizedBox(height: 20),
+              const SizedBox(height: 5),
               DashboardAppbar(
                 headerText: 'Property',
                 headerBody: propertyProvider.property?.propertyName ?? '',

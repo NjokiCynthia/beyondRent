@@ -525,7 +525,6 @@ class _AddUnitsState extends State<AddUnits> {
             ),
           ),
           const SizedBox(height: 24),
-
           SizedBox(
             width: double.infinity,
             child: CustomRequestButton(
@@ -563,7 +562,6 @@ class _AddUnitsState extends State<AddUnits> {
                         mintyGreen,
                       );
 
-                     
                       pageController.animateToPage(
                         2,
                         duration: const Duration(milliseconds: 300),
@@ -589,6 +587,11 @@ class _AddUnitsState extends State<AddUnits> {
               },
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
           // Row(
           //   children: [
           //     Expanded(
@@ -676,8 +679,4 @@ class _AddUnitsState extends State<AddUnits> {
           //     ))
           //   ],
           // ),
-        ],
-      ),
-    );
-  }
-}
+     
