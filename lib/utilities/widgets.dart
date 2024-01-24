@@ -478,7 +478,7 @@ class TransactionCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('$tenant'),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Text(
@@ -500,18 +500,18 @@ class TransactionCard extends StatelessWidget {
                               fontSize: 14,
                             ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
-                        'KES ${currencyFormat.format(double.parse(amount.toString() ?? "0"))}',
+                        'KES ${currencyFormat.format(double.parse(amount.toString()))}',
                         //'KES. $amount',
                         style: Theme.of(context)
                             .textTheme
                             .labelMedium!
                             .copyWith(color: primaryDarkColor),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
@@ -907,7 +907,7 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
 class InvoiceCard extends StatelessWidget {
   final Invoice invoice;
 
-  InvoiceCard({required this.invoice});
+  const InvoiceCard({super.key, required this.invoice});
 
   @override
   Widget build(BuildContext context) {
@@ -1027,7 +1027,7 @@ class InvoicesCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('${invoice.tenant}'),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                   ],
@@ -1038,7 +1038,7 @@ class InvoicesCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      'KES ${currencyFormat.format(double.parse(invoice.pendingAmount.toString() ?? "0"))}',
+                      'KES ${currencyFormat.format(double.parse(invoice.pendingAmount.toString()))}',
                       style: Theme.of(context)
                           .textTheme
                           .labelMedium!
@@ -1050,7 +1050,7 @@ class InvoicesCard extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: EdgeInsets.only(left: 40),
+            padding: const EdgeInsets.only(left: 40),
             child: Row(
               children: [
                 Text(
@@ -1078,7 +1078,7 @@ class InvoicesCard extends StatelessWidget {
 class WithdrawalCard extends StatelessWidget {
   final Invoice invoice;
 
-  WithdrawalCard({required this.invoice});
+  const WithdrawalCard({required this.invoice});
 
   @override
   Widget build(BuildContext context) {

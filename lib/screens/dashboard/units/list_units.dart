@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/screens/dashboard/units/add_unit.dart';
 import 'package:x_rent/providers/property_provider.dart';
@@ -20,12 +19,15 @@ class Units extends StatefulWidget {
 class _UnitsState extends State<Units> {
   bool unitDetailsLoading = true;
   Map<String, dynamic> responseData = {};
+  bool unitsFetched = false;
 
   fetchUnitDetails() async {
     print('I am here to fetch units information');
-    setState(() {
-      unitDetailsLoading = true;
-    });
+    if (_mounted) {
+      setState(() {
+        unitDetailsLoading = true;
+      });
+    }
 
     final propertyProvider = Provider.of<PropertyProvider>(
       context,
@@ -56,15 +58,16 @@ class _UnitsState extends State<Units> {
 
       if (status == 1) {
         var units = responseData['units'];
-
-        setState(() {
-          propertyUnitsList = units;
-          // Update other UI elements with the new data
-          // For example, you can access other values like this:
-          // var totalUnits = responseData['total_units'];
-          // var totalVacantUnits = responseData['total_vacant_units'];
-          // // Update UI elements with totalUnits and totalVacantUnits
-        });
+        if (_mounted) {
+          setState(() {
+            propertyUnitsList = units;
+            // Update other UI elements with the new data
+            // For example, you can access other values like this:
+            // var totalUnits = responseData['total_units'];
+            // var totalVacantUnits = responseData['total_vacant_units'];
+            // // Update UI elements with totalUnits and totalVacantUnits
+          });
+        }
       } else {
         // Handle other status cases if needed
       }
@@ -72,19 +75,23 @@ class _UnitsState extends State<Units> {
       // Handle the error
       // You might want to log or display an error message
     } finally {
-      setState(() {
-        unitDetailsLoading = false;
-      });
+      if (_mounted) {
+        setState(() {
+          unitDetailsLoading = false;
+        });
+      }
     }
   }
 
   bool unitsLoading = true;
 
-  fetchPropertyUnits() async {
+  fetchPropertyUnits(BuildContext context) async {
     print('I am here to fetch units');
-    setState(() {
-      unitsLoading = true;
-    });
+    if (_mounted) {
+      setState(() {
+        unitsLoading = true;
+      });
+    }
     final propertyProvider = Provider.of<PropertyProvider>(
       context,
       listen: false,
@@ -110,32 +117,55 @@ class _UnitsState extends State<Units> {
         var status = response['response']['status'];
         if (status == 1) {
           var units = response['response']['units'];
-
-          setState(() {
-            propertyUnitsList = units;
-          });
+          if (_mounted) {
+            setState(() {
+              propertyUnitsList = units;
+            });
+          }
           print('this is my units fetched');
           print(response['response']['units']);
         }
       }).catchError((error) {
         // Handle the error
-        return;
+        print('error');
+        print(error);
       });
-      setState(() {
-        unitsLoading = false;
-      });
+      if (_mounted) {
+        setState(() {
+          unitsLoading = false;
+        });
+      }
     } catch (e) {
-      setState(() {
-        unitsLoading = false;
-      });
+      if (_mounted) {
+        setState(() {
+          unitsLoading = false;
+        });
+      }
     }
   }
+
+  Future<void> _refreshUnits(BuildContext context) async {
+    // Fetch units data here
+    await fetchPropertyUnits(context);
+  }
+
+  bool _mounted = false;
 
   @override
   void initState() {
     super.initState();
-    fetchPropertyUnits();
-    fetchUnitDetails();
+    _mounted = true;
+    if (!unitsFetched) {
+      fetchPropertyUnits(context);
+      fetchUnitDetails();
+      unitsFetched = true;
+    }
+  }
+
+  @override
+  void dispose() {
+    _mounted = false;
+    super.dispose();
   }
 
   @override
@@ -165,7 +195,7 @@ class _UnitsState extends State<Units> {
                           PageTransitionAnimation.cupertino,
                     ).then(
                       (_) => setState(() {
-                        fetchPropertyUnits();
+                        fetchPropertyUnits(context);
                       }),
                     );
                   },
@@ -208,7 +238,7 @@ class _UnitsState extends State<Units> {
                     SafeArea(
                         top: false,
                         child: Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
@@ -226,7 +256,7 @@ class _UnitsState extends State<Units> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               Center(
@@ -235,7 +265,7 @@ class _UnitsState extends State<Units> {
                                   style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               Center(
@@ -311,7 +341,7 @@ class _UnitsState extends State<Units> {
                               //   'Total number of tenants: ${responseData['total_tenants'] ?? '0'}',
                               //   style: Theme.of(context).textTheme.bodyLarge,
                               // ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               )
                             ],
@@ -319,51 +349,56 @@ class _UnitsState extends State<Units> {
                         )),
                     const SizedBox(height: 10),
                     Expanded(
-                      child: unitsLoading == true
-                          ? Center(
-                              child: SizedBox(
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 4,
-                                  color: mintyGreen,
+                      child: RefreshIndicator(
+                        onRefresh: () => _refreshUnits(context),
+                        child: unitsLoading == true
+                            ? Center(
+                                child: SizedBox(
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 4,
+                                    color: mintyGreen,
+                                  ),
                                 ),
-                              ),
-                            )
-                          : propertyUnitsList.isEmpty
-                              ? const Center(
-                                  child: EmptyUnits(),
-                                )
-                              : ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: propertyUnitsList.length,
-                                  itemBuilder: (context, index) {
-                                    return UnitWidget(
-                                      id: num.parse(
-                                          propertyUnitsList[index]['id']),
-                                      unitNo: propertyUnitsList[index]
-                                          ['house_number'],
-                                      name: propertyUnitsList[index]
-                                          ['house_number'],
-                                      tenant: propertyUnitsList[index]
-                                          ['tenant_id'],
-                                      callback: (value) {
-                                        PersistentNavBarNavigator.pushNewScreen(
-                                          context,
-                                          screen: UnitDetails(
-                                              unitID: value['id'],
-                                              unitNo: value['unitNo'],
-                                              tenantID: value['tenant']),
-                                          withNavBar: false,
-                                          pageTransitionAnimation:
-                                              PageTransitionAnimation.cupertino,
-                                        ).then(
-                                          (_) => setState(() {
-                                            fetchPropertyUnits();
-                                          }),
-                                        );
-                                      },
-                                    );
-                                  },
-                                ),
+                              )
+                            : propertyUnitsList.isEmpty
+                                ? const Center(
+                                    child: EmptyUnits(),
+                                  )
+                                : ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: propertyUnitsList.length,
+                                    itemBuilder: (context, index) {
+                                      return UnitWidget(
+                                        id: num.parse(
+                                            propertyUnitsList[index]['id']),
+                                        unitNo: propertyUnitsList[index]
+                                            ['house_number'],
+                                        name: propertyUnitsList[index]
+                                            ['house_number'],
+                                        tenant: propertyUnitsList[index]
+                                            ['tenant_id'],
+                                        callback: (value) {
+                                          PersistentNavBarNavigator
+                                              .pushNewScreen(
+                                            context,
+                                            screen: UnitDetails(
+                                                unitID: value['id'],
+                                                unitNo: value['unitNo'],
+                                                tenantID: value['tenant']),
+                                            withNavBar: false,
+                                            pageTransitionAnimation:
+                                                PageTransitionAnimation
+                                                    .cupertino,
+                                          ).then(
+                                            (_) => setState(() {
+                                              fetchPropertyUnits(context);
+                                            }),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                      ),
                     ),
                   ],
                 ),

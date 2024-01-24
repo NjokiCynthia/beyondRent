@@ -389,24 +389,24 @@ class _HomeState extends State<Home> {
         isScrollControlled: true,
         builder: (_) {
           return Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
-                  Text(
+                  const Text(
                     'CURRENT AVAILABLE BALANCE:',
                     style: TextStyle(color: Colors.black),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Text(
                     'KES ${currencyFormat.format(double.parse(rentInfo['current_balance'] ?? '0.0'))}',
                     style: Theme.of(context).textTheme.displayLarge,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   const Row(
@@ -455,24 +455,24 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10.0),
-                  Text(
+                  const SizedBox(height: 10.0),
+                  const Text(
                     'Select withdrawal purpose',
                     style: TextStyle(fontSize: 18.0),
                   ),
-                  SizedBox(height: 10.0),
+                  const SizedBox(height: 10.0),
                   DropdownButtonFormField(
                     value: selectedOption,
                     items: [
-                      DropdownMenuItem(
+                      const DropdownMenuItem(
                         child: Text('Expense Payment'),
                         value: 'expense_payment',
                       ),
-                      DropdownMenuItem(
+                      const DropdownMenuItem(
                         child: Text('Tenant Refund'),
                         value: 'tenant_refund',
                       ),
-                      DropdownMenuItem(
+                      const DropdownMenuItem(
                         child: Text('Account Transfer'),
                         value: 'account_transfer',
                       ),
@@ -536,7 +536,7 @@ class _HomeState extends State<Home> {
                               context: context,
                               builder: (BuildContext context) {
                                 return Padding(
-                                  padding: EdgeInsets.all(30),
+                                  padding: const EdgeInsets.all(30),
                                   child: AlertDialog(
                                     insetPadding: const EdgeInsets.all(10),
                                     content: SizedBox(
@@ -546,8 +546,8 @@ class _HomeState extends State<Home> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text('Confirm phone number'),
-                                          SizedBox(
+                                          const Text('Confirm phone number'),
+                                          const SizedBox(
                                             height: 20,
                                           ),
                                           TextFormField(
@@ -587,7 +587,7 @@ class _HomeState extends State<Home> {
                                               ),
                                             ),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 20,
                                           ),
                                           CustomRequestButton(
@@ -642,7 +642,7 @@ class _HomeState extends State<Home> {
                                                         context,
                                                         MaterialPageRoute(
                                                             builder: ((context) =>
-                                                                ListWithdrawals())));
+                                                                const ListWithdrawals())));
                                                   });
                                                 }
                                                 ;
@@ -665,7 +665,7 @@ class _HomeState extends State<Home> {
                               },
                             );
                           },
-                          child: Text(
+                          child: const Text(
                             'SEND TO MOBILE',
                             // style: TextStyle(
                             //   fontSize: 10.0,
@@ -677,7 +677,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 30,
                       ),
                       Expanded(
@@ -695,11 +695,19 @@ class _HomeState extends State<Home> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 20,
                                       ),
-                                      Text('Select preferred bank'),
-                                      SizedBox(
+                                      Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text('Select preferred bank'),
+                                            const Text('or'),
+                                            const Text('Add bank'),
+                                          ]),
+
+                                      const SizedBox(
                                         height: 10,
                                       ),
                                       DropdownButtonFormField<String>(
@@ -752,7 +760,7 @@ class _HomeState extends State<Home> {
                                         },
                                       ),
 
-                                      SizedBox(height: 20),
+                                      const SizedBox(height: 20),
                                       // DropdownButtonFormField<String>(
                                       //   decoration: InputDecoration(
                                       //     filled: true,
@@ -803,7 +811,7 @@ class _HomeState extends State<Home> {
                                       //     });
                                       //   },
                                       // ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 20,
                                       ),
                                       SizedBox(
@@ -828,10 +836,10 @@ class _HomeState extends State<Home> {
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: ((context) =>
-                                                            ListWithdrawals())));
+                                                            const ListWithdrawals())));
                                               });
                                             },
-                                            child: Text('CONFIRM')),
+                                            child: const Text('CONFIRM')),
                                       )
                                     ],
                                   ),
@@ -839,10 +847,10 @@ class _HomeState extends State<Home> {
                               },
                             );
                           },
-                          child: Text('SEND TO BANK'),
+                          child: const Text('SEND TO BANK'),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
                     ],
@@ -855,14 +863,10 @@ class _HomeState extends State<Home> {
   String? selectedOption;
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Color.fromRGBO(247, 247, 247, 1),
     ));
     final propertyProvider = Provider.of<PropertyProvider>(
-      context,
-      listen: false,
-    );
-    final userPropertyListProvider = Provider.of<PropertyListProvider>(
       context,
       listen: false,
     );
@@ -899,7 +903,7 @@ class _HomeState extends State<Home> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Text('Total rent for $currentMonth'),
-              Text('Withdrawable amount'),
+              const Text('Withdrawable amount'),
 
               Text(
                 // 'KES ${currencyFormat.format(rentInfo['amount_collected'] ?? 0)}',
@@ -908,7 +912,7 @@ class _HomeState extends State<Home> {
                 style: Theme.of(context).textTheme.displayLarge,
               ),
               const SizedBox(height: 10),
-              ProgressBar(
+              const ProgressBar(
                   // collectedAmount: rentInfo['amount_collected'],
                   // expectedAmount: rentInfo['amount_in_arrears'],
                   ),
@@ -940,7 +944,7 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Expanded(
                   child: GestureDetector(
@@ -949,20 +953,20 @@ class _HomeState extends State<Home> {
                       //showBottomModal(context, bottomContent);
                     },
                     child: Padding(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       child: Container(
                         decoration: BoxDecoration(
                             border: Border.all(color: primaryDarkColor),
                             color: primaryDarkColor.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(10)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
+                        child: const Padding(
+                          padding: EdgeInsets.all(10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 'Withdraw',
-                                style: const TextStyle(
+                                style: TextStyle(
                                     color: primaryDarkColor, fontSize: 14),
                               ),
                               SizedBox(
@@ -984,26 +988,26 @@ class _HomeState extends State<Home> {
                   child: GestureDetector(
                     onTap: () {
                       PersistentNavBarNavigator.pushNewScreen(context,
-                          screen: Withdrawals(),
+                          screen: const Withdrawals(),
                           withNavBar: false,
                           pageTransitionAnimation:
                               PageTransitionAnimation.cupertino);
                     },
                     child: Padding(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       child: Container(
                         decoration: BoxDecoration(
                             border: Border.all(color: primaryDarkColor),
                             color: primaryDarkColor.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(10)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
+                        child: const Padding(
+                          padding: EdgeInsets.all(10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 'View History',
-                                style: const TextStyle(
+                                style: TextStyle(
                                     color: primaryDarkColor, fontSize: 14),
                               ),
                               SizedBox(
@@ -1029,8 +1033,8 @@ class _HomeState extends State<Home> {
     );
     Widget monthWidget = Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 5, right: 5),
+        const Padding(
+          padding: EdgeInsets.only(left: 5, right: 5),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [],
@@ -1054,13 +1058,13 @@ class _HomeState extends State<Home> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Total rent collected this month'),
+              const Text('Total rent collected this month'),
               Text(
                 'KES ${currencyFormat.format(double.parse(monthRent['amount_collected']?.toString() ?? '0.0'))}',
                 style: Theme.of(context).textTheme.displayLarge,
               ),
               const SizedBox(height: 10),
-              ProgressBar(),
+              const ProgressBar(),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1089,7 +1093,7 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Container(
@@ -1097,15 +1101,14 @@ class _HomeState extends State<Home> {
                     color: primaryDarkColor.withOpacity(0.1),
                     border: Border.all(color: primaryDarkColor),
                     borderRadius: BorderRadius.circular(10)),
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
+                child: const Padding(
+                  padding: EdgeInsets.all(10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         'View Monthly Summary',
-                        style: const TextStyle(
-                            color: primaryDarkColor, fontSize: 14),
+                        style: TextStyle(color: primaryDarkColor, fontSize: 14),
                       ),
                       SizedBox(
                         width: 10,
@@ -1144,7 +1147,7 @@ class _HomeState extends State<Home> {
                         pageTransitionAnimation:
                             PageTransitionAnimation.cupertino,
                         withNavBar: false,
-                        screen: Transactions());
+                        screen: const Transactions());
                   },
                   child: Row(
                     children: [
@@ -1155,7 +1158,7 @@ class _HomeState extends State<Home> {
                             .bodySmall!
                             .copyWith(color: primaryDarkColor),
                       ),
-                      Icon(
+                      const Icon(
                         Icons.arrow_forward_ios_sharp,
                         size: 15,
                         color: primaryDarkColor,

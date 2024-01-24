@@ -88,14 +88,6 @@ class TenantSetUp extends StatefulWidget {
 }
 
 class _TenantSetUpState extends State<TenantSetUp> {
-  int _selectedIndex = 0;
-
-  void _selectItem(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   bool buttonError = true;
   String buttonErrorMessage = 'Enter all inputs';
 

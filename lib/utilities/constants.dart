@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 
 String ipAddress = 'https://kodi.sandbox.co.ke';
 // Color Themes
-Color mintyGreen = Color.fromRGBO(36, 105, 80, 1.0);
+Color mintyGreen = const Color.fromRGBO(36, 105, 80, 1.0);
 
 String propertyName = 'Elgon Court';
 String propertyUser = 'Cynthia Njoki';
@@ -109,4 +109,4 @@ class ApiClient {
   }
 }
 
-final currencyFormat = new NumberFormat("#,##0.00", "en_KE");
+final currencyFormat = NumberFormat("#,##0.00", "en_KE");

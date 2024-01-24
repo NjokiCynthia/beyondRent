@@ -126,7 +126,7 @@ class _AddUnitsState extends State<AddUnits> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 buttonErrorMessage,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.red,
                   fontSize: 16,
                 ),
@@ -562,8 +562,19 @@ class _AddUnitsState extends State<AddUnits> {
                         mintyGreen,
                       );
 
+                      // pageController.animateToPage(
+                      //   2,
+                      //   duration: const Duration(milliseconds: 300),
+                      //   curve: Curves.easeInOut,
+                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => const Dashboard()),
+                        ),
+                      );
                       pageController.animateToPage(
-                        2,
+                        0,
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                       );

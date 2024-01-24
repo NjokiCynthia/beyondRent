@@ -385,7 +385,7 @@ class _SignupState extends State<Signup> {
               ),
 
               // ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Container(

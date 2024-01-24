@@ -122,7 +122,7 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Enter the bill name'),
+                      const Text('Enter the bill name'),
                       const SizedBox(height: 10),
                       TextFormField(
                         controller: billNameController,
@@ -162,9 +162,9 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
                           });
                         },
                       ),
-                      SizedBox(height: 10),
-                      Text('Select the Bill Option: '),
-                      SizedBox(
+                      const SizedBox(height: 10),
+                      const Text('Select the Bill Option: '),
+                      const SizedBox(
                         height: 10,
                       ),
                       DropdownButtonFormField<String>(
@@ -212,10 +212,10 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
                           );
                         }).toList(),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       if (billOption == 'Varying')
-                        Text('Specify the bill amount'),
-                      SizedBox(
+                        const Text('Specify the bill amount'),
+                      const SizedBox(
                         height: 10,
                       ),
                       TextFormField(
@@ -255,7 +255,7 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
                           });
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
                       Row(
@@ -265,7 +265,7 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: Text(
+                            child: const Text(
                               'Cancel',
                               style: TextStyle(color: primaryDarkColor),
                             ),
@@ -294,7 +294,7 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: primaryDarkColor),
-                            child: Text('Confirm'),
+                            child: const Text('Confirm'),
                           ),
                         ],
                       ),
@@ -312,7 +312,7 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Color.fromRGBO(247, 247, 247, 1),
     ));
     final propertyProvider = Provider.of<PropertyProvider>(
@@ -340,7 +340,7 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
                       ),
                       Column(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           if (bills.isNotEmpty)
@@ -350,7 +350,7 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
                               itemBuilder: (BuildContext context, int index) {
                                 Map<String, dynamic> bill = bills[index];
                                 return Padding(
-                                  padding: EdgeInsets.only(top: 10),
+                                  padding: const EdgeInsets.only(top: 10),
                                   child: buildUtilityListTile(
                                     bill['billName'],
                                     bill['billOption'],
@@ -367,7 +367,7 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
                                   children: [
                                     Image.asset(
                                         'assets/illustrations/transaction.png'),
-                                    Text(
+                                    const Text(
                                       'No supplementary bills at the moment.',
                                       style: TextStyle(
                                         fontSize: 16,
@@ -382,7 +382,7 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
                             onTap: () => _showAddUtilitiesBottomSheet(context),
 
                             //onTap: _showAddUtilitiesBottomSheet(context),
-                            child: Row(
+                            child: const Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -419,7 +419,7 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
                       },
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: CustomRequestButton(
                       cookie:

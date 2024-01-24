@@ -84,7 +84,7 @@ class _TenantStatementState extends State<TenantStatement> {
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back_ios,
             color: primaryDarkColor,
           ),
@@ -146,14 +146,14 @@ class _TenantStatementState extends State<TenantStatement> {
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Text(
                                 '${depositList.first['unit']['name']}',
-                                style: TextStyle(fontSize: 14),
+                                style: const TextStyle(fontSize: 14),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               Text(
@@ -223,7 +223,7 @@ class _TenantStatementState extends State<TenantStatement> {
                                       Text(
                                         '${deposit['bill']['name']}',
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 10,
                                       ),
                                       Text(

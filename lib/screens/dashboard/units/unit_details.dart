@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/utilities/constants.dart';
@@ -218,28 +220,26 @@ class _UnitDetailsState extends State<UnitDetails> {
                 )
               : transactionsList.isEmpty
                   ? const EmptyTransactions()
-                  : Expanded(
-                      child: ListView.builder(
-                        // itemCount: transactionsList.length > 6
-                        //     ? 6
-                        //     : transactionsList.length,
-                        itemCount: transactionsList.length,
-                        itemBuilder: (context, index) {
-                          var transaction = transactionsList[index];
-                          return TransactionCard(
-                            tenant: transaction['tenant'],
-                            date: transaction['date'],
-                            amount: transaction['amount'],
-                            type: transaction['type'],
-                            unit: transaction['unit'],
-                            bill: transaction['bill'],
-                            reconciliation: transaction['reconciliation'],
-                            narrative: transaction['narative'],
-                            id: transaction['id'],
-                          );
-                        },
-                      ),
-                    )
+                  : ListView.builder(
+                      // itemCount: transactionsList.length > 6
+                      //     ? 6
+                      //     : transactionsList.length,
+                      itemCount: transactionsList.length,
+                      itemBuilder: (context, index) {
+                        var transaction = transactionsList[index];
+                        return TransactionCard(
+                          tenant: transaction['tenant'],
+                          date: transaction['date'],
+                          amount: transaction['amount'],
+                          type: transaction['type'],
+                          unit: transaction['unit'],
+                          bill: transaction['bill'],
+                          reconciliation: transaction['reconciliation'],
+                          narrative: transaction['narative'],
+                          id: transaction['id'],
+                        );
+                      },
+                    ),
         ],
       ),
     );

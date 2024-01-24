@@ -225,10 +225,10 @@ class _AddPropertyState extends State<AddProperty> {
         currentPageIndex: _currentPageIndex,
         pageController: propertyPageController,
       ),
-      TenantSetUp(
-        currentPageIndex: _currentPageIndex,
-        pageController: propertyPageController,
-      ),
+      // TenantSetUp(
+      //   currentPageIndex: _currentPageIndex,
+      //   pageController: propertyPageController,
+      // ),
     ];
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -251,8 +251,8 @@ class _AddPropertyState extends State<AddProperty> {
                   const SizedBox(width: 8),
                   _buildStepIndicator(1),
                   const SizedBox(width: 8),
-                  _buildStepIndicator(2),
-                  const SizedBox(width: 8),
+                  // _buildStepIndicator(2),
+                  // const SizedBox(width: 8),
                 ],
               ),
               Expanded(
@@ -264,9 +264,9 @@ class _AddPropertyState extends State<AddProperty> {
                     });
                   },
                   physics: _currentPageIndex == 0 || _currentPageIndex == 1
-        ? NeverScrollableScrollPhysics()
-        : PageScrollPhysics(),
-    children: pages,
+                      ? const NeverScrollableScrollPhysics()
+                      : const PageScrollPhysics(),
+                  children: pages,
                 ),
               ),
             ],
@@ -439,7 +439,7 @@ class _StepPage1State extends State<StepPage1> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 buttonErrorMessage,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.red,
                   fontSize: 16,
                 ),
@@ -449,7 +449,7 @@ class _StepPage1State extends State<StepPage1> {
             children: [
               Icon(
                 Icons.home,
-                color: Color.fromRGBO(13, 201, 150, 1),
+                color: primaryDarkColor,
               ),
               SizedBox(
                 width: 10,
@@ -501,7 +501,7 @@ class _StepPage1State extends State<StepPage1> {
             children: [
               Icon(
                 Icons.location_on,
-                color: Color.fromRGBO(13, 201, 150, 1),
+                color: primaryDarkColor,
               ),
               SizedBox(
                 width: 10,
@@ -552,7 +552,7 @@ class _StepPage1State extends State<StepPage1> {
             children: [
               Icon(
                 Icons.edit_document,
-                color: Color.fromRGBO(13, 201, 150, 1),
+                color: primaryDarkColor,
               ),
               SizedBox(
                 width: 10,
@@ -601,7 +601,7 @@ class _StepPage1State extends State<StepPage1> {
             children: [
               Icon(
                 Icons.house_siding_outlined,
-                color: Color.fromRGBO(13, 201, 150, 1),
+                color: primaryDarkColor,
               ),
               SizedBox(
                 width: 10,

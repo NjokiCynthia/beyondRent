@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:x_rent/screens/dashboard/home.dart';
-import 'package:x_rent/screens/dashboard/invoices.dart';
-import 'package:x_rent/screens/dashboard/invoices/list_invoices.dart';
 import 'package:x_rent/screens/dashboard/profile.dart';
 import 'package:x_rent/screens/dashboard/tenants/list_tenants.dart';
-import 'package:x_rent/screens/dashboard/units.dart';
-import 'package:x_rent/screens/dashboard/transactions.dart';
+import 'package:x_rent/screens/dashboard/units/list_units.dart';
 import 'package:x_rent/utilities/constants.dart';
 
 class Dashboard extends StatefulWidget {
@@ -17,6 +14,12 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  @override
+  void initState() {
+    super.initState();
+    bottomNavigationController = PersistentTabController(initialIndex: 0);
+  }
+
   List<Widget> _buildScreens() {
     return [
       const Home(),
@@ -41,12 +44,6 @@ class _DashboardState extends State<Dashboard> {
         activeColorPrimary: mintyGreen,
         inactiveColorPrimary: Colors.grey,
       ),
-      // PersistentBottomNavBarItem(
-      //   icon: const Icon(Icons.list),
-      //   title: ("Invoices"),
-      //   activeColorPrimary: mintyGreen,
-      //   inactiveColorPrimary: Colors.grey,
-      // ),
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.people_outline_outlined),
         title: ("Statements"),

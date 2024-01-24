@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
-import 'package:x_rent/screens/dashboard/invoices/create_invoice.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 
@@ -63,8 +62,7 @@ class _WithdrawalsState extends State<Withdrawals>
       "sort_by": "date_desc",
       "status": [status],
     };
-    print('What i am sending to backend');
-    print(postData);
+
     final apiClient = ApiClient();
     final headers = {
       'Content-Type': 'application/json',
@@ -120,6 +118,9 @@ class _WithdrawalsState extends State<Withdrawals>
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: primaryDarkColor.withOpacity(0.01)));
+
     return WillPopScope(
       onWillPop: () async {
         // Handle navigation when the back button is pressed
@@ -133,22 +134,21 @@ class _WithdrawalsState extends State<Withdrawals>
       },
       child: Scaffold(
         appBar: AppBar(
-          //backgroundColor: backColor.withOpacity(0.02),
           backgroundColor: primaryDarkColor.withOpacity(0.1),
           elevation: 0,
           leading: GestureDetector(
             onTap: () {
               Navigator.pop(context);
             },
-            child: Icon(
+            child: const Icon(
               Icons.arrow_back_ios,
               color: primaryDarkColor,
             ),
           ),
-          title: Row(
+          title: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'List Withdrawals',
                 style: TextStyle(color: Colors.black, fontSize: 16),
               ),
@@ -156,12 +156,13 @@ class _WithdrawalsState extends State<Withdrawals>
           ),
           bottom: TabBar(
             controller: _tabController,
+            isScrollable: true,
             indicatorColor: primaryDarkColor,
             unselectedLabelColor: Colors.grey,
-            labelColor: Colors.black,
-            labelStyle: TextStyle(fontWeight: FontWeight.bold),
+            labelColor: Colors.white,
+            labelStyle: const TextStyle(fontWeight: FontWeight.bold),
             indicator: BoxDecoration(color: primaryDarkColor.withOpacity(0.5)),
-            tabs: [
+            tabs: const [
               Tab(
                 text: 'PENDING DISBURSEMENT',
               ),
@@ -250,7 +251,7 @@ class _WithdrawalsState extends State<Withdrawals>
                                     padding: const EdgeInsets.only(
                                         left: 10, right: 10, top: 2, bottom: 2),
                                     child: Text(
-                                      'KES ${currencyFormat.format(double.parse(withdrawal['amount'].toString() ?? "0"))}',
+                                      'KES ${currencyFormat.format(double.parse(withdrawal['amount'].toString()))}',
                                       style: const TextStyle(
                                           color: primaryDarkColor,
                                           fontSize: 14),
@@ -269,7 +270,7 @@ class _WithdrawalsState extends State<Withdrawals>
                             const SizedBox(
                               height: 5,
                             ),
-                            Text('Recepient:'),
+                            const Text('Recepient:'),
                             Text(
                                 '${withdrawal['recipient']} to ${withdrawal['name']}',
                                 style: const TextStyle(

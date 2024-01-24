@@ -6,7 +6,6 @@ import 'package:x_rent/property/property_list.dart';
 import 'package:x_rent/screens/authentication/signup.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/utilities/constants.dart';
-import 'package:x_rent/screens/dashboard.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -49,7 +48,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Color.fromRGBO(247, 247, 247, 1),
     ));
     return Scaffold(

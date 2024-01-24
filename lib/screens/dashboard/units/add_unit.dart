@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:x_rent/constants/theme.dart';
-import 'package:x_rent/screens/dashboard/units.dart';
+import 'package:x_rent/screens/dashboard/units/list_units.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/providers/property_provider.dart';

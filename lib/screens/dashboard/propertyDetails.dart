@@ -1,10 +1,10 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/models/invoice.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
-import 'package:x_rent/screens/dashboard/invoices.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/constants/theme.dart';
@@ -64,6 +64,12 @@ class _PropertyDetailsState extends State<PropertyDetails> {
     return abbreviation;
   }
 
+  void _updateYear(int increment) {
+    setState(() {
+      currentYear += increment;
+    });
+  }
+
   BoxDecoration inactiveMonthDecoration = BoxDecoration(
     borderRadius: BorderRadius.circular(4),
     border: Border.all(
@@ -82,7 +88,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
       builder: (BuildContext context) {
         return AlertDialog(
           contentPadding: EdgeInsets.zero,
-          content: Container(
+          content: SizedBox(
             width: MediaQuery.of(context).size.width * 0.8,
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -93,19 +99,20 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                     color: mintyGreen,
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
                         onTap: () {
                           print('tapped');
-                          setState(() {
-                            currentYear = currentYear - 1;
-                          });
+                          _updateYear(-1);
+                          // setState(() {
+                          //   currentYear = currentYear - 1;
+                          // });
                         },
                         child: Container(
-                          padding: EdgeInsets.only(left: 10, right: 10),
+                          padding: const EdgeInsets.only(left: 10, right: 10),
                           decoration: BoxDecoration(
                               border: Border.all(
                             color: Colors.white,
@@ -130,12 +137,13 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                       GestureDetector(
                         onTap: () {
                           print('tapped');
-                          setState(() {
-                            currentYear = currentYear + 1;
-                          });
+                          _updateYear(1);
+                          // setState(() {
+                          //   currentYear = currentYear + 1;
+                          // });
                         },
                         child: Container(
-                          padding: EdgeInsets.only(left: 10, right: 10),
+                          padding: const EdgeInsets.only(left: 10, right: 10),
                           decoration: BoxDecoration(
                               border: Border.all(
                             color: Colors.white,
@@ -161,7 +169,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                       .copyWith(color: Colors.white, fontSize: 18),
                 ),
                 Container(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   child: Column(
                     children: [
                       Row(
@@ -255,7 +263,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                                 decoration: currentMonth == 'Apr'
                                     ? activeMonthDecoration
                                     : inactiveMonthDecoration,
-                                child: Text(
+                                child: const Text(
                                   'APR',
                                   textAlign: TextAlign.center,
                                 ),
@@ -279,7 +287,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                                 decoration: currentMonth == 'May'
                                     ? activeMonthDecoration
                                     : inactiveMonthDecoration,
-                                child: Text(
+                                child: const Text(
                                   'MAY',
                                   textAlign: TextAlign.center,
                                 ),
@@ -300,7 +308,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                                 decoration: currentMonth == 'Jun'
                                     ? activeMonthDecoration
                                     : inactiveMonthDecoration,
-                                child: Text(
+                                child: const Text(
                                   'JUN',
                                   textAlign: TextAlign.center,
                                 ),
@@ -328,7 +336,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                                 decoration: currentMonth == 'Jul'
                                     ? activeMonthDecoration
                                     : inactiveMonthDecoration,
-                                child: Text(
+                                child: const Text(
                                   'JUL',
                                   textAlign: TextAlign.center,
                                 ),
@@ -349,7 +357,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                                 decoration: currentMonth == 'Aug'
                                     ? activeMonthDecoration
                                     : inactiveMonthDecoration,
-                                child: Text(
+                                child: const Text(
                                   'AUG',
                                   textAlign: TextAlign.center,
                                 ),
@@ -370,7 +378,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                                 decoration: currentMonth == 'Sep'
                                     ? activeMonthDecoration
                                     : inactiveMonthDecoration,
-                                child: Text(
+                                child: const Text(
                                   'SEP',
                                   textAlign: TextAlign.center,
                                 ),
@@ -398,7 +406,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                                 decoration: currentMonth == 'Oct'
                                     ? activeMonthDecoration
                                     : inactiveMonthDecoration,
-                                child: Text(
+                                child: const Text(
                                   'OCT',
                                   textAlign: TextAlign.center,
                                 ),
@@ -422,7 +430,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                                 decoration: currentMonth == 'Nov'
                                     ? activeMonthDecoration
                                     : inactiveMonthDecoration,
-                                child: Text(
+                                child: const Text(
                                   'NOV',
                                   textAlign: TextAlign.center,
                                 ),
@@ -443,7 +451,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                                 decoration: currentMonth == 'Dec'
                                     ? activeMonthDecoration
                                     : inactiveMonthDecoration,
-                                child: Text(
+                                child: const Text(
                                   'DEC',
                                   textAlign: TextAlign.center,
                                 ),
@@ -462,16 +470,14 @@ class _PropertyDetailsState extends State<PropertyDetails> {
       },
     );
 
-    if (currentMonth != null) {
-      setState(() {
-        currentMonth = currentMonth;
-      });
+    setState(() {
+      currentMonth = currentMonth;
+    });
 
-      // Call the fetchRentInfo function with the selected month
-      await fetchRentInfo(monthToNumber(currentMonth));
-      await fetchTransactionsList(monthToNumber(currentMonth));
-      await fetchPendingInfo(monthToNumber(currentMonth));
-    }
+    // Call the fetchRentInfo function with the selected month
+    await fetchRentInfo(monthToNumber(currentMonth));
+    await fetchTransactionsList(monthToNumber(currentMonth));
+    await fetchPendingInfo(monthToNumber(currentMonth));
   }
 
   bool transactionListLoaded = false;
@@ -821,7 +827,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                         margin: const EdgeInsets.only(left: 10),
                         decoration: BoxDecoration(
                           color: _selectedTabIndex == 1
-                              ? Color.fromARGB(255, 248, 164, 151)
+                              ? const Color.fromARGB(255, 248, 164, 151)
                                   .withOpacity(0.1)
                               : Colors.transparent,
                           shape: BoxShape.circle,
@@ -1128,7 +1134,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
                                             color: Colors.black,
                                             fontWeight: FontWeight.bold),
                                   ),
-                                  Icon(
+                                  const Icon(
                                     Icons.keyboard_arrow_down,
                                     color: Colors.black,
                                     size: 20,

@@ -1,10 +1,11 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/constants/theme.dart';
-import 'package:x_rent/screens/dashboard/tenant/update_tenant.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -108,14 +109,14 @@ class _ViewTenantState extends State<ViewTenant> {
               : Column(
                   children: [
                     Text(
-                      '${tenantDetails['invoices'].isNotEmpty ? tenantDetails['invoices'][0]['tenant'].toString() : "None"}',
+                      tenantDetails['invoices'].isNotEmpty ? tenantDetails['invoices'][0]['tenant'].toString() : "None",
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Column(
+                        const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
@@ -142,17 +143,17 @@ class _ViewTenantState extends State<ViewTenant> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'KES ${currencyFormat.format(double.parse(tenantDetails['total_amount_payable'].toString() ?? "0"))}',
+                              'KES ${currencyFormat.format(double.parse(tenantDetails['total_amount_payable'].toString()))}',
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 4,
                             ),
                             Text(
-                              'KES ${currencyFormat.format(double.parse(tenantDetails['total_amount_paid'].toString() ?? "0"))}',
+                              'KES ${currencyFormat.format(double.parse(tenantDetails['total_amount_paid'].toString()))}',
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 4,
                             ),
                             Container(
@@ -164,7 +165,7 @@ class _ViewTenantState extends State<ViewTenant> {
                                 padding: const EdgeInsets.only(
                                     left: 10, right: 10, top: 2, bottom: 2),
                                 child: Text(
-                                  'KES ${currencyFormat.format(double.parse((tenantDetails['total_amount_payable'] - tenantDetails['total_amount_paid']).toString() ?? "0"))}',
+                                  'KES ${currencyFormat.format(double.parse((tenantDetails['total_amount_payable'] - tenantDetails['total_amount_paid']).toString()))}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium!
@@ -205,7 +206,7 @@ class _ViewTenantState extends State<ViewTenant> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '${invoice?['invoice_date'] ?? "No date"}',
+                    '${invoice['invoice_date'] ?? "No date"}',
                     style: const TextStyle(color: Colors.grey, fontSize: 13),
                   ),
                 ],
@@ -220,7 +221,7 @@ class _ViewTenantState extends State<ViewTenant> {
               const SizedBox(
                 height: 5,
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
@@ -233,7 +234,7 @@ class _ViewTenantState extends State<ViewTenant> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Row(
@@ -247,7 +248,7 @@ class _ViewTenantState extends State<ViewTenant> {
                       padding: const EdgeInsets.only(
                           left: 10, right: 10, top: 2, bottom: 2),
                       child: Text(
-                        'KES ${currencyFormat.format(double.parse(invoice['amount_payable'].toString() ?? "0"))}',
+                        'KES ${currencyFormat.format(double.parse(invoice['amount_payable'].toString()))}',
                         style: const TextStyle(
                             color: primaryDarkColor, fontSize: 14),
                       ),
@@ -261,7 +262,7 @@ class _ViewTenantState extends State<ViewTenant> {
                       padding: const EdgeInsets.only(
                           left: 10, right: 10, top: 2, bottom: 2),
                       child: Text(
-                        'KES ${currencyFormat.format(double.parse(invoice['amount_paid'].toString() ?? "0"))}',
+                        'KES ${currencyFormat.format(double.parse(invoice['amount_paid'].toString()))}',
                         style: const TextStyle(
                             color: primaryDarkColor, fontSize: 14),
                       ),
@@ -299,7 +300,7 @@ class _ViewTenantState extends State<ViewTenant> {
               borderRadius: BorderRadius.circular(30),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 15,
           ),
           tenantInfoLoading == true
@@ -318,7 +319,7 @@ class _ViewTenantState extends State<ViewTenant> {
                             return invoiceItem(invoice);
                           },
                         )
-                      : Center(child: EmptyTransactions()),
+                      : const Center(child: EmptyTransactions()),
                 ),
         ],
       ),
@@ -513,7 +514,7 @@ class _ViewTenantState extends State<ViewTenant> {
               const SizedBox(height: 20),
               Container(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: DashboardAppbar(
+                child: const DashboardAppbar(
                   backButton: true,
                   backButtonText: 'Tenant Details',
                 ),

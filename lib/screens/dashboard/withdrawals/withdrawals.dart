@@ -105,15 +105,15 @@ class _ListWithdrawalsState extends State<ListWithdrawals> {
               });
               // return false;
             },
-            child: Icon(
+            child: const Icon(
               Icons.arrow_back_ios,
               color: primaryDarkColor,
             ),
           ),
-          title: Row(
+          title: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'List Approved Withdrawals',
                 style: TextStyle(color: Colors.black, fontSize: 16),
               ),
@@ -179,7 +179,7 @@ class _ListWithdrawalsState extends State<ListWithdrawals> {
                                               top: 2,
                                               bottom: 2),
                                           child: Text(
-                                            'KES ${currencyFormat.format(double.parse(withdrawal['amount'].toString() ?? "0"))}',
+                                            'KES ${currencyFormat.format(double.parse(withdrawal['amount'].toString()))}',
                                             // 'KES ${invoice['amount_payable']}',
                                             style: const TextStyle(
                                                 color: primaryDarkColor,

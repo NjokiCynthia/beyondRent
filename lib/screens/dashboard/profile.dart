@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/screens/billing/add_supplementary_bill.dart';
-import 'package:x_rent/utilities/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/screens/authentication/login.dart';
 import 'package:x_rent/screens/dashboard/profile/communicate.dart';
@@ -153,7 +152,7 @@ class _SettingsState extends State<Settings> {
                   onTap: () {
                     PersistentNavBarNavigator.pushNewScreen(
                       context,
-                      screen: SupplementaryBill(),
+                      screen: const SupplementaryBill(),
                       withNavBar: false,
                       pageTransitionAnimation:
                           PageTransitionAnimation.cupertino,
@@ -231,71 +230,71 @@ class _SettingsState extends State<Settings> {
                   ),
                 ),
 
-                GestureDetector(
-                  onTap: () {
-                    PersistentNavBarNavigator.pushNewScreen(
-                      context,
-                      screen: const Property(),
-                      withNavBar: false,
-                      pageTransitionAnimation:
-                          PageTransitionAnimation.cupertino,
-                    );
-                  },
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          10.0), // Adjust the radius as needed
-                    ),
-                    child: ListTile(
-                      leading: Container(
-                        decoration: BoxDecoration(
-                          color: primaryDarkColor.withOpacity(0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        padding: const EdgeInsets.all(8),
-                        child: const Icon(
-                          Icons.house,
-                          color: primaryDarkColor,
-                        ),
-                      ),
-                      title: const Text(
-                        'Properties',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      subtitle: const Text('Add a new property'),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                    ),
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     PersistentNavBarNavigator.pushNewScreen(
+                //       context,
+                //       screen: const Property(),
+                //       withNavBar: false,
+                //       pageTransitionAnimation:
+                //           PageTransitionAnimation.cupertino,
+                //     );
+                //   },
+                //   child: Card(
+                //     shape: RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(
+                //           10.0), // Adjust the radius as needed
+                //     ),
+                //     child: ListTile(
+                //       leading: Container(
+                //         decoration: BoxDecoration(
+                //           color: primaryDarkColor.withOpacity(0.1),
+                //           shape: BoxShape.circle,
+                //         ),
+                //         padding: const EdgeInsets.all(8),
+                //         child: const Icon(
+                //           Icons.house,
+                //           color: primaryDarkColor,
+                //         ),
+                //       ),
+                //       title: const Text(
+                //         'Properties',
+                //         style: TextStyle(
+                //           fontWeight: FontWeight.bold,
+                //         ),
+                //       ),
+                //       subtitle: const Text('Add a new property'),
+                //       trailing: const Icon(Icons.arrow_forward_ios),
+                //     ),
+                //   ),
+                // ),
 
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: ListTile(
-                    leading: Container(
-                      decoration: BoxDecoration(
-                        color: primaryDarkColor.withOpacity(0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      padding: const EdgeInsets.all(8),
-                      child:
-                          const Icon(Icons.language, color: primaryDarkColor),
-                    ),
-                    title: const Text(
-                      'Language',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: const Text('Chosen Language: English'),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                  ),
-                ),
+                // Card(
+                //   shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(10.0),
+                //   ),
+                //   child: ListTile(
+                //     leading: Container(
+                //       decoration: BoxDecoration(
+                //         color: primaryDarkColor.withOpacity(0.1),
+                //         shape: BoxShape.circle,
+                //       ),
+                //       padding: const EdgeInsets.all(8),
+                //       child:
+                //           const Icon(Icons.language, color: primaryDarkColor),
+                //     ),
+                //     title: const Text(
+                //       'Language',
+                //       style: TextStyle(
+                //         fontWeight: FontWeight.bold,
+                //       ),
+                //     ),
+                //     subtitle: const Text('Chosen Language: English'),
+                //     trailing: const Icon(Icons.arrow_forward_ios),
+                //   ),
+                // ),
                 const SizedBox(
-                  height: 40,
+                  height: 30,
                 ), // To fill the remaining space
                 Padding(
                   padding: const EdgeInsets.only(
