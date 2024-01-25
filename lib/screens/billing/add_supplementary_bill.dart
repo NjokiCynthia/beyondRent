@@ -472,13 +472,13 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
       ),
       leading: Container(
         decoration: BoxDecoration(
-          color: const Color.fromRGBO(13, 201, 150, 1).withOpacity(0.1),
+          color: primaryDarkColor.withOpacity(0.1),
           shape: BoxShape.circle,
         ),
         padding: const EdgeInsets.all(8),
         child: const Icon(
           Icons.check,
-          color: Color.fromRGBO(13, 201, 150, 1),
+          color: primaryDarkColor,
         ),
       ),
       title: Text('Utility: $billName'),

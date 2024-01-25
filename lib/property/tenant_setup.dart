@@ -171,7 +171,7 @@ class _TenantSetUpState extends State<TenantSetUp> {
             children: [
               Icon(
                 Icons.person_2,
-                color: Color.fromRGBO(13, 201, 150, 1),
+                color: primaryDarkColor,
               ),
               SizedBox(
                 width: 10,

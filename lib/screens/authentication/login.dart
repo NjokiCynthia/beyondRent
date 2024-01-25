@@ -260,7 +260,7 @@ class _LoginState extends State<Login> {
         ),
         Container(
           margin: const EdgeInsets.only(left: 20, right: 20),
-          child: CustomRequestButton(
+          child: CustomOutlinedButton(
             url: '/mobile/login',
             method: 'POST',
             buttonText: 'Demo Account',

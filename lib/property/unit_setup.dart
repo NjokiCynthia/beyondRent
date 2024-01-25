@@ -562,22 +562,24 @@ class _AddUnitsState extends State<AddUnits> {
                         mintyGreen,
                       );
 
-                      // pageController.animateToPage(
-                      //   2,
-                      //   duration: const Duration(milliseconds: 300),
-                      //   curve: Curves.easeInOut,
-                      // );
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: ((context) => const Dashboard()),
-                        ),
-                      );
                       pageController.animateToPage(
-                        0,
+                        2,
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                       );
+                      // Future.delayed(const Duration(seconds: 2), () {
+                      //   Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: ((context) => const Dashboard()),
+                      //     ),
+                      //   );
+                      // });
+                      // pageController.animateToPage(
+                      //   0,
+                      //   duration: const Duration(milliseconds: 300),
+                      //   curve: Curves.easeInOut,
+                      // );
                     } else {
                       showToast(
                         context,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/screens/dashboard/units/list_units.dart';
 import 'package:x_rent/utilities/constants.dart';
@@ -335,7 +336,7 @@ class _AddUnitState extends State<AddUnit> {
                   children: [
                     Icon(
                       Icons.king_bed_rounded,
-                      color: Color.fromRGBO(13, 201, 150, 1),
+                      color: primaryDarkColor,
                     ),
                     SizedBox(
                       width: 10,
@@ -381,109 +382,188 @@ class _AddUnitState extends State<AddUnit> {
                         );
                       }),
                 ),
-                const SizedBox(height: 24),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        margin: const EdgeInsets.only(left: 10),
-                        child: CustomRequestButton(
-                          url: null,
-                          method: 'POST',
-                          buttonText: 'Cancel',
-                          body: const {},
-                          onSuccess: (res) {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        margin: const EdgeInsets.only(left: 10),
-                        child: CustomRequestButton(
-                          cookie:
-                              'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
-                          authorization: 'Bearer ${userProvider.user?.token}',
-                          buttonError: buttonError,
-                          buttonErrorMessage: buttonErrorMessage,
-                          url: '/mobile/units/create',
-                          method: 'POST',
-                          buttonText: 'Proceed',
-                          body: {
-                            "property_id": propertyProvider.property?.id,
-                            "house_number": houseNoController.text,
-                            "house_type": 1,
-                            "block": 1,
-                            "floor": floorNoController.text,
-                            "tenant_id": 0,
-                            "contribution_id": 0
-                          },
-                          onSuccess: (res) {
-                            if (res['isSuccessful'] == false) {
-                              return showToast(
-                                context,
-                                'Error!',
-                                res['error'],
-                                Colors.red,
-                              );
-                            } else {
-                              fetchPropertyUnits();
+                const SizedBox(height: 30),
+                CustomRequestButton(
+                  cookie:
+                      'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
+                  authorization: 'Bearer ${userProvider.user?.token}',
+                  buttonError: buttonError,
+                  buttonErrorMessage: buttonErrorMessage,
+                  url: '/mobile/units/create',
+                  method: 'POST',
+                  buttonText: 'Proceed',
+                  body: {
+                    "property_id": propertyProvider.property?.id,
+                    "house_number": houseNoController.text,
+                    "house_type": 1,
+                    "block": 1,
+                    "floor": floorNoController.text,
+                    "tenant_id": 0,
+                    "contribution_id": 0
+                  },
+                  onSuccess: (res) {
+                    if (res['isSuccessful'] == false) {
+                      return showToast(
+                        context,
+                        'Error!',
+                        res['error'],
+                        Colors.red,
+                      );
+                    } else {
+                      fetchPropertyUnits();
 
-                              showToast(
-                                context,
-                                'Success!',
-                                'Unit added successfully',
-                                mintyGreen,
-                              );
+                      showToast(
+                        context,
+                        'Success!',
+                        'Unit added successfully',
+                        mintyGreen,
+                      );
 
-                              Future.delayed(const Duration(seconds: 2), () {
-                                // Delay for 2 seconds (adjust as needed)
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: ((context) => const Units()),
-                                  ),
-                                );
-                              });
+                      Future.delayed(const Duration(seconds: 2), () {
+                        // Delay for 2 seconds (adjust as needed)
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: ((context) => const Units()),
+                          ),
+                        );
+                      });
 
-                              // Remove the return statement here
+                      // Remove the return statement here
 
-                              // You can optionally remove the return statement after Future.delayed,
-                              // or use 'return;' to exit the function early.
+                      // You can optionally remove the return statement after Future.delayed,
+                      // or use 'return;' to exit the function early.
 
-                              // return; // Remove this line or replace it with 'return;'
-                            }
-                          },
-                          // if (res['data']['response']['status'] != 1) {
-                          //   return showToast(
-                          //     context,
-                          //     'Error!',
-                          //     res['data']['message'] ??
-                          //         'Error, please try again later.',
-                          //     Colors.red,
-                          //   );
-                          // }
-                          // var userData = res['data']['response']['user'];
-                          // var accessToken =
-                          //     res['data']['response']['access_token'];
-                          // print('Access token: ' + accessToken);
-                          // final userProvider = context.read<UserProvider>();
-                          // userProvider.setUser(
-                          //   User(
-                          //     firstName: userData['first_name'],
-                          //     lastName: userData['last_name'],
-                          //     phone: userData['phone'],
-                          //     email: userData['email'],
-                          //     id: userData['id'],
-                          //     token: accessToken,
-                          //   ),
-                          // );
-                        ),
-                      ),
-                    ),
-                  ],
+                      // return; // Remove this line or replace it with 'return;'
+                    }
+                  },
+                  // if (res['data']['response']['status'] != 1) {
+                  //   return showToast(
+                  //     context,
+                  //     'Error!',
+                  //     res['data']['message'] ??
+                  //         'Error, please try again later.',
+                  //     Colors.red,
+                  //   );
+                  // }
+                  // var userData = res['data']['response']['user'];
+                  // var accessToken =
+                  //     res['data']['response']['access_token'];
+                  // print('Access token: ' + accessToken);
+                  // final userProvider = context.read<UserProvider>();
+                  // userProvider.setUser(
+                  //   User(
+                  //     firstName: userData['first_name'],
+                  //     lastName: userData['last_name'],
+                  //     phone: userData['phone'],
+                  //     email: userData['email'],
+                  //     id: userData['id'],
+                  //     token: accessToken,
+                  //   ),
+                  // );
                 ),
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: Container(
+                //         margin: const EdgeInsets.only(left: 10),
+                //         child: CustomRequestButton(
+                //           url: null,
+                //           method: 'POST',
+                //           buttonText: 'Cancel',
+                //           body: const {},
+                //           onSuccess: (res) {
+                //             Navigator.pop(context);
+                //           },
+                //         ),
+                //       ),
+                //     ),
+                //     Expanded(
+                //       child: Container(
+                //         margin: const EdgeInsets.only(left: 10),
+                //         child: CustomRequestButton(
+                //           cookie:
+                //               'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
+                //           authorization: 'Bearer ${userProvider.user?.token}',
+                //           buttonError: buttonError,
+                //           buttonErrorMessage: buttonErrorMessage,
+                //           url: '/mobile/units/create',
+                //           method: 'POST',
+                //           buttonText: 'Proceed',
+                //           body: {
+                //             "property_id": propertyProvider.property?.id,
+                //             "house_number": houseNoController.text,
+                //             "house_type": 1,
+                //             "block": 1,
+                //             "floor": floorNoController.text,
+                //             "tenant_id": 0,
+                //             "contribution_id": 0
+                //           },
+                //           onSuccess: (res) {
+                //             if (res['isSuccessful'] == false) {
+                //               return showToast(
+                //                 context,
+                //                 'Error!',
+                //                 res['error'],
+                //                 Colors.red,
+                //               );
+                //             } else {
+                //               fetchPropertyUnits();
+
+                //               showToast(
+                //                 context,
+                //                 'Success!',
+                //                 'Unit added successfully',
+                //                 mintyGreen,
+                //               );
+
+                //               Future.delayed(const Duration(seconds: 2), () {
+                //                 // Delay for 2 seconds (adjust as needed)
+                //                 Navigator.push(
+                //                   context,
+                //                   MaterialPageRoute(
+                //                     builder: ((context) => const Units()),
+                //                   ),
+                //                 );
+                //               });
+
+                //               // Remove the return statement here
+
+                //               // You can optionally remove the return statement after Future.delayed,
+                //               // or use 'return;' to exit the function early.
+
+                //               // return; // Remove this line or replace it with 'return;'
+                //             }
+                //           },
+                //           // if (res['data']['response']['status'] != 1) {
+                //           //   return showToast(
+                //           //     context,
+                //           //     'Error!',
+                //           //     res['data']['message'] ??
+                //           //         'Error, please try again later.',
+                //           //     Colors.red,
+                //           //   );
+                //           // }
+                //           // var userData = res['data']['response']['user'];
+                //           // var accessToken =
+                //           //     res['data']['response']['access_token'];
+                //           // print('Access token: ' + accessToken);
+                //           // final userProvider = context.read<UserProvider>();
+                //           // userProvider.setUser(
+                //           //   User(
+                //           //     firstName: userData['first_name'],
+                //           //     lastName: userData['last_name'],
+                //           //     phone: userData['phone'],
+                //           //     email: userData['email'],
+                //           //     id: userData['id'],
+                //           //     token: accessToken,
+                //           //   ),
+                //           // );
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ),

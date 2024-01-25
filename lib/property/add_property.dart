@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
+import 'package:x_rent/property/account_setup.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/property/unit_setup.dart';
-import 'package:x_rent/property/tenant_setup.dart';
 import 'package:provider/provider.dart';
 
 int _selectedIndex = 0;
@@ -33,7 +33,6 @@ class _AddUnitsModalContentState extends State<AddUnitsModalContent> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          // mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Row(
@@ -87,7 +86,7 @@ class _AddUnitsModalContentState extends State<AddUnitsModalContent> {
               children: [
                 Icon(
                   Icons.money_off,
-                  color: Color.fromRGBO(13, 201, 150, 1),
+                  color: primaryDarkColor,
                 ),
                 SizedBox(
                   width: 10,
@@ -225,10 +224,10 @@ class _AddPropertyState extends State<AddProperty> {
         currentPageIndex: _currentPageIndex,
         pageController: propertyPageController,
       ),
-      // TenantSetUp(
-      //   currentPageIndex: _currentPageIndex,
-      //   pageController: propertyPageController,
-      // ),
+      AccountSetup(
+        currentPageIndex: _currentPageIndex,
+        pageController: propertyPageController,
+      )
     ];
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -238,7 +237,7 @@ class _AddPropertyState extends State<AddProperty> {
           child: Column(
             children: [
               Text(
-                'Add Property and Units',
+                'Add Property, Units and Account Details',
                 style: AppTextStyles.smallHeaderSlightlyBold,
               ),
               const SizedBox(
@@ -251,8 +250,8 @@ class _AddPropertyState extends State<AddProperty> {
                   const SizedBox(width: 8),
                   _buildStepIndicator(1),
                   const SizedBox(width: 8),
-                  // _buildStepIndicator(2),
-                  // const SizedBox(width: 8),
+                  _buildStepIndicator(2),
+                  const SizedBox(width: 8),
                 ],
               ),
               Expanded(
@@ -434,17 +433,17 @@ class _StepPage1State extends State<StepPage1> {
           const SizedBox(
             height: 24,
           ),
-          if (buttonError)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                buttonErrorMessage,
-                style: const TextStyle(
-                  color: Colors.red,
-                  fontSize: 16,
-                ),
-              ),
-            ),
+          // if (buttonError)
+          //   Padding(
+          //     padding: const EdgeInsets.all(8.0),
+          //     child: Text(
+          //       buttonErrorMessage,
+          //       style: const TextStyle(
+          //         color: Colors.red,
+          //         fontSize: 16,
+          //       ),
+          //     ),
+          //   ),
           const Row(
             children: [
               Icon(
@@ -457,7 +456,6 @@ class _StepPage1State extends State<StepPage1> {
               Text('Enter Property name'),
             ],
           ),
-          const SizedBox(height: 10),
           const SizedBox(height: 10),
           TextFormField(
             controller: propertyNameController,

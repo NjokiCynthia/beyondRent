@@ -77,6 +77,8 @@ class _SignupState extends State<Signup> {
     validateSignupInputs();
   }
 
+  String? selectedValue;
+
   @override
   Widget build(BuildContext context) {
     Widget form = Column(
@@ -297,6 +299,58 @@ class _SignupState extends State<Signup> {
             ),
           ),
         ),
+        SizedBox(
+          height: 20,
+        ),
+        DropdownButtonFormField<String>(
+          isExpanded: true,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            labelText: 'Select role',
+            labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                .copyWith(color: Colors.grey),
+            border: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Colors.grey,
+                width: 1.0,
+              ),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.grey.shade300,
+                width: 2.0,
+              ),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Colors.grey,
+                width: 1.0,
+              ),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+          value: selectedValue,
+          onChanged: (String? newValue) {
+            setState(() {
+              selectedValue = newValue!;
+            });
+          },
+          items: <String>[
+            'Agent',
+            'Landlord',
+          ].map<DropdownMenuItem<String>>(
+            (String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            },
+          ).toList(),
+        ),
+        const SizedBox(height: 20),
       ],
     );
     return Scaffold(
@@ -390,7 +444,7 @@ class _SignupState extends State<Signup> {
               ),
               Container(
                 margin: const EdgeInsets.only(left: 20, right: 20),
-                child: CustomRequestButton(
+                child: CustomOutlinedButton(
                   url: '/mobile/login',
                   method: 'POST',
                   buttonText: 'Demo Account',

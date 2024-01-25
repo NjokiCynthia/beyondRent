@@ -9,7 +9,7 @@ String ipAddress = 'https://kodi.sandbox.co.ke';
 Color mintyGreen = const Color.fromRGBO(36, 105, 80, 1.0);
 
 String propertyName = 'Elgon Court';
-String propertyUser = 'Cynthia Njoki';
+String propertyUser = '';
 String propertyUserPhone = '+254721882694';
 String propertyUserEmail = 'cynthia@gmail.com';
 

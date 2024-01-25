@@ -736,6 +736,162 @@ Widget _buildBottomModalContent(BuildContext context, Widget content) {
   );
 }
 
+class CustomOutlinedButton extends StatefulWidget {
+  final String? authorization;
+  final String? cookie;
+  final bool? buttonError;
+  final String? buttonErrorMessage;
+  final String? url;
+  final String method;
+  final String buttonText;
+  final Map<String, dynamic> body;
+  final dynamic onSuccess;
+
+  const CustomOutlinedButton({
+    super.key,
+    this.authorization,
+    this.cookie,
+    this.buttonError,
+    this.buttonErrorMessage,
+    this.url,
+    required this.method,
+    required this.buttonText,
+    required this.body,
+    required this.onSuccess,
+  });
+
+  @override
+  _CustomOutlinedButtonState createState() => _CustomOutlinedButtonState();
+}
+
+class _CustomOutlinedButtonState extends State<CustomOutlinedButton> {
+  bool isButtonDisabled = false;
+  bool isLoading = false;
+  late Dio _dio;
+
+  @override
+  void initState() {
+    super.initState();
+    _dio = Dio();
+  }
+
+  Future<void> sendRequest() async {
+    if (widget.buttonError == true) {
+      return widget.onSuccess({
+        'isSuccessful': false,
+        'error': widget.buttonErrorMessage,
+      });
+    }
+    if (widget.url == null) {
+      return widget.onSuccess({'isSuccessful': true});
+    }
+    setState(() {
+      isButtonDisabled = true;
+      isLoading = true;
+    });
+
+    try {
+      final response = await _makeRequest();
+      setState(() {
+        isButtonDisabled = false;
+        isLoading = false;
+      });
+      if (response.statusCode == 200) {
+        // Request was successful
+        widget.onSuccess({'isSuccessful': true, 'data': response.data});
+      } else {
+        // Request returned an error status code
+        widget.onSuccess({
+          'isSuccessful': false,
+          'error': response.data['error'],
+        });
+      }
+    } on DioException catch (error) {
+      print('error');
+      print(error);
+      // setState(() {
+      //   isButtonDisabled = false;
+      //   isLoading = false;
+      // });
+      // var serverError = error.error;
+      // var theError = error.response?.data;
+      // var theStatus = error.response?.statusCode;
+
+      // print('serverError: $serverError');
+      // print('error: $error');
+      // print('theError: $theError');
+      // print('theStatus: $theStatus');
+
+      // widget.onSuccess({
+      //   'isSuccessful': false,
+      //   'error': 'Error making request',
+      // });
+    }
+
+    setState(() {
+      isButtonDisabled = false;
+      isLoading = false;
+    });
+  }
+
+  Future<Response<dynamic>> _makeRequest() async {
+    // Retrieve user information from provider
+    final headers = {
+      'Versioncode': 99,
+      'version': 99,
+      'Authorization': widget.authorization ?? '',
+      'Cookie': widget.cookie ?? ''
+    };
+    final options = Options(contentType: 'application/json', headers: headers);
+    try {
+      if (widget.method == 'POST') {
+        return _dio.post(
+          ipAddress + widget.url!,
+          data: widget.body,
+          options: options,
+        );
+      } else if (widget.method == 'GET') {
+        return _dio.get(ipAddress + widget.url!, options: options);
+      }
+    } catch (error) {
+      throw Exception('Invalid request method: ${widget.method}');
+    }
+    throw Exception('Invalid request method: ${widget.method}');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: isButtonDisabled ? null : sendRequest,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 2000),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: mintyGreen),
+          borderRadius:
+              isLoading ? BorderRadius.circular(8) : BorderRadius.circular(8),
+        ),
+        child: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(15),
+          child: isLoading
+              ? SpinKitThreeBounce(
+                  color: mintyGreen,
+                  size: 20,
+                )
+              : Text(
+                  widget.buttonText,
+                  style: Theme.of(context)
+                      .textTheme
+                      .displayMedium!
+                      .copyWith(color: mintyGreen, fontSize: 16),
+                ),
+        ),
+      ),
+    );
+  }
+}
+
 class CustomRequestButton extends StatefulWidget {
   final String? authorization;
   final String? cookie;

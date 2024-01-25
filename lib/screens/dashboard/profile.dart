@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:x_rent/constants/color_contants.dart';
+import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/screens/billing/add_supplementary_bill.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/screens/authentication/login.dart';
@@ -24,6 +25,10 @@ class _SettingsState extends State<Settings> {
       statusBarColor: Colors.grey.withOpacity(0.1),
     ));
     final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    final propertyProvider = Provider.of<PropertyProvider>(
       context,
       listen: false,
     );
@@ -61,6 +66,7 @@ class _SettingsState extends State<Settings> {
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
+                                  // '${propertyProvider.property?.propertyName ?? ''}',
                                   '${userProvider.user!.firstName} ${userProvider.user!.lastName}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,

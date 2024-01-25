@@ -413,7 +413,7 @@ class _HomeState extends State<Home> {
                     children: [
                       Icon(
                         Icons.money_off,
-                        color: Color.fromRGBO(13, 201, 150, 1),
+                        color: primaryDarkColor,
                       ),
                       SizedBox(
                         width: 10,
@@ -698,15 +698,7 @@ class _HomeState extends State<Home> {
                                       const SizedBox(
                                         height: 20,
                                       ),
-                                      Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text('Select preferred bank'),
-                                            const Text('or'),
-                                            const Text('Add bank'),
-                                          ]),
-
+                                      const Text('Select preferred bank'),
                                       const SizedBox(
                                         height: 10,
                                       ),
@@ -744,8 +736,7 @@ class _HomeState extends State<Home> {
                                                 BorderRadius.circular(8.0),
                                           ),
                                         ),
-                                        value:
-                                            selectedBankValue, // Set the selected value if needed
+                                        value: selectedBankValue,
                                         items:
                                             bankModelsDropdownList.map((bank) {
                                           return DropdownMenuItem<String>(

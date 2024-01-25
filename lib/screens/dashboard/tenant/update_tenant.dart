@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/providers/tenants_provider.dart';
 import 'package:x_rent/utilities/constants.dart';
@@ -144,7 +145,7 @@ class _AddTenantState extends State<AddTenant> {
                   children: [
                     Icon(
                       Icons.person_2,
-                      color: Color.fromRGBO(13, 201, 150, 1),
+                      color: primaryDarkColor,
                     ),
                     SizedBox(
                       width: 10,
@@ -244,7 +245,7 @@ class _AddTenantState extends State<AddTenant> {
                   children: [
                     Icon(
                       Icons.email,
-                      color: Color.fromRGBO(13, 201, 150, 1),
+                      color: primaryDarkColor,
                     ),
                     SizedBox(
                       width: 10,
@@ -295,7 +296,7 @@ class _AddTenantState extends State<AddTenant> {
                   children: [
                     Icon(
                       Icons.email,
-                      color: Color.fromRGBO(13, 201, 150, 1),
+                      color: primaryDarkColor,
                     ),
                     SizedBox(
                       width: 10,
@@ -346,7 +347,7 @@ class _AddTenantState extends State<AddTenant> {
                   children: [
                     Icon(
                       Icons.phone,
-                      color: Color.fromRGBO(13, 201, 150, 1),
+                      color: primaryDarkColor,
                     ),
                     SizedBox(
                       width: 10,
