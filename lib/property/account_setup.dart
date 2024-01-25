@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
+import 'package:x_rent/models/bank_list.dart';
 import 'package:x_rent/providers/user_provider.dart';
+import 'package:x_rent/screens/dashboard.dart';
+import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 
 import '../providers/property_provider.dart';
@@ -61,18 +64,151 @@ class _AccountSetupState extends State<AccountSetup> {
     }
   }
 
-  final propertyProvider = Provider.of<PropertyProvider>(
-    context,
-    listen: false,
-  );
-  final userProvider = Provider.of<UserProvider>(
-    context,
-    listen: false,
-  );
-  PageController pageController = widget.pageController!;
+  String selectedBankAccount = 'Select Bank';
+  String selectedBranchValue = '';
+  String? selectedBankValue;
+  bool fetchingBanks = false;
+  List<String> bankModelsDropdownList = [];
+  List<Banks> bankModels = [];
+  Future<void> _fetchBanks(BuildContext context) async {
+    print('I am here to fetch all banks');
+    try {
+      setState(() {
+        fetchingBanks = true;
+      });
+
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final token = userProvider.user?.token;
+
+      final propertyProvider = Provider.of<PropertyProvider>(
+        context,
+        listen: false,
+      );
+
+      final postData = {
+        'property_id': propertyProvider.property?.id.toString() ?? '',
+      };
+
+      final apiClient = ApiClient();
+      final headers = {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      };
+
+      final response = await apiClient.post(
+        '/mobile/banks/get_bank_options',
+        postData,
+        headers: headers,
+      );
+
+      print('Banks Response: $response');
+
+      setState(() {
+        bankModels = [];
+        bankModelsDropdownList = [];
+      });
+
+      if (response['response']['status'] == 1 &&
+          response['response']['banks'] != null) {
+        final banksList = BanksList.fromJson(response['response']);
+
+        setState(() {
+          bankModels = banksList.banks ?? [];
+          selectedBankAccount = '${bankModels[0].name}';
+          bankModelsDropdownList =
+              bankModels.map((bank) => bank.name ?? '').toList();
+        });
+      } else {
+        print('No or invalid banks found in the response');
+        // Handle the case when 'status' is not 1 or 'banks' is null
+      }
+    } catch (error) {
+      print('Error fetching banks: $error');
+      // Handle the error
+    } finally {
+      setState(() {
+        fetchingBanks = false;
+      });
+    }
+  }
+
+  List<String> bankBranchesDropdownList = [];
+
+  Future<void> _fetchBankBranches(BuildContext context, String bankId) async {
+    try {
+      // Assuming you have the user token and property id
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final token = userProvider.user?.token;
+
+      final propertyProvider = Provider.of<PropertyProvider>(
+        context,
+        listen: false,
+      );
+
+      final postData = {
+        'property_id': propertyProvider.property?.id.toString() ?? '',
+        'bank_id': bankId,
+      };
+
+      final apiClient = ApiClient();
+      final headers = {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      };
+
+      final response = await apiClient.post(
+        '/mobile/bank_branches/get_bank_branches_options',
+        postData,
+        headers: headers,
+      );
+
+      print('Bank Branches Response: $response');
+
+      setState(() {
+        bankBranchesDropdownList = [];
+      });
+
+      if (response['response']['status'] == 1 &&
+          response['response']['bank_branches'] != null) {
+        final bankBranches = response['response']['bank_branches'];
+
+        setState(() {
+          bankBranchesDropdownList = bankBranches
+              .map<String>((branch) => branch['name'].toString())
+              .toList();
+          selectedBranchValue = bankBranchesDropdownList.isNotEmpty
+              ? bankBranchesDropdownList[0]
+              : '';
+        });
+      } else {
+        print('No or invalid bank branches found in the response');
+        // Handle the case when 'status' is not 1 or 'bank_branches' is null
+      }
+    } catch (error) {
+      print('Error fetching bank branches: $error');
+      // Handle the error
+    }
+  }
+
+  Map<String, List<Map<String, dynamic>>> bankBranches = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchBanks(context);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    PageController pageController = widget.pageController!;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -98,7 +234,7 @@ class _AccountSetupState extends State<AccountSetup> {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
-                labelText: 'Select bank',
+                hintText: 'Select Bank',
                 labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
                     .copyWith(color: Colors.grey),
                 border: OutlineInputBorder(
@@ -123,23 +259,18 @@ class _AccountSetupState extends State<AccountSetup> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              value: selectedValue,
-              onChanged: (String? newValue) {
+              value: selectedBankValue,
+              items: bankModelsDropdownList.map((bank) {
+                return DropdownMenuItem<String>(
+                  value: bank,
+                  child: Text(bank),
+                );
+              }).toList(),
+              onChanged: (value) {
                 setState(() {
-                  selectedValue = newValue!;
+                  selectedBankValue = value;
                 });
               },
-              items: <String>[
-                'Equity',
-                'KCB',
-              ].map<DropdownMenuItem<String>>(
-                (String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                },
-              ).toList(),
             ),
             SizedBox(
               height: 20,
@@ -158,11 +289,10 @@ class _AccountSetupState extends State<AccountSetup> {
             ),
             const SizedBox(height: 10),
             DropdownButtonFormField<String>(
-              isExpanded: true,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
-                labelText: 'Select branch',
+                hintText: 'Select Branch',
                 labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
                     .copyWith(color: Colors.grey),
                 border: OutlineInputBorder(
@@ -187,23 +317,29 @@ class _AccountSetupState extends State<AccountSetup> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              value: selectedValue,
-              onChanged: (String? newValue) {
+              value: selectedBranchValue,
+              items: selectedBankValue != 'Select Bank' &&
+                      bankBranches.containsKey(selectedBankValue)
+                  ? [
+                      DropdownMenuItem<String>(
+                        value: 'Select Branch',
+                        child: Text('Select Branch'),
+                      ),
+                      ...(bankBranches[selectedBankValue]
+                              as List<Map<String, dynamic>>)
+                          .map<DropdownMenuItem<String>>((branch) {
+                        return DropdownMenuItem<String>(
+                          value: branch['name'].toString(),
+                          child: Text(branch['name'].toString()),
+                        );
+                      }).toList()
+                    ]
+                  : [],
+              onChanged: (value) {
                 setState(() {
-                  selectedValue = newValue!;
+                  selectedBranchValue = value!;
                 });
               },
-              items: <String>[
-                'Agent',
-                'Landlord',
-              ].map<DropdownMenuItem<String>>(
-                (String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                },
-              ).toList(),
             ),
             SizedBox(
               height: 20,
@@ -317,18 +453,10 @@ class _AccountSetupState extends State<AccountSetup> {
               authorization: 'Bearer ${userProvider.user?.token}',
               buttonError: buttonError,
               buttonErrorMessage: buttonErrorMessage,
-              url: '/mobile/units/batch_create',
+              //url: '/mobile/units/batch_create',
               method: 'POST',
               buttonText: 'Proceed',
-              body: {
-                "property_id": propertyProvider.property?.id,
-                "house_numbers": unitsToSend,
-                "house_types": const [1, 2, 3, 4],
-                "blocks": const [1, 1, 1, 2],
-                "floor": const [1, 2, 3, 4, 5, 6],
-                "tenant_id": const [0, 0, 0, 0],
-                "contribution_id": const [0, 0, 0, 0]
-              },
+              body: {},
               onSuccess: (res) {
                 if (!buttonError) {
                   print('<<<<<<<<<<< res >>>>>>>>>>>>>>');
@@ -336,34 +464,26 @@ class _AccountSetupState extends State<AccountSetup> {
                   if (res['isSuccessful'] == true) {
                     var response = res['data']['response']['status'];
                     if (response == 1) {
-                      setState(() {
-                        unitsForStep3 = res['data']['response']['units'];
-                      });
                       showToast(
                         context,
                         'Success!',
-                        'Unit added successfully',
+                        'Account details added successfully',
                         mintyGreen,
                       );
 
+                      Future.delayed(const Duration(seconds: 2), () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: ((context) => const Dashboard()),
+                          ),
+                        );
+                      });
                       pageController.animateToPage(
-                        2,
+                        0,
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                       );
-                      // Future.delayed(const Duration(seconds: 2), () {
-                      //   Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: ((context) => const Dashboard()),
-                      //     ),
-                      //   );
-                      // });
-                      // pageController.animateToPage(
-                      //   0,
-                      //   duration: const Duration(milliseconds: 300),
-                      //   curve: Curves.easeInOut,
-                      // );
                     } else {
                       showToast(
                         context,

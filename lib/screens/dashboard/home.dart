@@ -163,7 +163,7 @@ class _HomeState extends State<Home> {
   List<String> bankModelsDropdownList = [];
   List<Banks> bankModels = [];
   Future<void> _fetchBanks(BuildContext context) async {
-    print('I am here to fetch banks');
+    print('I am here to fetch user banks');
     try {
       setState(() {
         fetchingBanks = true;
@@ -608,15 +608,13 @@ class _HomeState extends State<Home> {
                                               "amount": amountController.text,
                                               "recipient": "3",
                                               "withdrawal_for": 5,
-                                              "phone": "",
+                                              "phone": phone,
                                               "expense_category_id": "",
-                                              "bank_id": "9488",
-                                              "account_number":
-                                                  "01109123441200",
-                                              "account_name":
-                                                  "JAMES NJUGUNA NGURUI",
-                                              "transfer_from": "bank-9429",
-                                              "transfer_to": "bank-9488",
+                                              "bank_id": "",
+                                              "account_number": "",
+                                              "account_name": "",
+                                              "transfer_from": "",
+                                              "transfer_to": "",
                                               "tenant_id": "",
                                               "contribution_id": ""
                                             },
@@ -637,7 +635,6 @@ class _HomeState extends State<Home> {
                                                   Future.delayed(
                                                       const Duration(
                                                           seconds: 2), () {
-                                                    // Delay for 2 seconds (adjust as needed)
                                                     Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
@@ -750,58 +747,6 @@ class _HomeState extends State<Home> {
                                           });
                                         },
                                       ),
-
-                                      const SizedBox(height: 20),
-                                      // DropdownButtonFormField<String>(
-                                      //   decoration: InputDecoration(
-                                      //     filled: true,
-                                      //     fillColor: Colors.white,
-                                      //     hintText: 'Select Branch',
-                                      //     labelStyle: MyTheme
-                                      //         .darkTheme.textTheme.bodyLarge!1
-                                      //         .copyWith(color: Colors.grey),
-                                      //     border: OutlineInputBorder(
-                                      //       borderSide: const BorderSide(
-                                      //         color: Colors.grey,
-                                      //         width: 1.0,
-                                      //       ),
-                                      //       borderRadius: BorderRadius.circular(8.0),
-                                      //     ),
-                                      //     enabledBorder: OutlineInputBorder(
-                                      //       borderSide: BorderSide(
-                                      //         color: Colors.grey.shade300,
-                                      //         width: 2.0,
-                                      //       ),
-                                      //       borderRadius: BorderRadius.circular(8.0),
-                                      //     ),
-                                      //     focusedBorder: OutlineInputBorder(
-                                      //       borderSide: const BorderSide(
-                                      //         color: Colors.grey,
-                                      //         width: 1.0,
-                                      //       ),
-                                      //       borderRadius: BorderRadius.circular(8.0),
-                                      //     ),
-                                      //   ),
-                                      //   value: selectedBranchValue,
-                                      //   items: selectedBankValue != 'Select Bank' &&
-                                      //           bankBranches
-                                      //               .containsKey(selectedBankValue)
-                                      //       ? [
-                                      //           'Select Branch',
-                                      //           ...bankBranches[selectedBankValue]!
-                                      //         ].map((branch) {
-                                      //           return DropdownMenuItem<String>(
-                                      //             value: branch,
-                                      //             child: Text(branch),
-                                      //           );
-                                      //         }).toList()
-                                      //       : [],
-                                      //   onChanged: (value) {
-                                      //     setState(() {
-                                      //       selectedBranchValue = value!;
-                                      //     });
-                                      //   },
-                                      // ),
                                       const SizedBox(
                                         height: 20,
                                       ),
