@@ -820,9 +820,9 @@ class _HomeState extends State<Home> {
             ],
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 5),
         Container(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -847,12 +847,11 @@ class _HomeState extends State<Home> {
                 //'Ksh. 0',
                 style: Theme.of(context).textTheme.displayLarge,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 5),
               const ProgressBar(
                   // collectedAmount: rentInfo['amount_collected'],
                   // expectedAmount: rentInfo['amount_in_arrears'],
                   ),
-              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -999,9 +998,8 @@ class _HomeState extends State<Home> {
                 'KES ${currencyFormat.format(double.parse(monthRent['amount_collected']?.toString() ?? '0.0'))}',
                 style: Theme.of(context).textTheme.displayLarge,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 5),
               const ProgressBar(),
-              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

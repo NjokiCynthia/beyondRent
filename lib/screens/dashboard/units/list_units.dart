@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:x_rent/utilities/data_caching.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/screens/dashboard/units/add_unit.dart';
 import 'package:x_rent/providers/property_provider.dart';
@@ -85,6 +86,9 @@ class _UnitsState extends State<Units> {
 
   bool unitsLoading = true;
 
+  // Key for caching the property units
+  static const String CACHE_KEY_PROPERTY_UNITS = 'cachedPropertyUnits';
+
   fetchPropertyUnits(BuildContext context) async {
     print('I am here to fetch units');
     if (_mounted) {
@@ -104,19 +108,34 @@ class _UnitsState extends State<Units> {
       // "upper_limit": 20
     };
 
-    final apiClient = ApiClient();
-    final headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $token',
-    };
-
     try {
-      await apiClient
-          .post('/mobile/units/get_all', postData, headers: headers)
-          .then((response) {
+      // Check if cached data exists for property units
+      final cachedData =
+          await DataCacheManager.loadDataFromCache(CACHE_KEY_PROPERTY_UNITS);
+
+      if (cachedData != null && _mounted) {
+        // Data exists in cache, load it
+        setState(() {
+          propertyUnitsList = cachedData as List;
+        });
+      } else {
+        // No cached data, fetch from API
+        final apiClient = ApiClient();
+        final headers = {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        };
+
+        final response = await apiClient.post('/mobile/units/get_all', postData,
+            headers: headers);
+
         var status = response['response']['status'];
         if (status == 1) {
           var units = response['response']['units'];
+          // Cache the fetched data
+          await DataCacheManager.saveDataToCache(
+              CACHE_KEY_PROPERTY_UNITS, units);
+
           if (_mounted) {
             setState(() {
               propertyUnitsList = units;
@@ -125,17 +144,14 @@ class _UnitsState extends State<Units> {
           print('this is my units fetched');
           print(response['response']['units']);
         }
-      }).catchError((error) {
-        // Handle the error
-        print('error');
-        print(error);
-      });
+      }
+    } catch (e) {
       if (_mounted) {
         setState(() {
           unitsLoading = false;
         });
       }
-    } catch (e) {
+    } finally {
       if (_mounted) {
         setState(() {
           unitsLoading = false;
@@ -155,9 +171,10 @@ class _UnitsState extends State<Units> {
   void initState() {
     super.initState();
     _mounted = true;
+    fetchUnitDetails();
     if (!unitsFetched) {
       fetchPropertyUnits(context);
-      fetchUnitDetails();
+
       unitsFetched = true;
     }
   }

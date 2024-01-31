@@ -6,6 +6,7 @@ import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/screens/dashboard/tenant/tenant_details.dart';
 import 'package:x_rent/utilities/constants.dart';
+import 'package:x_rent/utilities/data_caching.dart';
 import 'package:x_rent/utilities/widgets.dart';
 
 class ListTenants extends StatefulWidget {
@@ -19,6 +20,26 @@ class _ListTenantsState extends State<ListTenants> {
   bool tenantListLoaded = false;
   List tenantList = [];
   List selectedTenants = [2];
+  // Key for caching the tenant list
+  static const String CACHE_KEY_TENANT_LIST = 'cachedTenantList';
+
+  // Load data from cache or fetch from API if not cached
+  Future<void> loadData() async {
+    // Check if cached data exists
+    final cachedData =
+        await DataCacheManager.loadDataFromCache(CACHE_KEY_TENANT_LIST);
+
+    if (cachedData != null) {
+      // Data exists in cache, load it
+      setState(() {
+        tenantList = cachedData as List;
+        tenantListLoaded = true;
+      });
+    } else {
+      // No cached data, fetch from API
+      await fetchTenantsList();
+    }
+  }
 
   fetchTenantsList() async {
     final userProvider = Provider.of<UserProvider>(
@@ -50,10 +71,16 @@ class _ListTenantsState extends State<ListTenants> {
           });
         }
       }
+      if (_mounted) {
+        setState(() {
+          tenantListLoaded = true;
+        });
+      }
     } catch (e) {
       print('Error');
       print(e);
     }
+    await DataCacheManager.saveDataToCache(CACHE_KEY_TENANT_LIST, tenantList);
     if (_mounted) {
       setState(() {
         tenantListLoaded = true;
@@ -66,13 +93,19 @@ class _ListTenantsState extends State<ListTenants> {
   void initState() {
     super.initState();
     _mounted = true;
-    fetchTenantsList();
+    loadData();
+    //fetchTenantsList();
   }
 
   @override
   void dispose() {
     _mounted = false;
     super.dispose();
+  }
+
+  Future<void> onRefresh() async {
+    // Explicitly refresh data from API
+    await fetchTenantsList();
   }
 
   @override
@@ -142,17 +175,11 @@ class _ListTenantsState extends State<ListTenants> {
               child: SafeArea(
                 top: false,
                 child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: tenantListLoaded == false
-                        ? Center(
-                            child: SizedBox(
-                              child: CircularProgressIndicator(
-                                strokeWidth: 4,
-                                color: mintyGreen,
-                              ),
-                            ),
-                          )
-                        : tenantList.isEmpty
+                  padding: const EdgeInsets.all(10),
+                  child: RefreshIndicator(
+                    onRefresh: onRefresh,
+                    child: tenantListLoaded
+                        ? (tenantList.isEmpty
                             ? Center(child: const EmptyTenants())
                             : ListView.builder(
                                 itemCount: tenantList.length,
@@ -265,7 +292,17 @@ class _ListTenantsState extends State<ListTenants> {
                                       ],
                                     ),
                                   );
-                                })),
+                                }))
+                        : Center(
+                            child: SizedBox(
+                              child: CircularProgressIndicator(
+                                strokeWidth: 4,
+                                color: mintyGreen,
+                              ),
+                            ),
+                          ),
+                  ),
+                ),
               ),
             ),
           ],

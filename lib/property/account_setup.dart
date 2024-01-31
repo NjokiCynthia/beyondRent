@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/models/bank_list.dart';
+import 'package:x_rent/models/branch_model.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/screens/dashboard.dart';
 import 'package:x_rent/utilities/constants.dart';
@@ -114,7 +115,7 @@ class _AccountSetupState extends State<AccountSetup> {
 
         setState(() {
           bankModels = banksList.banks ?? [];
-          selectedBankAccount = '${bankModels[0].name}';
+          selectedBankAccount = '${bankModels[0].id}';
           bankModelsDropdownList =
               bankModels.map((bank) => bank.name ?? '').toList();
         });
@@ -134,9 +135,9 @@ class _AccountSetupState extends State<AccountSetup> {
 
   List<String> bankBranchesDropdownList = [];
 
-  Future<void> _fetchBankBranches(BuildContext context, String bankId) async {
+  _fetchBankBranches(BuildContext context, String bankId) async {
+    print('I am now fetching branches');
     try {
-      // Assuming you have the user token and property id
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       final token = userProvider.user?.token;
 
@@ -149,6 +150,8 @@ class _AccountSetupState extends State<AccountSetup> {
         'property_id': propertyProvider.property?.id.toString() ?? '',
         'bank_id': bankId,
       };
+      print('This is the bank id i need to fetch branches for');
+      print(bankId);
 
       final apiClient = ApiClient();
       final headers = {
@@ -170,12 +173,15 @@ class _AccountSetupState extends State<AccountSetup> {
 
       if (response['response']['status'] == 1 &&
           response['response']['bank_branches'] != null) {
-        final bankBranches = response['response']['bank_branches'];
+        final List<dynamic> bankBranchesData =
+            response['response']['bank_branches'];
 
         setState(() {
-          bankBranchesDropdownList = bankBranches
-              .map<String>((branch) => branch['name'].toString())
-              .toList();
+          bankBranchesDropdownList = bankBranchesData.map<String>((branch) {
+            final branchName = branch['name'] as String;
+            return branchName;
+          }).toList();
+
           selectedBranchValue = bankBranchesDropdownList.isNotEmpty
               ? bankBranchesDropdownList[0]
               : '';
@@ -190,7 +196,8 @@ class _AccountSetupState extends State<AccountSetup> {
     }
   }
 
-  Map<String, List<Map<String, dynamic>>> bankBranches = {};
+  Map<String, List<BankBranches>> bankBranches = {};
+  String? selectedBankId;
 
   @override
   void initState() {
@@ -198,16 +205,10 @@ class _AccountSetupState extends State<AccountSetup> {
     _fetchBanks(context);
   }
 
+  bool loadingBranches = false;
+
   @override
   Widget build(BuildContext context) {
-    final propertyProvider = Provider.of<PropertyProvider>(
-      context,
-      listen: false,
-    );
-    final userProvider = Provider.of<UserProvider>(
-      context,
-      listen: false,
-    );
     PageController pageController = widget.pageController!;
     return Scaffold(
       body: SingleChildScrollView(
@@ -229,118 +230,149 @@ class _AccountSetupState extends State<AccountSetup> {
               ],
             ),
             const SizedBox(height: 10),
-            DropdownButtonFormField<String>(
-              isExpanded: true,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: 'Select Bank',
-                labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                    .copyWith(color: Colors.grey),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: DropdownButtonFormField<String>(
+                isExpanded: true,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: 'Select Bank',
+                  labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                      .copyWith(color: Colors.grey),
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey.shade300,
-                    width: 2.0,
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade300,
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                  borderRadius: BorderRadius.circular(8.0),
                 ),
+                value: selectedBankValue,
+                items: bankModelsDropdownList.map((bank) {
+                  return DropdownMenuItem<String>(
+                    value: bank,
+                    child: Text(bank),
+                  );
+                }).toList(),
+                onChanged: (value) async {
+                  // Find the selected bank model based on the selected bank name
+                  Banks selectedBankModel =
+                      bankModels.firstWhere((bank) => bank.name == value);
+
+                  // Print the selected bank ID from the response
+                  print('Selected Bank ID: ${selectedBankModel.id}');
+                  // Store the selected bank ID
+                  selectedBankId = selectedBankModel.id;
+                  setState(() {
+                    selectedBankValue = value;
+                    selectedBranchValue = '';
+                    bankBranchesDropdownList
+                        .clear(); // Clear branches list when changing the bank
+                    loadingBranches =
+                        true; // Set loading state to true when changing the bank
+                  });
+
+                  // Fetch branches for the selected bank
+                  List<String> fetchedBranchesList = await _fetchBankBranches(
+                      context, selectedBankId.toString());
+
+                  setState(() {
+                    // Update branches list after fetching branches
+                    bankBranchesDropdownList = fetchedBranchesList;
+                    loadingBranches =
+                        false; // Set loading state to false after branches are fetched
+                  });
+                },
               ),
-              value: selectedBankValue,
-              items: bankModelsDropdownList.map((bank) {
-                return DropdownMenuItem<String>(
-                  value: bank,
-                  child: Text(bank),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedBankValue = value;
-                });
-              },
             ),
             SizedBox(
               height: 20,
             ),
-            const Row(
-              children: [
-                Icon(
-                  Icons.account_balance,
-                  color: primaryDarkColor,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text('Select bank branch.'),
-              ],
-            ),
-            const SizedBox(height: 10),
-            DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: 'Select Branch',
-                labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                    .copyWith(color: Colors.grey),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey.shade300,
-                    width: 2.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Colors.grey,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              ),
-              value: selectedBranchValue,
-              items: selectedBankValue != 'Select Bank' &&
-                      bankBranches.containsKey(selectedBankValue)
-                  ? [
-                      DropdownMenuItem<String>(
-                        value: 'Select Branch',
-                        child: Text('Select Branch'),
+            if (selectedBankValue != null)
+              Column(
+                children: [
+                  const Row(
+                    children: [
+                      Icon(
+                        Icons.account_balance,
+                        color: primaryDarkColor,
                       ),
-                      ...(bankBranches[selectedBankValue]
-                              as List<Map<String, dynamic>>)
-                          .map<DropdownMenuItem<String>>((branch) {
-                        return DropdownMenuItem<String>(
-                          value: branch['name'].toString(),
-                          child: Text(branch['name'].toString()),
-                        );
-                      }).toList()
-                    ]
-                  : [],
-              onChanged: (value) {
-                setState(() {
-                  selectedBranchValue = value!;
-                });
-              },
-            ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text('Select bank branch.'),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: 'Select Branch',
+                        labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                            .copyWith(color: Colors.grey),
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.grey.shade300,
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      value: bankBranchesDropdownList.isEmpty
+                          ? ''
+                          : selectedBranchValue,
+                      items: bankBranchesDropdownList.isEmpty
+                          ? [
+                              DropdownMenuItem(
+                                  value: '', child: Text('Loading branches...'))
+                            ]
+                          : bankBranchesDropdownList.map((branch) {
+                              return DropdownMenuItem<String>(
+                                value: branch,
+                                child: Text(branch),
+                              );
+                            }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedBranchValue = value!;
+                        });
+                      },
+                    ),
+                  )
+                ],
+              ),
             SizedBox(
               height: 20,
             ),
@@ -446,63 +478,82 @@ class _AccountSetupState extends State<AccountSetup> {
             SizedBox(
               height: 30,
             ),
-            const SizedBox(height: 20),
-            CustomRequestButton(
-              cookie:
-                  'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
-              authorization: 'Bearer ${userProvider.user?.token}',
-              buttonError: buttonError,
-              buttonErrorMessage: buttonErrorMessage,
-              //url: '/mobile/units/batch_create',
-              method: 'POST',
-              buttonText: 'Proceed',
-              body: {},
-              onSuccess: (res) {
-                if (!buttonError) {
-                  print('<<<<<<<<<<< res >>>>>>>>>>>>>>');
-                  print(res);
-                  if (res['isSuccessful'] == true) {
-                    var response = res['data']['response']['status'];
-                    if (response == 1) {
-                      showToast(
-                        context,
-                        'Success!',
-                        'Account details added successfully',
-                        mintyGreen,
-                      );
-
-                      Future.delayed(const Duration(seconds: 2), () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: ((context) => const Dashboard()),
-                          ),
-                        );
-                      });
-                      pageController.animateToPage(
-                        0,
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                    } else {
-                      showToast(
-                        context,
-                        'Error!',
-                        res['data']['response']['message'],
-                        Colors.red,
-                      );
-                    }
-                  } else {
-                    showToast(
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: primaryDarkColor),
+                  onPressed: () {
+                    Navigator.push(
                       context,
-                      'Error!',
-                      "Error saving unit",
-                      Colors.red,
+                      MaterialPageRoute(
+                        builder: ((context) => const Dashboard()),
+                      ),
                     );
-                  }
-                }
-              },
-            ),
+                    pageController.animateToPage(
+                      0,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                  child: Text('Proceed')),
+            )
+            // CustomRequestButton(
+            //   cookie:
+            //       'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
+            //   authorization: 'Bearer ${userProvider.user?.token}',
+            //   buttonError: buttonError,
+            //   buttonErrorMessage: buttonErrorMessage,
+            //   //url: '/mobile/units/batch_create',
+            //   method: 'POST',
+            //   buttonText: 'Proceed',
+            //   body: {},
+            //   onSuccess: (res) {
+            //     if (!buttonError) {
+            //       print('<<<<<<<<<<< res >>>>>>>>>>>>>>');
+            //       print(res);
+            //       if (res['isSuccessful'] == true) {
+            //         var response = res['data']['response']['status'];
+            //         if (response == 1) {
+            //           showToast(
+            //             context,
+            //             'Success!',
+            //             'Account details added successfully',
+            //             mintyGreen,
+            //           );
+
+            //           Future.delayed(const Duration(seconds: 2), () {
+            //             Navigator.push(
+            //               context,
+            //               MaterialPageRoute(
+            //                 builder: ((context) => const Dashboard()),
+            //               ),
+            //             );
+            //           });
+            //           pageController.animateToPage(
+            //             0,
+            //             duration: const Duration(milliseconds: 300),
+            //             curve: Curves.easeInOut,
+            //           );
+            //         } else {
+            //           showToast(
+            //             context,
+            //             'Error!',
+            //             res['data']['response']['message'],
+            //             Colors.red,
+            //           );
+            //         }
+            //       } else {
+            //         showToast(
+            //           context,
+            //           'Error!',
+            //           "Error saving unit",
+            //           Colors.red,
+            //         );
+            //       }
+            //     }
+            //   },
+            // ),
           ],
         ),
       ),

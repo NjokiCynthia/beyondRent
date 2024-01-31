@@ -197,7 +197,6 @@ class _AddRentState extends State<AddRent> {
                     filled: true,
                     fillColor: Colors.white,
                     hintText: 'KES 20,000',
-                    // labelText: 'KES 20,000',
                     labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!.copyWith(
                       color: Colors.grey,
                     ),
@@ -327,7 +326,7 @@ class _AddRentState extends State<AddRent> {
                   children: [
                     Checkbox(
                       checkColor: Colors.white,
-                      // fillColor: Colors.green,
+                      activeColor: primaryDarkColor,
                       value: arrearsContributionBool,
                       onChanged: (bool? value) {
                         setState(() {

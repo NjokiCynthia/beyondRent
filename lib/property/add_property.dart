@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/property/account_setup.dart';
+import 'package:x_rent/property/unit_type_setup.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/utilities/constants.dart';
@@ -220,6 +221,10 @@ class _AddPropertyState extends State<AddProperty> {
         currentPageIndex: _currentPageIndex,
         pageController: propertyPageController,
       ),
+      UnitTypes(
+        currentPageIndex: _currentPageIndex,
+        pageController: propertyPageController,
+      ),
       AddUnits(
         currentPageIndex: _currentPageIndex,
         pageController: propertyPageController,
@@ -252,6 +257,8 @@ class _AddPropertyState extends State<AddProperty> {
                   const SizedBox(width: 8),
                   _buildStepIndicator(2),
                   const SizedBox(width: 8),
+                  _buildStepIndicator(3),
+                  const SizedBox(width: 8),
                 ],
               ),
               Expanded(
@@ -262,7 +269,10 @@ class _AddPropertyState extends State<AddProperty> {
                       _currentPageIndex = index;
                     });
                   },
-                  physics: _currentPageIndex == 0 || _currentPageIndex == 1
+                  physics: _currentPageIndex == 0 ||
+                          _currentPageIndex == 1 ||
+                          _currentPageIndex == 2 ||
+                          _currentPageIndex == 3
                       ? const NeverScrollableScrollPhysics()
                       : const PageScrollPhysics(),
                   children: pages,
@@ -336,12 +346,12 @@ class _StepPage1State extends State<StepPage1> {
         buttonErrorMessage = 'Enter property location';
       });
       return false;
-    } else if (propertyDescriptionController.text == '') {
-      setState(() {
-        buttonError = true;
-        buttonErrorMessage = 'Enter property description';
-      });
-      return false;
+      // } else if (propertyDescriptionController.text == '') {
+      //   setState(() {
+      //     buttonError = true;
+      //     buttonErrorMessage = 'Enter property description';
+      //   });
+      //   return false;
     } else if (propertyDescriptionController.text == '') {
       setState(() {
         buttonError = true;

@@ -350,7 +350,7 @@ class ProgressBar extends StatelessWidget {
         FractionallySizedBox(
           widthFactor: 1,
           child: Container(
-            height: 10,
+            height: 4,
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.1),
               borderRadius: BorderRadius.circular(10),

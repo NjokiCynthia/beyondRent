@@ -301,16 +301,18 @@ class _SettingsState extends State<Settings> {
                 // ),
                 const SizedBox(
                   height: 30,
-                ), // To fill the remaining space
+                ),
                 Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: 20), // Adjust spacing from the bottom
-                  child: SizedBox(
-                    height: 48,
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                    ),
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        // Add your logout functionality here
                         PersistentNavBarNavigator.pushNewScreen(
                           context,
                           screen: const Login(),
