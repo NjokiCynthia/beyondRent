@@ -480,6 +480,7 @@ class _AccountSetupState extends State<AccountSetup> {
             ),
             SizedBox(
               width: double.infinity,
+              height: 48,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: primaryDarkColor),

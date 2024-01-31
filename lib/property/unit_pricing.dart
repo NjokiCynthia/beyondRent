@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
@@ -29,9 +31,10 @@ class _UnitPricingState extends State<UnitPricing> {
           padding: EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Select the unit type for the houses.'),
-              SizedBox(height: 16.0),
+              Text('Assign unit types to the houses'),
+              SizedBox(height: 20.0),
               DropdownButtonFormField<String>(
                 value: selectedUnitType,
                 items: [
@@ -84,11 +87,30 @@ class _UnitPricingState extends State<UnitPricing> {
                 ),
               ),
               SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Close the bottom sheet
-                },
-                child: Text('OK'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(width: 1.0, color: primaryDarkColor),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(color: primaryDarkColor),
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryDarkColor),
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the bottom sheet
+                    },
+                    child: Text('Confirm'),
+                  ),
+                ],
               ),
             ],
           ),
@@ -96,6 +118,39 @@ class _UnitPricingState extends State<UnitPricing> {
       },
     );
   }
+
+  final List<String> unitTypes = [
+    'Bedsitter',
+    '1-bedroom',
+    '2-bedroom',
+    '3-bedroom',
+    '4-bedroom'
+  ];
+  final Random random = Random();
+
+  String getRandomUnitType() {
+    return unitTypes[random.nextInt(unitTypes.length)];
+  }
+
+  int getPriceForUnitType(String unitType) {
+    switch (unitType) {
+      case 'Bedsitter':
+        return 10000;
+      case '1-bedroom':
+        return 11000;
+      case '2-bedroom':
+        return 12000;
+      case '3-bedroom':
+        return 13000;
+      case '4-bedroom':
+        return 14000;
+      default:
+        return 0; // Default price if unit type is not recognized
+    }
+  }
+
+  final List<String> unitLetters = ['A', 'B'];
+  List<bool> _selectedItems = List.filled(10, false);
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +170,10 @@ class _UnitPricingState extends State<UnitPricing> {
             child: ListView.builder(
                 itemCount: 10,
                 itemBuilder: (BuildContext context, int index) {
+                  String unitNumber =
+                      '${unitLetters[index % 2]}${(index ~/ 2) + 1}';
+                  String unitType = getRandomUnitType();
+                  int unitPrice = getPriceForUnitType(unitType);
                   return Card(
                     child: Container(
                       padding: EdgeInsets.all(10.0),
@@ -139,7 +198,7 @@ class _UnitPricingState extends State<UnitPricing> {
                                           letterSpacing: 0.5),
                                     ),
                                     Text(
-                                      'A1',
+                                      unitNumber,
                                       style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600,
@@ -155,7 +214,7 @@ class _UnitPricingState extends State<UnitPricing> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Bedsitter',
+                                      unitType,
                                       style: TextStyle(
                                           color: Colors.grey,
                                           fontSize: 12,
@@ -163,17 +222,18 @@ class _UnitPricingState extends State<UnitPricing> {
                                           letterSpacing: 0.5),
                                     ),
                                     Text(
-                                      'KES 10,000',
+                                      'KES ${unitPrice}',
+                                      // 'KES 10,000',
                                     ),
                                   ],
                                 ),
                               ],
                             ),
-                            value: _value,
+                            value: _selectedItems[index],
                             controlAffinity: ListTileControlAffinity.leading,
                             onChanged: (bool? value) {
                               setState(() {
-                                _value = value!;
+                                _selectedItems[index] = value!;
                               });
                             },
                           )
@@ -183,6 +243,7 @@ class _UnitPricingState extends State<UnitPricing> {
                   );
                 }),
           ),
+          //if (_selectedItems.contains(true))
           SizedBox(
               width: double.infinity,
               height: 50,
@@ -203,17 +264,19 @@ class _UnitPricingState extends State<UnitPricing> {
                   child: Text('Proceed')))
         ],
       ),
-      floatingActionButton: Align(
-        alignment: Alignment(1.0, 0.85),
-        child: FloatingActionButton(
-          backgroundColor: primaryDarkColor,
-          onPressed: () {
-            showBottomSheet(context: context);
-          },
-          tooltip: 'Open Alert',
-          child: Icon(Icons.warning),
-        ),
-      ),
+      floatingActionButton: _selectedItems.contains(true)
+          ? Align(
+              alignment: Alignment(1.0, 0.85),
+              child: FloatingActionButton(
+                backgroundColor: primaryDarkColor,
+                onPressed: () {
+                  _showBottomSheet(context);
+                },
+                tooltip: 'Open Alert',
+                child: Icon(Icons.arrow_circle_up_sharp),
+              ),
+            )
+          : null,
     );
   }
 }
