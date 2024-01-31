@@ -263,7 +263,7 @@ class _LoginState extends State<Login> {
           child: CustomOutlinedButton(
             url: '/mobile/login',
             method: 'POST',
-            buttonText: 'Demo Account',
+            buttonText: 'CNN TEST',
             body: const {
               "phone": '254797181989',
               "password": 'password',
@@ -300,6 +300,7 @@ class _LoginState extends State<Login> {
             },
           ),
         ),
+        SizedBox(height: 20),
         Container(
           margin: const EdgeInsets.only(left: 20, right: 20),
           child: CustomOutlinedButton(

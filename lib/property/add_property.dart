@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/property/account_setup.dart';
+import 'package:x_rent/property/unit_pricing.dart';
 import 'package:x_rent/property/unit_type_setup.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
@@ -229,6 +230,10 @@ class _AddPropertyState extends State<AddProperty> {
         currentPageIndex: _currentPageIndex,
         pageController: propertyPageController,
       ),
+      UnitPricing(
+        currentPageIndex: _currentPageIndex,
+        pageController: propertyPageController,
+      ),
       AccountSetup(
         currentPageIndex: _currentPageIndex,
         pageController: propertyPageController,
@@ -258,6 +263,8 @@ class _AddPropertyState extends State<AddProperty> {
                   _buildStepIndicator(2),
                   const SizedBox(width: 8),
                   _buildStepIndicator(3),
+                  const SizedBox(width: 8),
+                  _buildStepIndicator(4),
                   const SizedBox(width: 8),
                 ],
               ),

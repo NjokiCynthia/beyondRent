@@ -218,6 +218,7 @@ class _UnitTypesState extends State<UnitTypes> {
             Visibility(
               visible: selectedOption == AccountSettlementOption.yes,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text('Preferred invoice frequency.'),
                   const SizedBox(
