@@ -220,25 +220,27 @@ class _UnitDetailsState extends State<UnitDetails> {
                 )
               : transactionsList.isEmpty
                   ? const EmptyTransactions()
-                  : ListView.builder(
-                      // itemCount: transactionsList.length > 6
-                      //     ? 6
-                      //     : transactionsList.length,
-                      itemCount: transactionsList.length,
-                      itemBuilder: (context, index) {
-                        var transaction = transactionsList[index];
-                        return TransactionCard(
-                          tenant: transaction['tenant'],
-                          date: transaction['date'],
-                          amount: transaction['amount'],
-                          type: transaction['type'],
-                          unit: transaction['unit'],
-                          bill: transaction['bill'],
-                          reconciliation: transaction['reconciliation'],
-                          narrative: transaction['narative'],
-                          id: transaction['id'],
-                        );
-                      },
+                  : Expanded(
+                      child: ListView.builder(
+                        // itemCount: transactionsList.length > 6
+                        //     ? 6
+                        //     : transactionsList.length,
+                        itemCount: transactionsList.length,
+                        itemBuilder: (context, index) {
+                          var transaction = transactionsList[index];
+                          return TransactionCard(
+                            tenant: transaction['tenant'],
+                            date: transaction['date'],
+                            amount: transaction['amount'],
+                            type: transaction['type'],
+                            unit: transaction['unit'],
+                            bill: transaction['bill'],
+                            reconciliation: transaction['reconciliation'],
+                            narrative: transaction['narative'],
+                            id: transaction['id'],
+                          );
+                        },
+                      ),
                     ),
         ],
       ),
@@ -413,8 +415,7 @@ class _UnitDetailsState extends State<UnitDetails> {
       ],
     );
     return Scaffold(
-      backgroundColor:
-          Colors.transparent, // Set transparent background for the Scaffold
+      backgroundColor: Colors.transparent,
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -494,16 +495,19 @@ class _UnitDetailsState extends State<UnitDetails> {
                   ),
                 ),
               ),
-              Expanded(
-                child: Column(
-                  children: [
-                    propertySummary,
-                    Expanded(
-                      child: Center(child: propertyDetails),
-                    ),
-                  ],
-                ),
-              ),
+              propertySummary,
+              // propertyDetails,
+              Expanded(child: propertyDetails),
+              // Expanded(
+              //   child: Column(
+              //     children: [
+              //       propertySummary,
+              //       Expanded(
+              //         child: Center(child: propertyDetails),
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),

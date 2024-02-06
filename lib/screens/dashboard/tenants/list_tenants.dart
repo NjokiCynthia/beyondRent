@@ -17,31 +17,18 @@ class ListTenants extends StatefulWidget {
 }
 
 class _ListTenantsState extends State<ListTenants> {
-  bool tenantListLoaded = false;
-  List tenantList = [];
+  bool tenantListLoading = true;
   List selectedTenants = [2];
   // Key for caching the tenant list
   static const String CACHE_KEY_TENANT_LIST = 'cachedTenantList';
 
-  // Load data from cache or fetch from API if not cached
-  Future<void> loadData() async {
-    // Check if cached data exists
-    final cachedData =
-        await DataCacheManager.loadDataFromCache(CACHE_KEY_TENANT_LIST);
-
-    if (cachedData != null) {
-      // Data exists in cache, load it
-      setState(() {
-        tenantList = cachedData as List;
-        tenantListLoaded = true;
-      });
-    } else {
-      // No cached data, fetch from API
-      await fetchTenantsList();
-    }
-  }
-
   fetchTenantsList() async {
+    print('Fetching tenant list');
+    if (_mounted) {
+      setState(() {
+        tenantListLoading = true;
+      });
+    }
     final userProvider = Provider.of<UserProvider>(
       context,
       listen: false,
@@ -53,52 +40,76 @@ class _ListTenantsState extends State<ListTenants> {
     final token = userProvider.user?.token;
 
     final postData = {"property_id": propertyProvider.property?.id};
-    final apiClient = ApiClient();
-    final headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $token',
-    };
     try {
-      var response = await apiClient.post('/mobile/tenants/get_all', postData,
-          headers: headers);
-      var responseStatus = response['response']['status'];
-      if (responseStatus == 1) {
-        print('These are my tenant details below here >>>>>>>>>>>');
-        print(response['response']['tenants']);
-        if (_mounted) {
-          setState(() {
-            tenantList = response['response']['tenants'];
-          });
+      // Check if cached data exists for property units
+      final cachedData =
+          await DataCacheManager.loadDataFromCache(CACHE_KEY_TENANT_LIST);
+
+      if (cachedData != null && _mounted) {
+        // Data exists in cache, load it
+        setState(() {
+          tenantsList = cachedData as List;
+        });
+      } else {
+        // No cached data, fetch from API
+        final apiClient = ApiClient();
+        final headers = {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        };
+
+        final response = await apiClient
+            .post('/mobile/tenants/get_all', postData, headers: headers);
+
+        var status = response['response']['status'];
+        if (status == 1) {
+          print('These are my tenants below here >>>>>>>>>>>');
+          print(response['response']['tenants']);
+          var tenants = response['response']['tenants'];
+          // Cache the fetched data
+
+          await DataCacheManager.saveDataToCache(
+              CACHE_KEY_TENANT_LIST, tenants);
+          if (_mounted) {
+            setState(() {
+              tenantsList = tenants;
+            });
+          }
+          print('this are my tenants fetched from the api');
+          print(response['response']['tenants']);
         }
       }
+    } catch (e) {
       if (_mounted) {
         setState(() {
-          tenantListLoaded = true;
+          tenantListLoading = false;
         });
       }
-    } catch (e) {
-      print('Error');
-      print(e);
-    }
-    await DataCacheManager.saveDataToCache(CACHE_KEY_TENANT_LIST, tenantList);
-    if (_mounted) {
-      setState(() {
-        tenantListLoaded = true;
-      });
+    } finally {
+      if (_mounted) {
+        setState(() {
+          tenantListLoading = false;
+        });
+      }
     }
   }
 
   bool _mounted = false;
+  bool tenantsFetched = false;
   @override
   void initState() {
     super.initState();
     _mounted = true;
-    loadData();
-    //fetchTenantsList();
+    if (!tenantsFetched) {
+      fetchTenantsList();
+      tenantsFetched = true;
+    }
   }
 
   @override
   void dispose() {
+    // Clear the cached data when the widget is disposed
+    DataCacheManager.clearCache(CACHE_KEY_TENANT_LIST);
     _mounted = false;
     super.dispose();
   }
@@ -164,7 +175,7 @@ class _ListTenantsState extends State<ListTenants> {
                           color: Colors.black, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      '           ${tenantList.length}',
+                      '           ${tenantsList.length}',
                       style: const TextStyle(fontSize: 16, color: Colors.black),
                     ),
                   ]),
@@ -177,131 +188,134 @@ class _ListTenantsState extends State<ListTenants> {
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: RefreshIndicator(
-                    onRefresh: onRefresh,
-                    child: tenantListLoaded
-                        ? (tenantList.isEmpty
-                            ? Center(child: const EmptyTenants())
-                            : ListView.builder(
-                                itemCount: tenantList.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(bottom: 10),
-                                    child: Column(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            final selectedTenantId = int.parse(
-                                                tenantList[index]['id']);
-                                            PersistentNavBarNavigator
-                                                .pushNewScreen(
-                                              context,
-                                              withNavBar: false,
-                                              pageTransitionAnimation:
-                                                  PageTransitionAnimation
-                                                      .cupertino,
-                                              screen: ViewTenant(
-                                                  tenantId: selectedTenantId),
-                                            );
-                                          },
-                                          child: ListTile(
-                                            leading: Container(
-                                                decoration: BoxDecoration(
-                                                    color: primaryDarkColor
-                                                        .withOpacity(0.1),
-                                                    shape: BoxShape.circle),
-                                                child: const Padding(
-                                                  padding: EdgeInsets.all(8),
-                                                  child: Icon(
-                                                    Icons.person,
-                                                    color: primaryDarkColor,
-                                                  ),
-                                                )),
-                                            title: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  '${tenantList[index]['first_name']} ${tenantList[index]['last_name']}',
-                                                ),
-                                                Text(
-                                                  '${tenantList[index]['phone']}',
-                                                )
-                                              ],
-                                            ),
-                                            subtitle: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10),
-                                              child: Row(
+                      onRefresh: onRefresh,
+                      child: tenantListLoading == true
+                          ? Center(
+                              child: SizedBox(
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 4,
+                                  color: mintyGreen,
+                                ),
+                              ),
+                            )
+                          : (tenantsList.isEmpty
+                              ? Center(child: const EmptyTenants())
+                              : ListView.builder(
+                                  itemCount: tenantsList.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 10),
+                                      child: Column(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              final selectedTenantId =
+                                                  int.parse(
+                                                      tenantsList[index]['id']);
+                                              PersistentNavBarNavigator
+                                                  .pushNewScreen(
+                                                context,
+                                                withNavBar: false,
+                                                pageTransitionAnimation:
+                                                    PageTransitionAnimation
+                                                        .cupertino,
+                                                screen: ViewTenant(
+                                                    tenantId: selectedTenantId),
+                                              );
+                                            },
+                                            child: ListTile(
+                                              leading: Container(
+                                                  decoration: BoxDecoration(
+                                                      color: primaryDarkColor
+                                                          .withOpacity(0.1),
+                                                      shape: BoxShape.circle),
+                                                  child: const Padding(
+                                                    padding: EdgeInsets.all(8),
+                                                    child: Icon(
+                                                      Icons.person,
+                                                      color: primaryDarkColor,
+                                                    ),
+                                                  )),
+                                              title: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: [
-                                                  Row(
-                                                    children: [
-                                                      const Text(
-                                                        'House Number:',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal,
-                                                            fontSize: 13,
-                                                            color: Colors.grey),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Text(
-                                                          '${tenantList[index]['house_number']}'),
-                                                    ],
+                                                  Text(
+                                                    '${tenantsList[index]['first_name']} ${tenantsList[index]['last_name']}',
                                                   ),
-                                                  Container(
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(12),
-                                                          color:
-                                                              primaryDarkColor
-                                                                  .withOpacity(
-                                                                      0.1)),
-                                                      child: const Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                left: 10,
-                                                                right: 10,
-                                                                top: 2,
-                                                                bottom: 2),
-                                                        child: Text(
-                                                          'View rent statement',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  primaryDarkColor,
-                                                              fontSize: 12),
-                                                        ),
-                                                      ))
+                                                  Text(
+                                                    '${tenantsList[index]['phone']}',
+                                                  )
                                                 ],
+                                              ),
+                                              subtitle: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        const Text(
+                                                          'House Number:',
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
+                                                              fontSize: 13,
+                                                              color:
+                                                                  Colors.grey),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Text(
+                                                            '${tenantsList[index]['house_number']}'),
+                                                      ],
+                                                    ),
+                                                    Container(
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        12),
+                                                            color:
+                                                                primaryDarkColor
+                                                                    .withOpacity(
+                                                                        0.1)),
+                                                        child: const Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  left: 10,
+                                                                  right: 10,
+                                                                  top: 2,
+                                                                  bottom: 2),
+                                                          child: Text(
+                                                            'View rent statement',
+                                                            style: TextStyle(
+                                                                color:
+                                                                    primaryDarkColor,
+                                                                fontSize: 12),
+                                                          ),
+                                                        ))
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        const Divider(
-                                          color: Color.fromARGB(
-                                              255, 219, 218, 218),
-                                          height: 1,
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                }))
-                        : Center(
-                            child: SizedBox(
-                              child: CircularProgressIndicator(
-                                strokeWidth: 4,
-                                color: mintyGreen,
-                              ),
-                            ),
-                          ),
-                  ),
+                                          const Divider(
+                                            color: Color.fromARGB(
+                                                255, 219, 218, 218),
+                                            height: 1,
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  }))),
                 ),
               ),
             ),

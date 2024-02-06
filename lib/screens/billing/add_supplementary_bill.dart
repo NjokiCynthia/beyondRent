@@ -105,7 +105,7 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
       builder: (BuildContext context) {
         return GestureDetector(
           onTap: () {
-            FocusScope.of(context).unfocus(); // Dismiss the keyboard
+            FocusScope.of(context).unfocus();
           },
           child: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
@@ -272,7 +272,6 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              // Check the values and act accordingly
                               print(
                                   'Bill Name: $billName, Bill Option: $billOption');
 

@@ -276,10 +276,10 @@ class _AddPropertyState extends State<AddProperty> {
                       _currentPageIndex = index;
                     });
                   },
-                  physics: _currentPageIndex == 0 ||
-                          _currentPageIndex == 1 ||
-                          _currentPageIndex == 2 ||
-                          _currentPageIndex == 3
+                  physics: _currentPageIndex == 0 || _currentPageIndex == 1
+                      //||
+                      // _currentPageIndex == 2 ||
+                      // _currentPageIndex == 3
                       ? const NeverScrollableScrollPhysics()
                       : const PageScrollPhysics(),
                   children: pages,

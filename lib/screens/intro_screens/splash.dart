@@ -40,24 +40,12 @@ class _AnimatedScaleImageState extends State<AnimatedScaleImage>
           width: MediaQuery.of(context).size.width * 0.9,
           height: MediaQuery.of(context).size.width * 0.9,
           child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  child: Image.asset(
-                    'assets/images/icons/logo3.png',
-                    width: 40,
-                  ),
-                ),
-                Text(
-                  'beyondRent',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(color: Colors.black),
-                )
-              ],
+            child: Container(
+              margin: const EdgeInsets.only(right: 10),
+              child: Image.asset(
+                'assets/images/icons/logo.png',
+                width: 240,
+              ),
             ),
           ),
         ),

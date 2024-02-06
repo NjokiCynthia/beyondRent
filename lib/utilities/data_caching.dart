@@ -23,8 +23,8 @@ class DataCacheManager {
     }
   }
 
-  static Future<void> clearCache() async {
+  static Future<void> clearCache(String key) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove(KEY_DATA);
+    prefs.remove(key);
   }
 }

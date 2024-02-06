@@ -230,75 +230,72 @@ class _AccountSetupState extends State<AccountSetup> {
               ],
             ),
             const SizedBox(height: 10),
-            Container(
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-              child: DropdownButtonFormField<String>(
-                isExpanded: true,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  hintText: 'Select Bank',
-                  labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                      .copyWith(color: Colors.grey),
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
+            DropdownButtonFormField<String>(
+              isExpanded: true,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                hintText: 'Select Bank',
+                labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                    .copyWith(color: Colors.grey),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey.shade300,
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: Colors.grey,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                value: selectedBankValue,
-                items: bankModelsDropdownList.map((bank) {
-                  return DropdownMenuItem<String>(
-                    value: bank,
-                    child: Text(bank),
-                  );
-                }).toList(),
-                onChanged: (value) async {
-                  // Find the selected bank model based on the selected bank name
-                  Banks selectedBankModel =
-                      bankModels.firstWhere((bank) => bank.name == value);
-
-                  // Print the selected bank ID from the response
-                  print('Selected Bank ID: ${selectedBankModel.id}');
-                  // Store the selected bank ID
-                  selectedBankId = selectedBankModel.id;
-                  setState(() {
-                    selectedBankValue = value;
-                    selectedBranchValue = '';
-                    bankBranchesDropdownList
-                        .clear(); // Clear branches list when changing the bank
-                    loadingBranches =
-                        true; // Set loading state to true when changing the bank
-                  });
-
-                  // Fetch branches for the selected bank
-                  List<String> fetchedBranchesList = await _fetchBankBranches(
-                      context, selectedBankId.toString());
-
-                  setState(() {
-                    // Update branches list after fetching branches
-                    bankBranchesDropdownList = fetchedBranchesList;
-                    loadingBranches =
-                        false; // Set loading state to false after branches are fetched
-                  });
-                },
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey.shade300,
+                    width: 2.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
               ),
+              value: selectedBankValue,
+              items: bankModelsDropdownList.map((bank) {
+                return DropdownMenuItem<String>(
+                  value: bank,
+                  child: Text(bank),
+                );
+              }).toList(),
+              onChanged: (value) async {
+                // Find the selected bank model based on the selected bank name
+                Banks selectedBankModel =
+                    bankModels.firstWhere((bank) => bank.name == value);
+
+                // Print the selected bank ID from the response
+                print('Selected Bank ID: ${selectedBankModel.id}');
+                // Store the selected bank ID
+                selectedBankId = selectedBankModel.id;
+                setState(() {
+                  selectedBankValue = value;
+                  selectedBranchValue = '';
+                  bankBranchesDropdownList
+                      .clear(); // Clear branches list when changing the bank
+                  loadingBranches =
+                      true; // Set loading state to true when changing the bank
+                });
+
+                // Fetch branches for the selected bank
+                List<String> fetchedBranchesList = await _fetchBankBranches(
+                    context, selectedBankId.toString());
+
+                setState(() {
+                  // Update branches list after fetching branches
+                  bankBranchesDropdownList = fetchedBranchesList;
+                  loadingBranches =
+                      false; // Set loading state to false after branches are fetched
+                });
+              },
             ),
             SizedBox(
               height: 20,
@@ -319,57 +316,54 @@ class _AccountSetupState extends State<AccountSetup> {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: DropdownButtonFormField<String>(
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        hintText: 'Select Branch',
-                        labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
-                            .copyWith(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
+                  DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'Select Branch',
+                      labelStyle: MyTheme.darkTheme.textTheme.bodyLarge!
+                          .copyWith(color: Colors.grey),
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.grey.shade300,
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
-                      value: bankBranchesDropdownList.isEmpty
-                          ? ''
-                          : selectedBranchValue,
-                      items: bankBranchesDropdownList.isEmpty
-                          ? [
-                              DropdownMenuItem(
-                                  value: '', child: Text('Loading branches...'))
-                            ]
-                          : bankBranchesDropdownList.map((branch) {
-                              return DropdownMenuItem<String>(
-                                value: branch,
-                                child: Text(branch),
-                              );
-                            }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedBranchValue = value!;
-                        });
-                      },
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade300,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                     ),
+                    value: bankBranchesDropdownList.isEmpty
+                        ? ''
+                        : selectedBranchValue,
+                    items: bankBranchesDropdownList.isEmpty
+                        ? [
+                            DropdownMenuItem(
+                                value: '', child: Text('Loading branches...'))
+                          ]
+                        : bankBranchesDropdownList.map((branch) {
+                            return DropdownMenuItem<String>(
+                              value: branch,
+                              child: Text(branch),
+                            );
+                          }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedBranchValue = value!;
+                      });
+                    },
                   )
                 ],
               ),

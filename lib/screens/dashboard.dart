@@ -24,7 +24,6 @@ class _DashboardState extends State<Dashboard> {
     return [
       const Home(),
       const Units(),
-      //const ListInvoices(),
       const ListTenants(),
       const Settings(),
     ];
@@ -34,7 +33,7 @@ class _DashboardState extends State<Dashboard> {
     return [
       PersistentBottomNavBarItem(
         icon: const Icon(Icons.home),
-        title: ("Home"),
+        title: ("Property"),
         activeColorPrimary: mintyGreen,
         inactiveColorPrimary: Colors.grey,
       ),

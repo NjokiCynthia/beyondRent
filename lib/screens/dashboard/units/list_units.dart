@@ -86,7 +86,6 @@ class _UnitsState extends State<Units> {
 
   bool unitsLoading = true;
 
-  // Key for caching the property units
   static const String CACHE_KEY_PROPERTY_UNITS = 'cachedPropertyUnits';
 
   fetchPropertyUnits(BuildContext context) async {
@@ -174,13 +173,13 @@ class _UnitsState extends State<Units> {
     fetchUnitDetails();
     if (!unitsFetched) {
       fetchPropertyUnits(context);
-
       unitsFetched = true;
     }
   }
 
   @override
   void dispose() {
+    DataCacheManager.clearCache(CACHE_KEY_PROPERTY_UNITS);
     _mounted = false;
     super.dispose();
   }

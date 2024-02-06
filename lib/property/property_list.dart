@@ -160,25 +160,10 @@ class _PropertyListState extends State<PropertyList> {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.only(right: 10, top: 50),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: Image.asset(
-                      'assets/images/icons/logo3.png',
-                      width: 40,
-                    ),
-                  ),
-                  Text(
-                    'beyondRent',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge!
-                        .copyWith(color: Colors.black),
-                  )
-                ],
+              margin: const EdgeInsets.only(right: 10, top: 50),
+              child: Image.asset(
+                'assets/images/icons/logo.png',
+                width: 240,
               ),
             ),
             const SizedBox(height: 30),
@@ -188,10 +173,6 @@ class _PropertyListState extends State<PropertyList> {
                   : 'Choose one of your properties',
               style: Theme.of(context).textTheme.bodySmall,
             ),
-            // Text(
-            //   'Choose one of your properties',
-            //   style: Theme.of(context).textTheme.bodySmall,
-            // ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 20, top: 20),

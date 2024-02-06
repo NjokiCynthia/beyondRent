@@ -431,18 +431,18 @@ class _AddUnitsState extends State<AddUnits> {
                 ),
                 onPressed: () {
                   // Call createNumberArray here
-                  // createNumberArray(
-                  //   blocks: int.parse(blockNoController.text),
-                  //   blockIdentifier: 'A',
-                  //   unitsPerBlock: int.parse(blockUnitsNoController.text),
-                  //   useBlockAsPrefix: _selectedNaming,
-                  //   useHouseNoAsPrefix: !_selectedNaming,
-                  // );
-                  pageController.animateToPage(
-                    3,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
+                  createNumberArray(
+                    blocks: int.parse(blockNoController.text),
+                    blockIdentifier: 'A',
+                    unitsPerBlock: int.parse(blockUnitsNoController.text),
+                    useBlockAsPrefix: _selectedNaming,
+                    useHouseNoAsPrefix: !_selectedNaming,
                   );
+                  // pageController.animateToPage(
+                  //   3,
+                  //   duration: const Duration(milliseconds: 300),
+                  //   curve: Curves.easeInOut,
+                  // );
                 },
                 child: Text('Proceed'),
               ),

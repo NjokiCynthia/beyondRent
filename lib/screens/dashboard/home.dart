@@ -107,8 +107,6 @@ class _HomeState extends State<Home> {
     print('This is my property id while fetching transactions');
     print(propertyProvider.property?.id);
 
-    // postData["property_id"] = propertyProvider.property?.id;
-
     final apiClient = ApiClient();
     final headers = {
       'Content-Type': 'application/json',
@@ -147,15 +145,6 @@ class _HomeState extends State<Home> {
     });
   }
 
-  // String selectedBank = 'Select Bank';
-  // String selectedBranch = '';
-
-  // // List<String> banks = ['Select Bank', 'KCB', 'Equity', 'Cooperative Bank'];
-  Map<String, List<String>> bankBranches = {
-    'KCB': ['Select Branch', 'Branch1', 'Branch2', 'Branch3'],
-    'Equity': ['Select Branch', 'BranchA', 'BranchB', 'BranchC'],
-    'Cooperative Bank': ['Select Branch', 'BranchX', 'BranchY', 'BranchZ'],
-  };
   String selectedBankAccount = 'Select Bank';
   String selectedBranchValue = '';
   String? selectedBankValue;
@@ -608,13 +597,15 @@ class _HomeState extends State<Home> {
                                               "amount": amountController.text,
                                               "recipient": "3",
                                               "withdrawal_for": 5,
-                                              "phone": phone,
+                                              "phone": "",
                                               "expense_category_id": "",
-                                              "bank_id": "",
-                                              "account_number": "",
-                                              "account_name": "",
-                                              "transfer_from": "",
-                                              "transfer_to": "",
+                                              "bank_id": "9488",
+                                              "account_number":
+                                                  "01109123441200",
+                                              "account_name":
+                                                  "JAMES NJUGUNA NGURUI",
+                                              "transfer_from": "bank-9429",
+                                              "transfer_to": "bank-9488",
                                               "tenant_id": "",
                                               "contribution_id": ""
                                             },
@@ -750,21 +741,76 @@ class _HomeState extends State<Home> {
                                       const SizedBox(
                                         height: 20,
                                       ),
-                                      SizedBox(
-                                        width: double.infinity,
-                                        height: 48,
-                                        child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    primaryDarkColor),
-                                            onPressed: () {
+                                      // SizedBox(
+                                      //   width: double.infinity,
+                                      //   height: 48,
+                                      //   child: ElevatedButton(
+                                      //       style: ElevatedButton.styleFrom(
+                                      //           backgroundColor:
+                                      //               primaryDarkColor),
+                                      //       onPressed: () {
+                                      //         showToast(
+                                      //           context,
+                                      //           'Success!',
+                                      //           'Your withdrawal request is successful!',
+                                      //           mintyGreen,
+                                      //         );
+
+                                      //         Future.delayed(
+                                      //             const Duration(seconds: 2),
+                                      //             () {
+                                      //           Navigator.push(
+                                      //               context,
+                                      //               MaterialPageRoute(
+                                      //                   builder: ((context) =>
+                                      //                       const ListWithdrawals())));
+                                      //         });
+                                      //       },
+                                      //       child: const Text('CONFIRM')),
+                                      // )
+                                      CustomRequestButton(
+                                        cookie:
+                                            'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
+                                        authorization:
+                                            'Bearer ${userProvider.user?.token}',
+                                        url:
+                                            '/mobile/withdrawals/request_funds_transfer',
+                                        method: 'POST',
+                                        buttonText: 'CONFIRM',
+                                        body: {
+                                          "user_id": userID,
+                                          'property_id': propertyProvider
+                                                  .property?.id
+                                                  .toString() ??
+                                              '',
+                                          "amount": amountController.text,
+                                          "recipient": "3",
+                                          "withdrawal_for": 5,
+                                          "phone": "",
+                                          "expense_category_id": "",
+                                          "bank_id": "9488",
+                                          "account_number": "01109123441200",
+                                          "account_name":
+                                              "JAMES NJUGUNA NGURUI",
+                                          "transfer_from": "bank-9429",
+                                          "transfer_to": "bank-9488",
+                                          "tenant_id": "",
+                                          "contribution_id": ""
+                                        },
+                                        onSuccess: (res) {
+                                          print(
+                                              '<<<<<<<<<<< res >>>>>>>>>>>>>>');
+                                          print(res);
+                                          if (res['isSuccessful'] == true) {
+                                            if (res['data']['response']
+                                                    ['status'] ==
+                                                1) {
                                               showToast(
                                                 context,
                                                 'Success!',
                                                 'Your withdrawal request is successful!',
                                                 mintyGreen,
                                               );
-
                                               Future.delayed(
                                                   const Duration(seconds: 2),
                                                   () {
@@ -774,9 +820,18 @@ class _HomeState extends State<Home> {
                                                         builder: ((context) =>
                                                             const ListWithdrawals())));
                                               });
-                                            },
-                                            child: const Text('CONFIRM')),
-                                      )
+                                            }
+                                          } else {
+                                            showToast(
+                                              context,
+                                              'Error!',
+                                              res['data']['response']
+                                                  ['message'],
+                                              Colors.red,
+                                            );
+                                          }
+                                        },
+                                      ),
                                     ],
                                   ),
                                 );

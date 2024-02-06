@@ -55,20 +55,20 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/icons/logo2.png"
+  image_path: "assets/images/icons/logo.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   web:
     generate: true
-    image_path: "assets/images/icons/logo2.png"
+    image_path: "assets/images/icons/logo.png"
     background_color: "#hexcode"
     theme_color: "#hexcode"
   windows:
     generate: true
-    image_path: "assets/images/icons/logo2.png"
+    image_path: "assets/images/icons/logo.png"
     icon_size: 48 # min:48, max:256, default: 48
   macos:
     generate: true
-    image_path: "assets/images/icons/logo2.png"
+    image_path: "assets/images/icons/logo.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -84,7 +84,6 @@ flutter:
     - assets/images/rentals.png
 
     #Icons
-    - assets/images/icons/logo-green.png
     - assets/images/icons/exchange.png
     - assets/images/icons/filter.png
     - assets/images/icons/home.png
@@ -94,8 +93,8 @@ flutter:
     - assets/images/icons/user.png
     - assets/images/avatar.jpg
     - assets/images/apartment.png
-    - assets/images/icons/logo2.png
-    - assets/images/icons/logo3.png
+    - assets/images/icons/logo.png
+   
 
     #Illustrations
     - assets/illustrations/tenant.png

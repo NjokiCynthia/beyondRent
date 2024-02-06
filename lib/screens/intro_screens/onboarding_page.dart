@@ -17,27 +17,15 @@ class _HomePageState extends State<HomePage> {
     return IntroductionScreen(
       pages: [
         PageViewModel(
-          title: "Welcome to beyondRent",
+          title: "Effortless Property Management.",
           body:
-              "Manage your rental properties effortlessly. View all apartments, tenants, and send invoices seamlessly. Get started and make property management a breeze.",
-          image: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(right: 10),
-                child: Image.asset(
-                  'assets/images/icons/logo3.png',
-                  width: 40,
-                ),
-              ),
-              Text(
-                'beyondRent',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(color: Colors.black),
-              )
-            ],
+              "View all apartments, tenants, and send invoices seamlessly. Get started and make property management a breeze.",
+          image: Container(
+            margin: const EdgeInsets.only(right: 10),
+            child: Image.asset(
+              'assets/images/icons/logo.png',
+              width: 240,
+            ),
           ),
           decoration: pageDecoration(),
         ),

@@ -4,7 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:dio/dio.dart';
 
-String ipAddress = 'https://kodi.sandbox.co.ke';
+//String ipAddress = 'https://kodi.sandbox.co.ke';
+String ipAddress = 'https://beyondrent.co';
 // Color Themes
 Color mintyGreen = const Color.fromRGBO(36, 105, 80, 1.0);
 
@@ -15,6 +16,9 @@ String propertyUserEmail = 'cynthia@gmail.com';
 
 // Selected Property Units
 List propertyUnitsList = [];
+
+//Selected tenants
+List tenantsList = [];
 
 PersistentTabController bottomNavigationController =
     PersistentTabController(initialIndex: 0);

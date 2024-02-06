@@ -63,25 +63,10 @@ class _LoginState extends State<Login> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(bottom: 50),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 10),
-                          child: Image.asset(
-                            'assets/images/icons/logo3.png',
-                            width: 40,
-                          ),
-                        ),
-                        Text(
-                          'beyondRent',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge!
-                              .copyWith(color: Colors.black),
-                        )
-                      ],
+                    margin: const EdgeInsets.only(right: 10, bottom: 50),
+                    child: Image.asset(
+                      'assets/images/icons/logo.png',
+                      width: 250,
                     ),
                   ),
                   Column(
@@ -258,92 +243,92 @@ class _LoginState extends State<Login> {
             ),
           ),
         ),
-        Container(
-          margin: const EdgeInsets.only(left: 20, right: 20),
-          child: CustomOutlinedButton(
-            url: '/mobile/login',
-            method: 'POST',
-            buttonText: 'CNN TEST',
-            body: const {
-              "phone": '254797181989',
-              "password": 'password',
-              "remember": true
-            },
-            onSuccess: (res) {
-              if (res['data']['response']['status'] != 1) {
-                return showToast(
-                  context,
-                  'Error!',
-                  res['data']['message'] ?? 'Error, please try again later.',
-                  Colors.red,
-                );
-              }
-              var userData = res['data']['response']['user'];
-              var accessToken = res['data']['response']['access_token'];
-              final userProvider = context.read<UserProvider>();
-              userProvider.setUser(
-                User(
-                  firstName: userData['first_name'],
-                  lastName: userData['last_name'],
-                  phone: userData['phone'],
-                  email: userData['email'],
-                  id: userData['id'],
-                  token: accessToken,
-                ),
-              );
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((context) => const PropertyList()),
-                ),
-              );
-            },
-          ),
-        ),
-        SizedBox(height: 20),
-        Container(
-          margin: const EdgeInsets.only(left: 20, right: 20),
-          child: CustomOutlinedButton(
-            url: '/mobile/login',
-            method: 'POST',
-            buttonText: 'Demo Account',
-            body: const {
-              "phone": '2547398712777',
-              "password": 'innovations1234',
-              "remember": true
-            },
-            onSuccess: (res) {
-              if (res['data']['response']['status'] != 1) {
-                return showToast(
-                  context,
-                  'Error!',
-                  res['data']['message'] ?? 'Error, please try again later.',
-                  Colors.red,
-                );
-              }
-              var userData = res['data']['response']['user'];
-              var accessToken = res['data']['response']['access_token'];
-              final userProvider = context.read<UserProvider>();
-              userProvider.setUser(
-                User(
-                  firstName: userData['first_name'],
-                  lastName: userData['last_name'],
-                  phone: userData['phone'],
-                  email: userData['email'],
-                  id: userData['id'],
-                  token: accessToken,
-                ),
-              );
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: ((context) => const PropertyList()),
-                ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 20),
+        // Container(
+        //   margin: const EdgeInsets.only(left: 20, right: 20),
+        //   child: CustomOutlinedButton(
+        //     url: '/mobile/login',
+        //     method: 'POST',
+        //     buttonText: 'CNN TEST',
+        //     body: const {
+        //       "phone": '0723752602',
+        //       "password": 'password',
+        //       "remember": true
+        //     },
+        //     onSuccess: (res) {
+        //       if (res['data']['response']['status'] != 1) {
+        //         return showToast(
+        //           context,
+        //           'Error!',
+        //           res['data']['message'] ?? 'Error, please try again later.',
+        //           Colors.red,
+        //         );
+        //       }
+        //       var userData = res['data']['response']['user'];
+        //       var accessToken = res['data']['response']['access_token'];
+        //       final userProvider = context.read<UserProvider>();
+        //       userProvider.setUser(
+        //         User(
+        //           firstName: userData['first_name'],
+        //           lastName: userData['last_name'],
+        //           phone: userData['phone'],
+        //           email: userData['email'],
+        //           id: userData['id'],
+        //           token: accessToken,
+        //         ),
+        //       );
+        //       Navigator.push(
+        //         context,
+        //         MaterialPageRoute(
+        //           builder: ((context) => const PropertyList()),
+        //         ),
+        //       );
+        //     },
+        //   ),
+        // ),
+        // SizedBox(height: 20),
+        // Container(
+        //   margin: const EdgeInsets.only(left: 20, right: 20),
+        //   child: CustomOutlinedButton(
+        //     url: '/mobile/login',
+        //     method: 'POST',
+        //     buttonText: 'Demo Account',
+        //     body: const {
+        //       "phone": '2547398712777',
+        //       "password": 'innovations1234',
+        //       "remember": true
+        //     },
+        //     onSuccess: (res) {
+        //       if (res['data']['response']['status'] != 1) {
+        //         return showToast(
+        //           context,
+        //           'Error!',
+        //           res['data']['message'] ?? 'Error, please try again later.',
+        //           Colors.red,
+        //         );
+        //       }
+        //       var userData = res['data']['response']['user'];
+        //       var accessToken = res['data']['response']['access_token'];
+        //       final userProvider = context.read<UserProvider>();
+        //       userProvider.setUser(
+        //         User(
+        //           firstName: userData['first_name'],
+        //           lastName: userData['last_name'],
+        //           phone: userData['phone'],
+        //           email: userData['email'],
+        //           id: userData['id'],
+        //           token: accessToken,
+        //         ),
+        //       );
+        //       Navigator.push(
+        //         context,
+        //         MaterialPageRoute(
+        //           builder: ((context) => const PropertyList()),
+        //         ),
+        //       );
+        //     },
+        //   ),
+        // ),
+        // const SizedBox(height: 20),
         GestureDetector(
           onTap: () {
             Navigator.push(
