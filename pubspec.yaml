@@ -45,6 +45,7 @@ dependencies:
   shared_preferences: ^2.2.0
   month_year_picker: ^0.3.0+1
   multiselect_formfield: ^0.1.7
+  riverpod: ^2.5.0
 
 dev_dependencies:
   flutter_test:

@@ -8,7 +8,7 @@ class PendingInvoice {
   String? amountPayable;
   double? amountPaid;
   Unit? unit;
-  dynamic? pendingAmount;
+  dynamic pendingAmount;
 
   PendingInvoice({
     this.id,

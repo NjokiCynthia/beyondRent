@@ -71,13 +71,13 @@ class _AddUnitsState extends State<AddUnits> {
         String blockString = '';
         if (useBlockAsPrefix) {
           // Block as prefix (e.g., A1)
-          blockString = '${alphabet[block - 1]}${unit}';
+          blockString = '${alphabet[block - 1]}$unit';
         } else if (useHouseNoAsPrefix) {
           // House number as prefix (e.g., 1A)
-          blockString = '${unit}${alphabet[block - 1]}';
+          blockString = '$unit${alphabet[block - 1]}';
         } else {
           // Default to block as prefix
-          blockString = '${alphabet[block - 1]}${unit}';
+          blockString = '${alphabet[block - 1]}$unit';
         }
 
         numberArray.add(blockString);
@@ -168,7 +168,7 @@ class _AddUnitsState extends State<AddUnits> {
             //       ),
             //     ),
             //   ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             const Text('How are your units based?'),
             const SizedBox(height: 10),
             Row(children: [
@@ -182,8 +182,8 @@ class _AddUnitsState extends State<AddUnits> {
                   });
                 },
               ),
-              Text('Floors'),
-              SizedBox(width: 20.0),
+              const Text('Floors'),
+              const SizedBox(width: 20.0),
               Radio(
                 value: false,
                 activeColor: primaryDarkColor,
@@ -194,9 +194,9 @@ class _AddUnitsState extends State<AddUnits> {
                   });
                 },
               ),
-              Text('Blocks'),
+              const Text('Blocks'),
             ]),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             const Text('What is the prefix as you name your units?'),
             const SizedBox(height: 10),
             Column(
@@ -216,7 +216,7 @@ class _AddUnitsState extends State<AddUnits> {
                     Text(_selectedOption ? 'Alphabets' : 'Blocks(eg, A1)'),
                   ],
                 ),
-                SizedBox(width: 20.0),
+                const SizedBox(width: 20.0),
                 Row(
                   children: [
                     Radio(
@@ -234,7 +234,7 @@ class _AddUnitsState extends State<AddUnits> {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
 
@@ -283,7 +283,7 @@ class _AddUnitsState extends State<AddUnits> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   const Text('How many units exist in each block?'),
@@ -370,7 +370,7 @@ class _AddUnitsState extends State<AddUnits> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   const Text('Number of units per floor'),
@@ -411,7 +411,7 @@ class _AddUnitsState extends State<AddUnits> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                 ],
@@ -444,7 +444,7 @@ class _AddUnitsState extends State<AddUnits> {
                   //   curve: Curves.easeInOut,
                   // );
                 },
-                child: Text('Proceed'),
+                child: const Text('Proceed'),
               ),
             ),
           ],

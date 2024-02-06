@@ -512,8 +512,9 @@ class _PropertyDetailsState extends State<PropertyDetails> {
       "property_id": propertyProvider.property?.id,
       "month": selectedMonth.toString(),
       "year": currentYear.toString(),
-      "tenants": []
+      "tenant_ids": []
     };
+    print('This is my post data here while fetching tra');
     print(postData);
 
     final apiClient = ApiClient();
@@ -528,7 +529,9 @@ class _PropertyDetailsState extends State<PropertyDetails> {
         postData,
         headers: headers,
       );
-
+      print(headers);
+      print('This is my response here');
+      print(response);
       if (response != null && response['response'] != null) {
         var responseStatus = response['response']['status'];
 

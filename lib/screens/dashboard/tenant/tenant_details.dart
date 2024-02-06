@@ -109,7 +109,9 @@ class _ViewTenantState extends State<ViewTenant> {
               : Column(
                   children: [
                     Text(
-                      tenantDetails['invoices'].isNotEmpty ? tenantDetails['invoices'][0]['tenant'].toString() : "None",
+                      tenantDetails['invoices'].isNotEmpty
+                          ? tenantDetails['invoices'][0]['tenant'].toString()
+                          : "None",
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     const SizedBox(height: 10),

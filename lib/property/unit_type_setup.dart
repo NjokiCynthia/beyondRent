@@ -59,7 +59,7 @@ class _UnitTypesState extends State<UnitTypes> {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     const Row(
@@ -112,7 +112,7 @@ class _UnitTypesState extends State<UnitTypes> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     const Row(
@@ -165,7 +165,7 @@ class _UnitTypesState extends State<UnitTypes> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     const Row(
@@ -227,7 +227,7 @@ class _UnitTypesState extends State<UnitTypes> {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Visibility(
@@ -285,7 +285,7 @@ class _UnitTypesState extends State<UnitTypes> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           const Text('Preferred invoice date.'),
@@ -371,7 +371,7 @@ class _UnitTypesState extends State<UnitTypes> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     const Row(
@@ -433,7 +433,7 @@ class _UnitTypesState extends State<UnitTypes> {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     SizedBox(
@@ -456,7 +456,7 @@ class _UnitTypesState extends State<UnitTypes> {
                           });
                           Navigator.pop(context);
                         },
-                        child: Text('Confirm'),
+                        child: const Text('Confirm'),
                       ),
                     ),
                   ],
@@ -475,7 +475,7 @@ class _UnitTypesState extends State<UnitTypes> {
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Expanded(
@@ -484,7 +484,7 @@ class _UnitTypesState extends State<UnitTypes> {
               itemBuilder: (BuildContext context, int index) {
                 Map<String, dynamic> unitType = unitTypes[index];
                 return Padding(
-                  padding: EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsets.only(bottom: 10),
                   child: buildUnitListTile(
                     unitType['type'],
                     unitType['Price'],
@@ -510,21 +510,21 @@ class _UnitTypesState extends State<UnitTypes> {
                     curve: Curves.easeInOut,
                   );
                 },
-                child: Text('Proceed')),
+                child: const Text('Proceed')),
           ),
         ],
       ),
       floatingActionButton: Builder(
         builder: (BuildContext innerContext) {
           return Align(
-            alignment: Alignment(1.0, 0.85),
+            alignment: const Alignment(1.0, 0.85),
             child: FloatingActionButton(
               backgroundColor: primaryDarkColor,
               onPressed: () {
                 _showBottomSheet(context);
               },
               tooltip: 'Open Bottom Sheet',
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             ),
           );
         },

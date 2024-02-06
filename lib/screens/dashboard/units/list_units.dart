@@ -23,12 +23,10 @@ class _UnitsState extends State<Units> {
   bool unitsFetched = false;
 
   fetchUnitDetails() async {
-    print('I am here to fetch units information');
-    if (_mounted) {
-      setState(() {
-        unitDetailsLoading = true;
-      });
-    }
+    print('I am here to fetch unit details');
+    setState(() {
+      unitDetailsLoading = true;
+    });
 
     final propertyProvider = Provider.of<PropertyProvider>(
       context,
@@ -59,16 +57,15 @@ class _UnitsState extends State<Units> {
 
       if (status == 1) {
         var units = responseData['units'];
-        if (_mounted) {
-          setState(() {
-            propertyUnitsList = units;
-            // Update other UI elements with the new data
-            // For example, you can access other values like this:
-            // var totalUnits = responseData['total_units'];
-            // var totalVacantUnits = responseData['total_vacant_units'];
-            // // Update UI elements with totalUnits and totalVacantUnits
-          });
-        }
+
+        setState(() {
+          propertyUnitsList = units;
+          // Update other UI elements with the new data
+          // For example, you can access other values like this:
+          var totalUnits = responseData['total_units'];
+          var totalVacantUnits = responseData['total_vacant_units'];
+          // Update UI elements with totalUnits and totalVacantUnits
+        });
       } else {
         // Handle other status cases if needed
       }
@@ -76,25 +73,19 @@ class _UnitsState extends State<Units> {
       // Handle the error
       // You might want to log or display an error message
     } finally {
-      if (_mounted) {
-        setState(() {
-          unitDetailsLoading = false;
-        });
-      }
+      setState(() {
+        unitDetailsLoading = false;
+      });
     }
   }
 
   bool unitsLoading = true;
 
-  static const String CACHE_KEY_PROPERTY_UNITS = 'cachedPropertyUnits';
-
-  fetchPropertyUnits(BuildContext context) async {
-    print('I am here to fetch units');
-    if (_mounted) {
-      setState(() {
-        unitsLoading = true;
-      });
-    }
+  fetchPropertyUnits() async {
+    print('I am here to fetch property units');
+    setState(() {
+      unitsLoading = true;
+    });
     final propertyProvider = Provider.of<PropertyProvider>(
       context,
       listen: false,
@@ -107,81 +98,50 @@ class _UnitsState extends State<Units> {
       // "upper_limit": 20
     };
 
+    final apiClient = ApiClient();
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
     try {
-      // Check if cached data exists for property units
-      final cachedData =
-          await DataCacheManager.loadDataFromCache(CACHE_KEY_PROPERTY_UNITS);
-
-      if (cachedData != null && _mounted) {
-        // Data exists in cache, load it
-        setState(() {
-          propertyUnitsList = cachedData as List;
-        });
-      } else {
-        // No cached data, fetch from API
-        final apiClient = ApiClient();
-        final headers = {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        };
-
-        final response = await apiClient.post('/mobile/units/get_all', postData,
-            headers: headers);
-
+      await apiClient
+          .post('/mobile/units/get_all', postData, headers: headers)
+          .then((response) {
         var status = response['response']['status'];
         if (status == 1) {
           var units = response['response']['units'];
-          // Cache the fetched data
-          await DataCacheManager.saveDataToCache(
-              CACHE_KEY_PROPERTY_UNITS, units);
-
-          if (_mounted) {
-            setState(() {
-              propertyUnitsList = units;
-            });
-          }
-          print('this is my units fetched');
-          print(response['response']['units']);
+          print('here is my response for units list');
+          print(response);
+          setState(() {
+            propertyUnitsList = units;
+          });
         }
-      }
+      }).catchError((error) {
+        // Handle the error
+        return;
+      });
+      setState(() {
+        unitsLoading = false;
+      });
     } catch (e) {
-      if (_mounted) {
-        setState(() {
-          unitsLoading = false;
-        });
-      }
-    } finally {
-      if (_mounted) {
-        setState(() {
-          unitsLoading = false;
-        });
-      }
+      setState(() {
+        unitsLoading = false;
+      });
     }
   }
 
   Future<void> _refreshUnits(BuildContext context) async {
     // Fetch units data here
-    await fetchPropertyUnits(context);
+    await fetchPropertyUnits();
   }
-
-  bool _mounted = false;
 
   @override
   void initState() {
     super.initState();
-    _mounted = true;
     fetchUnitDetails();
-    if (!unitsFetched) {
-      fetchPropertyUnits(context);
-      unitsFetched = true;
-    }
-  }
 
-  @override
-  void dispose() {
-    DataCacheManager.clearCache(CACHE_KEY_PROPERTY_UNITS);
-    _mounted = false;
-    super.dispose();
+    fetchPropertyUnits();
   }
 
   @override
@@ -211,7 +171,7 @@ class _UnitsState extends State<Units> {
                           PageTransitionAnimation.cupertino,
                     ).then(
                       (_) => setState(() {
-                        fetchPropertyUnits(context);
+                        fetchPropertyUnits();
                       }),
                     );
                   },
@@ -407,7 +367,7 @@ class _UnitsState extends State<Units> {
                                                     .cupertino,
                                           ).then(
                                             (_) => setState(() {
-                                              fetchPropertyUnits(context);
+                                              fetchPropertyUnits();
                                             }),
                                           );
                                         },

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
-import 'package:x_rent/property/tenant_setup.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
 
@@ -28,13 +27,13 @@ class _UnitPricingState extends State<UnitPricing> {
       context: context,
       builder: (BuildContext context) {
         return Container(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Assign unit types to the houses'),
-              SizedBox(height: 20.0),
+              const Text('Assign unit types to the houses'),
+              const SizedBox(height: 20.0),
               DropdownButtonFormField<String>(
                 value: selectedUnitType,
                 items: [
@@ -86,18 +85,18 @@ class _UnitPricingState extends State<UnitPricing> {
                   ),
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(width: 1.0, color: primaryDarkColor),
+                      side: const BorderSide(width: 1.0, color: primaryDarkColor),
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text(
+                    child: const Text(
                       'Cancel',
                       style: TextStyle(color: primaryDarkColor),
                     ),
@@ -108,7 +107,7 @@ class _UnitPricingState extends State<UnitPricing> {
                     onPressed: () {
                       Navigator.of(context).pop(); // Close the bottom sheet
                     },
-                    child: Text('Confirm'),
+                    child: const Text('Confirm'),
                   ),
                 ],
               ),
@@ -176,7 +175,7 @@ class _UnitPricingState extends State<UnitPricing> {
                   int unitPrice = getPriceForUnitType(unitType);
                   return Card(
                     child: Container(
-                      padding: EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: Column(
                         children: <Widget>[
                           CheckboxListTile(
@@ -190,7 +189,7 @@ class _UnitPricingState extends State<UnitPricing> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'House number',
                                       style: TextStyle(
                                           fontSize: 14,
@@ -199,14 +198,14 @@ class _UnitPricingState extends State<UnitPricing> {
                                     ),
                                     Text(
                                       unitNumber,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600,
                                           letterSpacing: 0.5),
                                     )
                                   ],
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
                                 Row(
@@ -215,7 +214,7 @@ class _UnitPricingState extends State<UnitPricing> {
                                   children: [
                                     Text(
                                       unitType,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           color: Colors.grey,
                                           fontSize: 12,
                                           fontWeight: FontWeight.w600,
@@ -261,19 +260,19 @@ class _UnitPricingState extends State<UnitPricing> {
                       curve: Curves.easeInOut,
                     );
                   },
-                  child: Text('Proceed')))
+                  child: const Text('Proceed')))
         ],
       ),
       floatingActionButton: _selectedItems.contains(true)
           ? Align(
-              alignment: Alignment(1.0, 0.85),
+              alignment: const Alignment(1.0, 0.85),
               child: FloatingActionButton(
                 backgroundColor: primaryDarkColor,
                 onPressed: () {
                   _showBottomSheet(context);
                 },
                 tooltip: 'Open Alert',
-                child: Icon(Icons.arrow_circle_up_sharp),
+                child: const Icon(Icons.arrow_circle_up_sharp),
               ),
             )
           : null,

@@ -744,6 +744,8 @@ class _StepPage1State extends State<StepPage1> {
                 "location": propertyLocationController.text,
               },
               onSuccess: (res) {
+                print('the response is');
+                print(res);
                 if (!buttonError) {
                   print('<<<<<<<<<<< res >>>>>>>>>>>>>>');
                   print(res);

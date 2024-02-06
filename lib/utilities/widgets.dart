@@ -948,6 +948,8 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
 
     try {
       final response = await _makeRequest();
+      print('the error response');
+      print(response);
       setState(() {
         isButtonDisabled = false;
         isLoading = false;
@@ -991,7 +993,6 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
   }
 
   Future<Response<dynamic>> _makeRequest() async {
-    // Retrieve user information from provider
     final headers = {
       'Versioncode': 99,
       'version': 99,

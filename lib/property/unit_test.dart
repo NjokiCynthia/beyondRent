@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
-import 'package:x_rent/screens/dashboard.dart';
-import 'package:x_rent/utilities/constants.dart';
-import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -72,13 +69,13 @@ class _AddUnitsState extends State<AddUnits> {
         String blockString = '';
         if (useBlockAsPrefix) {
           // Block as prefix (e.g., A1)
-          blockString = '${alphabet[block - 1]}${unit}';
+          blockString = '${alphabet[block - 1]}$unit';
         } else if (useHouseNoAsPrefix) {
           // House number as prefix (e.g., 1A)
-          blockString = '${unit}${alphabet[block - 1]}';
+          blockString = '$unit${alphabet[block - 1]}';
         } else {
           // Default to block as prefix
-          blockString = '${alphabet[block - 1]}${unit}';
+          blockString = '${alphabet[block - 1]}$unit';
         }
 
         numberArray.add(blockString);
@@ -192,8 +189,8 @@ class _AddUnitsState extends State<AddUnits> {
                         });
                       },
                     ),
-                    Text('Floors'),
-                    SizedBox(width: 20.0),
+                    const Text('Floors'),
+                    const SizedBox(width: 20.0),
                     Radio(
                       value: false,
                       activeColor: primaryDarkColor,
@@ -204,15 +201,15 @@ class _AddUnitsState extends State<AddUnits> {
                         });
                       },
                     ),
-                    Text('Blocks'),
+                    const Text('Blocks'),
                   ]),
-                  SizedBox(height: 10.0),
+                  const SizedBox(height: 10.0),
                   const Text('How do you name your units?'),
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      Text('Prefix:'),
-                      SizedBox(width: 20.0),
+                      const Text('Prefix:'),
+                      const SizedBox(width: 20.0),
                       Radio(
                         value: true,
                         activeColor: primaryDarkColor,
@@ -224,7 +221,7 @@ class _AddUnitsState extends State<AddUnits> {
                         },
                       ),
                       Text(_selectedOption ? 'Alphabets' : 'Blocks(eg, A1)'),
-                      SizedBox(width: 20.0),
+                      const SizedBox(width: 20.0),
                       Radio(
                         value: false,
                         activeColor: primaryDarkColor,
@@ -238,7 +235,7 @@ class _AddUnitsState extends State<AddUnits> {
                       Text(_selectedOption ? 'Floors' : 'House No.'),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
 
@@ -287,7 +284,7 @@ class _AddUnitsState extends State<AddUnits> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         const Text('How many units exist in each block?'),
@@ -374,7 +371,7 @@ class _AddUnitsState extends State<AddUnits> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         const Text('Number of units per floor'),
@@ -415,7 +412,7 @@ class _AddUnitsState extends State<AddUnits> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                       ],
@@ -434,7 +431,7 @@ class _AddUnitsState extends State<AddUnits> {
                         useHouseNoAsPrefix: !_selectedNaming,
                       );
                     },
-                    child: Text('Proceed'),
+                    child: const Text('Proceed'),
                   ),
                   // SizedBox(
                   //   width: double.infinity,
@@ -521,7 +518,7 @@ class _AddUnitsState extends State<AddUnits> {
             title: const Text('Price set'),
             content: TextFormField(
               keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(hintText: 'enter price'),
+              decoration: const InputDecoration(hintText: 'enter price'),
             ),
             state: _currentStep == 1 ? StepState.editing : StepState.complete,
             isActive: _currentStep == 1,

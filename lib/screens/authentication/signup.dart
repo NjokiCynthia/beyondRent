@@ -4,9 +4,6 @@ import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/screens/authentication/login.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
-import 'package:x_rent/property/property_list.dart';
-import 'package:x_rent/providers/user_provider.dart';
-import 'package:provider/provider.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});

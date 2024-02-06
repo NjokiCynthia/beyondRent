@@ -7,7 +7,6 @@ import 'package:x_rent/models/branch_model.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/screens/dashboard.dart';
 import 'package:x_rent/utilities/constants.dart';
-import 'package:x_rent/utilities/widgets.dart';
 
 import '../providers/property_provider.dart';
 
@@ -214,7 +213,7 @@ class _AccountSetupState extends State<AccountSetup> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             const Row(
@@ -297,7 +296,7 @@ class _AccountSetupState extends State<AccountSetup> {
                 });
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             if (selectedBankValue != null)
@@ -350,7 +349,7 @@ class _AccountSetupState extends State<AccountSetup> {
                         : selectedBranchValue,
                     items: bankBranchesDropdownList.isEmpty
                         ? [
-                            DropdownMenuItem(
+                            const DropdownMenuItem(
                                 value: '', child: Text('Loading branches...'))
                           ]
                         : bankBranchesDropdownList.map((branch) {
@@ -367,7 +366,7 @@ class _AccountSetupState extends State<AccountSetup> {
                   )
                 ],
               ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             const Row(
@@ -418,7 +417,7 @@ class _AccountSetupState extends State<AccountSetup> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             const Row(
@@ -469,7 +468,7 @@ class _AccountSetupState extends State<AccountSetup> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             SizedBox(
@@ -491,7 +490,7 @@ class _AccountSetupState extends State<AccountSetup> {
                       curve: Curves.easeInOut,
                     );
                   },
-                  child: Text('Proceed')),
+                  child: const Text('Proceed')),
             )
             // CustomRequestButton(
             //   cookie:
