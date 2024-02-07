@@ -50,51 +50,6 @@ class _AddUnitsState extends State<AddUnits> {
   bool buttonError = true;
   String buttonErrorMessage = 'Enter all fields';
 
-  int _currentStep = 0;
-  List<String> createNumberArray({
-    required int blocks,
-    required String blockIdentifier,
-    required int unitsPerBlock,
-    required bool useBlockAsPrefix,
-    required bool useHouseNoAsPrefix,
-  }) {
-    List<String> numberArray = [];
-    String alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-    if (blockIdentifier.isEmpty || blocks <= 0 || unitsPerBlock <= 0) {
-      // Handle the case where block identifier is empty or invalid blocks/units
-      return numberArray;
-    }
-
-    for (int block = 1; block <= blocks; block++) {
-      for (int unit = 1; unit <= unitsPerBlock; unit++) {
-        String blockString = '';
-        if (useBlockAsPrefix) {
-          // Block as prefix (e.g., A1)
-          blockString = '${alphabet[block - 1]}$unit';
-        } else if (useHouseNoAsPrefix) {
-          // House number as prefix (e.g., 1A)
-          blockString = '$unit${alphabet[block - 1]}';
-        } else {
-          // Default to block as prefix
-          blockString = '${alphabet[block - 1]}$unit';
-        }
-
-        numberArray.add(blockString);
-      }
-    }
-
-    setState(() {
-      unitsToSend = numberArray;
-    });
-
-    print(
-        'unitsToSend ----------------------------------------------------------------');
-    print(unitsToSend);
-
-    return numberArray;
-  }
-
   propertyInputValidator() async {
     if (blockNoController.text == '') {
       setState(() {
@@ -140,7 +95,8 @@ class _AddUnitsState extends State<AddUnits> {
 
   String? selectedUnit;
 
-  bool _value = false;
+  String unitPreference = '1';
+
   @override
   Widget build(BuildContext context) {
     final propertyProvider = Provider.of<PropertyProvider>(
@@ -179,6 +135,7 @@ class _AddUnitsState extends State<AddUnits> {
                 onChanged: (value) {
                   setState(() {
                     _selectedOption = value as bool;
+                    
                   });
                 },
               ),
@@ -213,7 +170,9 @@ class _AddUnitsState extends State<AddUnits> {
                         });
                       },
                     ),
-                    Text(_selectedOption ? 'Alphabets' : 'Blocks(eg, A1)'),
+                    Text(_selectedOption
+                        ? 'Alphabets (eg, D1)'
+                        : 'Blocks (eg, A1)'),
                   ],
                 ),
                 const SizedBox(width: 20.0),
@@ -229,7 +188,9 @@ class _AddUnitsState extends State<AddUnits> {
                         });
                       },
                     ),
-                    Text(_selectedOption ? 'Floors' : 'House No.'),
+                    Text(_selectedOption
+                        ? 'Floors (eg, 1D)'
+                        : 'House No (eg.1D)'),
                   ],
                 ),
               ],
@@ -418,35 +379,82 @@ class _AddUnitsState extends State<AddUnits> {
               ),
             ),
 
-            const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: primaryDarkColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-                onPressed: () {
-                  // Call createNumberArray here
-                  createNumberArray(
-                    blocks: int.parse(blockNoController.text),
-                    blockIdentifier: 'A',
-                    unitsPerBlock: int.parse(blockUnitsNoController.text),
-                    useBlockAsPrefix: _selectedNaming,
-                    useHouseNoAsPrefix: !_selectedNaming,
+            const SizedBox(height: 30),
+            CustomRequestButton(
+              cookie:
+                  'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
+              authorization: 'Bearer ${userProvider.user?.token}',
+              buttonError: buttonError,
+              buttonErrorMessage: buttonErrorMessage,
+              url: '/mobile/units/generate_units',
+              method: 'POST',
+              buttonText: 'Proceed',
+              body: {
+                "property_id": propertyProvider.property?.id,
+
+                "number_of_floors": floorNoController.text,
+                "unit_based_on": 2, // 1 for block 2 for floor
+                "number_of_blocks": blockNoController.text,
+                "number_of_units_per_block": blockUnitsNoController.text,
+                "number_of_units_per_floor": unitNoController.text,
+                "floor_naming_options": "1",
+                "block_naming_options": "1"
+              },
+              onSuccess: (res) {
+                print('<<<<<<<<<<< res >>>>>>>>>>>>>>');
+                print(res);
+                if (res['isSuccessful'] == true) {
+                  var responseData = res['data']['response'];
+                  if (responseData['status'] == 1) {
+                    print('Here is my response while generating units');
+                    var generatedUnits = responseData['data'];
+                    print(generatedUnits);
+
+                    pageController.animateToPage(
+                      3,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  } else {
+                    showToast(
+                      context,
+                      'Error!',
+                      responseData['message'],
+                      Colors.red,
+                    );
+                  }
+                } else {
+                  showToast(
+                    context,
+                    'Error!',
+                    "Error saving units",
+                    Colors.red,
                   );
-                  // pageController.animateToPage(
-                  //   3,
-                  //   duration: const Duration(milliseconds: 300),
-                  //   curve: Curves.easeInOut,
-                  // );
-                },
-                child: const Text('Proceed'),
-              ),
+                }
+              },
             ),
+            // SizedBox(
+            //   width: double.infinity,
+            //   height: 50,
+            //   child: ElevatedButton(
+            //     style: ElevatedButton.styleFrom(
+            //       backgroundColor: primaryDarkColor,
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(8.0),
+            //       ),
+            //     ),
+            //     onPressed: () {
+            //       // Call createNumberArray here
+
+            //       // pageController.animateToPage(
+            //       //   3,
+            //       //   duration: const Duration(milliseconds: 300),
+            //       //   curve: Curves.easeInOut,
+            //       // );
+            //     },
+            //     child: const Text('Proceed'),
+            //   ),
+            // ),
           ],
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:x_rent/providers/tenant_list.dart';
 import 'package:x_rent/providers/tenants_provider.dart';
 import 'package:x_rent/screens/authentication/login.dart';
 import 'package:x_rent/screens/intro_screens/onboarding_page.dart';
@@ -28,7 +29,9 @@ void main() async {
         ),
         ChangeNotifierProvider<TenantsProvider>.value(
           value: TenantsProvider(),
-        )
+        ),
+        ChangeNotifierProvider(
+      create: (context) => TenantListModel(),)
       ],
       child: MyApp(isFirstLaunch: isFirstLaunch),
       //const MyApp(),

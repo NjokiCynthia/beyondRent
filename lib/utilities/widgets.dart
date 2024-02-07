@@ -948,8 +948,7 @@ class _CustomRequestButtonState extends State<CustomRequestButton> {
 
     try {
       final response = await _makeRequest();
-      print('the error response');
-      print(response);
+
       setState(() {
         isButtonDisabled = false;
         isLoading = false;

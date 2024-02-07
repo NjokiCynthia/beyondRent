@@ -42,6 +42,7 @@ class _WithdrawalsState extends State<Withdrawals>
   // }
 
   fetchWithdrawals(int status) async {
+    print('I want to fetch withdrawals for status $status');
     setState(() {
       withdrawalListLoaded = false;
     });
@@ -62,6 +63,8 @@ class _WithdrawalsState extends State<Withdrawals>
       "sort_by": "date_desc",
       "status": [status],
     };
+    print(id);
+    print(propertyProvider.property?.id);
 
     final apiClient = ApiClient();
     final headers = {

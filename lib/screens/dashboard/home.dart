@@ -29,8 +29,72 @@ class _HomeState extends State<Home> {
   bool propertiesLoading = true;
   List userPropertyList = [];
 
+  List propertyAccounts = [];
+  bool propertyAccountsLoading = true;
+
+  String? firstBankId;
+  String? secondBankId;
+
+  fetchPropertiesAccounts(context) async {
+    print('I am here to fetch my properties accounts');
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
+    final token = userProvider.user?.token;
+    final userID = userProvider.user?.id;
+
+    final postData = {
+      "property_id": propertyProvider.property?.id,
+      'user_id': userID,
+    };
+    final apiClient = ApiClient();
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    await apiClient
+        .post('/mobile/bank_accounts/get_group_bank_accounts_list', postData,
+            headers: headers)
+        .then((response) {
+      print('Here is my properties bank accounts');
+      print(response);
+      var responseStatus = response['response']['status'];
+      if (responseStatus == 1) {
+        setState(() {
+          propertyAccounts = response['response']['banks'];
+        });
+        if (propertyAccounts.length >= 2) {
+          firstBankId = propertyAccounts[0]['id'];
+          secondBankId = propertyAccounts[1]['id'];
+          print('the first bank id');
+          print('$firstBankId');
+        }
+      }
+      setState(() {
+        propertyAccountsLoading = false;
+      });
+      return response;
+    }).catchError((error) {
+      // Handle the error
+      setState(() {
+        propertyAccountsLoading = false;
+      });
+      return {
+        "response": {
+          "status": 4,
+          "message": "Banks not found",
+          "time": 1693471190
+        }
+      };
+    });
+  }
+
   fetchPropertiesByUser(context) async {
-    print('I am here to fetch my properties');
     final userProvider = Provider.of<UserProvider>(
       context,
       listen: false,
@@ -92,7 +156,6 @@ class _HomeState extends State<Home> {
   List<Map<String, dynamic>> transactionsList = [];
 
   fetchTransactionsList() async {
-    print('I am here to load transactions paid');
     final userProvider = Provider.of<UserProvider>(
       context,
       listen: false,
@@ -104,8 +167,6 @@ class _HomeState extends State<Home> {
     final token = userProvider.user?.token;
 
     final postData = {"property_id": propertyProvider.property?.id};
-    print('This is my property id while fetching transactions');
-    print(propertyProvider.property?.id);
 
     final apiClient = ApiClient();
     final headers = {
@@ -122,13 +183,12 @@ class _HomeState extends State<Home> {
 
       if (response != null && response['response'] != null) {
         var responseStatus = response['response']['status'];
+        print('tis is my transactions');
+        print(response);
 
         if (responseStatus == 1) {
           var deposits = response['response']['deposits'];
           if (deposits != null && deposits is List) {
-            print('These are my transaction details below here >>>>>>>>>>>');
-            print(deposits);
-
             setState(() {
               transactionsList = deposits.cast<Map<String, dynamic>>();
             });
@@ -152,7 +212,7 @@ class _HomeState extends State<Home> {
   List<String> bankModelsDropdownList = [];
   List<Banks> bankModels = [];
   Future<void> _fetchBanks(BuildContext context) async {
-    print('I am here to fetch user banks');
+    print('Fetching banks');
     try {
       setState(() {
         fetchingBanks = true;
@@ -183,8 +243,6 @@ class _HomeState extends State<Home> {
         headers: headers,
       );
 
-      print('Banks Response: $response');
-
       setState(() {
         bankModels = [];
         bankModelsDropdownList = [];
@@ -194,10 +252,12 @@ class _HomeState extends State<Home> {
           response['response']['banks'] != null) {
         final data =
             List<Map<String, dynamic>>.from(response['response']['banks']);
+        print('These are the banks');
+        print(response);
 
         final tempBankModels = data.map((bankData) {
           return Banks(
-            id: bankData['id'].toString(),
+            id: bankData['bank_id'].toString(),
             accountNumber: bankData['account_number'].toString(),
             accountName: bankData['account_name'].toString(),
             bankBranch: bankData['bank_branch'].toString(),
@@ -354,10 +414,10 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    fetchPropertiesAccounts(context);
     _fetchBanks(context);
     fetchRentInfo();
     fetchRentInfoForCurrentMonth();
-
     fetchTransactionsList();
     fetchPropertiesByUser(context);
   }
@@ -373,6 +433,7 @@ class _HomeState extends State<Home> {
       context,
       listen: false,
     );
+    String withdrawalForValue = "5";
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -455,22 +516,35 @@ class _HomeState extends State<Home> {
                     items: [
                       const DropdownMenuItem(
                         child: Text('Expense Payment'),
-                        value: 'expense_payment',
+                        value: 'expense_payment', // 1 : Expense Payment,
                       ),
                       const DropdownMenuItem(
                         child: Text('Tenant Refund'),
-                        value: 'tenant_refund',
+                        value: 'tenant_refund', //2
                       ),
                       const DropdownMenuItem(
-                        child: Text('Account Transfer'),
                         value: 'account_transfer',
+                        child: Text('Account Transfer (Wallet to Bank)'), //5
                       ),
                     ],
                     onChanged: (value) {
                       setState(() {
                         selectedOption = value;
+                        // Update the withdrawalForValue based on the selected option
+                        if (value == 'expense_payment') {
+                          withdrawalForValue = "1";
+                        } else if (value == 'tenant_refund') {
+                          withdrawalForValue = "2";
+                        } else if (value == 'account_transfer') {
+                          withdrawalForValue = "5";
+                        }
                       });
                     },
+                    // onChanged: (value) {
+                    //   setState(() {
+                    //     selectedOption = value;
+                    //   });
+                    // },
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
@@ -546,7 +620,7 @@ class _HomeState extends State<Home> {
                                             decoration: InputDecoration(
                                               filled: true,
                                               fillColor: Colors.white,
-                                              hintText: 'ENTER AMOUNT',
+                                              hintText: 'Enter amount',
                                               labelStyle: MyTheme.darkTheme
                                                   .textTheme.bodyLarge!
                                                   .copyWith(color: Colors.grey),
@@ -599,13 +673,11 @@ class _HomeState extends State<Home> {
                                               "withdrawal_for": 5,
                                               "phone": "",
                                               "expense_category_id": "",
-                                              "bank_id": "9488",
-                                              "account_number":
-                                                  "01109123441200",
-                                              "account_name":
-                                                  "JAMES NJUGUNA NGURUI",
+                                              "bank_id": "1",
+                                              "account_number": "0160171977507",
+                                              "account_name": "CYNTHIA NJOKI",
                                               "transfer_from": "bank-9429",
-                                              "transfer_to": "bank-9488",
+                                              "transfer_to": "bank-9491",
                                               "tenant_id": "",
                                               "contribution_id": ""
                                             },
@@ -655,13 +727,6 @@ class _HomeState extends State<Home> {
                           },
                           child: const Text(
                             'SEND TO MOBILE',
-                            // style: TextStyle(
-                            //   fontSize: 10.0,
-                            //   fontFamily: 'Roboto',
-                            //   color: Colors.white,
-                            //   fontWeight: FontWeight.bold,
-                            //   letterSpacing: 1.0,
-                            // ),
                           ),
                         ),
                       ),
@@ -741,33 +806,6 @@ class _HomeState extends State<Home> {
                                       const SizedBox(
                                         height: 20,
                                       ),
-                                      // SizedBox(
-                                      //   width: double.infinity,
-                                      //   height: 48,
-                                      //   child: ElevatedButton(
-                                      //       style: ElevatedButton.styleFrom(
-                                      //           backgroundColor:
-                                      //               primaryDarkColor),
-                                      //       onPressed: () {
-                                      //         showToast(
-                                      //           context,
-                                      //           'Success!',
-                                      //           'Your withdrawal request is successful!',
-                                      //           mintyGreen,
-                                      //         );
-
-                                      //         Future.delayed(
-                                      //             const Duration(seconds: 2),
-                                      //             () {
-                                      //           Navigator.push(
-                                      //               context,
-                                      //               MaterialPageRoute(
-                                      //                   builder: ((context) =>
-                                      //                       const ListWithdrawals())));
-                                      //         });
-                                      //       },
-                                      //       child: const Text('CONFIRM')),
-                                      // )
                                       CustomRequestButton(
                                         cookie:
                                             'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
@@ -779,25 +817,40 @@ class _HomeState extends State<Home> {
                                         buttonText: 'CONFIRM',
                                         body: {
                                           "user_id": userID,
-                                          'property_id': propertyProvider
+                                          "property_id": propertyProvider
                                                   .property?.id
                                                   .toString() ??
                                               '',
                                           "amount": amountController.text,
                                           "recipient": "3",
-                                          "withdrawal_for": 5,
+                                          "withdrawal_for": withdrawalForValue,
                                           "phone": "",
                                           "expense_category_id": "",
-                                          "bank_id": "9488",
-                                          "account_number": "01109123441200",
-                                          "account_name":
-                                              "JAMES NJUGUNA NGURUI",
-                                          "transfer_from": "bank-9429",
-                                          "transfer_to": "bank-9488",
+                                          "bank_id": bankModels.isNotEmpty
+                                              ? bankModels[0].id
+                                              : "",
+                                          "account_number":
+                                              bankModels.isNotEmpty
+                                                  ? bankModels[0].accountNumber
+                                                  : "",
+                                          "account_name": bankModels.isNotEmpty
+                                              ? bankModels[0].accountName
+                                              : "",
+                                          "transfer_to": firstBankId != null
+                                              ? "bank-${firstBankId}"
+                                              : "",
+                                          "transfer_from":
+                                              //"bank-9492",
+                                              secondBankId != null
+                                                  ? "bank-${secondBankId}"
+                                                  : "",
                                           "tenant_id": "",
                                           "contribution_id": ""
                                         },
                                         onSuccess: (res) {
+                                          print('This is the id i am sending');
+                                          print(firstBankId);
+
                                           print(
                                               '<<<<<<<<<<< res >>>>>>>>>>>>>>');
                                           print(res);
