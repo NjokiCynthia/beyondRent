@@ -26,9 +26,9 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    namespace "com.example.x_rent"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
+    namespace "com.example.beyondRent"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -43,9 +43,10 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
+
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.x_rent"
+        applicationId "com.example.beyondRent"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion flutter.minSdkVersion
@@ -53,11 +54,31 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
+    signingConfigs {
+        release {
 
+            keyAlias 'key0'
+            keyPassword 'QWERTY123'
+            storeFile file('C:\\Users\\DVEa-Dev-Laptop\\Flutter_projects\\X-rent-mobile-Application\\key\\key.jks')
+            storePassword 'QWERTY123'
+        }
+        // You can define additional signing configurations for different build types if needed.
+        debug {
+            // Define debug signing configurations if necessary.
+            keyAlias 'key0'
+            keyPassword 'QWERTY123'
+            storeFile file('C:\\Users\\DVEa-Dev-Laptop\\Flutter_projects\\X-rent-mobile-Application\\key\\key.jks')
+            storePassword 'QWERTY123'
+        }
+    }
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
             signingConfig signingConfigs.debug
         }
     }
