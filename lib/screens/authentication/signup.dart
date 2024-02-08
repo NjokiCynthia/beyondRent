@@ -362,26 +362,14 @@ class _SignupState extends State<Signup> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      SizedBox(
+                        height: 20,
+                      ),
                       Container(
-                        margin: const EdgeInsets.only(top: 20, bottom: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(right: 10),
-                              child: Image.asset(
-                                'assets/images/icons/logo.png',
-                                width: 40,
-                              ),
-                            ),
-                            Text(
-                              'beyondRent',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge!
-                                  .copyWith(color: Colors.black),
-                            )
-                          ],
+                        margin: const EdgeInsets.only(right: 10),
+                        child: Image.asset(
+                          'assets/images/icons/logo.png',
+                          width: 250,
                         ),
                       ),
                       form,

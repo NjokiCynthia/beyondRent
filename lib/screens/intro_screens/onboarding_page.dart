@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
               style: Theme.of(context)
                   .textTheme
                   .bodySmall!
-                  .copyWith(color: Colors.black),
+                  .copyWith(color: Colors.white),
             ),
           ),
         ),
