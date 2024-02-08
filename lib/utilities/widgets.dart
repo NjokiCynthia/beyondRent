@@ -441,6 +441,11 @@ class TransactionCard extends StatelessWidget {
     final backgroundColor = getRandomColor();
     final firstLetter = tenant != null && tenant!.isNotEmpty ? tenant![0] : '';
 
+    final tenantName = tenant
+            ?.replaceAllMapped(RegExp(r'\s*\([^)]*\)'), (match) => '')
+            .trim() ??
+        '';
+
     return Container(
       padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
       decoration: BoxDecoration(
@@ -477,7 +482,7 @@ class TransactionCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('$tenant'),
+                      Text('$tenantName'),
                       const SizedBox(
                         height: 10,
                       ),
