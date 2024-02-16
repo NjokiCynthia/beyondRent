@@ -17,8 +17,9 @@ String propertyUserEmail = 'cynthia@gmail.com';
 // Selected Property Units
 List propertyUnitsList = [];
 
-// Selected Property Units
 List transactionsList = [];
+
+List tenantList = [];
 
 //Selected tenants
 List tenantsList = [];

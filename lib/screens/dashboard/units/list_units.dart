@@ -212,6 +212,7 @@ class _UnitsState extends State<Units> {
                       SafeArea(
                           top: false,
                           child: Container(
+                            width: double.infinity,
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
                                 begin: Alignment.centerLeft,

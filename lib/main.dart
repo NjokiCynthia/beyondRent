@@ -64,7 +64,6 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         home: isFirstLaunch ? const SplashScreen() : const Login(),
-        //const SplashScreen(),
         routes: {
           '/home': (_) => const HomePage(),
         },

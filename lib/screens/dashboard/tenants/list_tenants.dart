@@ -3,58 +3,28 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/providers/property_provider.dart';
-import 'package:x_rent/providers/tenant_list.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/screens/dashboard/tenant/tenant_details.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 
-class ListTenants extends StatelessWidget {
-  const ListTenants({Key? key}) : super(key: key);
+class ListTenants extends StatefulWidget {
+  const ListTenants({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: backColor.withOpacity(0.02),
-        elevation: 0,
-        leading: GestureDetector(
-          onTap: () {
-            // Navigate back to the home screen
-            Navigator.popUntil(context, (route) => true);
-            bottomNavigationController.jumpToTab(0);
-          },
-          child: const Icon(
-            Icons.arrow_back_ios,
-            color: Color.fromARGB(255, 114, 198, 117),
-          ),
-        ),
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Tenants List',
-              style: TextStyle(color: Colors.black, fontSize: 16),
-            ),
-          ],
-        ),
-      ),
-      body: const _TenantsListBody(),
-    );
-  }
+  State<ListTenants> createState() => _ListTenantsState();
 }
 
-class _TenantsListBody extends StatefulWidget {
-  const _TenantsListBody({Key? key}) : super(key: key);
+class _ListTenantsState extends State<ListTenants> {
+  bool tenantListLoaded = true;
 
-  @override
-  __TenantsListBodyState createState() => __TenantsListBodyState();
-}
+  List selectedTenants = [2];
 
-class __TenantsListBodyState extends State<_TenantsListBody> {
-  bool tenantListLoaded = false;
-
-  Future<void> fetchTenantsList(BuildContext context) async {
+  fetchTenantsList() async {
+    print('i am here to fetch tenant list');
+    setState(() {
+      tenantListLoaded = true;
+    });
     final userProvider = Provider.of<UserProvider>(
       context,
       listen: false,
@@ -74,41 +44,62 @@ class __TenantsListBodyState extends State<_TenantsListBody> {
     try {
       var response = await apiClient.post('/mobile/tenants/get_all', postData,
           headers: headers);
-      var responseStatus = response['response']['status'];
-      if (responseStatus == 1) {
-        print('These are my tenant details below here >>>>>>>>>>>');
-        print(response['response']['tenants']);
-        final tenantListProvider = Provider.of<TenantListProvider>(
-          context,
-          listen: false,
-        );
-        tenantListProvider.updateTenantList(response['response']['tenants']);
-        setState(() {
-          tenantListLoaded = true; // Set loaded to true after fetching
-        });
+      if (response != null && response['response'] != null) {
+        var responseStatus = response['response']['status'];
+        print('this are my tenants list below here >>>>>>>>>>>');
+        print(response);
+        if (responseStatus == 1) {
+          var tenants = response['response']['tenants'];
+          if (tenants != null) {
+            setState(() {
+              tenantList = tenants;
+            });
+          }
+        }
       }
     } catch (e) {
       print('Error');
       print(e);
     }
+    setState(() {
+      tenantListLoaded = false;
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    fetchTenantsList(context); // Fetch tenants list when screen is initialized
-  }
-
-  Future<void> _handleRefresh() async {
-    await fetchTenantsList(context);
+    fetchTenantsList();
   }
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: _handleRefresh,
-      color: primaryDarkColor,
-      child: SafeArea(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: backColor.withOpacity(0.02),
+        elevation: 0,
+        leading: GestureDetector(
+          onTap: () {
+            // Navigate back to the home screen
+            Navigator.popUntil(context, (route) => true);
+            bottomNavigationController.jumpToTab(0);
+          },
+          child: const Icon(Icons.arrow_back_ios, color: primaryDarkColor),
+        ),
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Tenants List',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
+      ),
+      body: SafeArea(
         child: Column(
           children: [
             Container(
@@ -125,24 +116,21 @@ class __TenantsListBodyState extends State<_TenantsListBody> {
                   ],
                 ),
               ),
-              // Change this color as needed
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text(
-                      'Total Number of Tenants:',
+                    const Text(
+                      'Total Number of Tenants',
                     ),
-                    Consumer<TenantListProvider>(
-                      builder: (context, tenantListProvider, _) => Text(
-                        '${tenantListProvider.tenantList.length}',
-                        style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    )
+                    Text(
+                      '${tenantList.length}',
+                      style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
               ),
@@ -151,141 +139,124 @@ class __TenantsListBodyState extends State<_TenantsListBody> {
               child: SafeArea(
                 top: false,
                 child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  // child: tenantListLoaded == false // Check if data is loaded
-                  //     ? Center(
-                  //         child: SizedBox(
-                  //           child: CircularProgressIndicator(
-                  //             strokeWidth: 4,
-                  //             color: mintyGreen,
-                  //           ),
-                  //         ),
-                  //       )
-                  child: Consumer<TenantListProvider>(
-                    builder: (context, tenantListProvider, _) =>
-                        tenantListProvider.tenantList.isEmpty
-                            ? Center(child: const EmptyTenants())
-                            : ListView.builder(
-                                itemCount: tenantListProvider.tenantList.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(bottom: 10),
-                                    child: Column(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            final selectedTenantId = int.parse(
-                                                tenantListProvider
-                                                    .tenantList[index]['id']);
-                                            PersistentNavBarNavigator
-                                                .pushNewScreen(
-                                              context,
-                                              withNavBar: false,
-                                              pageTransitionAnimation:
-                                                  PageTransitionAnimation
-                                                      .cupertino,
-                                              screen: ViewTenant(
-                                                  tenantId: selectedTenantId),
-                                            );
-                                          },
-                                          child: ListTile(
-                                            leading: Container(
-                                              decoration: BoxDecoration(
+                    padding: const EdgeInsets.all(10),
+                    // child: tenantListLoaded == false
+                    //     ? Center(
+                    //         child: SizedBox(
+                    //           child: CircularProgressIndicator(
+                    //             strokeWidth: 4,
+                    //             color: mintyGreen,
+                    //           ),
+                    //         ),
+                    //       )
+                    //     :
+                    child: tenantList.isEmpty
+                        ? Center(child: const EmptyTenants())
+                        : ListView.builder(
+                            itemCount: tenantList.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        final selectedTenantId =
+                                            int.parse(tenantList[index]['id']);
+                                        PersistentNavBarNavigator.pushNewScreen(
+                                          context,
+                                          withNavBar: false,
+                                          pageTransitionAnimation:
+                                              PageTransitionAnimation.cupertino,
+                                          screen: ViewTenant(
+                                              tenantId: selectedTenantId),
+                                        );
+                                      },
+                                      child: ListTile(
+                                        leading: Container(
+                                            decoration: BoxDecoration(
                                                 color: primaryDarkColor
                                                     .withOpacity(0.1),
-                                                shape: BoxShape.circle,
+                                                shape: BoxShape.circle),
+                                            child: const Padding(
+                                              padding: EdgeInsets.all(8),
+                                              child: Icon(
+                                                Icons.person,
+                                                color: primaryDarkColor,
                                               ),
-                                              child: const Padding(
-                                                padding: EdgeInsets.all(8),
-                                                child: Icon(
-                                                  Icons.person,
-                                                  color: primaryDarkColor,
-                                                ),
-                                              ),
+                                            )),
+                                        title: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              '${tenantList[index]['first_name']} ${tenantList[index]['last_name']}',
                                             ),
-                                            title: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  '${tenantListProvider.tenantList[index]['first_name']} ${tenantListProvider.tenantList[index]['last_name']}',
-                                                ),
-                                                Text(
-                                                  '${tenantListProvider.tenantList[index]['phone']}',
-                                                )
-                                              ],
-                                            ),
-                                            subtitle: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
+                                            Text(
+                                              '${tenantList[index]['phone']}',
+                                            )
+                                          ],
+                                        ),
+                                        subtitle: Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 10),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
                                                 children: [
-                                                  Row(
-                                                    children: [
-                                                      const Text(
-                                                        'House Number:',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal,
-                                                            fontSize: 13,
-                                                            color: Colors.grey),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Text(
-                                                        '${tenantListProvider.tenantList[index]['house_number']}',
-                                                      ),
-                                                    ],
+                                                  const Text(
+                                                    'House Number:',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        fontSize: 13,
+                                                        color: Colors.grey),
                                                   ),
-                                                  Container(
-                                                    decoration: BoxDecoration(
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                      '${tenantList[index]['house_number']}'),
+                                                ],
+                                              ),
+                                              Container(
+                                                  decoration: BoxDecoration(
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               12),
                                                       color: primaryDarkColor
-                                                          .withOpacity(0.1),
-                                                    ),
-                                                    child: const Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 10,
-                                                          right: 10,
-                                                          top: 2,
-                                                          bottom: 2),
-                                                      child: Text(
-                                                        'View rent statement',
-                                                        style: TextStyle(
+                                                          .withOpacity(0.1)),
+                                                  child: const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 10,
+                                                        right: 10,
+                                                        top: 2,
+                                                        bottom: 2),
+                                                    child: Text(
+                                                      'View rent statement',
+                                                      style: TextStyle(
                                                           color:
                                                               primaryDarkColor,
-                                                          fontSize: 12,
-                                                        ),
-                                                      ),
+                                                          fontSize: 12),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
+                                                  ))
+                                            ],
                                           ),
                                         ),
-                                        const Divider(
-                                          color: Color.fromARGB(
-                                              255, 219, 218, 218),
-                                          height: 1,
-                                        ),
-                                      ],
+                                      ),
                                     ),
-                                  );
-                                },
-                              ),
-                  ),
-                ),
+                                    const Divider(
+                                      color: Color.fromARGB(255, 219, 218, 218),
+                                      height: 1,
+                                    )
+                                  ],
+                                ),
+                              );
+                            })),
               ),
-            )
+            ),
           ],
         ),
       ),
