@@ -90,7 +90,7 @@ class _PropertyListState extends State<PropertyList> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Color.fromRGBO(247, 247, 247, 1),
+      statusBarColor: Colors.grey[50],
     ));
     Widget propertyListView = ListView.builder(
       shrinkWrap: true,

@@ -30,8 +30,9 @@ void main() async {
         ChangeNotifierProvider<TenantsProvider>.value(
           value: TenantsProvider(),
         ),
-        ChangeNotifierProvider(
-      create: (context) => TenantListModel(),)
+        ChangeNotifierProvider<TenantListProvider>.value(
+          value: TenantListProvider(),
+        ),
       ],
       child: MyApp(isFirstLaunch: isFirstLaunch),
       //const MyApp(),

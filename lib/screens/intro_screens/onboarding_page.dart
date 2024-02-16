@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/screens/authentication/login.dart';
@@ -14,6 +15,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.grey[50],
+      //Color.fromRGBO(247, 247, 247, 1),
+    ));
     return IntroductionScreen(
       pages: [
         PageViewModel(
