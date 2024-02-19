@@ -1,11 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
-import 'package:x_rent/providers/property_provider.dart';
-import 'package:x_rent/providers/user_provider.dart';
+
 
 class UnitPricing extends StatefulWidget {
   final String? fromPage;
@@ -19,7 +17,6 @@ class UnitPricing extends StatefulWidget {
 }
 
 class _UnitPricingState extends State<UnitPricing> {
-  bool _value = false;
   String? selectedUnitType;
 
   Future<void> _showBottomSheet(BuildContext context) async {
@@ -91,7 +88,8 @@ class _UnitPricingState extends State<UnitPricing> {
                 children: [
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(width: 1.0, color: primaryDarkColor),
+                      side:
+                          const BorderSide(width: 1.0, color: primaryDarkColor),
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -153,14 +151,7 @@ class _UnitPricingState extends State<UnitPricing> {
 
   @override
   Widget build(BuildContext context) {
-    final propertyProvider = Provider.of<PropertyProvider>(
-      context,
-      listen: false,
-    );
-    final userProvider = Provider.of<UserProvider>(
-      context,
-      listen: false,
-    );
+   
     PageController pageController = widget.pageController!;
     return Scaffold(
       body: Column(

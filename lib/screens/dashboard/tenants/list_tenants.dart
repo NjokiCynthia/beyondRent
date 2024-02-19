@@ -140,121 +140,129 @@ class _ListTenantsState extends State<ListTenants> {
                 top: false,
                 child: Padding(
                     padding: const EdgeInsets.all(10),
-                    // child: tenantListLoaded == false
-                    //     ? Center(
-                    //         child: SizedBox(
-                    //           child: CircularProgressIndicator(
-                    //             strokeWidth: 4,
-                    //             color: mintyGreen,
-                    //           ),
-                    //         ),
-                    //       )
-                    //     :
-                    child: tenantList.isEmpty
-                        ? Center(child: const EmptyTenants())
-                        : ListView.builder(
-                            itemCount: tenantList.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
-                                child: Column(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        final selectedTenantId =
-                                            int.parse(tenantList[index]['id']);
-                                        PersistentNavBarNavigator.pushNewScreen(
-                                          context,
-                                          withNavBar: false,
-                                          pageTransitionAnimation:
-                                              PageTransitionAnimation.cupertino,
-                                          screen: ViewTenant(
-                                              tenantId: selectedTenantId),
-                                        );
-                                      },
-                                      child: ListTile(
-                                        leading: Container(
-                                            decoration: BoxDecoration(
-                                                color: primaryDarkColor
-                                                    .withOpacity(0.1),
-                                                shape: BoxShape.circle),
-                                            child: const Padding(
-                                              padding: EdgeInsets.all(8),
-                                              child: Icon(
-                                                Icons.person,
-                                                color: primaryDarkColor,
-                                              ),
-                                            )),
-                                        title: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              '${tenantList[index]['first_name']} ${tenantList[index]['last_name']}',
+                    child:
+                        // tenantListLoaded
+                        //     ? Center(
+                        //         child: CircularProgressIndicator(
+                        //           strokeWidth: 4,
+                        //           color: mintyGreen,
+                        //         ),
+                        //       )
+                        //     :
+                        tenantList.isEmpty
+                            ? const Center(child: EmptyTenants())
+                            : ListView.builder(
+                                itemCount: tenantList.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 10),
+                                    child: Column(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            final selectedTenantId = int.parse(
+                                                tenantList[index]['id']);
+                                            PersistentNavBarNavigator
+                                                .pushNewScreen(
+                                              context,
+                                              withNavBar: false,
+                                              pageTransitionAnimation:
+                                                  PageTransitionAnimation
+                                                      .cupertino,
+                                              screen: ViewTenant(
+                                                  tenantId: selectedTenantId),
+                                            );
+                                          },
+                                          child: ListTile(
+                                            leading: Container(
+                                                decoration: BoxDecoration(
+                                                    color: primaryDarkColor
+                                                        .withOpacity(0.1),
+                                                    shape: BoxShape.circle),
+                                                child: const Padding(
+                                                  padding: EdgeInsets.all(8),
+                                                  child: Icon(
+                                                    Icons.person,
+                                                    color: primaryDarkColor,
+                                                  ),
+                                                )),
+                                            title: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  '${tenantList[index]['first_name']} ${tenantList[index]['last_name']}',
+                                                ),
+                                                Text(
+                                                  '${tenantList[index]['phone']}',
+                                                )
+                                              ],
                                             ),
-                                            Text(
-                                              '${tenantList[index]['phone']}',
-                                            )
-                                          ],
-                                        ),
-                                        subtitle: Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 10),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
+                                            subtitle: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 10),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
-                                                  const Text(
-                                                    'House Number:',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        fontSize: 13,
-                                                        color: Colors.grey),
+                                                  Row(
+                                                    children: [
+                                                      const Text(
+                                                        'House Number:',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                            fontSize: 13,
+                                                            color: Colors.grey),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text(
+                                                          '${tenantList[index]['house_number']}'),
+                                                    ],
                                                   ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Text(
-                                                      '${tenantList[index]['house_number']}'),
+                                                  Container(
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(12),
+                                                          color:
+                                                              primaryDarkColor
+                                                                  .withOpacity(
+                                                                      0.1)),
+                                                      child: const Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                left: 10,
+                                                                right: 10,
+                                                                top: 2,
+                                                                bottom: 2),
+                                                        child: Text(
+                                                          'View rent statement',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  primaryDarkColor,
+                                                              fontSize: 12),
+                                                        ),
+                                                      ))
                                                 ],
                                               ),
-                                              Container(
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
-                                                      color: primaryDarkColor
-                                                          .withOpacity(0.1)),
-                                                  child: const Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 10,
-                                                        right: 10,
-                                                        top: 2,
-                                                        bottom: 2),
-                                                    child: Text(
-                                                      'View rent statement',
-                                                      style: TextStyle(
-                                                          color:
-                                                              primaryDarkColor,
-                                                          fontSize: 12),
-                                                    ),
-                                                  ))
-                                            ],
+                                            ),
                                           ),
                                         ),
-                                      ),
+                                        const Divider(
+                                          color: Color.fromARGB(
+                                              255, 219, 218, 218),
+                                          height: 1,
+                                        )
+                                      ],
                                     ),
-                                    const Divider(
-                                      color: Color.fromARGB(255, 219, 218, 218),
-                                      height: 1,
-                                    )
-                                  ],
-                                ),
-                              );
-                            })),
+                                  );
+                                })),
               ),
             ),
           ],
