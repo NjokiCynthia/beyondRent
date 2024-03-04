@@ -374,6 +374,16 @@ class _StepPage1State extends State<StepPage1> {
     }
   }
 
+  int getNatureValue() {
+    if (_selectedValue == 'Commercial') {
+      return 1;
+    } else if (_selectedValue == 'Residential') {
+      return 2;
+    } else {
+      return 1;
+    }
+  }
+
   addNewProperty() async {
     final propertyProvider = Provider.of<PropertyProvider>(
       context,
@@ -403,6 +413,8 @@ class _StepPage1State extends State<StepPage1> {
       var propertyReturned = response['response']['user_groups'][0];
 
       if (response['response']['status'] == 1) {
+        print('here is my response');
+        print(response);
         propertyProvider.setProperty(
           Property(
             propertyName: propertyReturned['name'],
@@ -430,6 +442,15 @@ class _StepPage1State extends State<StepPage1> {
   bool accountSettlementNo = false;
 
   AccountSettlementOption? selectedOption;
+  int getAccountSettlementOptionValue() {
+    if (selectedOption == AccountSettlementOption.yes) {
+      return 1;
+    } else if (selectedOption == AccountSettlementOption.no) {
+      return 2;
+    } else {
+      return -1; // Default or error value
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -671,6 +692,7 @@ class _StepPage1State extends State<StepPage1> {
               ),
             ),
           ),
+
           const SizedBox(height: 24),
           const Row(
             children: [
@@ -742,14 +764,18 @@ class _StepPage1State extends State<StepPage1> {
               body: {
                 "property_name": propertyNameController.text,
                 "location": propertyLocationController.text,
+                "description": propertyDescriptionController.text,
+                "nature_of_property": getNatureValue().toString(),
+                // nature_of_property = array(
+                //     1 => 'Commercial',
+                //     2 => 'Residential',
+                // );
+                "enable_automatic_account_settlement":
+                    getAccountSettlementOptionValue().toString(),
+                // or 0
               },
               onSuccess: (res) {
-                print('the response is');
-                print(res);
                 if (!buttonError) {
-                  print('<<<<<<<<<<< res >>>>>>>>>>>>>>');
-                  print(res);
-
                   if (res['isSuccessful'] == true) {
                     var propertyReturned =
                         res['data']['response']['user_groups'][0];

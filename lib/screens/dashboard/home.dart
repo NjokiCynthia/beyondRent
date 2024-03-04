@@ -7,13 +7,11 @@ import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/screens/dashboard/transactions.dart';
 import 'package:x_rent/screens/dashboard/withdrawals/list_withdrawals.dart';
 import 'package:x_rent/screens/dashboard/withdrawals/withdrawals.dart';
-import 'package:x_rent/screens/intro_screens/onboarding_page.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/screens/dashboard/propertyDetails.dart';
 import 'package:x_rent/property/add_property.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/screens/dashboard.dart';
@@ -1135,11 +1133,11 @@ class _HomeState extends State<Home> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'KES ${currencyFormat.format(double.parse(monthRent?['amount_expected']?.toString() ?? '0.0'))}',
+                    'KES ${currencyFormat.format(double.parse(monthRent['amount_expected']?.toString() ?? '0.0'))}',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   Text(
-                    'KES ${currencyFormat.format(double.parse(monthRent?['amount_in_arrears']?.toString() ?? '0.0'))}',
+                    'KES ${currencyFormat.format(double.parse(monthRent['amount_in_arrears']?.toString() ?? '0.0'))}',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],

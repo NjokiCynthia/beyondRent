@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
+import 'package:x_rent/providers/property_provider.dart';
+import 'package:x_rent/providers/user_provider.dart';
+import 'package:x_rent/utilities/constants.dart';
+import 'package:x_rent/utilities/widgets.dart';
 
 class UnitTypes extends StatefulWidget {
   final String? fromPage;
@@ -19,7 +25,11 @@ enum AccountSettlementOption { yes, no }
 
 enum Notification { yes, no }
 
+enum EmailSms { yes, no }
+
 class _UnitTypesState extends State<UnitTypes> {
+  bool fetchUnitTypes = false;
+
   String? selectedFrequency;
   String? selectedDay;
 
@@ -27,10 +37,13 @@ class _UnitTypesState extends State<UnitTypes> {
   bool accountSettlementNo = false;
 
   AccountSettlementOption? selectedOption;
-  bool sms = true;
-  bool email = false;
+
+  bool isEmailSelected = false;
+  bool isSmsSelected = false;
 
   Notification? notification;
+
+  EmailSms? notify;
 
   void initState() {
     super.initState();
@@ -41,8 +54,63 @@ class _UnitTypesState extends State<UnitTypes> {
   List<Map<String, dynamic>> unitTypes = [];
 
   Future<void> _showBottomSheet(BuildContext context) async {
-    String? unit;
-    String? price;
+    TextEditingController unitypecontroller = TextEditingController();
+    TextEditingController amountController = TextEditingController();
+
+    int getOption() {
+      if (selectedOption == 'Yes') {
+        return 1;
+      } else if (selectedOption == 'No') {
+        return 0;
+      } else {
+        return 1;
+      }
+    }
+
+    final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    bool buttonError = true;
+    String buttonErrorMessage = 'Enter all fields';
+    propertyInputValidator() async {
+      if (unitypecontroller.text == '') {
+        setState(() {
+          buttonError = true;
+          buttonErrorMessage = 'Enter unit type name';
+        });
+        return false;
+      } else if (amountController.text == '') {
+        setState(() {
+          buttonError = true;
+          buttonErrorMessage = 'Enter unit amount';
+        });
+        return false;
+      } else {
+        setState(() {
+          buttonError = false;
+          buttonErrorMessage = 'Enter all fields';
+        });
+        return true;
+      }
+    }
+
+    int? _getDayNumber(String value) {
+      final RegExp number = RegExp(r'[0-9]+');
+      final RegExp ordinal = RegExp(r'st|nd|rd|th');
+      final numberMatch = number.firstMatch(value)?.group(0);
+      if (numberMatch != null) {
+        final isOrdinalMatch = ordinal.hasMatch(value);
+        final int day = int.parse(numberMatch);
+        return isOrdinalMatch ? day : null;
+      }
+      return null;
+    }
+
     showModalBottomSheet(
       isScrollControlled: true,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -79,9 +147,10 @@ class _UnitTypesState extends State<UnitTypes> {
                       style: bodyText,
                       onChanged: (value) {
                         setState(() {
-                          unit = value;
+                          propertyInputValidator();
                         });
                       },
+                      controller: unitypecontroller,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         filled: true,
@@ -130,10 +199,11 @@ class _UnitTypesState extends State<UnitTypes> {
                     const SizedBox(height: 10),
                     TextFormField(
                       style: bodyText,
+                      controller: amountController,
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
                         setState(() {
-                          price = value;
+                          propertyInputValidator();
                         });
                       },
                       decoration: InputDecoration(
@@ -378,7 +448,7 @@ class _UnitTypesState extends State<UnitTypes> {
                       children: [
                         Expanded(
                           child: Text(
-                            'Do you wish to send SMS or email to tenants?',
+                            'Do you wish to send notifications to tenants?',
                             softWrap: true,
                           ),
                         ),
@@ -433,32 +503,129 @@ class _UnitTypesState extends State<UnitTypes> {
                         ),
                       ],
                     ),
+                    Visibility(
+                      visible: notification == Notification.yes,
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Do you wish to send SMS or email notifications to tenants?',
+                                  softWrap: true,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Row(
+                                children: [
+                                  Checkbox(
+                                    value: isSmsSelected,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        isSmsSelected = value!;
+                                      });
+                                    },
+                                    activeColor: primaryDarkColor,
+                                  ),
+                                  Text(
+                                    "Email",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(
+                                            color:
+                                                Colors.black.withOpacity(0.5)),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Checkbox(
+                                    value: isEmailSelected,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        isEmailSelected = value!;
+                                      });
+                                    },
+                                    activeColor: primaryDarkColor,
+                                  ),
+                                  Text(
+                                    "SMS",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(
+                                            color:
+                                                Colors.black.withOpacity(0.5)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 48,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryDarkColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                        ),
-                        onPressed: () {
-                          print('Unit type Name: $unit, Unit price: $price');
-                          setState(() {
-                            unitTypes.add({
-                              'type': unit,
-                              'Price': price,
-                            });
-                          });
-                          Navigator.pop(context);
+                    CustomRequestButton(
+                        cookie:
+                            'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
+                        authorization: 'Bearer ${userProvider.user?.token}',
+                        buttonError: buttonError,
+                        buttonErrorMessage: buttonErrorMessage,
+                        url: '/mobile/unit_types/create',
+                        method: 'POST',
+                        buttonText: 'Proceed',
+                        body: {
+                          "name": unitypecontroller.text,
+                          "amount": amountController.text,
+                          "category": 2,
+                          "type": 1,
+                          "regular_invoicing_active": getOption().toString(),
+                          "contribution_frequency": 1,
+                          "month_day_monthly": _getDayNumber(selectedDay!) ?? 1,
+                          "start_month_multiple": 1,
+                          "sms_notification_email_notification":
+                              isSmsSelected && isEmailSelected ? 1 : 0,
+                          "sms_notifications_enabled": isSmsSelected ? 1 : 0,
+                          "email_notifications_enabled":
+                              isEmailSelected ? 1 : 0,
                         },
-                        child: const Text('Confirm'),
-                      ),
-                    ),
+                        onSuccess: (res) {
+                          print('here it is');
+                          print(getOption().toString());
+                          if (!buttonError) {
+                            if (res['isSuccessful'] == true) {
+                              print('here is my response');
+                              print(res);
+                              showToast(
+                                context,
+                                'Success!',
+                                'Unit Type successfully created',
+                                mintyGreen,
+                              );
+                            } else {
+                              showToast(
+                                context,
+                                'Error!',
+                                res['message'],
+                                Colors.red,
+                              );
+                            }
+                          } else {
+                            showToast(
+                              context,
+                              'Error!',
+                              "Please enter all fields",
+                              Colors.red,
+                            );
+                          }
+                        }),
                   ],
                 ),
               ),
@@ -472,6 +639,7 @@ class _UnitTypesState extends State<UnitTypes> {
   @override
   Widget build(BuildContext context) {
     PageController pageController = widget.pageController!;
+
     return Scaffold(
       body: Column(
         children: [
@@ -549,8 +717,8 @@ class _UnitTypesState extends State<UnitTypes> {
           color: primaryDarkColor,
         ),
       ),
-      title: Text('Unit type: $unit'),
-      subtitle: Text('Amount: KES $price'),
+      title: Text('Unit type: '),
+      subtitle: Text('Amount: KES '),
     );
   }
 }
