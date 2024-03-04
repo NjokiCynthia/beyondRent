@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
+import 'package:x_rent/models/unit_type.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/utilities/constants.dart';
@@ -28,7 +29,69 @@ enum Notification { yes, no }
 enum EmailSms { yes, no }
 
 class _UnitTypesState extends State<UnitTypes> {
-  bool fetchUnitTypes = false;
+  bool fetchingUnitTypes = false;
+  _fetchPropertyUnitTypes(BuildContext context) async {
+    setState(() {
+      fetchingUnitTypes = true;
+    });
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final token = userProvider.user?.token;
+
+    if (token == null) {
+      print('Token is null.');
+      setState(() {
+        fetchingUnitTypes = false;
+      });
+      return;
+    }
+
+    final postData = {
+      "property_id": 14686,
+    };
+
+    final apiClient = ApiClient();
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    print(postData);
+
+    await apiClient
+        .post('/mobile/unit_types/get_property_house_types_to_pay', postData,
+            headers: headers)
+        .then((response) {
+      print('Response: $response');
+      if (response['response'] != null && response['response']['status'] == 1) {
+        List<UnitType> unitTypes = [];
+        setState(() {
+          unitTypes =
+              (response['response']['UnitTypes'] as List).map((unitTypeData) {
+            return UnitType(
+              id: unitTypeData['id'].toString(),
+              name: unitTypeData['name'].toString(),
+              amount: unitTypeData['amount'].toString(),
+              type: unitTypeData['type'].toString(),
+              contributionType: unitTypeData['contribution_type'].toString(),
+              frequency: unitTypeData['frequency'].toString(),
+              invoiceDate: unitTypeData['invoice_date'].toString(),
+              contributionDate: unitTypeData['contribution_date'].toString(),
+              oneTimeContributionSetting:
+                  unitTypeData['one_time_contribution_setting'] == 1,
+              isHidden: unitTypeData['is_hidden'] == 1,
+              active: unitTypeData['active'] == 1,
+            );
+          }).toList();
+        });
+      } else {
+        print('No unit types found in the response');
+      }
+    }).catchError((error) {
+      print('Error fetching unit types');
+      print(error);
+    });
+  }
 
   String? selectedFrequency;
   String? selectedDay;
@@ -45,10 +108,12 @@ class _UnitTypesState extends State<UnitTypes> {
 
   EmailSms? notify;
 
+  @override
   void initState() {
     super.initState();
     selectedDay = 'Every 5th';
     selectedFrequency = 'Monthly';
+    _fetchPropertyUnitTypes(context);
   }
 
   List<Map<String, dynamic>> unitTypes = [];
