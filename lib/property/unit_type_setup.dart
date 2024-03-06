@@ -30,6 +30,7 @@ enum EmailSms { yes, no }
 
 class _UnitTypesState extends State<UnitTypes> {
   bool fetchingUnitTypes = false;
+  List<UnitType> unitTypes = [];
   _fetchPropertyUnitTypes(BuildContext context) async {
     setState(() {
       fetchingUnitTypes = true;
@@ -64,7 +65,6 @@ class _UnitTypesState extends State<UnitTypes> {
         .then((response) {
       print('Response: $response');
       if (response['response'] != null && response['response']['status'] == 1) {
-        List<UnitType> unitTypes = [];
         setState(() {
           unitTypes =
               (response['response']['UnitTypes'] as List).map((unitTypeData) {
@@ -93,6 +93,10 @@ class _UnitTypesState extends State<UnitTypes> {
     });
   }
 
+  Future<void> _refreshUnitTypes(BuildContext context) async {
+    await _fetchPropertyUnitTypes(context);
+  }
+
   String? selectedFrequency;
   String? selectedDay;
 
@@ -115,8 +119,6 @@ class _UnitTypesState extends State<UnitTypes> {
     selectedFrequency = 'Monthly';
     _fetchPropertyUnitTypes(context);
   }
-
-  List<Map<String, dynamic>> unitTypes = [];
 
   Future<void> _showBottomSheet(BuildContext context) async {
     TextEditingController unitypecontroller = TextEditingController();
@@ -647,6 +649,7 @@ class _UnitTypesState extends State<UnitTypes> {
                         method: 'POST',
                         buttonText: 'Proceed',
                         body: {
+                          "property_id": propertyProvider.property!.id,
                           "name": unitypecontroller.text,
                           "amount": amountController.text,
                           "category": 2,
@@ -668,12 +671,16 @@ class _UnitTypesState extends State<UnitTypes> {
                             if (res['isSuccessful'] == true) {
                               print('here is my response');
                               print(res);
-                              showToast(
-                                context,
-                                'Success!',
-                                'Unit Type successfully created',
-                                mintyGreen,
-                              );
+                              if (res['status'] == 1) {
+                                print('here is my response');
+                                print(res);
+                                showToast(
+                                  context,
+                                  'Success!',
+                                  'Unit Type successfully created',
+                                  mintyGreen,
+                                );
+                              }
                             } else {
                               showToast(
                                 context,
@@ -712,19 +719,45 @@ class _UnitTypesState extends State<UnitTypes> {
             height: 20,
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: unitTypes.length,
-              itemBuilder: (BuildContext context, int index) {
-                Map<String, dynamic> unitType = unitTypes[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: buildUnitListTile(
-                    unitType['type'],
-                    unitType['Price'],
-                  ),
-                );
-              },
-            ),
+            child: RefreshIndicator(
+                onRefresh: () => _fetchPropertyUnitTypes(context),
+                child: fetchingUnitTypes
+                    ? const Center(child: CircularProgressIndicator())
+                    : unitTypes.isNotEmpty
+                        ? ListView.builder(
+                            itemCount: unitTypes.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final unitype = unitTypes[index];
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: ListTile(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        8.0), // Adjust the value as needed
+                                    side: BorderSide(
+                                        color:
+                                            primaryDarkColor.withOpacity(0.1)),
+                                  ),
+                                  leading: Container(
+                                    decoration: BoxDecoration(
+                                      color: primaryDarkColor.withOpacity(0.1),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    padding: const EdgeInsets.all(8),
+                                    child: const Icon(
+                                      Icons.check,
+                                      color: primaryDarkColor,
+                                    ),
+                                  ),
+                                  title: Text('${unitype.name}'),
+                                  subtitle: Text('${unitype.amount}'),
+                                ),
+                              );
+                            },
+                          )
+                        : Center(
+                            child: EmptyUnits(),
+                          )),
           ),
           SizedBox(
             width: double.infinity,
@@ -743,7 +776,10 @@ class _UnitTypesState extends State<UnitTypes> {
                     curve: Curves.easeInOut,
                   );
                 },
-                child: const Text('Proceed')),
+                child: const Text(
+                  'Proceed',
+                  style: TextStyle(color: Colors.white),
+                )),
           ),
         ],
       ),
@@ -762,28 +798,6 @@ class _UnitTypesState extends State<UnitTypes> {
           );
         },
       ),
-    );
-  }
-
-  ListTile buildUnitListTile(String unit, String price) {
-    return ListTile(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0), // Adjust the value as needed
-        side: BorderSide(color: primaryDarkColor.withOpacity(0.1)),
-      ),
-      leading: Container(
-        decoration: BoxDecoration(
-          color: primaryDarkColor.withOpacity(0.1),
-          shape: BoxShape.circle,
-        ),
-        padding: const EdgeInsets.all(8),
-        child: const Icon(
-          Icons.check,
-          color: primaryDarkColor,
-        ),
-      ),
-      title: Text('Unit type: '),
-      subtitle: Text('Amount: KES '),
     );
   }
 }
