@@ -488,10 +488,13 @@ class _PropertyDetailsState extends State<PropertyDetails> {
     await fetchPendingInfo(monthToNumber(currentMonth));
   }
 
-  bool transactionListLoaded = false;
-  List<Map<String, dynamic>> transactionsList = [];
+  bool transactionListLoaded = true;
+
   fetchTransactionsList(int selectedMonth, int selectedYear) async {
     print('I am here to load transactions paid');
+    setState(() {
+      transactionListLoaded = true;
+    });
     final userProvider = Provider.of<UserProvider>(
       context,
       listen: false,
@@ -542,7 +545,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
             print(deposits);
 
             setState(() {
-              transactionsList = deposits.cast<Map<String, dynamic>>();
+              transactionsList = deposits;
             });
           }
         }
@@ -553,7 +556,7 @@ class _PropertyDetailsState extends State<PropertyDetails> {
     }
 
     setState(() {
-      transactionListLoaded = true;
+      transactionListLoaded = false;
     });
   }
 
@@ -701,6 +704,12 @@ class _PropertyDetailsState extends State<PropertyDetails> {
   }
 
   int _selectedTabIndex = 0;
+
+  void refreshData() {
+    fetchRentInfo(monthToNumber(currentMonth), currentYear);
+    fetchTransactionsList(monthToNumber(currentMonth), currentYear);
+    fetchPendingInfo(monthToNumber(currentMonth));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -874,35 +883,36 @@ class _PropertyDetailsState extends State<PropertyDetails> {
           ),
           const SizedBox(height: 30),
           _selectedTabIndex == 0
-              ? transactionListLoaded == false
-                  ? Center(
-                      child: SizedBox(
-                          child: LinearProgressIndicator(
-                        color: mintyGreen,
-                        minHeight: 4,
-                      )),
+              // ? transactionListLoaded == false
+              //     ? Center(
+              //         child: SizedBox(
+              //             child: LinearProgressIndicator(
+              //           color: mintyGreen,
+              //           minHeight: 4,
+              //         )),
+              //       )
+              //     :
+              ? transactionsList.isEmpty
+                  ? const EmptyTransactions()
+                  : Expanded(
+                      child: ListView.builder(
+                        itemCount: transactionsList.length,
+                        itemBuilder: (context, index) {
+                          var transaction = transactionsList[index];
+                          return TransactionCard(
+                            tenant: transaction['tenant'],
+                            date: transaction['date'],
+                            amount: transaction['amount'],
+                            type: transaction['type'],
+                            unit: transaction['unit'],
+                            bill: transaction['bill'],
+                            reconciliation: transaction['reconciliation'],
+                            narrative: transaction['narative'],
+                            id: transaction['id'],
+                          );
+                        },
+                      ),
                     )
-                  : transactionsList.isEmpty
-                      ? const EmptyTransactions()
-                      : Expanded(
-                          child: ListView.builder(
-                            itemCount: transactionsList.length,
-                            itemBuilder: (context, index) {
-                              var transaction = transactionsList[index];
-                              return TransactionCard(
-                                tenant: transaction['tenant'],
-                                date: transaction['date'],
-                                amount: transaction['amount'],
-                                type: transaction['type'],
-                                unit: transaction['unit'],
-                                bill: transaction['bill'],
-                                reconciliation: transaction['reconciliation'],
-                                narrative: transaction['narative'],
-                                id: transaction['id'],
-                              );
-                            },
-                          ),
-                        )
               : invoices.isEmpty
                   ? const EmptyTransactions()
                   : Expanded(
@@ -1086,125 +1096,128 @@ class _PropertyDetailsState extends State<PropertyDetails> {
       ],
     );
     return Scaffold(
-      backgroundColor:
-          Colors.transparent, // Set transparent background for the Scaffold
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-            colors: [
-              Color.fromRGBO(161, 204, 204, 1),
-              Color.fromRGBO(229, 210, 185, 1)
-            ],
+      backgroundColor: Colors.transparent,
+      body: RefreshIndicator(
+        onRefresh: () => Future.sync(() => refreshData()),
+        color: mintyGreen,
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                Color.fromRGBO(161, 204, 204, 1),
+                Color.fromRGBO(229, 210, 185, 1)
+              ],
+            ),
           ),
-        ),
-        child: SafeArea(
-          bottom: false,
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              Container(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Image.asset(
-                            'assets/images/icons/left-arrow.png',
-                            width: 15,
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          showMonthPickerModal(context);
-                        },
-                        child: Row(
-                          children: [
-                            Container(
-                              padding:
-                                  const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    currentMonth,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .copyWith(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                  ),
-                                  const Icon(
-                                    Icons.keyboard_arrow_down,
-                                    color: Colors.black,
-                                    size: 20,
-                                  )
-                                ],
-                              ),
+          child: SafeArea(
+            bottom: false,
+            child: Column(
+              children: [
+                const SizedBox(height: 20),
+                Container(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          // callback!('');
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Image.asset(
-                            'assets/images/icons/info.png',
-                            width: 15,
+                            child: Image.asset(
+                              'assets/images/icons/left-arrow.png',
+                              width: 15,
+                            ),
                           ),
                         ),
+                        GestureDetector(
+                          onTap: () async {
+                            showMonthPickerModal(context);
+                          },
+                          child: Row(
+                            children: [
+                              Container(
+                                padding:
+                                    const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      currentMonth,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold),
+                                    ),
+                                    const Icon(
+                                      Icons.keyboard_arrow_down,
+                                      color: Colors.black,
+                                      size: 20,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            // callback!('');
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Image.asset(
+                              'assets/images/icons/info.png',
+                              width: 15,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                    // DashboardAppbar(
+                    //   propertyNav: true,
+                    //   callback: (value) {
+                    //     value == 'date'
+                    //         ? _showDayPicker(context)
+                    //         : showBottomModal(
+                    //             context,
+                    //             Container(
+                    //               padding: const EdgeInsets.all(20),
+                    //               margin: const EdgeInsets.only(bottom: 30),
+                    //               child: modalContent,
+                    //             ),
+                    //           );
+                    //   },
+                    // ),
+                    ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      propertySummary,
+                      Expanded(
+                        child: Center(child: propertyDetails),
                       ),
                     ],
-                  )
-                  // DashboardAppbar(
-                  //   propertyNav: true,
-                  //   callback: (value) {
-                  //     value == 'date'
-                  //         ? _showDayPicker(context)
-                  //         : showBottomModal(
-                  //             context,
-                  //             Container(
-                  //               padding: const EdgeInsets.all(20),
-                  //               margin: const EdgeInsets.only(bottom: 30),
-                  //               child: modalContent,
-                  //             ),
-                  //           );
-                  //   },
-                  // ),
                   ),
-              Expanded(
-                child: Column(
-                  children: [
-                    propertySummary,
-                    Expanded(
-                      child: Center(child: propertyDetails),
-                    ),
-                  ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

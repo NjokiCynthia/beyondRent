@@ -60,7 +60,32 @@ class EmptyUnits extends StatelessWidget {
       children: [
         Image.asset('assets/illustrations/tenant.png', width: 250),
         Text(
-          'Unit list empty.',
+          'Units is empty.',
+          style: Theme.of(context).textTheme.bodyMedium,
+          textAlign: TextAlign.center,
+        )
+      ],
+    );
+  }
+}
+
+class EmptyUnitList extends StatelessWidget {
+  const EmptyUnitList({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Image.asset('assets/illustrations/tenant.png', width: 250),
+        Text(
+          'Unit list is empty.',
+          style: Theme.of(context).textTheme.bodyLarge,
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Text(
+          'Use the button below to set up your unit types.',
           style: Theme.of(context).textTheme.bodyMedium,
           textAlign: TextAlign.center,
         )

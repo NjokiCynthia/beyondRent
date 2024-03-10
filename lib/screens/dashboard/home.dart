@@ -7,13 +7,11 @@ import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/screens/dashboard/transactions.dart';
 import 'package:x_rent/screens/dashboard/withdrawals/list_withdrawals.dart';
 import 'package:x_rent/screens/dashboard/withdrawals/withdrawals.dart';
-import 'package:x_rent/screens/intro_screens/onboarding_page.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/screens/dashboard/propertyDetails.dart';
 import 'package:x_rent/property/add_property.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/screens/dashboard.dart';
@@ -152,10 +150,14 @@ class _HomeState extends State<Home> {
     });
   }
 
-  bool transactionListLoaded = false;
-  List<Map<String, dynamic>> transactionsList = [];
+  bool transactionListLoaded = true;
+  //List<Map<String, dynamic>> transactionsList = [];
 
   fetchTransactionsList() async {
+    print('fetching transactions list');
+    setState(() {
+      transactionListLoaded = true;
+    });
     final userProvider = Provider.of<UserProvider>(
       context,
       listen: false,
@@ -183,14 +185,14 @@ class _HomeState extends State<Home> {
 
       if (response != null && response['response'] != null) {
         var responseStatus = response['response']['status'];
-        print('tis is my transactions');
+        print('this are my transactions');
         print(response);
 
         if (responseStatus == 1) {
           var deposits = response['response']['deposits'];
           if (deposits != null && deposits is List) {
             setState(() {
-              transactionsList = deposits.cast<Map<String, dynamic>>();
+              transactionsList = deposits;
             });
           }
         }
@@ -201,7 +203,7 @@ class _HomeState extends State<Home> {
     }
 
     setState(() {
-      transactionListLoaded = true;
+      transactionListLoaded = false;
     });
   }
 
@@ -288,11 +290,14 @@ class _HomeState extends State<Home> {
     }
   }
 
-  bool rentInfoLoaded = false;
+  bool rentInfoLoaded = true;
   Map<String, dynamic> rentInfo = {};
 
   fetchRentInfo() async {
     print('I am here trying to fetch the total rent info');
+    setState(() {
+      rentInfoLoaded = true;
+    });
 
     final userProvider = Provider.of<UserProvider>(
       context,
@@ -346,17 +351,18 @@ class _HomeState extends State<Home> {
       print('Error in API call: $e');
     }
     setState(() {
-      rentInfoLoaded = true;
+      rentInfoLoaded = false;
     });
   }
 
-  List trasactionList = [];
-
-  bool monthRentLoaded = false;
+  bool monthRentLoaded = true;
   Map<String, dynamic> monthRent = {};
 
   fetchRentInfoForCurrentMonth() async {
     print('I am here trying to fetch rent info');
+    setState(() {
+      monthRentLoaded = true;
+    });
 
     // Get the current month
     final currentMonth = DateTime.now().month;
@@ -407,13 +413,13 @@ class _HomeState extends State<Home> {
     }
 
     setState(() {
-      monthRentLoaded = true;
+      monthRentLoaded = false;
     });
   }
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     fetchPropertiesAccounts(context);
     _fetchBanks(context);
     fetchRentInfo();
@@ -905,6 +911,7 @@ class _HomeState extends State<Home> {
   }
 
   String? selectedOption;
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -1126,11 +1133,11 @@ class _HomeState extends State<Home> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'KES ${currencyFormat.format(double.parse(monthRent?['amount_expected']?.toString() ?? '0.0'))}',
+                    'KES ${currencyFormat.format(double.parse(monthRent['amount_expected']?.toString() ?? '0.0'))}',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   Text(
-                    'KES ${currencyFormat.format(double.parse(monthRent?['amount_in_arrears']?.toString() ?? '0.0'))}',
+                    'KES ${currencyFormat.format(double.parse(monthRent['amount_in_arrears']?.toString() ?? '0.0'))}',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ],
@@ -1211,43 +1218,44 @@ class _HomeState extends State<Home> {
               ],
             ),
           ),
-          transactionListLoaded == false
-              ? Center(
-                  child: SizedBox(
-                      child: LinearProgressIndicator(
-                    color: mintyGreen,
-                    minHeight: 4,
-                  )
-                      // CircularProgressIndicator(
-                      //   strokeWidth: 4,
-                      //   color: mintyGreen,
-                      // ),
-                      ),
+          // transactionListLoaded == false
+          //     ? Center(
+          //         child: SizedBox(
+          //             child: LinearProgressIndicator(
+          //           color: mintyGreen,
+          //           minHeight: 4,
+          //         )
+          //             // CircularProgressIndicator(
+          //             //   strokeWidth: 4,
+          //             //   color: mintyGreen,
+          //             // ),
+          //             ),
+          //       )
+          //     :
+          transactionsList.isEmpty
+              ? const EmptyTransactions()
+              : Expanded(
+                  child: ListView.builder(
+                    // itemCount: transactionsList.length > 6
+                    //     ? 6
+                    //     : transactionsList.length,
+                    itemCount: transactionsList.length,
+                    itemBuilder: (context, index) {
+                      var transaction = transactionsList[index];
+                      return TransactionCard(
+                        tenant: transaction['tenant'],
+                        date: transaction['date'],
+                        amount: transaction['amount'],
+                        type: transaction['type'],
+                        unit: transaction['unit'],
+                        bill: transaction['bill'],
+                        reconciliation: transaction['reconciliation'],
+                        narrative: transaction['narative'],
+                        id: transaction['id'],
+                      );
+                    },
+                  ),
                 )
-              : transactionsList.isEmpty
-                  ? const EmptyTransactions()
-                  : Expanded(
-                      child: ListView.builder(
-                        // itemCount: transactionsList.length > 6
-                        //     ? 6
-                        //     : transactionsList.length,
-                        itemCount: transactionsList.length,
-                        itemBuilder: (context, index) {
-                          var transaction = transactionsList[index];
-                          return TransactionCard(
-                            tenant: transaction['tenant'],
-                            date: transaction['date'],
-                            amount: transaction['amount'],
-                            type: transaction['type'],
-                            unit: transaction['unit'],
-                            bill: transaction['bill'],
-                            reconciliation: transaction['reconciliation'],
-                            narrative: transaction['narative'],
-                            id: transaction['id'],
-                          );
-                        },
-                      ),
-                    )
         ],
       ),
     );

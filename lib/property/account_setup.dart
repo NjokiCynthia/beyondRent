@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
@@ -7,6 +8,7 @@ import 'package:x_rent/models/branch_model.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/screens/dashboard.dart';
 import 'package:x_rent/utilities/constants.dart';
+import 'package:x_rent/utilities/widgets.dart';
 
 import '../providers/property_provider.dart';
 
@@ -209,6 +211,14 @@ class _AccountSetupState extends State<AccountSetup> {
   @override
   Widget build(BuildContext context) {
     PageController pageController = widget.pageController!;
+    final userProvider = Provider.of<UserProvider>(
+      context,
+      listen: false,
+    );
+    final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -437,7 +447,7 @@ class _AccountSetupState extends State<AccountSetup> {
               onChanged: (value) {
                 accountInputValidator();
               },
-              controller: accountNameController,
+              controller: accountNumberController,
               style: bodyText,
               decoration: InputDecoration(
                 filled: true,
@@ -473,7 +483,6 @@ class _AccountSetupState extends State<AccountSetup> {
             ),
             SizedBox(
               width: double.infinity,
-              height: 48,
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: primaryDarkColor),
@@ -490,18 +499,28 @@ class _AccountSetupState extends State<AccountSetup> {
                       curve: Curves.easeInOut,
                     );
                   },
-                  child: const Text('Proceed')),
-            )
+                  child: Text(
+                    'Proceed',
+                    style: TextStyle(color: Colors.white),
+                  )),
+            ),
             // CustomRequestButton(
             //   cookie:
             //       'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
             //   authorization: 'Bearer ${userProvider.user?.token}',
             //   buttonError: buttonError,
             //   buttonErrorMessage: buttonErrorMessage,
-            //   //url: '/mobile/units/batch_create',
+            //   url: '/mobile/bank_accounts/create',
             //   method: 'POST',
             //   buttonText: 'Proceed',
-            //   body: {},
+            //   body: {
+            //     "property_id": propertyProvider.property?.id,
+            //     "bank_id": bankModels.isNotEmpty ? bankModels[0].id : "",
+            //     "bank_branch_id": 1857,
+            //     "account_number": accountNameController.text,
+            //     "account_name": accountNumberController.text,
+            //     "account_currency_id": 1
+            //   },
             //   onSuccess: (res) {
             //     if (!buttonError) {
             //       print('<<<<<<<<<<< res >>>>>>>>>>>>>>');

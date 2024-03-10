@@ -11,18 +11,17 @@ class Branch {
     if (json['bank_branches'] != null) {
       bankBranches = <BankBranches>[];
       json['bank_branches'].forEach((v) {
-        bankBranches!.add(new BankBranches.fromJson(v));
+        bankBranches!.add(BankBranches.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
-    if (this.bankBranches != null) {
-      data['bank_branches'] =
-          this.bankBranches!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status'] = status;
+    data['message'] = message;
+    if (bankBranches != null) {
+      data['bank_branches'] = bankBranches!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -40,9 +39,9 @@ class BankBranches {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
     return data;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x_rent/screens/intro_screens/onboarding_page.dart';
 
@@ -33,6 +34,9 @@ class _AnimatedScaleImageState extends State<AnimatedScaleImage>
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.grey[50],
+    ));
     return Center(
       child: ScaleTransition(
         scale: _scaleAnimation,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
-import 'package:x_rent/screens/dashboard.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/providers/property_provider.dart';
@@ -51,10 +50,10 @@ class _AddUnitsState extends State<AddUnits> {
   String buttonErrorMessage = 'Enter all fields';
 
   propertyInputValidator() async {
-    if (blockNoController.text == '') {
+    if (blockNoController.text == '' && blockUnitsNoController.text == '') {
       setState(() {
         buttonError = true;
-        buttonErrorMessage = 'Enter property block';
+        buttonErrorMessage = 'Enter the number of blocks and units';
       });
       return false;
     } else if (floorNoController.text == '') {
@@ -67,12 +66,6 @@ class _AddUnitsState extends State<AddUnits> {
       setState(() {
         buttonError = true;
         buttonErrorMessage = 'Enter number of units per block';
-      });
-      return false;
-    } else if (unitNoController.text == '') {
-      setState(() {
-        buttonError = true;
-        buttonErrorMessage = 'Enter number of units';
       });
       return false;
     } else {
@@ -89,8 +82,9 @@ class _AddUnitsState extends State<AddUnits> {
     super.initState();
   }
 
-  bool _selectedOption = false;
-  bool _selectedNaming = false;
+  int? _selectedOption = 1;
+
+  int _selectedNaming = 1;
   String? selectedItem;
 
   String? selectedUnit;
@@ -129,25 +123,24 @@ class _AddUnitsState extends State<AddUnits> {
             const SizedBox(height: 10),
             Row(children: [
               Radio(
-                value: true,
+                value: 2,
                 activeColor: primaryDarkColor,
                 groupValue: _selectedOption,
                 onChanged: (value) {
                   setState(() {
-                    _selectedOption = value as bool;
-                    
+                    _selectedOption = value;
                   });
                 },
               ),
               const Text('Floors'),
               const SizedBox(width: 20.0),
               Radio(
-                value: false,
+                value: 1,
                 activeColor: primaryDarkColor,
                 groupValue: _selectedOption,
                 onChanged: (value) {
                   setState(() {
-                    _selectedOption = value as bool;
+                    _selectedOption = value;
                   });
                 },
               ),
@@ -161,36 +154,36 @@ class _AddUnitsState extends State<AddUnits> {
                 Row(
                   children: [
                     Radio(
-                      value: true,
+                      value: 1,
                       activeColor: primaryDarkColor,
                       groupValue: _selectedNaming,
                       onChanged: (value) {
                         setState(() {
-                          _selectedNaming = value as bool;
+                          _selectedNaming = value!;
                         });
                       },
                     ),
-                    Text(_selectedOption
-                        ? 'Alphabets (eg, D1)'
-                        : 'Blocks (eg, A1)'),
+                    Text(_selectedOption == 1
+                        ? 'Blocks (eg, D1)'
+                        : 'Alphabet (eg.D1)'),
                   ],
                 ),
                 const SizedBox(width: 20.0),
                 Row(
                   children: [
                     Radio(
-                      value: false,
+                      value: 2,
                       activeColor: primaryDarkColor,
                       groupValue: _selectedNaming,
                       onChanged: (value) {
                         setState(() {
-                          _selectedNaming = value as bool;
+                          _selectedNaming = value!;
                         });
                       },
                     ),
-                    Text(_selectedOption
-                        ? 'Floors (eg, 1D)'
-                        : 'House No (eg.1D)'),
+                    Text(_selectedOption == 1
+                        ? ' House No (eg, 1D)'
+                        : 'Floors (eg.1D)'),
                   ],
                 ),
               ],
@@ -200,7 +193,7 @@ class _AddUnitsState extends State<AddUnits> {
             ),
 
             Visibility(
-              visible: !_selectedOption,
+              visible: _selectedOption == 1,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -289,7 +282,7 @@ class _AddUnitsState extends State<AddUnits> {
               ),
             ),
             Visibility(
-              visible: _selectedOption,
+              visible: _selectedOption == 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -384,7 +377,7 @@ class _AddUnitsState extends State<AddUnits> {
               cookie:
                   'CALLING_CODE=254; COUNTRY_CODE=KE; ci_session=t8bor7oiaqf8chjib5sl3ujo73d6mm5p; identity=254721882678; remember_code=aNU%2FwbBOfORTkMSIyi60ou',
               authorization: 'Bearer ${userProvider.user?.token}',
-              buttonError: buttonError,
+              //buttonError: buttonError,
               buttonErrorMessage: buttonErrorMessage,
               url: '/mobile/units/generate_units',
               method: 'POST',
@@ -392,15 +385,26 @@ class _AddUnitsState extends State<AddUnits> {
               body: {
                 "property_id": propertyProvider.property?.id,
 
-                "number_of_floors": floorNoController.text,
-                "unit_based_on": 2, // 1 for block 2 for floor
-                "number_of_blocks": blockNoController.text,
-                "number_of_units_per_block": blockUnitsNoController.text,
-                "number_of_units_per_floor": unitNoController.text,
-                "floor_naming_options": "1",
-                "block_naming_options": "1"
+                "number_of_floors":
+                    _selectedOption == 1 ? "" : floorNoController.text,
+                "unit_based_on": _selectedOption!,
+                //"unit_based_on": 2, // 1 for block 2 for floor
+                "number_of_blocks":
+                    _selectedOption == 2 ? "" : blockNoController.text,
+                "number_of_units_per_block":
+                    _selectedOption == 2 ? "" : blockUnitsNoController.text,
+                "number_of_units_per_floor":
+                    _selectedOption == 1 ? "" : unitNoController.text,
+                "floor_naming_options": _selectedNaming.toString(),
+                "block_naming_options": _selectedNaming.toString(),
               },
               onSuccess: (res) {
+                // Clear text controllers
+                floorNoController.clear();
+                blockNoController.clear();
+                blockUnitsNoController.clear();
+                unitNoController.clear();
+
                 print('<<<<<<<<<<< res >>>>>>>>>>>>>>');
                 print(res);
                 if (res['isSuccessful'] == true) {
@@ -409,6 +413,12 @@ class _AddUnitsState extends State<AddUnits> {
                     print('Here is my response while generating units');
                     var generatedUnits = responseData['data'];
                     print(generatedUnits);
+                    showToast(
+                      context,
+                      'Success!',
+                      res['data']['response']['message'],
+                      mintyGreen,
+                    );
 
                     pageController.animateToPage(
                       3,
@@ -433,28 +443,6 @@ class _AddUnitsState extends State<AddUnits> {
                 }
               },
             ),
-            // SizedBox(
-            //   width: double.infinity,
-            //   height: 50,
-            //   child: ElevatedButton(
-            //     style: ElevatedButton.styleFrom(
-            //       backgroundColor: primaryDarkColor,
-            //       shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(8.0),
-            //       ),
-            //     ),
-            //     onPressed: () {
-            //       // Call createNumberArray here
-
-            //       // pageController.animateToPage(
-            //       //   3,
-            //       //   duration: const Duration(milliseconds: 300),
-            //       //   curve: Curves.easeInOut,
-            //       // );
-            //     },
-            //     child: const Text('Proceed'),
-            //   ),
-            // ),
           ],
         ),
       ),

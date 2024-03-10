@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:x_rent/constants/color_contants.dart';
-import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/screens/billing/add_supplementary_bill.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/screens/authentication/login.dart';
 import 'package:x_rent/screens/dashboard/profile/communicate.dart';
 import 'package:x_rent/screens/billing/add_rent.dart';
-import 'package:x_rent/property/property.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
@@ -28,10 +26,7 @@ class _SettingsState extends State<Settings> {
       context,
       listen: false,
     );
-    final propertyProvider = Provider.of<PropertyProvider>(
-      context,
-      listen: false,
-    );
+
     return Scaffold(
       backgroundColor: Colors.grey.withOpacity(0.1),
       body: SafeArea(

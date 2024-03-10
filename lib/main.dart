@@ -30,8 +30,9 @@ void main() async {
         ChangeNotifierProvider<TenantsProvider>.value(
           value: TenantsProvider(),
         ),
-        ChangeNotifierProvider(
-      create: (context) => TenantListModel(),)
+        ChangeNotifierProvider<TenantListProvider>.value(
+          value: TenantListProvider(),
+        ),
       ],
       child: MyApp(isFirstLaunch: isFirstLaunch),
       //const MyApp(),
@@ -63,7 +64,6 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         home: isFirstLaunch ? const SplashScreen() : const Login(),
-        //const SplashScreen(),
         routes: {
           '/home': (_) => const HomePage(),
         },

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class TenantListModel extends ChangeNotifier {
-  List _cachedTenants = [];
+class TenantListProvider extends ChangeNotifier {
+  List _tenantList = [];
 
-  List get cachedTenants => _cachedTenants;
+  List get tenantList => _tenantList;
 
-  void updateCachedTenants(List tenants) {
-    _cachedTenants = tenants;
+  void updateTenantList(List tenants) {
+    _tenantList = tenants;
     notifyListeners();
   }
 }

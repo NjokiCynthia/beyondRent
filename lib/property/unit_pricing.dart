@@ -1,11 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
-import 'package:x_rent/providers/property_provider.dart';
-import 'package:x_rent/providers/user_provider.dart';
 
 class UnitPricing extends StatefulWidget {
   final String? fromPage;
@@ -19,7 +16,6 @@ class UnitPricing extends StatefulWidget {
 }
 
 class _UnitPricingState extends State<UnitPricing> {
-  bool _value = false;
   String? selectedUnitType;
 
   Future<void> _showBottomSheet(BuildContext context) async {
@@ -91,7 +87,8 @@ class _UnitPricingState extends State<UnitPricing> {
                 children: [
                   OutlinedButton(
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(width: 1.0, color: primaryDarkColor),
+                      side:
+                          const BorderSide(width: 1.0, color: primaryDarkColor),
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -107,7 +104,10 @@ class _UnitPricingState extends State<UnitPricing> {
                     onPressed: () {
                       Navigator.of(context).pop(); // Close the bottom sheet
                     },
-                    child: const Text('Confirm'),
+                    child: const Text(
+                      'Confirm',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ],
               ),
@@ -153,14 +153,6 @@ class _UnitPricingState extends State<UnitPricing> {
 
   @override
   Widget build(BuildContext context) {
-    final propertyProvider = Provider.of<PropertyProvider>(
-      context,
-      listen: false,
-    );
-    final userProvider = Provider.of<UserProvider>(
-      context,
-      listen: false,
-    );
     PageController pageController = widget.pageController!;
     return Scaffold(
       body: Column(
@@ -260,7 +252,10 @@ class _UnitPricingState extends State<UnitPricing> {
                       curve: Curves.easeInOut,
                     );
                   },
-                  child: const Text('Proceed')))
+                  child: const Text(
+                    'Proceed',
+                    style: TextStyle(color: Colors.white),
+                  )))
         ],
       ),
       floatingActionButton: _selectedItems.contains(true)
@@ -272,7 +267,10 @@ class _UnitPricingState extends State<UnitPricing> {
                   _showBottomSheet(context);
                 },
                 tooltip: 'Open Alert',
-                child: const Icon(Icons.arrow_circle_up_sharp),
+                child: const Icon(
+                  Icons.arrow_circle_up_sharp,
+                  color: Colors.white,
+                ),
               ),
             )
           : null,

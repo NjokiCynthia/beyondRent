@@ -3,9 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:dio/dio.dart';
+import 'package:x_rent/models/unit_type.dart';
 
-//String ipAddress = 'https://kodi.sandbox.co.ke';
-String ipAddress = 'https://beyondrent.co';
+String ipAddress = 'https://kodi.sandbox.co.ke';
+//String ipAddress = 'https://beyondrent.co';
 // Color Themes
 Color mintyGreen = const Color.fromRGBO(36, 105, 80, 1.0);
 
@@ -17,8 +18,14 @@ String propertyUserEmail = 'cynthia@gmail.com';
 // Selected Property Units
 List propertyUnitsList = [];
 
+List transactionsList = [];
+
+List tenantList = [];
+
 //Selected tenants
 List tenantsList = [];
+
+List<UnitType> unitTypes = [];
 
 PersistentTabController bottomNavigationController =
     PersistentTabController(initialIndex: 0);
