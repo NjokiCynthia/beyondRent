@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
 
-
 class UnitPricing extends StatefulWidget {
   final String? fromPage;
   final int? currentPageIndex;
@@ -105,7 +104,10 @@ class _UnitPricingState extends State<UnitPricing> {
                     onPressed: () {
                       Navigator.of(context).pop(); // Close the bottom sheet
                     },
-                    child: const Text('Confirm'),
+                    child: const Text(
+                      'Confirm',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ],
               ),
@@ -151,7 +153,6 @@ class _UnitPricingState extends State<UnitPricing> {
 
   @override
   Widget build(BuildContext context) {
-   
     PageController pageController = widget.pageController!;
     return Scaffold(
       body: Column(
@@ -251,7 +252,10 @@ class _UnitPricingState extends State<UnitPricing> {
                       curve: Curves.easeInOut,
                     );
                   },
-                  child: const Text('Proceed')))
+                  child: const Text(
+                    'Proceed',
+                    style: TextStyle(color: Colors.white),
+                  )))
         ],
       ),
       floatingActionButton: _selectedItems.contains(true)
@@ -263,7 +267,10 @@ class _UnitPricingState extends State<UnitPricing> {
                   _showBottomSheet(context);
                 },
                 tooltip: 'Open Alert',
-                child: const Icon(Icons.arrow_circle_up_sharp),
+                child: const Icon(
+                  Icons.arrow_circle_up_sharp,
+                  color: Colors.white,
+                ),
               ),
             )
           : null,

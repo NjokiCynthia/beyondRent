@@ -29,15 +29,21 @@ enum Notification { yes, no }
 enum EmailSms { yes, no }
 
 class _UnitTypesState extends State<UnitTypes> {
-  bool fetchingUnitTypes = false;
+  bool fetchingUnitTypes = true;
   List<UnitType> unitTypes = [];
   _fetchPropertyUnitTypes(BuildContext context) async {
+    print('I am here to fetch unit types');
     setState(() {
       fetchingUnitTypes = true;
     });
 
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final token = userProvider.user?.token;
+
+    final propertyProvider = Provider.of<PropertyProvider>(
+      context,
+      listen: false,
+    );
 
     if (token == null) {
       print('Token is null.');
@@ -48,7 +54,7 @@ class _UnitTypesState extends State<UnitTypes> {
     }
 
     final postData = {
-      "property_id": 14686,
+      "property_id": propertyProvider.property!.id,
     };
 
     final apiClient = ApiClient();
@@ -83,6 +89,7 @@ class _UnitTypesState extends State<UnitTypes> {
               active: unitTypeData['active'] == 1,
             );
           }).toList();
+          fetchingUnitTypes = false;
         });
       } else {
         print('No unit types found in the response');
@@ -90,6 +97,9 @@ class _UnitTypesState extends State<UnitTypes> {
     }).catchError((error) {
       print('Error fetching unit types');
       print(error);
+      setState(() {
+        fetchingUnitTypes = false;
+      });
     });
   }
 
@@ -123,6 +133,7 @@ class _UnitTypesState extends State<UnitTypes> {
   Future<void> _showBottomSheet(BuildContext context) async {
     TextEditingController unitypecontroller = TextEditingController();
     TextEditingController amountController = TextEditingController();
+    // Reset controllers and state variables when the bottom sheet is popped
 
     int getOption() {
       if (selectedOption == 'Yes') {
@@ -218,7 +229,6 @@ class _UnitTypesState extends State<UnitTypes> {
                         });
                       },
                       controller: unitypecontroller,
-                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -665,21 +675,23 @@ class _UnitTypesState extends State<UnitTypes> {
                               isEmailSelected ? 1 : 0,
                         },
                         onSuccess: (res) {
-                          print('here it is');
-                          print(getOption().toString());
                           if (!buttonError) {
                             if (res['isSuccessful'] == true) {
-                              print('here is my response');
+                              print('Here i am');
                               print(res);
-                              if (res['status'] == 1) {
-                                print('here is my response');
-                                print(res);
+                              if (res['data']['status'] == 1) {
                                 showToast(
                                   context,
                                   'Success!',
                                   'Unit Type successfully created',
                                   mintyGreen,
                                 );
+
+                                Future.delayed(Duration(milliseconds: 300), () {
+                                  Navigator.of(context).pop();
+
+                                  _refreshUnitTypes(context);
+                                });
                               }
                             } else {
                               showToast(
@@ -720,7 +732,7 @@ class _UnitTypesState extends State<UnitTypes> {
           ),
           Expanded(
             child: RefreshIndicator(
-                onRefresh: () => _fetchPropertyUnitTypes(context),
+                onRefresh: () => _refreshUnitTypes(context),
                 child: fetchingUnitTypes
                     ? const Center(child: CircularProgressIndicator())
                     : unitTypes.isNotEmpty
@@ -749,38 +761,54 @@ class _UnitTypesState extends State<UnitTypes> {
                                       color: primaryDarkColor,
                                     ),
                                   ),
-                                  title: Text('${unitype.name}'),
-                                  subtitle: Text('${unitype.amount}'),
+                                  title: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Unit name:'),
+                                      Text(unitype.name),
+                                    ],
+                                  ),
+                                  subtitle: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Unit price:'),
+                                      Text(
+                                          'KES ${currencyFormat.format(double.parse(unitype.amount))}'),
+                                    ],
+                                  ),
                                 ),
                               );
                             },
                           )
                         : Center(
-                            child: EmptyUnits(),
+                            child: EmptyUnitList(),
                           )),
           ),
-          SizedBox(
-            width: double.infinity,
-            height: 48,
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: primaryDarkColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+          if (unitTypes.isNotEmpty)
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryDarkColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
                   ),
-                ),
-                onPressed: () {
-                  pageController.animateToPage(
-                    2,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                },
-                child: const Text(
-                  'Proceed',
-                  style: TextStyle(color: Colors.white),
-                )),
-          ),
+                  onPressed: () {
+                    pageController.animateToPage(
+                      2,
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                  child: const Text(
+                    'Proceed',
+                    style: TextStyle(color: Colors.white),
+                  )),
+            ),
         ],
       ),
       floatingActionButton: Builder(
@@ -793,7 +821,10 @@ class _UnitTypesState extends State<UnitTypes> {
                 _showBottomSheet(context);
               },
               tooltip: 'Open Bottom Sheet',
-              child: const Icon(Icons.add),
+              child: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
             ),
           );
         },
