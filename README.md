@@ -1,4 +1,4 @@
-# x_rent
+# beyondRent
 
 A new Flutter project.
 
