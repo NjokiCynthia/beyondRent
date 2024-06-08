@@ -724,8 +724,12 @@ class _StepPage1State extends State<StepPage1> {
                     "Yes",
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1!
-                        .copyWith(color: Colors.black.withOpacity(0.5)),
+                        .bodyMedium!
+                        .apply(color: Colors.black.withOpacity(0.5)),
+                    // Theme.of(context)
+                    //     .textTheme
+                    //     .bodyText1!
+                    //     .copyWith(color: Colors.black.withOpacity(0.5)),
                   ),
                 ],
               ),
@@ -745,8 +749,8 @@ class _StepPage1State extends State<StepPage1> {
                     "No",
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText1!
-                        .copyWith(color: Colors.black.withOpacity(0.5)),
+                        .bodyMedium!
+                        .apply(color: Colors.black.withOpacity(0.5)),
                   ),
                 ],
               ),

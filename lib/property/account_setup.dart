@@ -8,7 +8,6 @@ import 'package:x_rent/models/branch_model.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/screens/dashboard.dart';
 import 'package:x_rent/utilities/constants.dart';
-import 'package:x_rent/utilities/widgets.dart';
 
 import '../providers/property_provider.dart';
 

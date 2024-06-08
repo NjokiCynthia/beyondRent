@@ -344,9 +344,8 @@ class _UnitTypesState extends State<UnitTypes> {
                               "Yes",
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1!
-                                  .copyWith(
-                                      color: Colors.black.withOpacity(0.5)),
+                                  .bodyMedium!
+                                  .apply(color: Colors.black.withOpacity(0.5)),
                             ),
                           ],
                         ),
@@ -366,9 +365,8 @@ class _UnitTypesState extends State<UnitTypes> {
                               "No",
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1!
-                                  .copyWith(
-                                      color: Colors.black.withOpacity(0.5)),
+                                  .bodyMedium!
+                                  .apply(color: Colors.black.withOpacity(0.5)),
                             ),
                           ],
                         ),
@@ -550,9 +548,8 @@ class _UnitTypesState extends State<UnitTypes> {
                               "Yes",
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1!
-                                  .copyWith(
-                                      color: Colors.black.withOpacity(0.5)),
+                                  .bodyMedium!
+                                  .apply(color: Colors.black.withOpacity(0.5)),
                             ),
                           ],
                         ),
@@ -572,9 +569,8 @@ class _UnitTypesState extends State<UnitTypes> {
                               "No",
                               style: Theme.of(context)
                                   .textTheme
-                                  .bodyText1!
-                                  .copyWith(
-                                      color: Colors.black.withOpacity(0.5)),
+                                  .bodyMedium!
+                                  .apply(color: Colors.black.withOpacity(0.5)),
                             ),
                           ],
                         ),
@@ -612,8 +608,8 @@ class _UnitTypesState extends State<UnitTypes> {
                                     "Email",
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText1!
-                                        .copyWith(
+                                        .bodyMedium!
+                                        .apply(
                                             color:
                                                 Colors.black.withOpacity(0.5)),
                                   ),
@@ -634,8 +630,8 @@ class _UnitTypesState extends State<UnitTypes> {
                                     "SMS",
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyText1!
-                                        .copyWith(
+                                        .bodyMedium!
+                                        .apply(
                                             color:
                                                 Colors.black.withOpacity(0.5)),
                                   ),
