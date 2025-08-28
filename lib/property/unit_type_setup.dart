@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, unrelated_type_equality_checks
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -692,6 +692,7 @@ class _UnitTypesState extends State<UnitTypes> {
 
                                 Future.delayed(Duration(milliseconds: 300), () {
                                   Navigator.of(context).pop();
+                                  
 
                                   _refreshUnitTypes();
                                 });

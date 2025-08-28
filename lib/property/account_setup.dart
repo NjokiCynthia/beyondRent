@@ -32,7 +32,7 @@ class _AccountSetupState extends State<AccountSetup> {
 
   bool buttonError = true;
   String buttonErrorMessage = 'Enter all fields';
-  accountInputValidator() async {
+  Future<bool> accountInputValidator() async {
     if (bankNameController.text == '') {
       setState(() {
         buttonError = true;
@@ -136,7 +136,7 @@ class _AccountSetupState extends State<AccountSetup> {
 
   List<String> bankBranchesDropdownList = [];
 
-  _fetchBankBranches(BuildContext context, String bankId) async {
+  Future<List<String>> _fetchBankBranches(String bankId) async {
     print('I am now fetching branches');
     try {
       final userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -151,8 +151,6 @@ class _AccountSetupState extends State<AccountSetup> {
         'property_id': propertyProvider.property?.id.toString() ?? '',
         'bank_id': bankId,
       };
-      print('This is the bank id i need to fetch branches for');
-      print(bankId);
 
       final apiClient = ApiClient();
       final headers = {
@@ -168,32 +166,32 @@ class _AccountSetupState extends State<AccountSetup> {
 
       print('Bank Branches Response: $response');
 
-      setState(() {
-        bankBranchesDropdownList = [];
-      });
+      List<String> branches = [];
 
       if (response['response']['status'] == 1 &&
           response['response']['bank_branches'] != null) {
         final List<dynamic> bankBranchesData =
             response['response']['bank_branches'];
 
-        setState(() {
-          bankBranchesDropdownList = bankBranchesData.map<String>((branch) {
-            final branchName = branch['name'] as String;
-            return branchName;
-          }).toList();
+        branches = bankBranchesData.map<String>((branch) {
+          final branchName = branch['name'] as String;
+          return branchName;
+        }).toList();
 
+        setState(() {
+          bankBranchesDropdownList = branches;
           selectedBranchValue = bankBranchesDropdownList.isNotEmpty
               ? bankBranchesDropdownList[0]
               : '';
         });
       } else {
         print('No or invalid bank branches found in the response');
-        // Handle the case when 'status' is not 1 or 'bank_branches' is null
       }
+
+      return branches; // ✅ Always return a list
     } catch (error) {
       print('Error fetching bank branches: $error');
-      // Handle the error
+      return []; // ✅ Return empty list on error
     }
   }
 
@@ -295,8 +293,8 @@ class _AccountSetupState extends State<AccountSetup> {
                 });
 
                 // Fetch branches for the selected bank
-                List<String> fetchedBranchesList = await _fetchBankBranches(
-                    context, selectedBankId.toString());
+                List<String> fetchedBranchesList =
+                    await _fetchBankBranches(selectedBankId.toString());
 
                 setState(() {
                   // Update branches list after fetching branches
