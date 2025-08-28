@@ -871,6 +871,7 @@ class _HomeState extends State<Home> {
                                               Future.delayed(
                                                   const Duration(seconds: 2),
                                                   () {
+                                                    
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(

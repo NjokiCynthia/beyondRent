@@ -83,17 +83,18 @@ class _ListWithdrawalsState extends State<ListWithdrawals> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        // Handle navigation when the back button is pressed
-        // Use Navigator.popUntil to navigate back approximately three steps
-        int popCount = 2; // Set the number of steps you want to go back
+    return PopScope(
+      canPop: false, // block the default system pop
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return; // if Flutter already popped, do nothing
+
+        int popCount = 2; // how many steps you want to go back
         Navigator.popUntil(context, (route) {
           popCount--;
           return popCount < 0;
         });
-        return false; // Return false to prevent the default system back behavior
       },
+
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: backColor.withValues(alpha: 0.02),

@@ -71,18 +71,22 @@ class _DashboardState extends State<Dashboard> {
         handleAndroidBackButtonPress: true,
         resizeToAvoidBottomInset: true,
         stateManagement: false,
-        hideNavigationBarWhenKeyboardShows: true,
+        hideNavigationBarWhenKeyboardAppears: true,
         decoration: const NavBarDecoration(colorBehindNavBar: Colors.white),
-        popAllScreensOnTapOfSelectedTab: true,
-        popActionScreens: PopActionScreensType.all,
-        itemAnimationProperties: const ItemAnimationProperties(
-          duration: Duration(milliseconds: 200),
-          curve: Curves.ease,
-        ),
-        screenTransitionAnimation: const ScreenTransitionAnimation(
-          animateTabTransition: true,
-          curve: Curves.ease,
-          duration: Duration(milliseconds: 200),
+        //popAllScreensOnTapOfSelectedTab: true,
+        //popBehaviorOnSelectedNavBarItemPress: PopActionScreensType.all,
+        animationSettings: const NavBarAnimationSettings(
+          navBarItemAnimation: ItemAnimationSettings(
+            // Navigation Bar's items animation properties.
+            duration: Duration(milliseconds: 400),
+            curve: Curves.ease,
+          ),
+          screenTransitionAnimation: ScreenTransitionAnimationSettings(
+            // Screen transition animation on change of selected tab.
+            animateTabTransition: true,
+            duration: Duration(milliseconds: 200),
+            screenTransitionAnimationType: ScreenTransitionAnimationType.fadeIn,
+          ),
         ),
         navBarStyle: NavBarStyle.style6,
         onItemSelected: (value) {

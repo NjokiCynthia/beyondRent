@@ -126,16 +126,16 @@ class _WithdrawalsState extends State<Withdrawals>
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: primaryDarkColor.withValues(alpha: 0.01)));
 
-    return WillPopScope(
-      onWillPop: () async {
-        // Handle navigation when the back button is pressed
-        // Use Navigator.popUntil to navigate back approximately three steps
-        int popCount = 1; // Set the number of steps you want to go back
+    return PopScope(
+      canPop: false, // prevents the default back action
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return; // if the system already popped, do nothing
+
+        int popCount = 1; // how many screens you want to go back
         Navigator.popUntil(context, (route) {
           popCount--;
           return popCount < 0;
         });
-        return false; // Return false to prevent the default system back behavior
       },
       child: Scaffold(
         appBar: AppBar(
