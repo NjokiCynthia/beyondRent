@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/models/invoice.dart';
@@ -19,7 +21,7 @@ Color getRandomColor() {
 }
 
 class EmptyTenants extends StatelessWidget {
-  const EmptyTenants({Key? key}) : super(key: key);
+  const EmptyTenants({super.key});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,7 +38,7 @@ class EmptyTenants extends StatelessWidget {
 }
 
 class EmptyInvoices extends StatelessWidget {
-  const EmptyInvoices({Key? key}) : super(key: key);
+  const EmptyInvoices({super.key});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -53,7 +55,7 @@ class EmptyInvoices extends StatelessWidget {
 }
 
 class EmptyUnits extends StatelessWidget {
-  const EmptyUnits({Key? key}) : super(key: key);
+  const EmptyUnits({super.key});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -70,7 +72,7 @@ class EmptyUnits extends StatelessWidget {
 }
 
 class EmptyUnitList extends StatelessWidget {
-  const EmptyUnitList({Key? key}) : super(key: key);
+  const EmptyUnitList({super.key});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -95,7 +97,7 @@ class EmptyUnitList extends StatelessWidget {
 }
 
 class EmptyTransactions extends StatelessWidget {
-  const EmptyTransactions({Key? key}) : super(key: key);
+  const EmptyTransactions({super.key});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -118,12 +120,12 @@ class MessageNotification extends StatelessWidget {
   final Color? color;
 
   const MessageNotification({
-    Key? key,
+    super.key,
     required this.onReply,
     required this.message,
     required this.color,
     required this.title,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +165,7 @@ class MessageNotification extends StatelessWidget {
 }
 
 // Global Toast
-showToast(context, String title, String message, Color color) {
+OverlaySupportEntry showToast(String title, String message, Color color) {
   return showOverlayNotification((context) {
     return MessageNotification(
       title: title,
@@ -239,7 +241,7 @@ class DashboardAppbar extends StatelessWidget {
                       ),
                       Icon(
                         Icons.keyboard_arrow_down,
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2),
                         size: 20,
                       ),
                     ],
@@ -342,7 +344,7 @@ class DashboardAppbar extends StatelessWidget {
                     //     color: Colors.white,
                     //     boxShadow: [
                     //       BoxShadow(
-                    //         color: Colors.grey.withOpacity(0.2),
+                    //         color: Colors.grey.withValues(alpha:0.2),
                     //         spreadRadius: 2,
                     //         blurRadius: 4,
                     //         offset: const Offset(0, 2),
@@ -361,7 +363,7 @@ class ProgressBar extends StatelessWidget {
   final int? collectedAmount;
   final int? expectedAmount;
 
-  const ProgressBar({
+  const ProgressBar({super.key, 
     this.collectedAmount,
     this.expectedAmount,
   });
@@ -377,7 +379,7 @@ class ProgressBar extends StatelessWidget {
           child: Container(
             height: 4,
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
           ),
@@ -415,7 +417,7 @@ class ProgressBar extends StatelessWidget {
 //           child: Container(
 //             height: 10,
 //             decoration: BoxDecoration(
-//               color: Colors.black.withOpacity(0.1),
+//               color: Colors.black.withValues(alpha:0.1),
 //               borderRadius: BorderRadius.circular(10),
 //             ),
 //           ),
@@ -448,7 +450,7 @@ class TransactionCard extends StatelessWidget {
   final String? house_number;
 
   const TransactionCard({
-    Key? key,
+    super.key,
     this.type,
     this.date,
     this.amount,
@@ -459,7 +461,7 @@ class TransactionCard extends StatelessWidget {
     this.narrative,
     this.id,
     this.house_number,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -476,7 +478,7 @@ class TransactionCard extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: 0.1),
             width: 1.0,
           ),
         ),
@@ -507,7 +509,7 @@ class TransactionCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('$tenantName'),
+                      Text(tenantName),
                       const SizedBox(
                         height: 10,
                       ),
@@ -587,7 +589,7 @@ class TenantWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
+            color: Colors.grey.withValues(alpha: 0.3),
             spreadRadius: 0.5,
             blurRadius: 1,
             offset: const Offset(0, 1),
@@ -618,7 +620,7 @@ class TenantWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.green.withOpacity(0.1),
+                  color: Colors.green.withValues(alpha: .1),
                 ),
                 child: const Icon(
                   Icons.phone,
@@ -631,7 +633,7 @@ class TenantWidget extends StatelessWidget {
           const SizedBox(height: 20),
           Container(
             height: 1,
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: .1),
           ),
           const SizedBox(height: 20),
           Row(
@@ -693,7 +695,7 @@ class UnitWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
+              color: Colors.grey.withValues(alpha: .3),
               spreadRadius: 0.5,
               blurRadius: 1,
               offset: const Offset(0, 1),
@@ -791,10 +793,12 @@ class CustomOutlinedButton extends StatefulWidget {
   });
 
   @override
-  _CustomOutlinedButtonState createState() => _CustomOutlinedButtonState();
+  CustomOutlinedButtonState createState() {
+    return CustomOutlinedButtonState();
+  }
 }
 
-class _CustomOutlinedButtonState extends State<CustomOutlinedButton> {
+class CustomOutlinedButtonState extends State<CustomOutlinedButton> {
   bool isButtonDisabled = false;
   bool isLoading = false;
   late Dio _dio;
@@ -947,10 +951,12 @@ class CustomRequestButton extends StatefulWidget {
   });
 
   @override
-  _CustomRequestButtonState createState() => _CustomRequestButtonState();
+  CustomRequestButtonState createState() {
+    return CustomRequestButtonState();
+  }
 }
 
-class _CustomRequestButtonState extends State<CustomRequestButton> {
+class CustomRequestButtonState extends State<CustomRequestButton> {
   bool isButtonDisabled = false;
   bool isLoading = false;
   late Dio _dio;
@@ -1105,14 +1111,14 @@ class InvoiceCard extends StatelessWidget {
         border: Border(
           bottom: BorderSide(
             //                   <--- left side
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: .1),
             width: 1.0,
           ),
         ),
         // borderRadius: BorderRadius.circular(10),
         // boxShadow: [
         //   BoxShadow(
-        //     color: Colors.grey.withOpacity(0.3),
+        //     color: Colors.grey.withValues(alpha:0.3),
         //     spreadRadius: 0.5,
         //     blurRadius: 1,
         //     offset: const Offset(0, 1),
@@ -1136,7 +1142,7 @@ class InvoiceCard extends StatelessWidget {
                       horizontal: 8.0, vertical: 4.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(4.0),
-                    color: invoice.statusColor.withOpacity(0.2),
+                    color: invoice.statusColor.withValues(alpha: .2),
                     border: Border.all(),
                   ),
                   child: Text(
@@ -1169,7 +1175,7 @@ class InvoiceCard extends StatelessWidget {
 class InvoicesCard extends StatelessWidget {
   final PendingInvoice invoice;
 
-  const InvoicesCard({Key? key, required this.invoice}) : super(key: key);
+  const InvoicesCard({super.key, required this.invoice});
 
   @override
   Widget build(BuildContext context) {
@@ -1183,7 +1189,7 @@ class InvoicesCard extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: .1),
             width: 1.0,
           ),
         ),
@@ -1264,7 +1270,7 @@ class InvoicesCard extends StatelessWidget {
 class WithdrawalCard extends StatelessWidget {
   final Invoice invoice;
 
-  const WithdrawalCard({required this.invoice});
+  const WithdrawalCard({super.key, required this.invoice});
 
   @override
   Widget build(BuildContext context) {
@@ -1276,14 +1282,14 @@ class WithdrawalCard extends StatelessWidget {
         border: Border(
           bottom: BorderSide(
             //                   <--- left side
-            color: Colors.grey.withOpacity(0.1),
+            color: Colors.grey.withValues(alpha: .1),
             width: 1.0,
           ),
         ),
         // borderRadius: BorderRadius.circular(10),
         // boxShadow: [
         //   BoxShadow(
-        //     color: Colors.grey.withOpacity(0.3),
+        //     color: Colors.grey.withValues(alpha:0.3),
         //     spreadRadius: 0.5,
         //     blurRadius: 1,
         //     offset: const Offset(0, 1),
@@ -1307,7 +1313,7 @@ class WithdrawalCard extends StatelessWidget {
                       horizontal: 8.0, vertical: 4.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(4.0),
-                    color: invoice.statusColor.withOpacity(0.2),
+                    color: invoice.statusColor.withValues(alpha: .2),
                     border: Border.all(),
                   ),
                   child: Text(

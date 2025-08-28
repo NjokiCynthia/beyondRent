@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:x_rent/screens/dashboard/home.dart';
 import 'package:x_rent/screens/dashboard/profile.dart';
 import 'package:x_rent/screens/dashboard/tenants/list_tenants.dart';
@@ -7,7 +7,7 @@ import 'package:x_rent/screens/dashboard/units/list_units.dart';
 import 'package:x_rent/utilities/constants.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  const Dashboard({super.key});
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -66,7 +66,7 @@ class _DashboardState extends State<Dashboard> {
         controller: bottomNavigationController,
         screens: _buildScreens(),
         items: _navBarsItems(),
-        confineInSafeArea: true,
+        confineToSafeArea: true,
         backgroundColor: Colors.white,
         handleAndroidBackButtonPress: true,
         resizeToAvoidBottomInset: true,

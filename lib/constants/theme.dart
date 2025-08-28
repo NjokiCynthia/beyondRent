@@ -8,7 +8,6 @@ class MyTheme {
     brightness: Brightness.dark,
     primaryColor: primaryDarkColor,
     scaffoldBackgroundColor: backColor,
-    dialogBackgroundColor: primaryDarkColor,
     fontFamily: Strings.fontName,
     bottomSheetTheme:
         const BottomSheetThemeData(backgroundColor: primaryDarkColor),
@@ -39,8 +38,9 @@ class MyTheme {
     colorScheme: const ColorScheme.dark().copyWith(
       secondary: secondaryDarkColor,
       tertiary: redDarkColor,
-      background: Colors.white,
+      surface: Colors.white,
     ),
+    dialogTheme: DialogThemeData(backgroundColor: primaryDarkColor),
   );
   static const Color primaryColor = primaryDarkColor;
 }
@@ -86,13 +86,13 @@ TextStyle displaySmallBoldLightGrey = GoogleFonts.getFont(
   Strings.fontName,
   fontSize: 10,
   fontWeight: FontWeight.bold,
-  color: Colors.black.withOpacity(0.4),
+  color: Colors.black.withValues(alpha: 0.4),
 );
 TextStyle displaySmallerLightGrey = GoogleFonts.getFont(
   Strings.fontName,
   fontSize: 13,
   fontWeight: FontWeight.w500,
-  color: Colors.black.withOpacity(0.4),
+  color: Colors.black.withValues(alpha: 0.4),
 );
 TextStyle displayBigBoldWhite = GoogleFonts.getFont(
   Strings.fontName,

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +43,7 @@ class _WithdrawalsState extends State<Withdrawals>
   //   return tabStatusValues[index];
   // }
 
-  fetchWithdrawals(int status) async {
+  Future<void> fetchWithdrawals(int status) async {
     print('I want to fetch withdrawals for status $status');
     setState(() {
       withdrawalListLoaded = false;
@@ -122,7 +124,7 @@ class _WithdrawalsState extends State<Withdrawals>
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: primaryDarkColor.withOpacity(0.01)));
+        statusBarColor: primaryDarkColor.withValues(alpha: 0.01)));
 
     return WillPopScope(
       onWillPop: () async {
@@ -137,7 +139,7 @@ class _WithdrawalsState extends State<Withdrawals>
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: primaryDarkColor.withOpacity(0.1),
+          backgroundColor: primaryDarkColor.withValues(alpha: 0.1),
           elevation: 0,
           leading: GestureDetector(
             onTap: () {
@@ -164,7 +166,8 @@ class _WithdrawalsState extends State<Withdrawals>
             unselectedLabelColor: Colors.grey,
             labelColor: Colors.white,
             labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-            indicator: BoxDecoration(color: primaryDarkColor.withOpacity(0.5)),
+            indicator:
+                BoxDecoration(color: primaryDarkColor.withValues(alpha: 0.5)),
             tabs: const [
               Tab(
                 text: 'PENDING DISBURSEMENT',
@@ -228,9 +231,9 @@ class _WithdrawalsState extends State<Withdrawals>
                             borderRadius: BorderRadius.circular(8),
                             border: Border.fromBorderSide(BorderSide(
                                 strokeAlign: BorderSide.strokeAlignOutside,
-                                color: primaryDarkColor.withOpacity(0.1)))
+                                color: primaryDarkColor.withValues(alpha: 0.1)))
                             // border: Border.all(
-                            //     color: primaryDarkColor.withOpacity(0.1)),
+                            //     color: primaryDarkColor.withValues(alpha:0.1)),
                             ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -248,7 +251,8 @@ class _WithdrawalsState extends State<Withdrawals>
                                 ),
                                 Container(
                                   decoration: BoxDecoration(
-                                      color: primaryDarkColor.withOpacity(0.1),
+                                      color: primaryDarkColor.withValues(
+                                          alpha: 0.1),
                                       borderRadius: BorderRadius.circular(10)),
                                   child: Padding(
                                     padding: const EdgeInsets.only(

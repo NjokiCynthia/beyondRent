@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:x_rent/constants/color_contants.dart';
@@ -12,10 +14,12 @@ class SupplementaryBill extends StatefulWidget {
   const SupplementaryBill({super.key});
 
   @override
-  _SupplementaryBillState createState() => _SupplementaryBillState();
+  SupplementaryBillState createState() {
+    return SupplementaryBillState();
+  }
 }
 
-class _SupplementaryBillState extends State<SupplementaryBill> {
+class SupplementaryBillState extends State<SupplementaryBill> {
   bool arrearsContributionBool = false;
   bool displayContributionBool = false;
   bool buttonError = true;
@@ -30,7 +34,7 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
       TextEditingController();
   final TextEditingController blockNoController = TextEditingController();
 
-  propertyInputValidator() async {
+  Future<bool> propertyInputValidator() async {
     if (contributionNameController.text == '') {
       setState(() {
         buttonError = true;
@@ -52,7 +56,7 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
     }
   }
 
-  addRentBill() async {
+  Future addRentBill() async {
     final userProvider = Provider.of<UserProvider>(
       context,
       listen: false,
@@ -467,11 +471,11 @@ class _SupplementaryBillState extends State<SupplementaryBill> {
     return ListTile(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0), // Adjust the value as needed
-        side: BorderSide(color: primaryDarkColor.withOpacity(0.1)),
+        side: BorderSide(color: primaryDarkColor.withValues(alpha: 0.1)),
       ),
       leading: Container(
         decoration: BoxDecoration(
-          color: primaryDarkColor.withOpacity(0.1),
+          color: primaryDarkColor.withValues(alpha: 0.1),
           shape: BoxShape.circle,
         ),
         padding: const EdgeInsets.all(8),

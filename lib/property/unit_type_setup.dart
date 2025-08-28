@@ -1,5 +1,6 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
@@ -15,8 +16,7 @@ class UnitTypes extends StatefulWidget {
   final PageController? pageController;
 
   const UnitTypes(
-      {Key? key, this.fromPage, this.currentPageIndex, this.pageController})
-      : super(key: key);
+      {super.key, this.fromPage, this.currentPageIndex, this.pageController});
 
   @override
   State<UnitTypes> createState() => _UnitTypesState();
@@ -31,7 +31,7 @@ enum EmailSms { yes, no }
 class _UnitTypesState extends State<UnitTypes> {
   bool fetchingUnitTypes = true;
   List<UnitType> unitTypes = [];
-  _fetchPropertyUnitTypes(BuildContext context) async {
+  Future<void> _fetchPropertyUnitTypes(BuildContext context) async {
     print('I am here to fetch unit types');
     setState(() {
       fetchingUnitTypes = true;
@@ -103,7 +103,7 @@ class _UnitTypesState extends State<UnitTypes> {
     });
   }
 
-  Future<void> _refreshUnitTypes(BuildContext context) async {
+  Future<void> _refreshUnitTypes() async {
     await _fetchPropertyUnitTypes(context);
   }
 
@@ -177,7 +177,7 @@ class _UnitTypesState extends State<UnitTypes> {
       }
     }
 
-    int? _getDayNumber(String value) {
+    int? getDayNumber(String value) {
       final RegExp number = RegExp(r'[0-9]+');
       final RegExp ordinal = RegExp(r'st|nd|rd|th');
       final numberMatch = number.firstMatch(value)?.group(0);
@@ -345,7 +345,9 @@ class _UnitTypesState extends State<UnitTypes> {
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
-                                  .apply(color: Colors.black.withOpacity(0.5)),
+                                  .apply(
+                                      color:
+                                          Colors.black.withValues(alpha: 0.5)),
                             ),
                           ],
                         ),
@@ -366,7 +368,9 @@ class _UnitTypesState extends State<UnitTypes> {
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
-                                  .apply(color: Colors.black.withOpacity(0.5)),
+                                  .apply(
+                                      color:
+                                          Colors.black.withValues(alpha: 0.5)),
                             ),
                           ],
                         ),
@@ -549,7 +553,9 @@ class _UnitTypesState extends State<UnitTypes> {
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
-                                  .apply(color: Colors.black.withOpacity(0.5)),
+                                  .apply(
+                                      color:
+                                          Colors.black.withValues(alpha: 0.5)),
                             ),
                           ],
                         ),
@@ -570,7 +576,9 @@ class _UnitTypesState extends State<UnitTypes> {
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
-                                  .apply(color: Colors.black.withOpacity(0.5)),
+                                  .apply(
+                                      color:
+                                          Colors.black.withValues(alpha: 0.5)),
                             ),
                           ],
                         ),
@@ -610,8 +618,8 @@ class _UnitTypesState extends State<UnitTypes> {
                                         .textTheme
                                         .bodyMedium!
                                         .apply(
-                                            color:
-                                                Colors.black.withOpacity(0.5)),
+                                            color: Colors.black
+                                                .withValues(alpha: 0.5)),
                                   ),
                                 ],
                               ),
@@ -632,8 +640,8 @@ class _UnitTypesState extends State<UnitTypes> {
                                         .textTheme
                                         .bodyMedium!
                                         .apply(
-                                            color:
-                                                Colors.black.withOpacity(0.5)),
+                                            color: Colors.black
+                                                .withValues(alpha: 0.5)),
                                   ),
                                 ],
                               ),
@@ -662,7 +670,7 @@ class _UnitTypesState extends State<UnitTypes> {
                           "type": 1,
                           "regular_invoicing_active": getOption().toString(),
                           "contribution_frequency": 1,
-                          "month_day_monthly": _getDayNumber(selectedDay!) ?? 1,
+                          "month_day_monthly": getDayNumber(selectedDay!) ?? 1,
                           "start_month_multiple": 1,
                           "sms_notification_email_notification":
                               isSmsSelected && isEmailSelected ? 1 : 0,
@@ -677,7 +685,6 @@ class _UnitTypesState extends State<UnitTypes> {
                               print(res);
                               if (res['data']['status'] == 1) {
                                 showToast(
-                                  context,
                                   'Success!',
                                   'Unit Type successfully created',
                                   mintyGreen,
@@ -686,12 +693,11 @@ class _UnitTypesState extends State<UnitTypes> {
                                 Future.delayed(Duration(milliseconds: 300), () {
                                   Navigator.of(context).pop();
 
-                                  _refreshUnitTypes(context);
+                                  _refreshUnitTypes();
                                 });
                               }
                             } else {
                               showToast(
-                                context,
                                 'Error!',
                                 res['message'],
                                 Colors.red,
@@ -699,7 +705,6 @@ class _UnitTypesState extends State<UnitTypes> {
                             }
                           } else {
                             showToast(
-                              context,
                               'Error!',
                               "Please enter all fields",
                               Colors.red,
@@ -728,7 +733,7 @@ class _UnitTypesState extends State<UnitTypes> {
           ),
           Expanded(
             child: RefreshIndicator(
-                onRefresh: () => _refreshUnitTypes(context),
+                onRefresh: () => _refreshUnitTypes(),
                 child: fetchingUnitTypes
                     ? const Center(child: CircularProgressIndicator())
                     : unitTypes.isNotEmpty
@@ -743,12 +748,13 @@ class _UnitTypesState extends State<UnitTypes> {
                                     borderRadius: BorderRadius.circular(
                                         8.0), // Adjust the value as needed
                                     side: BorderSide(
-                                        color:
-                                            primaryDarkColor.withOpacity(0.1)),
+                                        color: primaryDarkColor.withValues(
+                                            alpha: 0.1)),
                                   ),
                                   leading: Container(
                                     decoration: BoxDecoration(
-                                      color: primaryDarkColor.withOpacity(0.1),
+                                      color: primaryDarkColor.withValues(
+                                          alpha: 0.1),
                                       shape: BoxShape.circle,
                                     ),
                                     padding: const EdgeInsets.all(8),

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:x_rent/constants/color_contants.dart';
@@ -12,10 +14,12 @@ class AddRent extends StatefulWidget {
   const AddRent({super.key});
 
   @override
-  _AddRentState createState() => _AddRentState();
+  AddRentState createState() {
+    return AddRentState();
+  }
 }
 
-class _AddRentState extends State<AddRent> {
+class AddRentState extends State<AddRent> {
   bool arrearsContributionBool = false;
   bool displayContributionBool = false;
   bool buttonError = true;
@@ -30,7 +34,7 @@ class _AddRentState extends State<AddRent> {
       TextEditingController();
   final TextEditingController blockNoController = TextEditingController();
 
-  propertyInputValidator() async {
+  Future<bool> propertyInputValidator() async {
     if (contributionNameController.text == '') {
       setState(() {
         buttonError = true;
@@ -52,7 +56,7 @@ class _AddRentState extends State<AddRent> {
     }
   }
 
-  addRentBill() async {
+  Future addRentBill() async {
     final userProvider = Provider.of<UserProvider>(
       context,
       listen: false,
@@ -338,7 +342,7 @@ class _AddRentState extends State<AddRent> {
                         child: Text(
                       'Disable arrears during invoicing',
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            color: Colors.black.withOpacity(0.5),
+                            color: Colors.black.withValues(alpha: 0.5),
                           ),
                     ))
                   ],

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
@@ -23,10 +25,12 @@ class AddUnits extends StatefulWidget {
   });
 
   @override
-  _AddUnitsState createState() => _AddUnitsState();
+  AddUnitsState createState() {
+    return AddUnitsState();
+  }
 }
 
-class _AddUnitsState extends State<AddUnits> {
+class AddUnitsState extends State<AddUnits> {
   bool propertySaveLoading = false;
   final TextEditingController controller = TextEditingController();
   String initialCountry = 'KE';
@@ -49,7 +53,7 @@ class _AddUnitsState extends State<AddUnits> {
   bool buttonError = true;
   String buttonErrorMessage = 'Enter all fields';
 
-  propertyInputValidator() async {
+  Future<bool> propertyInputValidator() async {
     if (blockNoController.text == '' && blockUnitsNoController.text == '') {
       setState(() {
         buttonError = true;
@@ -414,7 +418,6 @@ class _AddUnitsState extends State<AddUnits> {
                     var generatedUnits = responseData['data'];
                     print(generatedUnits);
                     showToast(
-                      context,
                       'Success!',
                       res['data']['response']['message'],
                       mintyGreen,
@@ -427,7 +430,6 @@ class _AddUnitsState extends State<AddUnits> {
                     );
                   } else {
                     showToast(
-                      context,
                       'Error!',
                       responseData['message'],
                       Colors.red,
@@ -435,7 +437,6 @@ class _AddUnitsState extends State<AddUnits> {
                   }
                 } else {
                   showToast(
-                    context,
                     'Error!',
                     "Error saving units",
                     Colors.red,

@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:x_rent/providers/property_provider.dart';
@@ -14,11 +14,11 @@ class UnitDetails extends StatefulWidget {
   final String? unitNo;
   final String? tenantID;
   const UnitDetails({
-    Key? key,
+    super.key,
     this.unitID,
     this.unitNo,
     this.tenantID,
-  }) : super(key: key);
+  });
 
   @override
   State<UnitDetails> createState() => _UnitDetailsState();
@@ -27,7 +27,7 @@ class UnitDetails extends StatefulWidget {
 class _UnitDetailsState extends State<UnitDetails> {
   bool transactionListLoaded = false;
   List<Map<String, dynamic>> transactionsList = [];
-  fetchTransactionsList() async {
+  Future<void> fetchTransactionsList() async {
     print('I am here to load transactions paid');
     final userProvider = Provider.of<UserProvider>(
       context,
@@ -94,7 +94,7 @@ class _UnitDetailsState extends State<UnitDetails> {
   Map unitDetails = {};
   String? tenantName;
 
-  fetchTenantDetails() async {
+  Future<void> fetchTenantDetails() async {
     setState(() {
       tenantInfoLoading = true;
     });
@@ -465,7 +465,7 @@ class _UnitDetailsState extends State<UnitDetails> {
                         borderRadius: BorderRadius.circular(7),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
+                            color: Colors.grey.withValues(alpha: 0.2),
                             spreadRadius: 2,
                             blurRadius: 4,
                             offset: const Offset(0, 2),

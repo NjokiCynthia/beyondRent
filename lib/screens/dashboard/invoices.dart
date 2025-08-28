@@ -59,7 +59,7 @@ class InvoiceList extends StatelessWidget {
   final Invoice invoice;
   final int itemCount;
 
-  InvoiceList({required this.invoice, required this.itemCount});
+  const InvoiceList({super.key, required this.invoice, required this.itemCount});
 
   @override
   Widget build(BuildContext context) {

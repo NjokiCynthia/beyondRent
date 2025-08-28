@@ -32,7 +32,7 @@
 //                           borderRadius: BorderRadius.circular(7),
 //                           color: studioActive == true
 //                               ? mintyGreen
-//                               : Colors.grey.withOpacity(0.2)),
+//                               : Colors.grey.withValues(alpha:0.2)),
 //                       child: Text(
 //                         'Studio',
 //                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -58,7 +58,7 @@
 //                           borderRadius: BorderRadius.circular(7),
 //                           color: oneBedroom == true
 //                               ? mintyGreen
-//                               : Colors.grey.withOpacity(0.2)),
+//                               : Colors.grey.withValues(alpha:0.2)),
 //                       child: Text(
 //                         '1',
 //                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -84,7 +84,7 @@
 //                           borderRadius: BorderRadius.circular(7),
 //                           color: twoBedroom == true
 //                               ? mintyGreen
-//                               : Colors.grey.withOpacity(0.2)),
+//                               : Colors.grey.withValues(alpha:0.2)),
 //                       child: Text(
 //                         '2',
 //                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -110,7 +110,7 @@
 //                           borderRadius: BorderRadius.circular(7),
 //                           color: threeBedroom == true
 //                               ? mintyGreen
-//                               : Colors.grey.withOpacity(0.2)),
+//                               : Colors.grey.withValues(alpha:0.2)),
 //                       child: Text(
 //                         '3',
 //                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -136,7 +136,7 @@
 //                           borderRadius: BorderRadius.circular(7),
 //                           color: fourBedroom == true
 //                               ? mintyGreen
-//                               : Colors.grey.withOpacity(0.2)),
+//                               : Colors.grey.withValues(alpha:0.2)),
 //                       child: Text(
 //                         '4',
 //                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -162,7 +162,7 @@
 //                           borderRadius: BorderRadius.circular(7),
 //                           color: fiveBedroom == true
 //                               ? mintyGreen
-//                               : Colors.grey.withOpacity(0.2)),
+//                               : Colors.grey.withValues(alpha:0.2)),
 //                       child: Text(
 //                         '5',
 //                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -188,7 +188,7 @@
 //                           borderRadius: BorderRadius.circular(7),
 //                           color: sixBedroom == true
 //                               ? mintyGreen
-//                               : Colors.grey.withOpacity(0.2)),
+//                               : Colors.grey.withValues(alpha:0.2)),
 //                       child: Text(
 //                         '6',
 //                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -214,7 +214,7 @@
 //                           borderRadius: BorderRadius.circular(7),
 //                           color: sevenBedroom == true
 //                               ? mintyGreen
-//                               : Colors.grey.withOpacity(0.2)),
+//                               : Colors.grey.withValues(alpha:0.2)),
 //                       child: Text(
 //                         '7',
 //                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(

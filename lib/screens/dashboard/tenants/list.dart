@@ -1,12 +1,13 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/screens/dashboard/tenant/tenant_details.dart';
 import 'package:x_rent/utilities/constants.dart';
-import 'package:x_rent/utilities/data_caching.dart';
 import 'package:x_rent/utilities/widgets.dart';
 
 class ListTenants extends StatefulWidget {
@@ -20,8 +21,7 @@ class _ListTenantsState extends State<ListTenants> {
   bool tenantListLoading = true;
   List selectedTenants = [2];
   // Key for caching the tenant list
-  static const String CACHE_KEY_TENANT_LIST = 'cachedTenantList';
-  fetchTenantsList() async {
+  Future<void> fetchTenantsList() async {
     final userProvider = Provider.of<UserProvider>(
       context,
       listen: false,
@@ -73,7 +73,7 @@ class _ListTenantsState extends State<ListTenants> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: backColor.withOpacity(0.02),
+        backgroundColor: backColor.withValues(alpha: 0.02),
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
@@ -178,7 +178,8 @@ class _ListTenantsState extends State<ListTenants> {
                                               leading: Container(
                                                   decoration: BoxDecoration(
                                                       color: primaryDarkColor
-                                                          .withOpacity(0.1),
+                                                          .withValues(
+                                                              alpha: 0.1),
                                                       shape: BoxShape.circle),
                                                   child: const Padding(
                                                     padding: EdgeInsets.all(8),
@@ -235,8 +236,9 @@ class _ListTenantsState extends State<ListTenants> {
                                                                         12),
                                                             color:
                                                                 primaryDarkColor
-                                                                    .withOpacity(
-                                                                        0.1)),
+                                                                    .withValues(
+                                                                        alpha:
+                                                                            0.1)),
                                                         child: const Padding(
                                                           padding:
                                                               EdgeInsets.only(

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:x_rent/constants/theme.dart';
@@ -27,7 +29,7 @@ class _SignupState extends State<Signup> {
   String buttonErrorMessage = 'Enter all inputs';
   bool _obscurePassword = true;
 
-  validateSignupInputs() {
+  void validateSignupInputs() {
     if (first_name_ctrl.text == '') {
       return setState(() {
         buttonError = true;
@@ -394,7 +396,6 @@ class _SignupState extends State<Signup> {
                           print(res);
                           if (res['isSuccessful'] == false) {
                             return showToast(
-                              context,
                               'Error!',
                               res['error'] ?? 'Error, please try again later.',
                               Colors.red,
@@ -402,7 +403,6 @@ class _SignupState extends State<Signup> {
                           }
                           if (res['data']['response_code'] != '1') {
                             return showToast(
-                              context,
                               'Error!',
                               res['data']['message'] ??
                                   'Error, please try again later.',

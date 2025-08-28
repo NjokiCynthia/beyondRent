@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -22,7 +24,7 @@ class _PropertyListState extends State<PropertyList> {
   bool propertiesLoading = true;
   List userPropertyList = [];
 
-  fetchPropertiesByUser(context) async {
+  Future<void> fetchPropertiesByUser() async {
     print('I am here to fetch my properties');
     final userProvider = Provider.of<UserProvider>(
       context,
@@ -84,7 +86,7 @@ class _PropertyListState extends State<PropertyList> {
   @override
   void initState() {
     super.initState();
-    fetchPropertiesByUser(context);
+    fetchPropertiesByUser();
   }
 
   @override
@@ -109,7 +111,7 @@ class _PropertyListState extends State<PropertyList> {
               bottom: 10,
             ),
             decoration: BoxDecoration(
-              color: mintyGreen.withOpacity(0.1),
+              color: mintyGreen.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(7),
             ),
             child: GestureDetector(
@@ -145,7 +147,8 @@ class _PropertyListState extends State<PropertyList> {
                     child: Text(
                       userPropertyList[index]['name'],
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          color: Colors.black.withOpacity(0.7), fontSize: 20),
+                          color: Colors.black.withValues(alpha: 0.7),
+                          fontSize: 20),
                     ),
                   )
                 ],
@@ -225,7 +228,7 @@ class _PropertyListState extends State<PropertyList> {
                                 padding:
                                     const EdgeInsets.fromLTRB(20, 10, 20, 10),
                                 decoration: BoxDecoration(
-                                  color: mintyGreen.withOpacity(0.1),
+                                  color: mintyGreen.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(7),
                                 ),
                                 child: Row(

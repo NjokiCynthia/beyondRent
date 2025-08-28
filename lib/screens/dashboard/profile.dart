@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/screens/billing/add_supplementary_bill.dart';
 import 'package:provider/provider.dart';
@@ -7,10 +8,9 @@ import 'package:x_rent/screens/authentication/login.dart';
 import 'package:x_rent/screens/dashboard/profile/communicate.dart';
 import 'package:x_rent/screens/billing/add_rent.dart';
 import 'package:x_rent/providers/user_provider.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class Settings extends StatefulWidget {
-  const Settings({Key? key}) : super(key: key);
+  const Settings({super.key});
 
   @override
   State<Settings> createState() => _SettingsState();
@@ -20,7 +20,7 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.grey.withOpacity(0.1),
+      statusBarColor: Colors.grey.withValues(alpha: 0.1),
     ));
     final userProvider = Provider.of<UserProvider>(
       context,
@@ -28,7 +28,7 @@ class _SettingsState extends State<Settings> {
     );
 
     return Scaffold(
-      backgroundColor: Colors.grey.withOpacity(0.1),
+      backgroundColor: Colors.grey.withValues(alpha: 0.1),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -75,7 +75,7 @@ class _SettingsState extends State<Settings> {
                       ListTile(
                         leading: Container(
                           decoration: BoxDecoration(
-                            color: primaryDarkColor.withOpacity(0.1),
+                            color: primaryDarkColor.withValues(alpha: 0.1),
                             shape: BoxShape.circle,
                           ),
                           padding: const EdgeInsets.all(8),
@@ -91,7 +91,7 @@ class _SettingsState extends State<Settings> {
                       ListTile(
                         leading: Container(
                           decoration: BoxDecoration(
-                            color: primaryDarkColor.withOpacity(0.1),
+                            color: primaryDarkColor.withValues(alpha: 0.1),
                             shape: BoxShape.circle,
                           ),
                           padding: const EdgeInsets.all(8),
@@ -126,7 +126,7 @@ class _SettingsState extends State<Settings> {
                     child: ListTile(
                       leading: Container(
                         decoration: BoxDecoration(
-                          color: primaryDarkColor.withOpacity(0.1),
+                          color: primaryDarkColor.withValues(alpha: 0.1),
                           shape: BoxShape.circle,
                         ),
                         padding: const EdgeInsets.all(8),
@@ -167,7 +167,7 @@ class _SettingsState extends State<Settings> {
                     child: ListTile(
                       leading: Container(
                         decoration: BoxDecoration(
-                          color: primaryDarkColor.withOpacity(0.1),
+                          color: primaryDarkColor.withValues(alpha: 0.1),
                           shape: BoxShape.circle,
                         ),
                         padding: const EdgeInsets.all(8),
@@ -208,7 +208,7 @@ class _SettingsState extends State<Settings> {
                     child: ListTile(
                       leading: Container(
                         decoration: BoxDecoration(
-                          color: primaryDarkColor.withOpacity(0.1),
+                          color: primaryDarkColor.withValues(alpha: 0.1),
                           shape: BoxShape.circle,
                         ),
                         padding: const EdgeInsets.all(8),
@@ -249,7 +249,7 @@ class _SettingsState extends State<Settings> {
                 //     child: ListTile(
                 //       leading: Container(
                 //         decoration: BoxDecoration(
-                //           color: primaryDarkColor.withOpacity(0.1),
+                //           color: primaryDarkColor.withValues(alpha:0.1),
                 //           shape: BoxShape.circle,
                 //         ),
                 //         padding: const EdgeInsets.all(8),
@@ -277,7 +277,7 @@ class _SettingsState extends State<Settings> {
                 //   child: ListTile(
                 //     leading: Container(
                 //       decoration: BoxDecoration(
-                //         color: primaryDarkColor.withOpacity(0.1),
+                //         color: primaryDarkColor.withValues(alpha:0.1),
                 //         shape: BoxShape.circle,
                 //       ),
                 //       padding: const EdgeInsets.all(8),
@@ -319,7 +319,8 @@ class _SettingsState extends State<Settings> {
                       icon: const Icon(Icons.exit_to_app, color: Colors.red),
                       label: Text(
                         'Logout',
-                        style: TextStyle(color: Colors.red.withOpacity(0.8)),
+                        style:
+                            TextStyle(color: Colors.red.withValues(alpha: 0.8)),
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,

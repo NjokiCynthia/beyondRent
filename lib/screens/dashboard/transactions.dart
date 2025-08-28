@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/providers/property_provider.dart';
@@ -7,7 +9,7 @@ import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/constants/theme.dart';
 
 class Transactions extends StatefulWidget {
-  const Transactions({Key? key}) : super(key: key);
+  const Transactions({super.key});
 
   @override
   State<Transactions> createState() => _TransactionsState();
@@ -17,7 +19,7 @@ class _TransactionsState extends State<Transactions> {
   bool transactionListLoaded = false;
   List<Map<String, dynamic>> transactionsList = [];
 
-  fetchTransactionsList() async {
+  Future<void> fetchTransactionsList() async {
     print('I am here to load transactions paid');
     final userProvider = Provider.of<UserProvider>(
       context,
@@ -76,6 +78,7 @@ class _TransactionsState extends State<Transactions> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     Widget paymentModalContent = Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -212,7 +215,7 @@ class _TransactionsState extends State<Transactions> {
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
+                      color: Colors.grey.withValues(alpha: 0.2),
                       spreadRadius: 2,
                       blurRadius: 4,
                       offset: const Offset(0, 2),
@@ -247,7 +250,7 @@ class _TransactionsState extends State<Transactions> {
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
+                      color: Colors.grey.withValues(alpha: 0.2),
                       spreadRadius: 2,
                       blurRadius: 4,
                       offset: const Offset(0, 2),

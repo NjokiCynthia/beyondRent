@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/providers/property_provider.dart';
@@ -21,7 +21,7 @@ class _ListInvoicesState extends State<ListInvoices> {
   bool invoiceListLoaded = false;
   List invoiceList = [];
 
-  fetchInvoices() async {
+  Future<void> fetchInvoices() async {
     print('I am here to fetch invoices');
     final userProvider = Provider.of<UserProvider>(
       context,
@@ -71,7 +71,7 @@ class _ListInvoicesState extends State<ListInvoices> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: backColor.withOpacity(0.02),
+        backgroundColor: backColor.withValues(alpha: 0.02),
         elevation: 0,
         leading: const Icon(
           Icons.arrow_back_ios,
@@ -93,7 +93,7 @@ class _ListInvoicesState extends State<ListInvoices> {
               },
               child: Container(
                   decoration: BoxDecoration(
-                      color: primaryDarkColor.withOpacity(0.1),
+                      color: primaryDarkColor.withValues(alpha: 0.1),
                       shape: BoxShape.circle),
                   child: const Padding(
                     padding: EdgeInsets.all(8),
@@ -133,10 +133,10 @@ class _ListInvoicesState extends State<ListInvoices> {
                                     border: Border.fromBorderSide(BorderSide(
                                         strokeAlign:
                                             BorderSide.strokeAlignOutside,
-                                        color:
-                                            primaryDarkColor.withOpacity(0.1)))
+                                        color: primaryDarkColor.withValues(
+                                            alpha: 0.1)))
                                     // border: Border.all(
-                                    //     color: primaryDarkColor.withOpacity(0.1)),
+                                    //     color: primaryDarkColor.withValues(alpha:0.1)),
                                     ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,7 +162,7 @@ class _ListInvoicesState extends State<ListInvoices> {
                                         Container(
                                           decoration: BoxDecoration(
                                               color: primaryDarkColor
-                                                  .withOpacity(0.1),
+                                                  .withValues(alpha: 0.1),
                                               borderRadius:
                                                   BorderRadius.circular(10)),
                                           child: Padding(
@@ -172,7 +172,7 @@ class _ListInvoicesState extends State<ListInvoices> {
                                                 top: 2,
                                                 bottom: 2),
                                             child: Text(
-                                              'KES ${currencyFormat.format(double.parse(invoice['amount_payable'].toString() ?? "0"))}',
+                                              'KES ${currencyFormat.format(double.parse(invoice['amount_payable'].toString()))}',
                                               // 'KES ${invoice['amount_payable']}',
                                               style: const TextStyle(
                                                   color: primaryDarkColor,

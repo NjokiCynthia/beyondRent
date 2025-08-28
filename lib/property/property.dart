@@ -36,7 +36,7 @@ class _PropertyState extends State<Property> {
                     child: Container(
                       padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                       decoration: BoxDecoration(
-                        color: mintyGreen.withOpacity(0.1),
+                        color: mintyGreen.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(7),
                       ),
                       child: Row(

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/utilities/constants.dart';
@@ -10,15 +12,17 @@ class Communicate extends StatefulWidget {
   const Communicate({super.key});
 
   @override
-  _CommunicateState createState() => _CommunicateState();
+  CommunicateState createState() {
+    return CommunicateState();
+  }
 }
 
-class _CommunicateState extends State<Communicate> {
+class CommunicateState extends State<Communicate> {
   bool tenantListLoaded = false;
   List tenantList = [];
   List selectedTenants = [2];
 
-  fetchTenants() async {
+  Future<void> fetchTenants() async {
     final userProvider = Provider.of<UserProvider>(
       context,
       listen: false,
@@ -187,8 +191,8 @@ class _CommunicateState extends State<Communicate> {
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               color: selectedTenants.contains(index)
-                                  ? mintyGreen.withOpacity(0.2)
-                                  : Colors.grey.withOpacity(0.3),
+                                  ? mintyGreen.withValues(alpha: 0.2)
+                                  : Colors.grey.withValues(alpha: 0.3),
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Text(
@@ -207,7 +211,6 @@ class _CommunicateState extends State<Communicate> {
                 onSuccess: (res) {
                   Navigator.pop(context);
                   showToast(
-                    context,
                     'Success!',
                     'Message sent successfully',
                     mintyGreen,

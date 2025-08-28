@@ -29,16 +29,17 @@ class _CreateInvoiceState extends State<CreateInvoice> {
         return Theme(
           data: ThemeData.dark().copyWith(
             primaryColor: primaryDarkColor,
-            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            buttonTheme:
+                const ButtonThemeData(textTheme: ButtonTextTheme.primary),
             colorScheme: const ColorScheme.light(primary: primaryDarkColor)
                 .copyWith(secondary: primaryDarkColor),
-            dialogBackgroundColor: Colors.white,
             textTheme: const TextTheme(
               displayLarge:
                   TextStyle(color: Colors.white), // Change number color
               bodyLarge:
                   TextStyle(color: primaryDarkColor), // Change text color
             ),
+            dialogTheme: DialogThemeData(backgroundColor: Colors.white),
           ),
           child: child!,
         );
@@ -69,16 +70,17 @@ class _CreateInvoiceState extends State<CreateInvoice> {
         return Theme(
           data: ThemeData.dark().copyWith(
             primaryColor: primaryDarkColor,
-            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            buttonTheme:
+                const ButtonThemeData(textTheme: ButtonTextTheme.primary),
             colorScheme: const ColorScheme.light(primary: primaryDarkColor)
                 .copyWith(secondary: primaryDarkColor),
-            dialogBackgroundColor: Colors.white,
             textTheme: const TextTheme(
               displayLarge:
                   TextStyle(color: Colors.white), // Change number color
               bodyLarge:
                   TextStyle(color: primaryDarkColor), // Change text color
             ),
+            dialogTheme: DialogThemeData(backgroundColor: Colors.white),
           ),
           child: child!,
         );
@@ -282,11 +284,8 @@ class _CreateInvoiceState extends State<CreateInvoice> {
                           ElevatedButton(
                             onPressed: () {
                               // Check the values and act accordingly
-                              print(
-                                  'Bill Name: $billName, Bill Option: $billOption');
 
                               if (billOption == 'Varying') {
-                                print('Amount: $amount');
                               }
 
                               // Add the bill to the list
@@ -323,7 +322,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: backColor.withOpacity(0.02),
+        backgroundColor: backColor.withValues(alpha: 0.02),
         elevation: 0,
         leading: const Icon(
           Icons.arrow_back_ios,
@@ -338,7 +337,7 @@ class _CreateInvoiceState extends State<CreateInvoice> {
             ),
             Container(
                 decoration: BoxDecoration(
-                    color: primaryDarkColor.withOpacity(0.1),
+                    color: primaryDarkColor.withValues(alpha: 0.1),
                     shape: BoxShape.circle),
                 child: const Padding(
                   padding: EdgeInsets.all(8),

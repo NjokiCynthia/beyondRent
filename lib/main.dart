@@ -42,7 +42,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final bool isFirstLaunch;
-  const MyApp({Key? key, required this.isFirstLaunch}) : super(key: key);
+  const MyApp({super.key, required this.isFirstLaunch});
 
   @override
   Widget build(BuildContext context) {

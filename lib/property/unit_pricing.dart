@@ -149,7 +149,7 @@ class _UnitPricingState extends State<UnitPricing> {
   }
 
   final List<String> unitLetters = ['A', 'B'];
-  List<bool> _selectedItems = List.filled(10, false);
+  final List<bool> _selectedItems = List.filled(10, false);
 
   @override
   Widget build(BuildContext context) {
@@ -213,7 +213,7 @@ class _UnitPricingState extends State<UnitPricing> {
                                           letterSpacing: 0.5),
                                     ),
                                     Text(
-                                      'KES ${unitPrice}',
+                                      'KES $unitPrice',
                                       // 'KES 10,000',
                                     ),
                                   ],

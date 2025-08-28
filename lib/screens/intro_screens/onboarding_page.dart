@@ -6,7 +6,7 @@ import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/screens/authentication/login.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -109,7 +109,8 @@ class _HomePageState extends State<HomePage> {
         size: const Size.square(10.0),
         activeSize: const Size(20.0, 10.0),
         activeColor: primaryDarkColor,
-        color: primaryDarkColor.withOpacity(0.5), // Color of inactive dots
+        color:
+            primaryDarkColor.withValues(alpha: 0.5), // Color of inactive dots
         spacing: const EdgeInsets.symmetric(horizontal: 3),
         activeShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25.0),

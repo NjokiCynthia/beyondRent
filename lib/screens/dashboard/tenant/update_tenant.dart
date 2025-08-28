@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
-import 'package:x_rent/providers/tenants_provider.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/providers/property_provider.dart';
@@ -14,10 +13,12 @@ class AddTenant extends StatefulWidget {
   const AddTenant({super.key, this.unitID});
 
   @override
-  _AddTenantState createState() => _AddTenantState();
+  AddTenantState createState() {
+    return AddTenantState();
+  }
 }
 
-class _AddTenantState extends State<AddTenant> {
+class AddTenantState extends State<AddTenant> {
   bool tenantInfoLoading = true;
   Map tenantDetails = {};
   Map unitDetails = {};
@@ -73,7 +74,7 @@ class _AddTenantState extends State<AddTenant> {
   bool buttonError = true;
   String buttonErrorMessage = 'Enter all inputs';
 
-  validateSignupInputs() {
+  void validateSignupInputs() {
     if (firstName.text == '') {
       return setState(() {
         buttonError = true;
@@ -471,7 +472,6 @@ class _AddTenantState extends State<AddTenant> {
                                       '${firstName.text} ${lastName.text}',
                                 });
                                 showToast(
-                                  context,
                                   'Success!',
                                   'Tenant added to unit successfully',
                                   mintyGreen,
@@ -480,7 +480,6 @@ class _AddTenantState extends State<AddTenant> {
                                 var serverMsg =
                                     res['data']['response']['message'];
                                 showToast(
-                                  context,
                                   'Error!',
                                   serverMsg,
                                   Colors.red,
@@ -488,7 +487,6 @@ class _AddTenantState extends State<AddTenant> {
                               }
                             } else {
                               showToast(
-                                context,
                                 'Error!',
                                 res['error'] ?? 'Error adding tenant',
                                 Colors.red,

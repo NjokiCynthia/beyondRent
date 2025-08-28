@@ -5,12 +5,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:x_rent/screens/intro_screens/onboarding_page.dart';
 
 class AnimatedScaleImage extends StatefulWidget {
-  const AnimatedScaleImage({Key? key}) : super(key: key);
+  const AnimatedScaleImage({super.key});
   @override
-  _AnimatedScaleImageState createState() => _AnimatedScaleImageState();
+  AnimatedScaleImageState createState() {
+    return AnimatedScaleImageState();
+  }
 }
 
-class _AnimatedScaleImageState extends State<AnimatedScaleImage>
+class AnimatedScaleImageState extends State<AnimatedScaleImage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
@@ -65,7 +67,7 @@ class _AnimatedScaleImageState extends State<AnimatedScaleImage>
 }
 
 class SplashScreen extends StatelessWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(

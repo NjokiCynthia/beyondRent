@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
@@ -19,7 +21,7 @@ class _TenantStatementState extends State<TenantStatement> {
   List depositList = [];
   Map<String, dynamic>? tenantDetails;
 
-  fetchDeposits(int tenantId) async {
+  Future<void> fetchDeposits(int tenantId) async {
     print('I am here to fetch deposits');
     final userProvider = Provider.of<UserProvider>(
       context,
@@ -78,7 +80,7 @@ class _TenantStatementState extends State<TenantStatement> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: backColor.withOpacity(0.02),
+        backgroundColor: backColor.withValues(alpha: 0.02),
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
@@ -134,7 +136,8 @@ class _TenantStatementState extends State<TenantStatement> {
                                 padding: const EdgeInsets.all(8),
                                 child: Icon(
                                   Icons.person_2_outlined,
-                                  color: primaryDarkColor.withOpacity(0.5),
+                                  color:
+                                      primaryDarkColor.withValues(alpha: 0.5),
                                 ),
                               )),
                           title: Text(
@@ -176,10 +179,10 @@ class _TenantStatementState extends State<TenantStatement> {
                                       border: Border.fromBorderSide(BorderSide(
                                           strokeAlign:
                                               BorderSide.strokeAlignOutside,
-                                          color: primaryDarkColor
-                                              .withOpacity(0.1)))
+                                          color: primaryDarkColor.withValues(
+                                              alpha: 0.1)))
                                       // border: Border.all(
-                                      //     color: primaryDarkColor.withOpacity(0.1)),
+                                      //     color: primaryDarkColor.withValues(alpha:0.1)),
                                       ),
                                   child: Column(
                                     crossAxisAlignment:
@@ -198,7 +201,7 @@ class _TenantStatementState extends State<TenantStatement> {
                                           Container(
                                             decoration: BoxDecoration(
                                                 color: primaryDarkColor
-                                                    .withOpacity(0.1),
+                                                    .withValues(alpha: 0.1),
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
                                             child: Padding(
@@ -208,7 +211,7 @@ class _TenantStatementState extends State<TenantStatement> {
                                                   top: 2,
                                                   bottom: 2),
                                               child: Text(
-                                                'KES ${currencyFormat.format(double.parse(deposit['amount'].toString() ?? "0"))}',
+                                                'KES ${currencyFormat.format(double.parse(deposit['amount'].toString()))}',
                                                 style: const TextStyle(
                                                     color: primaryDarkColor,
                                                     fontSize: 14),

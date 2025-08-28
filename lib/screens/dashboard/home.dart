@@ -1,5 +1,8 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
 import 'package:x_rent/models/bank_model.dart';
@@ -9,15 +12,14 @@ import 'package:x_rent/screens/dashboard/withdrawals/list_withdrawals.dart';
 import 'package:x_rent/screens/dashboard/withdrawals/withdrawals.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
-import 'package:x_rent/screens/dashboard/propertyDetails.dart';
+import 'package:x_rent/screens/dashboard/property_details.dart';
 import 'package:x_rent/property/add_property.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/screens/dashboard.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
@@ -33,7 +35,7 @@ class _HomeState extends State<Home> {
   String? firstBankId;
   String? secondBankId;
 
-  fetchPropertiesAccounts(context) async {
+  Future<void> fetchPropertiesAccounts() async {
     print('I am here to fetch my properties accounts');
     final userProvider = Provider.of<UserProvider>(
       context,
@@ -92,7 +94,7 @@ class _HomeState extends State<Home> {
     });
   }
 
-  fetchPropertiesByUser(context) async {
+  Future<void> fetchPropertiesByUser() async {
     final userProvider = Provider.of<UserProvider>(
       context,
       listen: false,
@@ -153,7 +155,7 @@ class _HomeState extends State<Home> {
   bool transactionListLoaded = true;
   //List<Map<String, dynamic>> transactionsList = [];
 
-  fetchTransactionsList() async {
+  Future<void> fetchTransactionsList() async {
     print('fetching transactions list');
     setState(() {
       transactionListLoaded = true;
@@ -293,7 +295,7 @@ class _HomeState extends State<Home> {
   bool rentInfoLoaded = true;
   Map<String, dynamic> rentInfo = {};
 
-  fetchRentInfo() async {
+  Future<void> fetchRentInfo() async {
     print('I am here trying to fetch the total rent info');
     setState(() {
       rentInfoLoaded = true;
@@ -358,7 +360,7 @@ class _HomeState extends State<Home> {
   bool monthRentLoaded = true;
   Map<String, dynamic> monthRent = {};
 
-  fetchRentInfoForCurrentMonth() async {
+  Future<void> fetchRentInfoForCurrentMonth() async {
     print('I am here trying to fetch rent info');
     setState(() {
       monthRentLoaded = true;
@@ -420,12 +422,12 @@ class _HomeState extends State<Home> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    fetchPropertiesAccounts(context);
+    fetchPropertiesAccounts();
     _fetchBanks(context);
     fetchRentInfo();
     fetchRentInfoForCurrentMonth();
     fetchTransactionsList();
-    fetchPropertiesByUser(context);
+    fetchPropertiesByUser();
   }
 
   void showBottom() {
@@ -521,12 +523,12 @@ class _HomeState extends State<Home> {
                     value: selectedOption,
                     items: [
                       const DropdownMenuItem(
-                        child: Text('Expense Payment'),
-                        value: 'expense_payment', // 1 : Expense Payment,
+                        value: 'expense_payment',
+                        child: Text('Expense Payment'), // 1 : Expense Payment,
                       ),
                       const DropdownMenuItem(
-                        child: Text('Tenant Refund'),
-                        value: 'tenant_refund', //2
+                        value: 'tenant_refund',
+                        child: Text('Tenant Refund'), //2
                       ),
                       const DropdownMenuItem(
                         value: 'account_transfer',
@@ -599,7 +601,7 @@ class _HomeState extends State<Home> {
                               listen: false,
                             );
                             final phone = userProvider.user?.phone;
-                            TextEditingController _phoneNumberController =
+                            TextEditingController phoneNumberController =
                                 TextEditingController(text: phone);
                             showDialog(
                               context: context,
@@ -620,7 +622,7 @@ class _HomeState extends State<Home> {
                                             height: 20,
                                           ),
                                           TextFormField(
-                                            controller: _phoneNumberController,
+                                            controller: phoneNumberController,
                                             style: bodyText,
                                             keyboardType: TextInputType.number,
                                             decoration: InputDecoration(
@@ -696,7 +698,6 @@ class _HomeState extends State<Home> {
                                                         ['status'] ==
                                                     1) {
                                                   showToast(
-                                                    context,
                                                     'Success!',
                                                     'Your withdrawal request is successful!',
                                                     mintyGreen,
@@ -711,10 +712,8 @@ class _HomeState extends State<Home> {
                                                                 const ListWithdrawals())));
                                                   });
                                                 }
-                                                ;
                                               } else {
                                                 showToast(
-                                                  context,
                                                   'Error!',
                                                   res['data']['response']
                                                       ['message'],
@@ -843,12 +842,12 @@ class _HomeState extends State<Home> {
                                               ? bankModels[0].accountName
                                               : "",
                                           "transfer_to": firstBankId != null
-                                              ? "bank-${firstBankId}"
+                                              ? "bank-$firstBankId"
                                               : "",
                                           "transfer_from":
                                               //"bank-9492",
                                               secondBankId != null
-                                                  ? "bank-${secondBankId}"
+                                                  ? "bank-$secondBankId"
                                                   : "",
                                           "tenant_id": "",
                                           "contribution_id": ""
@@ -865,7 +864,6 @@ class _HomeState extends State<Home> {
                                                     ['status'] ==
                                                 1) {
                                               showToast(
-                                                context,
                                                 'Success!',
                                                 'Your withdrawal request is successful!',
                                                 mintyGreen,
@@ -882,7 +880,6 @@ class _HomeState extends State<Home> {
                                             }
                                           } else {
                                             showToast(
-                                              context,
                                               'Error!',
                                               res['data']['response']
                                                   ['message'],
@@ -943,7 +940,7 @@ class _HomeState extends State<Home> {
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
+                color: Colors.grey.withValues(alpha: 0.2),
                 spreadRadius: 2,
                 blurRadius: 4,
                 offset: const Offset(0, 2),
@@ -1007,7 +1004,7 @@ class _HomeState extends State<Home> {
                       child: Container(
                         decoration: BoxDecoration(
                             border: Border.all(color: primaryDarkColor),
-                            color: primaryDarkColor.withOpacity(0.1),
+                            color: primaryDarkColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10)),
                         child: const Padding(
                           padding: EdgeInsets.all(10),
@@ -1048,7 +1045,7 @@ class _HomeState extends State<Home> {
                       child: Container(
                         decoration: BoxDecoration(
                             border: Border.all(color: primaryDarkColor),
-                            color: primaryDarkColor.withOpacity(0.1),
+                            color: primaryDarkColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(10)),
                         child: const Padding(
                           padding: EdgeInsets.all(10),
@@ -1098,7 +1095,7 @@ class _HomeState extends State<Home> {
             borderRadius: BorderRadius.circular(10),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
+                color: Colors.grey.withValues(alpha: 0.2),
                 spreadRadius: 2,
                 blurRadius: 4,
                 offset: const Offset(0, 2),
@@ -1147,7 +1144,7 @@ class _HomeState extends State<Home> {
               ),
               Container(
                 decoration: BoxDecoration(
-                    color: primaryDarkColor.withOpacity(0.1),
+                    color: primaryDarkColor.withValues(alpha: 0.1),
                     border: Border.all(color: primaryDarkColor),
                     borderRadius: BorderRadius.circular(10)),
                 child: const Padding(
@@ -1177,7 +1174,7 @@ class _HomeState extends State<Home> {
       ],
     );
 
-    Widget transactionsWidget = Container(
+    Widget transactionsWidget = SizedBox(
       height: MediaQuery.of(context).size.height,
       child: Column(
         children: [
@@ -1259,7 +1256,7 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
-    final userProvider = Provider.of<UserProvider>(
+    Provider.of<UserProvider>(
       context,
       listen: false,
     );
@@ -1443,7 +1440,7 @@ class _HomeState extends State<Home> {
                         bottom: 10,
                       ),
                       decoration: BoxDecoration(
-                        color: mintyGreen.withOpacity(0.1),
+                        color: mintyGreen.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(7),
                       ),
                       child: GestureDetector(
@@ -1483,7 +1480,8 @@ class _HomeState extends State<Home> {
                                     .textTheme
                                     .titleLarge!
                                     .copyWith(
-                                        color: Colors.black.withOpacity(0.7),
+                                        color:
+                                            Colors.black.withValues(alpha: 0.7),
                                         fontSize: 20),
                               ),
                             )

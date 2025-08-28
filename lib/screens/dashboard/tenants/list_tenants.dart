@@ -1,5 +1,7 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/providers/property_provider.dart';
@@ -20,7 +22,7 @@ class _ListTenantsState extends State<ListTenants> {
 
   List selectedTenants = [2];
 
-  fetchTenantsList() async {
+  Future<void> fetchTenantsList() async {
     print('i am here to fetch tenant list');
     setState(() {
       tenantListLoaded = true;
@@ -76,7 +78,7 @@ class _ListTenantsState extends State<ListTenants> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: backColor.withOpacity(0.02),
+        backgroundColor: backColor.withValues(alpha: 0.02),
         elevation: 0,
         leading: GestureDetector(
           onTap: () {
@@ -177,7 +179,7 @@ class _ListTenantsState extends State<ListTenants> {
                                             leading: Container(
                                                 decoration: BoxDecoration(
                                                     color: primaryDarkColor
-                                                        .withOpacity(0.1),
+                                                        .withValues(alpha: 0.1),
                                                     shape: BoxShape.circle),
                                                 child: const Padding(
                                                   padding: EdgeInsets.all(8),
@@ -232,8 +234,9 @@ class _ListTenantsState extends State<ListTenants> {
                                                                   .circular(12),
                                                           color:
                                                               primaryDarkColor
-                                                                  .withOpacity(
-                                                                      0.1)),
+                                                                  .withValues(
+                                                                      alpha:
+                                                                          0.1)),
                                                       child: const Padding(
                                                         padding:
                                                             EdgeInsets.only(

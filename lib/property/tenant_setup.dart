@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:x_rent/constants/color_contants.dart';
@@ -19,16 +21,19 @@ class DropdownWidget extends StatefulWidget {
   final List fetchedUnits;
   final ValueSetter<dynamic>? callback;
 
-  DropdownWidget({
+  const DropdownWidget({
+    super.key,
     required this.fetchedUnits,
     this.callback,
   });
 
   @override
-  _DropdownWidgetState createState() => _DropdownWidgetState();
+  DropdownWidgetState createState() {
+    return DropdownWidgetState();
+  }
 }
 
-class _DropdownWidgetState extends State<DropdownWidget> {
+class DropdownWidgetState extends State<DropdownWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -67,7 +72,7 @@ class _DropdownWidgetState extends State<DropdownWidget> {
               value: unit,
               child: Text(unit['house_number']),
             );
-          }).toList(),
+          }),
         ],
       ),
     );
@@ -84,10 +89,12 @@ class TenantSetUp extends StatefulWidget {
       required this.pageController});
 
   @override
-  _TenantSetUpState createState() => _TenantSetUpState();
+  TenantSetUpState createState() {
+    return TenantSetUpState();
+  }
 }
 
-class _TenantSetUpState extends State<TenantSetUp> {
+class TenantSetUpState extends State<TenantSetUp> {
   bool buttonError = true;
   String buttonErrorMessage = 'Enter all inputs';
 
@@ -100,7 +107,7 @@ class _TenantSetUpState extends State<TenantSetUp> {
 
   PhoneNumber number = PhoneNumber(isoCode: 'KE');
 
-  validateSignupInputs() {
+  void validateSignupInputs() {
     print('tapped');
     if (firstName.text == '') {
       return setState(() {
@@ -544,7 +551,6 @@ class _TenantSetUpState extends State<TenantSetUp> {
                 var serverStatus = res['data']['response']['status'];
                 if (serverStatus == 1) {
                   showToast(
-                    context,
                     'Success!',
                     'Tenant added successfully',
                     mintyGreen,
@@ -563,7 +569,6 @@ class _TenantSetUpState extends State<TenantSetUp> {
                 } else {
                   var serverMsg = res['data']['response']['message'];
                   showToast(
-                    context,
                     'Error!',
                     serverMsg,
                     Colors.red,
@@ -571,7 +576,6 @@ class _TenantSetUpState extends State<TenantSetUp> {
                 }
               } else {
                 showToast(
-                  context,
                   'Error!',
                   res['error'] ?? 'Error adding tenant',
                   Colors.red,

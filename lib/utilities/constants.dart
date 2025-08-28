@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:dio/dio.dart';
 import 'package:x_rent/models/unit_type.dart';
 
@@ -34,7 +34,7 @@ class AppTextStyles {
   static final TextStyle headerBig = GoogleFonts.poppins(
     fontSize: 30,
     fontWeight: FontWeight.w500,
-    color: Colors.black.withOpacity(0.8),
+    color: Colors.black.withValues(alpha: 0.8),
   );
   static final TextStyle header = GoogleFonts.poppins(
     fontSize: 24,

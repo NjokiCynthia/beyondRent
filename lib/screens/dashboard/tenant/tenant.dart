@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:x_rent/utilities/widgets.dart';
@@ -5,7 +7,7 @@ import 'package:x_rent/constants/theme.dart';
 import 'package:intl/intl.dart';
 
 class TenantDetails extends StatefulWidget {
-  const TenantDetails({Key? key}) : super(key: key);
+  const TenantDetails({super.key});
 
   @override
   State<TenantDetails> createState() => _TenantDetailsState();
@@ -15,42 +17,6 @@ class _TenantDetailsState extends State<TenantDetails> {
   DateTime selectedDate = DateTime.now();
   String currentMonth = '';
 
-  Future<void> _showDayPicker(BuildContext context) async {
-    DateTime currentDate = DateTime.now();
-    DateTime lastSelectableDate =
-        DateTime(currentDate.year - 1, currentDate.month);
-
-    DateTime? selected = await showDatePicker(
-      context: context,
-      initialDate: currentDate,
-      firstDate: lastSelectableDate,
-      lastDate: currentDate,
-      initialDatePickerMode: DatePickerMode.day, // Change this to day
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
-              primary: mintyGreen, // Change this to your desired color
-              onPrimary: Colors.white,
-              surface: Colors.white,
-              onSurface: Colors.black,
-            ),
-            buttonTheme: const ButtonThemeData(
-              textTheme: ButtonTextTheme.primary,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (selected != null) {
-      setState(() {
-        selectedDate = selected;
-        currentMonth = getMonthAbbreviation(selected);
-      });
-    }
-  }
 
   String getMonthAbbreviation(DateTime date) {
     String abbreviation = DateFormat.MMM().format(date);

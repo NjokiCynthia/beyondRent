@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
@@ -64,7 +66,7 @@ class _AddUnitsModalContentState extends State<AddUnitsModalContent> {
                       decoration: BoxDecoration(
                         color: _selectedIndex == index
                             ? mintyGreen
-                            : Colors.grey.withOpacity(0.2),
+                            : Colors.grey.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: Center(
@@ -210,10 +212,12 @@ class AddProperty extends StatefulWidget {
   const AddProperty({super.key});
 
   @override
-  _AddPropertyState createState() => _AddPropertyState();
+  AddPropertyState createState() {
+    return AddPropertyState();
+  }
 }
 
-class _AddPropertyState extends State<AddProperty> {
+class AddPropertyState extends State<AddProperty> {
   PageController propertyPageController = PageController(initialPage: 0);
   @override
   Widget build(BuildContext context) {
@@ -299,7 +303,7 @@ class _AddPropertyState extends State<AddProperty> {
         decoration: BoxDecoration(
           color: _currentPageIndex >= stepIndex
               ? mintyGreen
-              : mintyGreen.withOpacity(0.2),
+              : mintyGreen.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(2),
         ),
       ),
@@ -334,13 +338,7 @@ class _StepPage1State extends State<StepPage1> {
 
   bool propertySaveLoading = false;
 
-  void _selectItem(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  propertyInputValidator() async {
+  Future<bool> propertyInputValidator() async {
     if (propertyNameController.text == '') {
       setState(() {
         buttonError = true;
@@ -384,7 +382,7 @@ class _StepPage1State extends State<StepPage1> {
     }
   }
 
-  addNewProperty() async {
+  Future<void> addNewProperty() async {
     final propertyProvider = Provider.of<PropertyProvider>(
       context,
       listen: false,
@@ -725,11 +723,11 @@ class _StepPage1State extends State<StepPage1> {
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium!
-                        .apply(color: Colors.black.withOpacity(0.5)),
+                        .apply(color: Colors.black.withValues(alpha: 0.5)),
                     // Theme.of(context)
                     //     .textTheme
                     //     .bodyText1!
-                    //     .copyWith(color: Colors.black.withOpacity(0.5)),
+                    //     .copyWith(color: Colors.black.withValues(alpha:0.5)),
                   ),
                 ],
               ),
@@ -750,7 +748,7 @@ class _StepPage1State extends State<StepPage1> {
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium!
-                        .apply(color: Colors.black.withOpacity(0.5)),
+                        .apply(color: Colors.black.withValues(alpha: 0.5)),
                   ),
                 ],
               ),
@@ -805,7 +803,6 @@ class _StepPage1State extends State<StepPage1> {
                       );
                       userPropertyListProvider.addProperty(property);
                       showToast(
-                        context,
                         'Success!',
                         res['data']['response']['message'],
                         mintyGreen,
@@ -819,7 +816,6 @@ class _StepPage1State extends State<StepPage1> {
                     }
                   } else {
                     showToast(
-                      context,
                       'Error!',
                       res['data']['response']['message'],
                       Colors.red,
@@ -827,7 +823,6 @@ class _StepPage1State extends State<StepPage1> {
                   }
                 } else {
                   showToast(
-                    context,
                     'Error!',
                     "Please enter all fields",
                     Colors.red,

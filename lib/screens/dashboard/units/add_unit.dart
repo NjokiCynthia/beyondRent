@@ -13,10 +13,12 @@ class AddUnit extends StatefulWidget {
   const AddUnit({super.key});
 
   @override
-  _AddUnitState createState() => _AddUnitState();
+  AddUnitState createState() {
+    return AddUnitState();
+  }
 }
 
-class _AddUnitState extends State<AddUnit> {
+class AddUnitState extends State<AddUnit> {
   bool buttonError = true;
   String buttonErrorMessage = 'Enter all fields';
   int _selectedIndex = 0;
@@ -34,7 +36,7 @@ class _AddUnitState extends State<AddUnit> {
     });
   }
 
-  propertyInputValidator() async {
+  Future<bool> propertyInputValidator() async {
     if (houseNoController.text == '') {
       setState(() {
         buttonError = true;
@@ -62,7 +64,7 @@ class _AddUnitState extends State<AddUnit> {
     }
   }
 
-  addPropertyUnits() async {
+  Future addPropertyUnits() async {
     final userProvider = Provider.of<UserProvider>(
       context,
       listen: false,
@@ -101,7 +103,7 @@ class _AddUnitState extends State<AddUnit> {
     }
   }
 
-  fetchPropertyUnits() async {
+  Future<void> fetchPropertyUnits() async {
     final propertyProvider = Provider.of<PropertyProvider>(
       context,
       listen: false,
@@ -363,7 +365,7 @@ class _AddUnitState extends State<AddUnit> {
                             decoration: BoxDecoration(
                               color: _selectedIndex == index
                                   ? mintyGreen
-                                  : Colors.grey.withOpacity(0.2),
+                                  : Colors.grey.withValues(alpha: 0.2),
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Center(
@@ -404,7 +406,6 @@ class _AddUnitState extends State<AddUnit> {
                   onSuccess: (res) {
                     if (res['isSuccessful'] == false) {
                       return showToast(
-                        context,
                         'Error!',
                         res['error'],
                         Colors.red,
@@ -413,7 +414,6 @@ class _AddUnitState extends State<AddUnit> {
                       fetchPropertyUnits();
 
                       showToast(
-                        context,
                         'Success!',
                         'Unit added successfully',
                         mintyGreen,

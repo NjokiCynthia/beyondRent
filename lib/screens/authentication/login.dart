@@ -27,10 +27,10 @@ class _LoginState extends State<Login> {
   PhoneNumber number = PhoneNumber(isoCode: 'KE');
   bool _obscurePassword = true;
 
-  checkIfFreshSignup() {
+  void checkIfFreshSignup() {
     if (widget.justSignedup == true) {
       showToast(
-        context,
+        
         'Success',
         'You have Signed up successfully. Use your details to log in.',
         Colors.green,
@@ -210,7 +210,7 @@ class _LoginState extends State<Login> {
                     onSuccess: (res) {
                       if (res['data']['response']['status'] != 1) {
                         return showToast(
-                          context,
+                          
                           'Error!',
                           res['data']['message'] ??
                               'Error, please try again later.',

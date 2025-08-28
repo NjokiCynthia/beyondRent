@@ -1,5 +1,6 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
 import 'package:x_rent/constants/theme.dart';
@@ -210,11 +211,11 @@ class _AccountSetupState extends State<AccountSetup> {
   @override
   Widget build(BuildContext context) {
     PageController pageController = widget.pageController!;
-    final userProvider = Provider.of<UserProvider>(
+    Provider.of<UserProvider>(
       context,
       listen: false,
     );
-    final propertyProvider = Provider.of<PropertyProvider>(
+    Provider.of<PropertyProvider>(
       context,
       listen: false,
     );

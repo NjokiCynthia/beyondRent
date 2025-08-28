@@ -1,16 +1,18 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:x_rent/utilities/widgets.dart';
 import 'package:x_rent/screens/dashboard/units/add_unit.dart';
 import 'package:x_rent/providers/property_provider.dart';
 import 'package:x_rent/providers/user_provider.dart';
 import 'package:x_rent/utilities/constants.dart';
 import 'package:provider/provider.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:x_rent/screens/dashboard/units/unit_details.dart';
 
 class Units extends StatefulWidget {
-  const Units({Key? key}) : super(key: key);
+  const Units({super.key});
 
   @override
   State<Units> createState() => _UnitsState();
@@ -21,7 +23,7 @@ class _UnitsState extends State<Units> {
   Map<String, dynamic> responseData = {};
   bool unitsFetched = false;
 
-  fetchUnitDetails() async {
+  Future<void> fetchUnitDetails() async {
     print('I am here to fetch unit details');
     // setState(() {
     //   unitDetailsLoading = true;
@@ -61,7 +63,6 @@ class _UnitsState extends State<Units> {
           propertyUnitsList = units;
         });
       } else {}
-    } catch (e) {
     } finally {
       setState(() {
         unitDetailsLoading = false;
@@ -71,7 +72,7 @@ class _UnitsState extends State<Units> {
 
   bool unitsLoading = true;
 
-  fetchPropertyUnits() async {
+  Future<void> fetchPropertyUnits() async {
     print('I am here to fetch property units');
     setState(() {
       unitsLoading = true;
@@ -180,7 +181,7 @@ class _UnitsState extends State<Units> {
                         borderRadius: BorderRadius.circular(7),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
+                            color: Colors.grey.withValues(alpha: 0.2),
                             spreadRadius: 2,
                             blurRadius: 4,
                             offset: const Offset(0, 2),
@@ -265,7 +266,7 @@ class _UnitsState extends State<Units> {
                                           .bodySmall!
                                           .copyWith(
                                               color: Colors.black
-                                                  .withOpacity(0.5)),
+                                                  .withValues(alpha: 0.5)),
                                     ),
                                     Text(
                                       'Vacant units',
@@ -274,7 +275,7 @@ class _UnitsState extends State<Units> {
                                           .bodySmall!
                                           .copyWith(
                                               color: Colors.black
-                                                  .withOpacity(0.5)),
+                                                  .withValues(alpha: 0.5)),
                                     ),
                                   ],
                                 ),
@@ -306,7 +307,7 @@ class _UnitsState extends State<Units> {
                                           .bodyLarge!
                                           .copyWith(
                                               color: Colors.black
-                                                  .withOpacity(0.5)),
+                                                  .withValues(alpha: 0.5)),
                                     ),
                                     Text(
                                       ' ${responseData['total_tenants'] ?? '0'}',

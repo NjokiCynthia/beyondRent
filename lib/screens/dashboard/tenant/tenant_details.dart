@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:x_rent/constants/color_contants.dart';
@@ -22,7 +22,7 @@ class _ViewTenantState extends State<ViewTenant> {
   Map tenantDetails = {};
   Map unitDetails = {};
   String? tenantName;
-  fetchTenantDetails(int tenantId) async {
+  Future<void> fetchTenantDetails(int tenantId) async {
     print('i AM HERE TO FETCH TENANT DETAILS......');
     setState(() {
       tenantInfoLoading = true;
@@ -196,7 +196,7 @@ class _ViewTenantState extends State<ViewTenant> {
             borderRadius: BorderRadius.circular(8),
             border: Border.fromBorderSide(BorderSide(
                 strokeAlign: BorderSide.strokeAlignOutside,
-                color: primaryDarkColor.withOpacity(0.1))),
+                color: primaryDarkColor.withValues(alpha: 0.1))),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -244,7 +244,7 @@ class _ViewTenantState extends State<ViewTenant> {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                        color: primaryDarkColor.withOpacity(0.1),
+                        color: primaryDarkColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Padding(
                       padding: const EdgeInsets.only(
@@ -258,7 +258,7 @@ class _ViewTenantState extends State<ViewTenant> {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                        color: primaryDarkColor.withOpacity(0.1),
+                        color: primaryDarkColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(10)),
                     child: Padding(
                       padding: const EdgeInsets.only(

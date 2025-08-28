@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x_rent/constants/color_contants.dart';
@@ -17,7 +19,7 @@ class _ListWithdrawalsState extends State<ListWithdrawals> {
   bool withdrawalListLoaded = false;
   List<Map<String, dynamic>> withdrawalList = [];
 
-  fetchWithdrawals() async {
+  Future<void> fetchWithdrawals() async {
     print('I am here to fetch withdrawals');
     final userProvider = Provider.of<UserProvider>(
       context,
@@ -94,7 +96,7 @@ class _ListWithdrawalsState extends State<ListWithdrawals> {
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: backColor.withOpacity(0.02),
+          backgroundColor: backColor.withValues(alpha: 0.02),
           elevation: 0,
           leading: GestureDetector(
             onTap: () {
@@ -147,9 +149,10 @@ class _ListWithdrawalsState extends State<ListWithdrawals> {
                                   border: Border.fromBorderSide(BorderSide(
                                       strokeAlign:
                                           BorderSide.strokeAlignOutside,
-                                      color: primaryDarkColor.withOpacity(0.1)))
+                                      color: primaryDarkColor.withValues(
+                                          alpha: 0.1)))
                                   // border: Border.all(
-                                  //     color: primaryDarkColor.withOpacity(0.1)),
+                                  //     color: primaryDarkColor.withValues(alpha:0.1)),
                                   ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,8 +171,8 @@ class _ListWithdrawalsState extends State<ListWithdrawals> {
                                       ),
                                       Container(
                                         decoration: BoxDecoration(
-                                            color: primaryDarkColor
-                                                .withOpacity(0.1),
+                                            color: primaryDarkColor.withValues(
+                                                alpha: 0.1),
                                             borderRadius:
                                                 BorderRadius.circular(10)),
                                         child: Padding(

@@ -22,12 +22,12 @@ const Color codoWhite = Color.fromRGBO(247, 247, 247, 1);
 
 final List<Color> grediantColor1 = [
   secondaryDarkColor,
-  secondaryDarkColor.withOpacity(0.0)
+  secondaryDarkColor.withValues(alpha: 0.0)
 ];
 const List<Color> grediantColor2 = [secondaryDarkColor, Color(0xff0E5944)];
 final List<Color> grediantColor3 = [
   redDarkColor,
-  redDarkColor.withOpacity(0.3)
+  redDarkColor.withValues(alpha: .3)
 ];
 
 const Map<int, Color> primaryColorMap = {
